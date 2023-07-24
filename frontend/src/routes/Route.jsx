@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
-import MainPage from '../pages/MainPage/MainPage';
-import LoginPage from '../pages/LoginPage/LoginPage';
-import SignupPage from '../pages/SignupPage/SignupPage';
+import MainPage from '../components/pages/MainPage/MainPage';
+import LoginPage from '../components/pages/LoginPage/LoginPage';
+import SignupPage from '../components/pages/SignupPage/SignupPage';
 
 function RouteLink() {
   return (
