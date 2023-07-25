@@ -4,12 +4,19 @@ import axios from 'axios';
 
 export default function SignUpPage() {
   const navigate = useNavigate();
-
+  // 회원가입 요소 
   const [userMail, setUserMail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
+  
+  // 검사 통과 여부
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [isPasswordConfirmValid, setIsPasswordConfirmValid] = useState(true);
+  const [isNameValid, setIsNameValid] = useState(true);
+  const [isNicknameValid, setIsNicknameValid] = useState(true);
 
   const validateEmail = mail => {
     // 이메일 정규식
@@ -21,10 +28,6 @@ export default function SignUpPage() {
     const passwordRegEx = /^[A-Za-z0-9]{2,20}$/;
     return passwordRegEx.test(password);
   };
-
-  const validateName = (Name) => {
-    const nameRegEx = /^[]$/;
-  }
 
   const checkPassword = (password, passwordConfirm) => {
     return password === passwordConfirm;
@@ -51,17 +54,19 @@ export default function SignUpPage() {
   };
 
   const handleChange = (e) => {
-    const actionMap = {
+    const checkMap = {
       'userMail': setUserMail,
       'password': setPassword,
       'passwordConfirm': setPasswordConfirm,
       'name': setName,
-      'nickname': setNickname
+      'nickname': setNickname,
+      'isEmailValid': setIsEmailValid,
+      
     };
   
-    const action = actionMap[e.target.name];
-    if (action) {
-      action(e.target.value);
+    const check = checkMap[e.target.name];
+    if (check) {
+      check(e.target.value);
     }
   };
 
@@ -75,13 +80,13 @@ export default function SignUpPage() {
     if (!validatePassword(password)) {
       console.log('맞지 않은 비밀번호 입니다.');
     }
-  }, [userMail, password]);
+  }, [userMail, password, passwordConfirm]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // 이메일과 비밀번호 검증
     if (!validateEmail(userMail)) {
-      alert('이메일 형식이 유효하지 않습니다.');
+      // alert('이메일 형식이 유효하지 않습니다.');
       return;
     }
 
@@ -92,12 +97,12 @@ export default function SignUpPage() {
 
     // 이메일과 닉네임 중복 검사
     if (await checkEmail()) {
-        alert('이메일이 이미 사용 중입니다.');
+        // alert('이메일이 이미 사용 중입니다.');
         return;
       }
   
       if (await checkNickname()) {
-        alert('닉네임이 이미 사용 중입니다.');
+        // alert('닉네임이 이미 사용 중입니다.');
         return;
       }
 
@@ -108,7 +113,9 @@ export default function SignUpPage() {
       <form onSubmit={handleSubmit}>
           <p>아이디</p>
           <input type="text" placeholder="ID" value={userMail} onChange={handleChange} name="userMail" required />
-          <div></div>
+          <div>
+            <p>{isEmailValid ? "" : "이메일 형식이 유효하지 않습니다."}</p>
+          </div>
           <br></br>
           <p>비밀번호</p>
           <input type="password" placeholder="Password" value={password} onChange={handleChange} name="password" required />
