@@ -1,26 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
-import { setUserMail, setPassword, setPasswordConfirm, setName, setNickname } from '../../../slices/signUpSlice';
 
 export default function SignUpPage() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  const userMail = useSelector(state => state.userMail);
-  const password = useSelector(state => state.password);
-  const passwordConfirm = useSelector(state => state.passwordConfirm);
-  const name = useSelector(state => state.name);
-  const nickname = useSelector(state => state.nickname);
+  const [userMail, setUserMail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [name, setName] = useState("");
+  const [nickname, setNickname] = useState("");
 
   const validateEmail = mail => {
     // 이메일 정규식
-    const regEx = /^\S+@\S+\.\S+$/;
+    const regEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
     return regEx.test(mail);
   };
 
-  const validatePassword = (password, passwordConfirm) => {
+  const validatePassword = (password) => {
+    const passwordRegEx = /^[A-Za-z0-9]{2,20}$/;
+    return passwordRegEx.test(password);
+  };
+
+  const validateName = (Name) => {
+    const nameRegEx = /^[]$/;
+  }
+
+  const checkPassword = (password, passwordConfirm) => {
     return password === passwordConfirm;
   };
 
@@ -52,12 +58,24 @@ export default function SignUpPage() {
       'name': setName,
       'nickname': setNickname
     };
-
+  
     const action = actionMap[e.target.name];
     if (action) {
-      dispatch(action(e.target.value));
+      action(e.target.value);
     }
   };
+
+  useEffect(() => {
+    if (userMail && !validateEmail(userMail)) {
+      console.log(userMail);
+    }
+
+    console.log(password);
+
+    if (!validatePassword(password)) {
+      console.log('맞지 않은 비밀번호 입니다.');
+    }
+  }, [userMail, password]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,7 +85,7 @@ export default function SignUpPage() {
       return;
     }
 
-    if (!validatePassword(password, passwordConfirm)) {
+    if (!checkPassword(password, passwordConfirm)) {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     }
@@ -90,6 +108,7 @@ export default function SignUpPage() {
       <form onSubmit={handleSubmit}>
           <p>아이디</p>
           <input type="text" placeholder="ID" value={userMail} onChange={handleChange} name="userMail" required />
+          <div></div>
           <br></br>
           <p>비밀번호</p>
           <input type="password" placeholder="Password" value={password} onChange={handleChange} name="password" required />
