@@ -1,4 +1,7 @@
 package com.ssafy.bium.gameroom.repository;
 
-public interface GameRoomRepository {
+import com.ssafy.bium.gameroom.GameRoom;
+import org.springframework.data.repository.CrudRepository;
+
+public interface GameRoomRepository extends CrudRepository<GameRoom, Long> {
 }
