@@ -1,4 +1,4 @@
-package com.ssafy.bium.api.controller;
+package com.ssafy.bium.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
