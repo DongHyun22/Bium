@@ -32,10 +32,6 @@ function Login() {
             console.log('로그인 되었습니다.')
             // userSlice의 actions를 불러옴
             dispatch(loginActions.getUserInfo(email,password))
-            // dispatch(loginActions.getUserInfo({
-            //     email: response.data.email,
-            //     password: response.data.password
-            // }))
         })
         .catch((error) => {
             console.log(error)
