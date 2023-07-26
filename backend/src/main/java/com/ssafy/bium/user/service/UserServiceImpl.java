@@ -13,11 +13,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User getUserInfo(String loginId, String loginPw) {
-        Optional<User> findUser = userRepository.findByLoginId(loginId);
+    public User searchUser(String userEmail, String userPw) {
+//        Optional<User> findUser = userRepository.findById(id);
+        Optional<User> findUser = userRepository.findByUserEmailAndUserPw(userEmail, userPw);
         if (!findUser.isPresent()) {
-            System.out.println("로그인 없음");
+            System.out.println("로그인 실패");
             return null;
+            // 예외 처리
         }
         User user = findUser.get();
         return user;

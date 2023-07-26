@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class User extends TimeBaseEntity {
 
     @Id
@@ -38,26 +38,5 @@ public class User extends TimeBaseEntity {
     private Long totalBium;
     @Column(nullable = false)
     private boolean is_admin;
-    @Column(nullable = false)
-    private LocalDateTime createDate;
-    @Column(nullable = false)
-    private LocalDateTime modifiedDate;
-
-    @Builder
-    public User(Long id, String userEmail, String userPw, String token, String userName, String userNickname, int userRank, Long todayBium, Long topBium, Long totalBium, boolean is_admin, LocalDateTime createDate, LocalDateTime modifiedDate) {
-        this.id = id;
-        this.userEmail = userEmail;
-        this.userPw = userPw;
-        this.token = token;
-        this.userName = userName;
-        this.userNickname = userNickname;
-        this.userRank = userRank;
-        this.todayBium = todayBium;
-        this.topBium = topBium;
-        this.totalBium = totalBium;
-        this.is_admin = is_admin;
-        this.createDate = createDate;
-        this.modifiedDate = modifiedDate;
-    }
 
 }
