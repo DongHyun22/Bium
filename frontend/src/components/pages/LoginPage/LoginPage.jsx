@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import login from '../../../slices/userSlice.js';
+import { loginActions } from '../../../slices/userSlice.js';
+import axios from 'axios';
 
+// 로그인 컴포넌트
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -10,21 +12,51 @@ function Login() {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
+    // axios 요청 함수
+    const getUserInfo = (email,password) => {
+        const API = 'url'
+
+        console.log(email,password)
+
+        axios.post(API,{
+            "email": email,
+            "password": password,
+        },
+        {
+            // headers: {
+            //     Authorization: `Bearer ${token}`,
+            // },
+        })
+        .then((response) => {
+            console.log(response.data);
+            console.log('로그인 되었습니다.')
+            // userSlice의 actions를 불러옴
+            dispatch(loginActions.getUserInfo(email,password))
+            // dispatch(loginActions.getUserInfo({
+            //     email: response.data.email,
+            //     password: response.data.password
+            // }))
+        })
+        .catch((error) => {
+            console.log(error)
+            window.alert('로그인 실패')
+        })
+    }
     const handleSubmit = (e)=> {
+        e.preventDefault();
 
         if (!emailRegex.test(email)) {
             alert('유효한 이메일 형식이 아닙니다.');
             return;
         }
-        if (!passwordRegex.test(password)) {
-            alert("비밀번호는 최소 8자 이상이어야 하며, 영문 대소문자와 숫자를 포함해야 합니다.");
-            return;
-        }
-        dispatch(login({ email,  password }));
+
+        // axios 요청 함수
+        getUserInfo(email,password);
+
     }
     return (
         <div>
-            <form onSubmit={(e)=> handleSubmit(e)}>
+            <form onSubmit={handleSubmit}>
                 <div className='loginId'>
                     <div>
                         <input 
