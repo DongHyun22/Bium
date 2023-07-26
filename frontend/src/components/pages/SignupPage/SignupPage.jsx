@@ -91,7 +91,7 @@ export default function SignUpPage() {
   
     const check = checkMap[e.target.name];
     if (check) {
-      check(e.target.value);
+      check(e.target.value); 
     }
   };
 
