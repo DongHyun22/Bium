@@ -16,26 +16,41 @@ export default function SignUpPage() {
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [isPasswordConfirmValid, setIsPasswordConfirmValid] = useState(true);
   const [isNameValid, setIsNameValid] = useState(true);
-  const [isNicknameValid, setIsNicknameValid] = useState(true);
+  const [rightEmail, setRightEmail] = useState("유효한 이메일 형식입니다.");
+  const [wrongEmail, setWrongEmail] = useState("형식에 맞지않는 이메일입니다.");
+  const [rightPassword, setRightPassword] = useState("유효한 비밀번호 형식입니다.");
+  const [wrongPassword, setWrongPassword] = useState("형식에 맞지않는 비밀번호입니다.");
+  const [rightPasswordConfirm, setRightPasswordConfirm] = useState("비밀번호와 일치합니다.")
+  const [wrongPasswordConfirm, setWrongPasswordConfirm] = useState("비밀번호와 일치하지 않습니다.")
+  const [rightName, setRightName] = useState("유효한 이름 형식입니다.");
+  const [wrongName, setWrongName] = useState("형식에 맞지않는 이름입니다.");
 
-  const validateEmail = mail => {
+  const validateEmail = (mail) => {
     // 이메일 정규식
     const regEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
     return regEx.test(mail);
   };
 
   const validatePassword = (password) => {
-    const passwordRegEx = /^[A-Za-z0-9]{2,20}$/;
+    const passwordRegEx = /^[A-Za-z0-9]{4,20}$/;
     return passwordRegEx.test(password);
   };
 
+  const validateName = (name) => {
+    const nameRegEx = /^[가-힣a-zA-Z\s]+$/;
+    return nameRegEx.test(name);
+  };
+
   const checkPassword = (password, passwordConfirm) => {
-    return password === passwordConfirm;
+    if (password === passwordConfirm) {
+      return true;
+    }
+    return false;
   };
 
   const checkEmail = async () => {
     try {
-      const response = await axios.post('/mailcheck', { userMail });
+      const response = await axios.post('/signup', { userMail, password, name, nickname });
       return response.data.duplicate;
     } catch (error) {
       console.error(error);
@@ -61,7 +76,17 @@ export default function SignUpPage() {
       'name': setName,
       'nickname': setNickname,
       'isEmailValid': setIsEmailValid,
-      
+      'isPasswordValid': setIsPasswordValid,
+      'isPasswordConfirmValid': setIsPasswordConfirmValid,
+      'isNameValid': setIsNameValid,
+      'rightEmail': setRightEmail,     
+      'wrongEmail': setWrongEmail, 
+      'rightPassword': setRightPassword,     
+      'wrongPassword': setWrongPassword,    
+      'rightPasswordConfirm': setRightPasswordConfirm,     
+      'wrongPasswordConfirm': setWrongPasswordConfirm,
+      'rightName': setRightName,
+      'wrongName': setWrongName,
     };
   
     const check = checkMap[e.target.name];
@@ -71,29 +96,33 @@ export default function SignUpPage() {
   };
 
   useEffect(() => {
-    if (userMail && !validateEmail(userMail)) {
-      console.log(userMail);
+    // 입력값 확인용
+    // console.log(userMail);
+    // console.log(password);
+    // console.log(isPasswordConfirmValid);
+    // console.log(name)
+
+    // 해당 값들이 입력되면 true, false 판단 
+    if (userMail) {
+      setIsEmailValid(validateEmail(userMail));
     }
 
-    console.log(password);
-
-    if (!validatePassword(password)) {
-      console.log('맞지 않은 비밀번호 입니다.');
+    if (password) {
+      setIsPasswordValid(validatePassword(password));
     }
-  }, [userMail, password, passwordConfirm]);
+
+    if (passwordConfirm) {
+      setIsPasswordConfirmValid(checkPassword(password, passwordConfirm));
+    }
+
+    if (name) {
+      setIsNameValid(validateName(name));
+      console.log(validateName(name));
+    }
+  }, [userMail, password, passwordConfirm, name, isEmailValid, isPasswordValid, isPasswordConfirmValid]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // 이메일과 비밀번호 검증
-    if (!validateEmail(userMail)) {
-      // alert('이메일 형식이 유효하지 않습니다.');
-      return;
-    }
-
-    if (!checkPassword(password, passwordConfirm)) {
-      alert('비밀번호가 일치하지 않습니다.');
-      return;
-    }
 
     // 이메일과 닉네임 중복 검사
     if (await checkEmail()) {
@@ -106,25 +135,44 @@ export default function SignUpPage() {
         return;
       }
 
-      navigate('/signup');
+      navigate('/login');
   };
 
   return (
       <form onSubmit={handleSubmit}>
           <p>아이디</p>
           <input type="text" placeholder="ID" value={userMail} onChange={handleChange} name="userMail" required />
-          <div>
-            <p>{isEmailValid ? "" : "이메일 형식이 유효하지 않습니다."}</p>
-          </div>
-          <br></br>
+          {userMail && (
+            <div>
+              {isEmailValid ? <p>{rightEmail}</p> : <p>{wrongEmail}</p> }
+            </div>
+          )}
+
           <p>비밀번호</p>
           <input type="password" placeholder="Password" value={password} onChange={handleChange} name="password" required />
-          <br></br>
+          {password && (
+            <div>
+              {isPasswordValid ? <p>{rightPassword}</p> : <p>{wrongPassword}</p> }
+            </div>
+          )}
+
           <p>비밀번호 확인</p>
           <input type="password" placeholder="Confirm password" value={passwordConfirm} onChange={handleChange} name="passwordConfirm" required />
+          {passwordConfirm && (
+            <div>
+              {isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p> }
+            </div>
+          )}
+          
           <br></br>
           <p>이름</p>
           <input type="text" placeholder="Name" value={name} onChange={handleChange} name="name" required />
+          {name && (
+            <div>
+              {isNameValid ? <p>{rightName}</p> : <p>{wrongName}</p> }
+            </div>
+          )}
+          
           <br></br>
           <p>닉네임</p>
           <input type="text" placeholder="Nickname" value={nickname} onChange={handleChange} name="nickname" required />
