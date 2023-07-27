@@ -1,6 +1,7 @@
 package com.ssafy.bium.controller;
 
 import com.ssafy.bium.user.User;
+import com.ssafy.bium.user.request.UserRegisterPostReq;
 import com.ssafy.bium.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,15 @@ public class UserController {
 
         User user = userService.searchUser(userEmail, userPw);
         return new ResponseEntity<>(user.getId(), HttpStatus.OK);
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUp(@RequestBody UserRegisterPostReq registerInfo) {
+
+        User user = userService.setUser(registerInfo);
+        System.out.println(user);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/signup/check")

@@ -28,7 +28,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User setUser(UserRegisterPostReq userRegisterInfo) {
-        return null;
+
+        User user = User.builder()
+                .userEmail(userRegisterInfo.getUserEmail())
+                .userPw(userRegisterInfo.getUserPw())
+                .userName(userRegisterInfo.getUserName())
+                .userNickname(userRegisterInfo.getUserNickname())
+                .build();
+
+        return userRepository.save(user);
+
     }
 
     @Override
