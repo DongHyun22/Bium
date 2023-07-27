@@ -54,21 +54,17 @@ public class User extends TimeBaseEntity {
         this.totalBium = totalBium;
         this.is_admin = is_admin;
 
-        // 필드에 직접 초기화
         if (todayBium == null) {
             this.todayBium = 0L;
         }
 
-        // 필드에 직접 초기화
         if (topBium == null) {
             this.topBium = 0L;
         }
 
-        // 필드에 직접 초기화
         if (totalBium == null) {
             this.totalBium = 0L;
         }
     }
-
 
 }
