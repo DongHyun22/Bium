@@ -65,7 +65,7 @@ export default function SignUpPage() {
 
   const checkMail = async () => {
     try {
-      const response = await axios.post('/duplicateMail', { userMail });
+      const response = await axios.post('/signup/check', { userMail });
       return response.data.duplicate;
     } catch (error) {
       console.error(error);
