@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GameRoomDto {
-    private String id;
-    private String title;
-    private int maxPeople;
+public class SearchGameRoomDto {
+    private int sort;
+    private String keyword;
+    private int page;
 }

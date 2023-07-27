@@ -1,7 +1,9 @@
 package com.ssafy.bium.gameroom.service;
 
-import com.ssafy.bium.gameroom.request.GameRoomDto;
+import com.ssafy.bium.gameroom.request.SearchGameRoomDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +11,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GameRoomServiceImpl implements GameRoomService {
 //    private final GameRoomRepository gameRoomRepository;
-    private final RedisTemplate<String, GameRoomDto> redisTemplate;
+    private final RedisTemplate<String, SearchGameRoomDto> redisTemplate;
 
     @Override
-    public String searchGameRoom(int sort, String keyword, int page, String id) {
+    public Page<SearchGameRoomDto> searchGameRoom(SearchGameRoomDto request, PageRequest pageRequest) {
         return redisTemplate.opsForValue().get(id).getTitle();
 
 //        Optional<GameRoom> gameRoom = gameRoomRepository.findById(id);
@@ -23,9 +25,9 @@ public class GameRoomServiceImpl implements GameRoomService {
     }
 
     @Override
-    public String createGameRoom(GameRoomDto gameRoomDto) {
-        redisTemplate.opsForValue().set(gameRoomDto.getId(), gameRoomDto);
+    public String createGameRoom(SearchGameRoomDto searchGameRoomDto) {
+        redisTemplate.opsForValue().set(searchGameRoomDto.getId(), searchGameRoomDto);
 //        return gameRoomRepository.save(gameRoomDto.getId(), gameRoomDto);
-        return gameRoomDto.getId();
+        return searchGameRoomDto.getId();
     }
 }
