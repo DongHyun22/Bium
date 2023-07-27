@@ -123,19 +123,8 @@ export default function SignUpPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // 이메일과 닉네임 중복 검사
-    if (await checkEmail()) {
-        // alert('이메일이 이미 사용 중입니다.');
-        return;
-      }
-  
-      if (await checkNickname()) {
-        // alert('닉네임이 이미 사용 중입니다.');
-        return;
-      }
-
-      navigate('/login');
+    
+    navigate('/login');
   };
 
   return (
