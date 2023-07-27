@@ -8,4 +8,5 @@ public interface UserService {
     User searchUser(String userEmail, String userPw);
     User setUser(UserRegisterPostReq userRegisterInfo);
     int getUserByUserEmail(String userEmail);
+    int deleteUserByUserEmail(String userEmail);
 }

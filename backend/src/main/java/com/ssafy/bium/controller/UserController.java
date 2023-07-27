@@ -15,6 +15,7 @@ public class UserController {
 
     private final UserService userService;
 
+    // 로그인
     @GetMapping("/login")
     public ResponseEntity<?> login(@RequestParam String userEmail, @RequestParam String userPw) {
 
@@ -22,6 +23,7 @@ public class UserController {
         return new ResponseEntity<>(user.getId(), HttpStatus.OK);
     }
 
+    // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserRegisterPostReq registerInfo) {
 
@@ -31,6 +33,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // 아이디 중복 체크
     @GetMapping("/signup/check")
     public ResponseEntity<?> emailCheck(@RequestParam String userEmail) {
 
@@ -38,5 +41,12 @@ public class UserController {
         return new ResponseEntity<>(cnt, HttpStatus.OK);
     }
 
+    // 회원탈퇴
+    @PostMapping("profile/delete")
+    public ResponseEntity<?> deleteUser(@RequestParam String userEmail){
+
+        int check = userService.deleteUserByUserEmail(userEmail);
+        return new ResponseEntity<>(check, HttpStatus.OK);
+    }
 
 }

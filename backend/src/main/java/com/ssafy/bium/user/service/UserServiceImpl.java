@@ -50,4 +50,23 @@ public class UserServiceImpl implements UserService {
         System.out.println("사용 가능한 이메일");
         return 0;
     }
+
+    @Override
+    public int deleteUserByUserEmail(String userEmail) {
+
+        Optional<User> findUser = userRepository.findByUserEmail(userEmail);
+        if (!findUser.isPresent()) {
+            return 1;
+        }
+
+        User user = findUser.get();
+        if (!user.getUserEmail().equals(userEmail)) {
+            return 1;
+        }
+
+        userRepository.delete(user);
+        return 0;
+    }
+
+
 }
