@@ -2,6 +2,7 @@ package com.ssafy.bium.user.service;
 
 import com.ssafy.bium.user.User;
 import com.ssafy.bium.user.repository.UserRepository;
+import com.ssafy.bium.user.request.UserRegisterPostReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,5 +24,21 @@ public class UserServiceImpl implements UserService {
         }
         User user = findUser.get();
         return user;
+    }
+
+    @Override
+    public User setUser(UserRegisterPostReq userRegisterInfo) {
+        return null;
+    }
+
+    @Override
+    public int getUserByUserEmail(String userEmail) {
+        Optional<User> findUser = userRepository.findByUserEmail(userEmail);
+        if(findUser.isPresent()){
+            System.out.println("이미 존재하는 이메일");
+            return 1;
+        }
+        System.out.println("사용 가능한 이메일");
+        return 0;
     }
 }

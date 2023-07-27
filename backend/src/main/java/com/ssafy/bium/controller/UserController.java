@@ -21,5 +21,12 @@ public class UserController {
         return new ResponseEntity<>(user.getId(), HttpStatus.OK);
     }
 
+    @GetMapping("/signup/check")
+    public ResponseEntity<?> emailCheck(@RequestParam String userEmail) {
+
+        int cnt = userService.getUserByUserEmail(userEmail);
+        return new ResponseEntity<>(cnt, HttpStatus.OK);
+    }
+
 
 }
