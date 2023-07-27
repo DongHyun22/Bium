@@ -43,12 +43,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public int getUserByUserEmail(String userEmail) {
         Optional<User> findUser = userRepository.findByUserEmail(userEmail);
-        if(findUser.isPresent()){
-            System.out.println("이미 존재하는 이메일");
-            return 1;
+        if(!findUser.isPresent()){
+            return 0;
         }
-        System.out.println("사용 가능한 이메일");
-        return 0;
+        return 1;
     }
 
     @Override
