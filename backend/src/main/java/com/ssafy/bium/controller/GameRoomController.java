@@ -15,13 +15,10 @@ public class GameRoomController {
     private final GameRoomService gameRoomService;
 
     @GetMapping("")
-    public Page<GameRoomListDto> list(
+    public GameRoomListDto list(
             @RequestBody SearchGameRoomDto request
     ){
-        // TODO: 2023-07-27 페이징 알기
-        PageRequest pageRequest = PageRequest.of(request.getPage(), 10);
-
-        return gameRoomService.searchGameRoom(request, pageRequest);
+        return gameRoomService.searchGameRoom(request);
     }
 
 //    @RequestBody SearchGameRoomDto request
@@ -32,7 +29,6 @@ public class GameRoomController {
     public String enter(
            @RequestBody SearchGameRoomDto request
     ){
-        PageRequest pageRequest = PageRequest.of(request.getPage(), 10);
         // builder 사용 할 것 !
         return gameRoomService.createGameRoom(searchGameRoomDto);
     }

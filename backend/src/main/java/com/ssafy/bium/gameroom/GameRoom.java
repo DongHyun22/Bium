@@ -2,11 +2,12 @@ package com.ssafy.bium.gameroom;
 
 import com.ssafy.bium.common.TimeBaseEntity;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-@Data
+@Getter
 @NoArgsConstructor
 @RedisHash(value = "gameRoom")
 public class GameRoom extends TimeBaseEntity {
