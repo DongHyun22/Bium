@@ -83,10 +83,10 @@ export default function SignUpPage() {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:8080/signup', {
-          userEmail : userEmail,
-          userPw : password,
-          userName : name,
-          userNickname : nickname
+        userEmail: userEmail,
+        userPw: password,
+        userName: name,
+        userNickname: nickname
       });
       return response.data;
     } catch (error) {
@@ -98,17 +98,17 @@ export default function SignUpPage() {
     e.preventDefault();
     try {
       const response = await axios.get('http://localhost:8080/signup/check', {
-         params: {
-          userEmail : userEmail
-         }
+        params: {
+          userEmail: userEmail
+        }
       });
-      
-      console.log(response.data)
+
+      console.log(response.data);
       if (response.data === 0) {
-        alert('사용가능한 이메일입니다.')
+        alert('사용가능한 이메일입니다.');
         return setCheckEmailDuplicate(true);
       }
-      alert('이미 가입이 된 이메일입니다.')
+      alert('이미 가입이 된 이메일입니다.');
       return setCheckEmailDuplicate(false);
     } catch (error) {
       console.error(error);
@@ -116,7 +116,7 @@ export default function SignUpPage() {
     }
   };
 
-    useEffect(() => {
+  useEffect(() => {
     // 입력값 확인용
     // console.log(userEmail);
     // console.log(password);
@@ -146,12 +146,12 @@ export default function SignUpPage() {
     console.log(checkEmailDuplicate);
 
     if (checkEmailDuplicate) {
-      await goSignup(e)
-
+      await goSignup(e);
+      
       navigate('/login');
+    } else {
+      alert('회원가입에 실패 하셨습니다.');
     }
-
-    alert('회원가입에 실패 하셨습니다.');
   };
 
   return (
@@ -164,20 +164,27 @@ export default function SignUpPage() {
       {userEmail && <div>{isEmailValid ? <p>{rightEmail}</p> : <p>{wrongEmail}</p>}</div>}
       <form onSubmit={handleSubmit}>
         <p>비밀번호</p>
-        <input type="password" placeholder="Password" value={password} onChange={handleChange} name="password" required />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={handleChange}
+          name="password"
+          required
+        />
         {password && <div>{isPasswordValid ? <p>{rightPassword}</p> : <p>{wrongPassword}</p>}</div>}
 
         <p>비밀번호 확인</p>
         <input
-            type="password"
-            placeholder="Confirm password"
-            value={passwordConfirm}
-            onChange={handleChange}
-            name="passwordConfirm"
-            required
+          type="password"
+          placeholder="Confirm password"
+          value={passwordConfirm}
+          onChange={handleChange}
+          name="passwordConfirm"
+          required
         />
         {passwordConfirm && (
-            <div>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>
+          <div>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>
         )}
 
         <br></br>
