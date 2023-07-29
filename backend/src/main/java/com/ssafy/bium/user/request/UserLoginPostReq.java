@@ -1,4 +1,5 @@
 package com.ssafy.bium.user.request;
 
-public class UserRegisterPostReq {
+public class UserLoginPostReq {
+    
 }
