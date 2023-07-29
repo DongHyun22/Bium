@@ -5,7 +5,7 @@ import axios from 'axios';
 export default function SignUpPage() {
   const navigate = useNavigate();
   // 회원가입 요소
-  const [userMail, setUserMail] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [name, setName] = useState('');
@@ -51,31 +51,9 @@ export default function SignUpPage() {
     return false;
   };
 
-  const goSignup = async () => {
-    try {
-      const response = await axios.post('/signup', { userMail, password, name, nickname });
-      if (response === true) {
-        return setCheckEmailDuplicate(true);
-      }
-      return setCheckEmailDuplicate(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const checkMail = async () => {
-    try {
-      const response = await axios.post('/signup/check', { userMail });
-      return response.data.duplicate;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-  };
-
   const handleChange = (e) => {
     const checkMap = {
-      userMail: setUserMail,
+      userEmail: setUserEmail,
       password: setPassword,
       passwordConfirm: setPasswordConfirm,
       name: setName,
@@ -101,16 +79,53 @@ export default function SignUpPage() {
     }
   };
 
-  useEffect(() => {
+  const goSignup = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:8080/signup', {
+          userEmail : userEmail,
+          userPw : password,
+          userName : name,
+          userNickname : nickname
+      });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const checkMail = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get('http://localhost:8080/signup/check', {
+         params: {
+          userEmail : userEmail
+         }
+      });
+      
+      console.log(response.data)
+      if (response.data === 0) {
+        alert('사용가능한 이메일입니다.')
+        return setCheckEmailDuplicate(true);
+      }
+      alert('이미 가입이 된 이메일입니다.')
+      return setCheckEmailDuplicate(false);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+    useEffect(() => {
     // 입력값 확인용
-    // console.log(userMail);
+    // console.log(userEmail);
     // console.log(password);
     // console.log(isPasswordConfirmValid);
     // console.log(name)
 
     // 해당 값들이 입력되면 true, false 판단
-    if (userMail) {
-      setIsEmailValid(validateEmail(userMail));
+    if (userEmail) {
+      setIsEmailValid(validateEmail(userEmail));
     }
 
     if (password) {
@@ -125,54 +140,57 @@ export default function SignUpPage() {
       setIsNameValid(validateName(name));
       console.log(validateName(name));
     }
-  }, [userMail, password, passwordConfirm, name, isEmailValid, isPasswordValid, isPasswordConfirmValid]);
+  }, [userEmail, password, passwordConfirm, name, isEmailValid, isPasswordValid, isPasswordConfirmValid]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    console.log(checkEmailDuplicate);
 
-    if (setCheckEmailDuplicate) {
-      if (await goSignup()) {
-      }
+    if (checkEmailDuplicate) {
+      await goSignup(e)
 
       navigate('/login');
     }
 
-    alert('이메일 중복검사를 하지 않으셨습니다.');
+    alert('회원가입에 실패 하셨습니다.');
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <p>아이디</p>
-      <input type="text" placeholder="ID" value={userMail} onChange={handleChange} name="userMail" required />
-      {userMail && <div>{isEmailValid ? <p>{rightEmail}</p> : <p>{wrongEmail}</p>}</div>}
+    <div>
+      <form onSubmit={checkMail}>
+        <p>아이디</p>
+        <input type="text" placeholder="ID" value={userEmail} onChange={handleChange} name="userEmail" required />
+        <button type="submit">중복 확인</button>
+      </form>
+      {userEmail && <div>{isEmailValid ? <p>{rightEmail}</p> : <p>{wrongEmail}</p>}</div>}
+      <form onSubmit={handleSubmit}>
+        <p>비밀번호</p>
+        <input type="password" placeholder="Password" value={password} onChange={handleChange} name="password" required />
+        {password && <div>{isPasswordValid ? <p>{rightPassword}</p> : <p>{wrongPassword}</p>}</div>}
 
-      <p>비밀번호</p>
-      <input type="password" placeholder="Password" value={password} onChange={handleChange} name="password" required />
-      {password && <div>{isPasswordValid ? <p>{rightPassword}</p> : <p>{wrongPassword}</p>}</div>}
+        <p>비밀번호 확인</p>
+        <input
+            type="password"
+            placeholder="Confirm password"
+            value={passwordConfirm}
+            onChange={handleChange}
+            name="passwordConfirm"
+            required
+        />
+        {passwordConfirm && (
+            <div>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>
+        )}
 
-      <p>비밀번호 확인</p>
-      <input
-        type="password"
-        placeholder="Confirm password"
-        value={passwordConfirm}
-        onChange={handleChange}
-        name="passwordConfirm"
-        required
-      />
-      {passwordConfirm && (
-        <div>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>
-      )}
+        <br></br>
+        <p>이름</p>
+        <input type="text" placeholder="Name" value={name} onChange={handleChange} name="name" required />
+        {name && <div>{isNameValid ? <p>{rightName}</p> : <p>{wrongName}</p>}</div>}
 
-      <br></br>
-      <p>이름</p>
-      <input type="text" placeholder="Name" value={name} onChange={handleChange} name="name" required />
-      {name && <div>{isNameValid ? <p>{rightName}</p> : <p>{wrongName}</p>}</div>}
-
-      <br></br>
-      <p>닉네임</p>
-      <input type="text" placeholder="Nickname" value={nickname} onChange={handleChange} name="nickname" required />
-      <p>확인</p>
-      <button type="submit">Sign Up</button>
-    </form>
+        <br></br>
+        <p>닉네임</p>
+        <input type="text" placeholder="Nickname" value={nickname} onChange={handleChange} name="nickname" required />
+        <p>확인</p>
+        <button type="submit">Sign up</button>
+      </form>
+    </div>
   );
 }
