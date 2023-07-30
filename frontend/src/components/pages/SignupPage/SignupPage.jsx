@@ -34,9 +34,9 @@ export default function SignUpPage() {
     return regEx.test(mail);
   };
 
-  const validatePassword = (password) => {
-    const passwordRegEx = /^[A-Za-z0-9]{4,20}$/;
-    return passwordRegEx.test(password);
+  const validatePassword = (event) => {
+    const passwordRegEx = /^(?=.*[a-zA-Z])(?=.*[!@#$%^+=-])(?=.*[0-9]).{8,30}$/;
+    return passwordRegEx.test(event);
   };
 
   const validateName = (name) => {
@@ -82,13 +82,14 @@ export default function SignUpPage() {
   const goSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/signup', {
+      const userRegisterInfomation = {
         userEmail: userEmail,
         userPw: password,
         userName: name,
         userNickname: nickname
-      });
-      return response.data;
+      };
+      const response = await axios.post('http://localhost:8080/signup', userRegisterInfomation);
+      return console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -145,9 +146,9 @@ export default function SignUpPage() {
   const handleSubmit = async (e) => {
     console.log(checkEmailDuplicate);
 
-    if (checkEmailDuplicate) {
+    if (checkEmailDuplicate && isPasswordValid && isNameValid) {
       await goSignup(e);
-      
+
       navigate('/login');
     } else {
       alert('회원가입에 실패 하셨습니다.');
@@ -166,6 +167,7 @@ export default function SignUpPage() {
         <p>비밀번호</p>
         <input
           type="password"
+          autoComplete="off"
           placeholder="Password"
           value={password}
           onChange={handleChange}
@@ -177,6 +179,7 @@ export default function SignUpPage() {
         <p>비밀번호 확인</p>
         <input
           type="password"
+          autoComplete="off"
           placeholder="Confirm password"
           value={passwordConfirm}
           onChange={handleChange}
