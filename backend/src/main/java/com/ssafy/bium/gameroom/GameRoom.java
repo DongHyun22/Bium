@@ -7,14 +7,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 @Getter
 @NoArgsConstructor
-@RedisHash(value = "gameRoom")
+@RedisHash("gameRoom")
 public class GameRoom extends TimeBaseEntity {
 
     @Id
-    private Long gameRoomId;
+    private String gameRoomId;
     private String gameRoomTitle;
     private boolean start;
     private String gameRoomPw;
@@ -23,7 +24,7 @@ public class GameRoom extends TimeBaseEntity {
     private int maxPeople;
 
     @Builder
-    public GameRoom(Long gameRoomId, String gameRoomTitle, boolean start, String gameRoomPw, int gameRoomMovie, int curPeople, int maxPeople) {
+    public GameRoom(String gameRoomId, String gameRoomTitle, boolean start, String gameRoomPw, int gameRoomMovie, int curPeople, int maxPeople) {
         this.gameRoomId = gameRoomId;
         this.gameRoomTitle = gameRoomTitle;
         this.start = start;

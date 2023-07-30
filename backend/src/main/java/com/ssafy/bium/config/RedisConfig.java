@@ -48,7 +48,7 @@ public class RedisConfig {
 
         // Hash 자료구조를 사용할 때 필요한 설정입니다.
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
 
         // RedisTemplate을 초기화합니다.
         redisTemplate.afterPropertiesSet();

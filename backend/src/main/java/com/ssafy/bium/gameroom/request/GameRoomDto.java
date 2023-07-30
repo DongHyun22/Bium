@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+// 방 생성 시 요청받는 Dto
 public class GameRoomDto {
     private String title;
     private int movie; // 영상 종류
