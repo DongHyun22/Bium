@@ -15,16 +15,16 @@ public class UserGameRoom {
     @Id
     private Long detailGameRoomId;
     private Long gameRoomId;
-    private Long user_id;
+    private String userEmail;
     private boolean isHost;
     private int sequence;
     private Long gameRecord;
 
     @Builder
-    public UserGameRoom(Long detailGameRoomId, Long gameRoomId, Long user_id, boolean isHost, int sequence, Long gameRecord) {
+    public UserGameRoom(Long detailGameRoomId, Long gameRoomId, String userEmail, boolean isHost, int sequence, Long gameRecord) {
         this.detailGameRoomId = detailGameRoomId;
         this.gameRoomId = gameRoomId;
-        this.user_id = user_id;
+        this.userEmail = userEmail;
         this.isHost = isHost;
         this.sequence = sequence;
         this.gameRecord = gameRecord;

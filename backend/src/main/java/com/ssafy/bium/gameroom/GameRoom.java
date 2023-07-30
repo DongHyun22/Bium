@@ -16,17 +16,17 @@ public class GameRoom extends TimeBaseEntity {
     @Id
     private Long gameRoomId;
     private String gameRoomTitle;
-    private boolean isStart;
+    private boolean start;
     private String gameRoomPw;
     private int gameRoomMovie;
     private int curPeople;
     private int maxPeople;
 
     @Builder
-    public GameRoom(Long gameRoomId, String gameRoomTitle, boolean isStart, String gameRoomPw, int gameRoomMovie, int curPeople, int maxPeople) {
+    public GameRoom(Long gameRoomId, String gameRoomTitle, boolean start, String gameRoomPw, int gameRoomMovie, int curPeople, int maxPeople) {
         this.gameRoomId = gameRoomId;
         this.gameRoomTitle = gameRoomTitle;
-        this.isStart = isStart;
+        this.start = start;
         this.gameRoomPw = gameRoomPw;
         this.gameRoomMovie = gameRoomMovie;
         this.curPeople = curPeople;

@@ -56,29 +56,4 @@ public class RedisConfig {
         return redisTemplate;
     }
 
-//    public RedisTemplate<String, Object> redisTemplate() {
-//        RedisTemplate<String, Object> template = new RedisTemplate<>();
-//        template.setConnectionFactory(redisConnectionFactory);
-//        template.setKeySerializer(new StringRedisSerializer());
-//        template.setHashKeySerializer(new StringRedisSerializer());
-//
-//        // Serializer를 동적으로 설정하는 방법
-//        template.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
-//        return template;
-//    }
-
-//    @Primary
-//    @Bean
-//    public RedisTemplate<String, Object> redisTemplate() {
-//        RedisTemplate<String, Object> template = new RedisTemplate<>();
-//        template.setConnectionFactory(redisConnectionFactory());
-//        template.setKeySerializer(new StringRedisSerializer());
-//        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-//
-//        // Serializer를 동적으로 설정하는 방법
-//        template.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
-//
-//        return template;
-//    }
-
 }

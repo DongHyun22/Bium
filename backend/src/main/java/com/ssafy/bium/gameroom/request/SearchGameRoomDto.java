@@ -5,10 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class SearchGameRoomDto {
     private int sort;
     private String keyword;
-    private int page;
+//    private int page;
 }

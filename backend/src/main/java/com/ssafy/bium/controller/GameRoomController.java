@@ -9,31 +9,31 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/game")
 public class GameRoomController {
     private final GameRoomService gameRoomService;
 
-//    @GetMapping("")
-//    public Page<GameRoomListDto> list(
-//            @RequestBody SearchGameRoomDto request
-//    ) {
-//        return gameRoomService.searchGameRoom(request);
-//    }
+    @GetMapping("")
+    public List<GameRoomListDto> list(
+            @RequestBody SearchGameRoomDto request
+    ) {
+        return gameRoomService.searchGameRoom(request);
+    }
 
-//    @RequestBody SearchGameRoomDto request
-//    ){
-//        PageRequest pageRequest = PageRequest.of(request.getPage(), 10);
 
     @PostMapping("/create")
     public Long create(
-            @RequestBody GameRoomDto request
+            @RequestBody GameRoomDto request,
+            @RequestParam String userEmail
     ) {
         // 방 생성
         Long gameRoomId = gameRoomService.createGameRoom(request);
         // 해당 방에 입장
-        Long userGameRoomId = gameRoomService.enterGameRoom(gameRoomId);
+        Long userGameRoomId = gameRoomService.enterGameRoom(gameRoomId, userEmail);
         return userGameRoomId;
     }
 }

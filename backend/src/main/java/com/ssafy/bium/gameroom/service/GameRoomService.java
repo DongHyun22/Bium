@@ -5,9 +5,12 @@ import com.ssafy.bium.gameroom.request.GameRoomDto;
 import com.ssafy.bium.gameroom.request.SearchGameRoomDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 public interface GameRoomService {
-//    GameRoomListDto searchGameRoom(SearchGameRoomDto request);
+    List<GameRoomListDto> searchGameRoom(SearchGameRoomDto request);
     Long createGameRoom(GameRoomDto gameRoomDto);
-    Long enterGameRoom(Long gameRoomId);
+    Long enterGameRoom(Long gameRoomId, String userEmail);
 }
