@@ -1,5 +1,6 @@
 package com.ssafy.bium.config;
 
+import com.ssafy.bium.gameroom.request.GameRoomDto;
 import com.ssafy.bium.gameroom.request.SearchGameRoomDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -34,11 +35,9 @@ public class RedisConfig {
         return new LettuceConnectionFactory(redisConfiguration);
     }
 
-    @Primary
     @Bean
-    // TODO: 2023-07-26 (026)  GaneRoomDto -> Object로 변경하기
-    public RedisTemplate<String, SearchGameRoomDto> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, SearchGameRoomDto> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, ?> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, ?> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 
         // String 타입의 key를 사용하므로 StringRedisSerializer를 사용합니다.
@@ -56,5 +55,30 @@ public class RedisConfig {
 
         return redisTemplate;
     }
+
+//    public RedisTemplate<String, Object> redisTemplate() {
+//        RedisTemplate<String, Object> template = new RedisTemplate<>();
+//        template.setConnectionFactory(redisConnectionFactory);
+//        template.setKeySerializer(new StringRedisSerializer());
+//        template.setHashKeySerializer(new StringRedisSerializer());
+//
+//        // Serializer를 동적으로 설정하는 방법
+//        template.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
+//        return template;
+//    }
+
+//    @Primary
+//    @Bean
+//    public RedisTemplate<String, Object> redisTemplate() {
+//        RedisTemplate<String, Object> template = new RedisTemplate<>();
+//        template.setConnectionFactory(redisConnectionFactory());
+//        template.setKeySerializer(new StringRedisSerializer());
+//        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+//
+//        // Serializer를 동적으로 설정하는 방법
+//        template.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
+//
+//        return template;
+//    }
 
 }

@@ -1,6 +1,7 @@
 package com.ssafy.bium.gameroom;
 
 import com.ssafy.bium.common.TimeBaseEntity;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import org.springframework.data.redis.core.RedisHash;
 public class GameRoom extends TimeBaseEntity {
 
     @Id
-    private String gameRoomId;
+    private Long gameRoomId;
     private String gameRoomTitle;
     private boolean isStart;
     private String gameRoomPw;
@@ -21,4 +22,14 @@ public class GameRoom extends TimeBaseEntity {
     private int curPeople;
     private int maxPeople;
 
+    @Builder
+    public GameRoom(Long gameRoomId, String gameRoomTitle, boolean isStart, String gameRoomPw, int gameRoomMovie, int curPeople, int maxPeople) {
+        this.gameRoomId = gameRoomId;
+        this.gameRoomTitle = gameRoomTitle;
+        this.isStart = isStart;
+        this.gameRoomPw = gameRoomPw;
+        this.gameRoomMovie = gameRoomMovie;
+        this.curPeople = curPeople;
+        this.maxPeople = maxPeople;
+    }
 }
