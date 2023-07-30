@@ -63,6 +63,8 @@ function GameRoom() {
     if (join) {
       const OV = new OpenVidu();
       const session = OV.initSession();
+      console.log('OV:', OV);
+      console.log('session:', session);
       dispatch(initOVSession({ OV, session }));
     }
   }, [join]);
@@ -173,7 +175,7 @@ function GameRoom() {
             ) : (
               <h1>Publisher 발행중</h1>
             )}
-            {subscribers.map((sub, id) => (
+            {subscribers.map((sub) => (
               <div key={sub.id} className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(sub)}>
                 <span>{sub.id}</span>
                 <UserVideoComponent streamManager={sub} />
