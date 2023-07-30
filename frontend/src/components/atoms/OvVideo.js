@@ -1,24 +1,17 @@
-import React, { Component } from 'react';
+import React, { useRef, useEffect } from 'react';
+import * as faceapi from 'face-api.js';
 
-export default class OpenViduVideoComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.videoRef = React.createRef();
-  }
+const OpenViduVideoComponent = (props) => {
+  console.log('제발 빨리 끝내고 잘 수 있으면 좋겠다', props);
+  const videoRef = useRef(null);
 
-  componentDidUpdate(props) {
-    if (props && !!this.videoRef) {
-      this.props.streamManager.addVideoElement(this.videoRef.current);
+  useEffect(() => {
+    if (props && videoRef.current) {
+      props.streamManager.addVideoElement(videoRef.current);
     }
-  }
+  }, [props]);
 
-  componentDidMount() {
-    if (this.props && !!this.videoRef) {
-      this.props.streamManager.addVideoElement(this.videoRef.current);
-    }
-  }
+  return <video autoPlay={true} ref={videoRef} />;
+};
 
-  render() {
-    return <video autoPlay={true} ref={this.videoRef} />;
-  }
-}
+export default OpenViduVideoComponent;
