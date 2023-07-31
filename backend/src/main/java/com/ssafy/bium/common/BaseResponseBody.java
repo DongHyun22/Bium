@@ -1,2 +1,5 @@
-package com.ssafy.bium.common;public class BaseResponseBody {
+package com.ssafy.bium.common;
+
+public class BaseResponseBody {
+
 }

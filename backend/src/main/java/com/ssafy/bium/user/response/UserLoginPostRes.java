@@ -1,2 +1,6 @@
-package com.ssafy.bium.user.response;public class UserLoginPostRes {
+package com.ssafy.bium.user.response;
+
+public class UserLoginPostRes {
+
+
 }

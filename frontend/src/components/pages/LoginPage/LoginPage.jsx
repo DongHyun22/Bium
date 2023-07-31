@@ -7,7 +7,7 @@ import { userLogin } from '../../../slices/getLoginInfo';
 // 로그인 컴포넌트
 function Login() {
   const [userMail, setUserMail] = useState('');
-  const [password, setPassword] = useState('');
+  const [userPw, setUserPw] = useState('');
   const dispatch = useDispatch();
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -47,7 +47,7 @@ function Login() {
       alert('유효한 이메일 형식이 아닙니다.');
       return;
     }
-    const user = { userMail, password };
+    const user = { userMail, userPw };
     dispatch(userLogin(user));
 
     // const user = { userMail: 'ssafy', password: '1234' };
@@ -60,7 +60,7 @@ function Login() {
     console.log(userMail);
   };
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+    setUserPw(e.target.value);
   };
 
   return (
@@ -83,7 +83,7 @@ function Login() {
               type="password"
               id="userPassword"
               placeholder="비밀번호를 입력해 주세요."
-              value={password}
+              value={userPw}
               onChange={handlePasswordChange}
             />
           </div>
