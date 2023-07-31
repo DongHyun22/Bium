@@ -3,6 +3,7 @@ package com.ssafy.bium.gameroom.controller;
 import com.ssafy.bium.gameroom.request.EnterGameRoomDto;
 import com.ssafy.bium.gameroom.request.GameRoomDto;
 import com.ssafy.bium.gameroom.request.ModifyGameRoomDto;
+import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
 import com.ssafy.bium.gameroom.request.SearchGameRoomDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
 import com.ssafy.bium.gameroom.service.GameRoomService;
@@ -49,11 +50,19 @@ public class GameRoomController {
         Long userGameRoomId = gameRoomService.enterGameRoom(enterGameRoomDto);
         return 0L;
     }
+
     @GetMapping("/modify")
-    public ModifyGameRoomDto modify(
+    public DetailGameRoomDto modify(
             @RequestParam String gameRoomId
     ) {
         return gameRoomService.searchGameRoom(gameRoomId);
+    }
+
+    @PostMapping("/modify")
+    public Long modify(
+            @RequestBody ModifyGameRoomDto request
+    ) {
+        return gameRoomService.modifyGameRoom(request);
     }
 }
 
