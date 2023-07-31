@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { joinSession } from './videoThunkAction';
 
 const initialState = {
+  roomName: null,
   OV: {},
   session: undefined,
   token: undefined,
@@ -11,13 +12,20 @@ const initialState = {
   myUserName: 'jihyeok',
   subscribers: [],
   isVideoPublished: true,
-  isAudioPublished: true
+  isAudioPublished: true,
+  roomPassword: null
 };
 
 export const video = createSlice({
   name: 'video',
   initialState,
   reducers: {
+    setRoomPassword: (state, action) => {
+      state.roomPassword = action.payload.roompassword;
+    },
+    setRoomName: (state, action) => {
+      state.roomName = action.payload.roomName;
+    },
     initOVSession: (state, action) => {
       console.log('action 찍기', action);
       state.OV = action.payload.OV;
@@ -86,6 +94,8 @@ export const video = createSlice({
 });
 
 export const {
+  setRoomPassword,
+  setRoomName,
   initOVSession,
   setToken,
   setPublisher,

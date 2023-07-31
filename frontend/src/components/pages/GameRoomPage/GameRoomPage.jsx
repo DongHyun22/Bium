@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  setRoomPassword,
+  setRoomName,
   audioMute,
   deleteSubscriber,
   enteredSubscriber,
@@ -15,9 +17,13 @@ import { OpenVidu } from 'openvidu-browser';
 import { joinSession } from '../../../slices/video/videoThunkAction';
 
 function GameRoom() {
+  const [isSecret, setIsSecret] = useState(false);
+
   console.log('Join Start');
   const dispatch = useDispatch();
 
+  const roomPassword = useSelector((state) => state.video.roomPassword);
+  const roomName = useSelector((state) => state.video.roomName);
   const OV = useSelector((state) => state.video.OV);
   const session = useSelector((state) => state.video.session);
   const publisher = useSelector((state) => state.video.publisher);
@@ -45,7 +51,16 @@ function GameRoom() {
   const onbeforeunload = (e) => {
     leaveSession();
   };
+  const handleChangeisSecret = (e) => {
+    setIsSecret(!isSecret);
+  };
 
+  const handleChangeRoomPassword = (e) => {
+    dispatch(setRoomPassword({ roomPassword: e.target.value }));
+  };
+  const handleChangeRoomname = (e) => {
+    dispatch(setRoomName({ roomName: e.target.value }));
+  };
   const handleChangeSessionId = (e) => {
     dispatch(setMySessionId({ mySessionId: e.target.value }));
   };
@@ -130,12 +145,33 @@ function GameRoom() {
             <h1> Join a video session </h1>
             <form className="form-group" onSubmit={handleJoin}>
               <p>
+                <label>RoomName: </label>
+                <input className="form-control" type="text" id="roomName" value={roomName} onChange={handleChangeRoomname} required />
+              </p>
+              <p>
                 <label>Participant: </label>
                 <input className="form-control" type="text" id="userName" value={myUserName} onChange={handleChangeUserName} required />
               </p>
               <p>
                 <label> Session: </label>
                 <input className="form-control" type="text" id="sessionId" value={mySessionId} onChange={handleChangeSessionId} required />
+              </p>
+              <p>
+                <label> 비밀방 여부: </label>
+                <input className="form-control" type="checkbox" id="secretRoom" value={isSecret} onChange={handleChangeisSecret} required />
+                {isSecret && (
+                  <div>
+                    <label> Password: </label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      id="roomPassword"
+                      value={roomPassword}
+                      onChange={handleChangeRoomPassword}
+                      required
+                    />
+                  </div>
+                )}
               </p>
               <p className="text-center">
                 <input className="btn btn-lg btn-success" name="commit" type="submit" value="JOIN" />
@@ -161,12 +197,10 @@ function GameRoom() {
             />
             <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
           </div>
+          <div id="room-information">
+            <h1 id="room-name">{roomName}</h1>
+          </div>
 
-          {mainStreamManager !== undefined ? (
-            <div id="main-video" className="col-md-6">
-              <UserVideoComponent streamManager={mainStreamManager} />
-            </div>
-          ) : null}
           <div id="video-container" className="col-md-6">
             {publisher !== undefined ? (
               <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>

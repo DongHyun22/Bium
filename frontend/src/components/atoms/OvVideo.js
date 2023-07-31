@@ -50,20 +50,24 @@ const OpenViduVideoComponent = (props) => {
         .withFaceExpressions();
 
       // DRAW YOU FACE IN WEBCAM
-      canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoElement);
-      faceapi.matchDimensions(canvasRef.current, {
-        width: 480,
-        height: 270
-      });
+      if (detections && canvasRef.current !== null) {
+        canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoElement);
+        faceapi.matchDimensions(canvasRef.current, {
+          width: 480,
+          height: 270
+        });
 
-      const resized = faceapi.resizeResults(detections, {
-        width: 480,
-        height: 270
-      });
+        const resized = faceapi.resizeResults(detections, {
+          width: 480,
+          height: 270
+        });
 
-      faceapi.draw.drawDetections(canvasRef.current, resized);
-      faceapi.draw.drawFaceLandmarks(canvasRef.current, resized);
-      faceapi.draw.drawFaceExpressions(canvasRef.current, resized);
+        faceapi.draw.drawDetections(canvasRef.current, resized);
+        faceapi.draw.drawFaceLandmarks(canvasRef.current, resized);
+        faceapi.draw.drawFaceExpressions(canvasRef.current, resized);
+      } else {
+        return;
+      }
     }, 8000);
   };
 
