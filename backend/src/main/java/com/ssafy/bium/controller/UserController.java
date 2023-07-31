@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,10 +43,26 @@ public class UserController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        resultMap.put("message","success");
-        resultMap.put("httpHeaders",jwt.getAccessToken());
+        resultMap.put("message", "success");
+        resultMap.put("httpHeaders", jwt.getAccessToken());
 
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+    }
+
+    // 로그아웃
+    @GetMapping("/logout/{userEmail}")
+    public ResponseEntity<?> logout(@PathVariable("userEmail") String userId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.ACCEPTED;
+        try {
+            userService.deleteRefreshToken(userId);
+            resultMap.put("message", "success");
+            status = HttpStatus.ACCEPTED;
+        } catch (Exception e) {
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
     // 회원가입
@@ -63,7 +80,11 @@ public class UserController {
     @GetMapping("/signup/check")
     public ResponseEntity<?> emailCheck(@RequestParam String userEmail) {
 
-        int cnt = userService.getUserByUserEmail(userEmail);
+        int cnt = 1;
+        if (userService.getUserByUserEmail(userEmail) == null) {
+            cnt = 0;
+        }
+
         return new ResponseEntity<>(cnt, HttpStatus.OK);
     }
 

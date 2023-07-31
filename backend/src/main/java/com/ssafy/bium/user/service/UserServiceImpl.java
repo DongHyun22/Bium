@@ -25,18 +25,7 @@ public class UserServiceImpl implements UserService {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    @Override
-    public User getUser(String userEmail) {
-        Optional<User> findUser = userRepository.findByUserEmail(userEmail);
 
-        if (!findUser.isPresent()) {
-            System.out.println("유저 존재하지 않음");
-            return null;
-            // 예외 처리
-        }
-
-        return findUser.get();
-    }
 
     public User login(UserLoginPostReq userLoginPostReq) {
         String userEmail = userLoginPostReq.getUserEmail();
@@ -64,8 +53,6 @@ public class UserServiceImpl implements UserService {
                 .authorityName("ROLE_USER")
                 .build();
 
-        System.out.println("userServiceImpl" + userRegisterInfo.getUserEmail());
-        System.out.println("password encoder: " + passwordEncoder.encode(userRegisterInfo.getUserPw()));
         User user = User.builder()
                 .userEmail(userRegisterInfo.getUserEmail())
                 .userPw(passwordEncoder.encode(userRegisterInfo.getUserPw()))
@@ -81,12 +68,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getUserByUserEmail(String userEmail) {
+    public User getUserByUserEmail(String userEmail) {
         Optional<User> findUser = userRepository.findByUserEmail(userEmail);
         if(!findUser.isPresent()){
-            return 0;
+            return null;
         }
-        return 1;
+        return findUser.get();
     }
 
     @Override
@@ -106,4 +93,8 @@ public class UserServiceImpl implements UserService {
         return 0;
     }
 
+    @Override
+    public int deleteRefreshToken(String userEmail) {
+        return 0;
+    }
 }

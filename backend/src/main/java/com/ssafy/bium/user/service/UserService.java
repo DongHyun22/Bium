@@ -7,10 +7,9 @@ import com.ssafy.bium.user.request.UserRegisterPostReq;
 
 
 public interface UserService {
-    // UserResponse getUserInfo(String loginId, String loginPw);
-    User getUser(String userEmail);
-//    User searchUser(String userEmail, String userPw);
+
     User setUser(UserRegisterPostReq userRegisterInfo);
-    int getUserByUserEmail(String userEmail);
+    User getUserByUserEmail(String userEmail);
     int deleteUserByUserEmail(String userEmail);
+    int deleteRefreshToken(String userEmail);
 }
