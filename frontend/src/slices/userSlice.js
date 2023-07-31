@@ -3,8 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 // const initialStateValue= {email: "", password: ""}
 
 const initialState = {
-  email: '',
-  password: '',
+  nickname: '',
+  todayBium: 0,
+  totalBium: 0,
+  imageId: 0,
   isLogin: false,
   isLoginError: false,
   userInfo: null,
@@ -15,9 +17,12 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    getUserInfo(state, action) {
-      state.email = action.payload;
-      state.password = action.payload;
+    setProfile(state, action) {
+      state.nickname = action.payload;
+      console(action.payload);
+      state.todayBium = action.payload;
+      state.totalBium = action.payload;
+      state.imageId = action.payload;
     },
     setIsLogin(state, action) {
       state.isLogin = action.payload;
@@ -34,24 +39,5 @@ const userSlice = createSlice({
   }
 });
 
-export const { loginActions, setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } = userSlice.actions;
-
+export const { setProfile, setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } = userSlice.actions;
 export default userSlice.reducer;
-
-// import { createSlice } from '@reduxjs/toolkit';
-
-// const initialStateValue= {email: "", password: ""}
-
-// const userSlice = createSlice({
-//     name: "user",
-//     initialState: { value: initialStateValue},
-//     reducers: {
-//         getUserInfo(state,action) {
-//             state.value = action.payload;
-//         }
-//     },
-// });
-
-// export const loginActions = userSlice.actions;
-
-// export default userSlice.reducer;

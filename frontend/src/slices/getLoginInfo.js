@@ -1,12 +1,13 @@
 import { setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } from './userSlice';
 import jwtDecode from 'jwt-decode';
-import { login, findById, tokenRegeneration } from './user';
+import { login, findById, tokenRegeneration } from './login';
 
 // 사용자 로그인 처리 함수
 export const userLogin = (user) => async (dispatch) => {
   try {
     const response = await login(user);
     if (response.message === 'success') {
+      console.log(response.data);
       const { accessToken: accessToken, refreshToken: refreshToken } = response;
       sessionStorage.setItem('accessToken', accessToken);
       sessionStorage.setItem('refreshToken', refreshToken);
@@ -44,6 +45,7 @@ export const getUserInfo = (token) => async (dispatch) => {
 // 토큰 갱신 동작 처리 함수
 export const tokenRegenerationAction = () => async (dispatch, getState) => {
   try {
+    console.log(dispatch, getState);
     const state = getState();
     console.log('토큰 재발급 >> 기존 토큰 정보: ', sessionStorage.getItem('accessToken'));
     const response = await tokenRegeneration(JSON.stringfy(state.user.userInfo));

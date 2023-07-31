@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 // import { loginActions } from '../../../slices/userSlice.js';
-import { userLogin } from '../../../slices/userActions';
+import { userLogin } from '../../../slices/getLoginInfo';
 // import axios from 'axios';
 
 // 로그인 컴포넌트
@@ -39,7 +39,7 @@ function Login() {
   //         window.alert('로그인 실패')
   //     })
   // }
-  console.log(userMail, password);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -47,14 +47,22 @@ function Login() {
       alert('유효한 이메일 형식이 아닙니다.');
       return;
     }
-
-    // const user = { userMail, password };
-    const user = { userMail: 'ssafy', password: '1234' };
+    const user = { userMail, password };
     dispatch(userLogin(user));
+
+    // const user = { userMail: 'ssafy', password: '1234' };
 
     // axios 요청 함수
     // getUserInfo(email,password);
   };
+  const handleEmailChange = (e) => {
+    setUserMail(e.target.value);
+    console.log(userMail);
+  };
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -65,7 +73,7 @@ function Login() {
               id="userEmail"
               placeholder="이메일을 입력해 주세요."
               value={userMail}
-              onChange={(e) => setUserMail(e.target.value)}
+              onChange={handleEmailChange}
             />
           </div>
         </div>
@@ -76,7 +84,7 @@ function Login() {
               id="userPassword"
               placeholder="비밀번호를 입력해 주세요."
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
             />
           </div>
         </div>
