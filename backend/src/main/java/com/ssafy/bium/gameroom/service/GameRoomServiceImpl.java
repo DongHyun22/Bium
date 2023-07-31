@@ -13,6 +13,7 @@ import org.springframework.data.redis.support.atomic.RedisAtomicLong;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -128,7 +129,8 @@ public class GameRoomServiceImpl implements GameRoomService {
         String temp = (String) redisTemplate.opsForHash().get("gameRoom:"+gameRoomId, "start");
         boolean start = Boolean.parseBoolean(temp);
         if(!start){
-            redisTemplate.delete(userGameRoomId);
+            redisTemplate.delete("userGameRoom:" + userGameRoomId);
+            redisTemplate.opsForSet().remove("userGameRoom", Integer.parseInt(userGameRoomId));
         }
 
 //        RedisAtomicLong counterUGR = new RedisAtomicLong("ugri", redisTemplate.getConnectionFactory());
@@ -153,6 +155,7 @@ public class GameRoomServiceImpl implements GameRoomService {
     @Override
     public String deleteGameRoom(String gameRoomId) {
         // gameRoomId에 해당하는 userGameRoom 삭제
+        System.out.println(redisTemplate.opsForHash().entries("userGameRoom"));
 
         // 다 삭제하면 gameRoomId의 gameRoom 삭제
         return null;

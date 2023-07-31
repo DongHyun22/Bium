@@ -36,9 +36,9 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, ?> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+    public RedisTemplate<String, ?> redisTemplate() {
         RedisTemplate<String, ?> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
 
         // String 타입의 key를 사용하므로 StringRedisSerializer를 사용합니다.
         redisTemplate.setKeySerializer(new StringRedisSerializer());
