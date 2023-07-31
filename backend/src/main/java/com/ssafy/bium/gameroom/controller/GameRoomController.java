@@ -1,7 +1,9 @@
-package com.ssafy.bium.controller;
+package com.ssafy.bium.gameroom.controller;
 
 import com.ssafy.bium.gameroom.request.EnterGameRoomDto;
 import com.ssafy.bium.gameroom.request.GameRoomDto;
+import com.ssafy.bium.gameroom.request.ModifyGameRoomDto;
+import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
 import com.ssafy.bium.gameroom.request.SearchGameRoomDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
 import com.ssafy.bium.gameroom.service.GameRoomService;
@@ -20,7 +22,7 @@ public class GameRoomController {
     public List<GameRoomListDto> list(
             @RequestBody SearchGameRoomDto request
     ) {
-        return gameRoomService.searchGameRoom(request);
+        return gameRoomService.searchGameRooms(request);
     }
 
 
@@ -48,13 +50,26 @@ public class GameRoomController {
         Long userGameRoomId = gameRoomService.enterGameRoom(enterGameRoomDto);
         return 0L;
     }
+
+    @GetMapping("/modify")
+    public DetailGameRoomDto modify(
+            @RequestParam String gameRoomId
+    ) {
+        return gameRoomService.searchGameRoom(gameRoomId);
+    }
+
+    @PostMapping("/modify")
+    public Long modify(
+            @RequestBody ModifyGameRoomDto request
+    ) {
+        return gameRoomService.modifyGameRoom(request);
+    }
+
+    @PostMapping("/out")
+    public Long out(
+            @RequestParam String userGameRoomId
+    ) {
+        return gameRoomService.outGameRoom(userGameRoomId);
+    }
 }
 
-
-//    ArticleSearch condition = ArticleSearch.builder()
-//            .condition(keyword)
-//            .sortCondition(sortCondition)
-//            .build();
-//    PageRequest pageRequest = PageRequest.of(page - 1, 10);
-//    Page<ArticleListDto> articleListDto = articleService.searchArticles(condition, pageRequest);
-//        return new Result<Page<ArticleListDto>>(articleListDto);
