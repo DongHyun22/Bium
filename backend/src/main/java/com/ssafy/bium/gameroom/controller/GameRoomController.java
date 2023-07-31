@@ -1,10 +1,7 @@
 package com.ssafy.bium.gameroom.controller;
 
-import com.ssafy.bium.gameroom.request.EnterGameRoomDto;
-import com.ssafy.bium.gameroom.request.GameRoomDto;
-import com.ssafy.bium.gameroom.request.ModifyGameRoomDto;
+import com.ssafy.bium.gameroom.request.*;
 import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
-import com.ssafy.bium.gameroom.request.SearchGameRoomDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
 import com.ssafy.bium.gameroom.service.GameRoomService;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +34,7 @@ public class GameRoomController {
     }
 
     @PostMapping("/enter")
-    public Long enter(
+    public String enter(
             @RequestParam Long gameRoomId,
             @RequestParam String gameRoomPw,
             @RequestParam String userEmail
@@ -47,8 +44,8 @@ public class GameRoomController {
                 .gameRoomPw(gameRoomPw)
                 .userEmail(userEmail)
                 .build();
-        Long userGameRoomId = gameRoomService.enterGameRoom(enterGameRoomDto);
-        return 0L;
+        String userGameRoomId = gameRoomService.enterGameRoom(enterGameRoomDto);
+        return userGameRoomId;
     }
 
     @GetMapping("/modify")
@@ -59,17 +56,44 @@ public class GameRoomController {
     }
 
     @PostMapping("/modify")
-    public Long modify(
+    public String modify(
             @RequestBody ModifyGameRoomDto request
     ) {
         return gameRoomService.modifyGameRoom(request);
     }
 
     @PostMapping("/out")
-    public Long out(
+    public String out(
             @RequestParam String userGameRoomId
     ) {
         return gameRoomService.outGameRoom(userGameRoomId);
+    }
+
+    @PostMapping("/start")
+    public String start(
+            @RequestParam String gameRoomId
+    ) {
+        return gameRoomService.startGameRoom(gameRoomId);
+    }
+
+    @PostMapping("/over")
+    public String over(
+            @RequestParam String userGameRoomId,
+            @RequestParam Long record
+    ){
+        OverUserGameRoomDto request = OverUserGameRoomDto.builder()
+                .userGameRoomId(userGameRoomId)
+                .record(record)
+                .build();
+        return gameRoomService.overUserGameRoom(request);
+    }
+
+    // 게임 종료시 게임 기록 반환 및 게임 기록 유저에 저장
+    @PostMapping("/delete")
+    public String delete(
+            @RequestParam String gameRoomId
+    ) {
+        return gameRoomService.deleteGameRoom(gameRoomId);
     }
 }
 
