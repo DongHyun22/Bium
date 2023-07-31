@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginActions } from '../../../slices/userSlice.js';
-import axios from 'axios';
+// import { loginActions } from '../../../slices/userSlice.js';
+import { userLogin } from '../../../slices/userActions';
+// import axios from 'axios';
 
 // 로그인 컴포넌트
 function Login() {
@@ -13,35 +14,32 @@ function Login() {
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
   // axios 요청 함수
-  const getUserInfo = (userMail, password) => {
-    const API = 'http://localhost:8080/login';
+  // const getUserInfo = (email,password) => {
+  //     const API = 'http:localhost:8080/login'
 
-    console.log(userMail, password);
+  //     console.log(email,password)
 
-    axios
-      .post(
-        API,
-        {
-          userEmail: 'ssafy',
-          userPw: '1234'
-        },
-        {
-          // headers: {
-          //     Authorization: `Bearer ${token}`,
-          // },
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-        console.log('로그인 되었습니다.');
-        // userSlice의 actions를 불러옴
-        dispatch(loginActions.getUserInfo(userMail, password));
-      })
-      .catch((error) => {
-        console.log(error);
-        alert('로그인 실패');
-      });
-  };
+  //     axios.post(API,{
+  //         userEmail: 'ssafy',
+  //         userPw: '1234',
+  //     },
+  //     {
+  //         // headers: {
+  //         //     Authorization: `Bearer ${token}`,
+  //         // },
+  //     })
+  //     .then((response) => {
+  //         console.log(response.data);
+  //         console.log('로그인 되었습니다.')
+  //         // userSlice의 actions를 불러옴
+  //         dispatch(loginActions.getUserInfo(email,password))
+  //     })
+  //     .catch((error) => {
+  //         console.log(error)
+  //         window.alert('로그인 실패')
+  //     })
+  // }
+  console.log(userMail, password);
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -50,13 +48,17 @@ function Login() {
       return;
     }
 
+    // const user = { userMail, password };
+    const user = { userMail: 'ssafy', password: '1234' };
+    dispatch(userLogin(user));
+
     // axios 요청 함수
-    getUserInfo(userMail, password);
+    // getUserInfo(email,password);
   };
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div className="loginEmail">
+        <div className="loginId">
           <div>
             <input
               type="input"
