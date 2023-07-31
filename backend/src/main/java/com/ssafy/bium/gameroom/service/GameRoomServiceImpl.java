@@ -6,6 +6,7 @@ import com.ssafy.bium.gameroom.repository.GameRoomRepository;
 import com.ssafy.bium.gameroom.repository.UserGameRoomRepository;
 import com.ssafy.bium.gameroom.request.EnterGameRoomDto;
 import com.ssafy.bium.gameroom.request.GameRoomDto;
+import com.ssafy.bium.gameroom.request.ModifyGameRoomDto;
 import com.ssafy.bium.gameroom.request.SearchGameRoomDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class GameRoomServiceImpl implements GameRoomService {
 //    private final HashOperations<String, String, GameRoom> hashOperations;
 
     @Override
-    public List<GameRoomListDto> searchGameRoom(SearchGameRoomDto request) {
+    public List<GameRoomListDto> searchGameRooms(SearchGameRoomDto request) {
         // TODO: 2023-07-30 (030) paging, sort 구현
         List<GameRoom> gameRooms = gameRoomRepository.findAll();
 
@@ -77,7 +78,7 @@ public class GameRoomServiceImpl implements GameRoomService {
         int cur = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "curPeople"));
 //        GameRoom gameRoom = gameRoomRepository.findGameRoomByGameRoomId("5");
         // 게임방의 현재 인원 1 증가
-        redisTemplate.opsForHash().put("gameRoom:" + enterGameRoomDto.getGameRoomId(), "curPeople", String.valueOf(++cur));
+        redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "curPeople", String.valueOf(++cur));
         // 유저게임방에 참가자 생성
         RedisAtomicLong counterUGR = new RedisAtomicLong("ugri", redisTemplate.getConnectionFactory());
         Long ugri = counterUGR.incrementAndGet();
@@ -91,5 +92,21 @@ public class GameRoomServiceImpl implements GameRoomService {
                 .build();
         usergameRoomRepository.save(userGameRoom);
         return null;
+    }
+
+    @Override
+    public ModifyGameRoomDto searchGameRoom(String gameRoomId) {
+        // 해당 gameRoomId에 해당하는 방 정보를 ModifyDto에 저장하여 리턴
+        String title = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "gameRoomTitle");
+        int gameRoomMovie = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "gameRoomMovie"));
+        int maxPeople = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "maxPeople"));
+        String gameRoomPw = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "gameRoomPw");
+        ModifyGameRoomDto modifyGameRoomDto = ModifyGameRoomDto.builder()
+                .title(title)
+                .gameRoomMovie(gameRoomMovie)
+                .maxPeople(maxPeople)
+                .gameRoomPw(gameRoomPw)
+                .build();
+        return modifyGameRoomDto;
     }
 }
