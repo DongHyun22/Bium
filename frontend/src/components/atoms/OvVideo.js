@@ -21,7 +21,6 @@ const OpenViduVideoComponent = (props) => {
 
       // faceapi.nets.face
     ]).then((e) => {
-      console.log(e);
       console.log('end');
 
       faceMyDetect();
@@ -49,8 +48,6 @@ const OpenViduVideoComponent = (props) => {
         .detectSingleFace(videoElement, new faceapi.TinyFaceDetectorOptions())
         .withFaceLandmarks()
         .withFaceExpressions();
-
-      console.log(detections);
 
       // DRAW YOU FACE IN WEBCAM
       canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoElement);
