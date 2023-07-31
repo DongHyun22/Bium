@@ -18,6 +18,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,8 +31,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@Valid @RequestBody UserLoginPostReq userLoginPostReq) {
-
+    public ResponseEntity<?> login(@Valid @RequestBody UserLoginPostReq userLoginPostReq) {
+        Map<String, Object> resultMap = new HashMap<>();
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userLoginPostReq.getUserEmail(), userLoginPostReq.getUserPw());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -40,8 +42,10 @@ public class UserController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        resultMap.put("message","success");
+        resultMap.put("httpHeaders",jwt.getAccessToken());
 
-        return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 
     // 회원가입
