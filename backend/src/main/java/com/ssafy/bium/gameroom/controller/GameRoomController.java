@@ -1,4 +1,4 @@
-package com.ssafy.bium.controller;
+package com.ssafy.bium.gameroom.controller;
 
 import com.ssafy.bium.gameroom.request.EnterGameRoomDto;
 import com.ssafy.bium.gameroom.request.GameRoomDto;
