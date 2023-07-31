@@ -4,11 +4,8 @@ import com.ssafy.bium.gameroom.GameRoom;
 import com.ssafy.bium.gameroom.UserGameRoom;
 import com.ssafy.bium.gameroom.repository.GameRoomRepository;
 import com.ssafy.bium.gameroom.repository.UserGameRoomRepository;
-import com.ssafy.bium.gameroom.request.EnterGameRoomDto;
-import com.ssafy.bium.gameroom.request.GameRoomDto;
-import com.ssafy.bium.gameroom.request.ModifyGameRoomDto;
+import com.ssafy.bium.gameroom.request.*;
 import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
-import com.ssafy.bium.gameroom.request.SearchGameRoomDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -72,7 +69,7 @@ public class GameRoomServiceImpl implements GameRoomService {
     }
 
     @Override
-    public Long enterGameRoom(EnterGameRoomDto enterGameRoomDto) {
+    public String enterGameRoom(EnterGameRoomDto enterGameRoomDto) {
         String gameRoomId = enterGameRoomDto.getGameRoomId();
         // 게임방의 max인원이 꽉차면 입장 불가, 게임방이 진행중(start)이면 입장 불가, pw가 다르면 입장 불가
         int cur = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "curPeople"));
@@ -91,7 +88,7 @@ public class GameRoomServiceImpl implements GameRoomService {
                 .gameRecord(0L)
                 .build();
         usergameRoomRepository.save(userGameRoom);
-        return null;
+        return gameRoomId;
     }
 
     @Override
@@ -111,7 +108,7 @@ public class GameRoomServiceImpl implements GameRoomService {
     }
 
     @Override
-    public Long modifyGameRoom(ModifyGameRoomDto request) {
+    public String modifyGameRoom(ModifyGameRoomDto request) {
         int cur = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + request.getGameRoomId(), "curPeople"));
         GameRoom gameRoom = GameRoom.builder()
                 .gameRoomId(request.getGameRoomId())
@@ -122,19 +119,44 @@ public class GameRoomServiceImpl implements GameRoomService {
                 .curPeople(cur)
                 .maxPeople(request.getMaxPeople())
                 .build();
-        gameRoomRepository.save(gameRoom).getGameRoomId();
-        return null;
+        return gameRoomRepository.save(gameRoom).getGameRoomId();
     }
 
     @Override
-    public Long outGameRoom(String userGameRoomId) {
+    public String outGameRoom(String userGameRoomId) {
         String gameRoomId = (String) redisTemplate.opsForHash().get("userGameRoom:" + userGameRoomId, "gameRoomId");
         String temp = (String) redisTemplate.opsForHash().get("gameRoom:"+gameRoomId, "start");
         boolean start = Boolean.parseBoolean(temp);
         if(!start){
             redisTemplate.delete(userGameRoomId);
         }
+
+//        RedisAtomicLong counterUGR = new RedisAtomicLong("ugri", redisTemplate.getConnectionFactory());
+//        counterUGR.decrementAndGet();
+        return gameRoomId;
+    }
+
+    @Override
+    public String startGameRoom(String gameRoomId) {
+        String temp = (String) redisTemplate.opsForHash().get("gameRoom:"+gameRoomId, "start");
+        boolean start = !(Boolean.parseBoolean(temp));
+        redisTemplate.opsForHash().put("gameRoom:"+gameRoomId, "start", String.valueOf(start));
+        return gameRoomId;
+    }
+
+    @Override
+    public String overUserGameRoom(OverUserGameRoomDto request) {
+        redisTemplate.opsForHash().put("userGameRoom:"+request.getUserGameRoomId(), "gameRecord", String.valueOf(request.getRecord()));
+        return request.getUserGameRoomId();
+    }
+
+    @Override
+    public String deleteGameRoom(String gameRoomId) {
+        // gameRoomId에 해당하는 userGameRoom 삭제
+
+        // 다 삭제하면 gameRoomId의 gameRoom 삭제
         return null;
     }
+
 
 }
