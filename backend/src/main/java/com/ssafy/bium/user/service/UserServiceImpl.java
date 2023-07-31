@@ -1,9 +1,11 @@
 package com.ssafy.bium.user.service;
 
+import com.ssafy.bium.common.Authority;
 import com.ssafy.bium.config.jwt.TokenProvider;
 import com.ssafy.bium.user.User;
 import com.ssafy.bium.user.repository.UserRepository;
 import com.ssafy.bium.user.request.UserLoginPostReq;
+import com.ssafy.bium.user.request.UserRegisterPostReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -11,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -54,5 +57,53 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public User setUser(UserRegisterPostReq userRegisterInfo) {
+
+        Authority authority = Authority.builder()
+                .authorityName("ROLE_USER")
+                .build();
+
+        System.out.println("userServiceImpl" + userRegisterInfo.getUserEmail());
+        User user = User.builder()
+                .userEmail(userRegisterInfo.getUserEmail())
+                .userPw(passwordEncoder.encode(userRegisterInfo.getUserPw()))
+//                .userRegisterInfo.getUserPw()
+                .userName(userRegisterInfo.getUserName())
+                .userNickname(userRegisterInfo.getUserNickname())
+                .authorities(Collections.singleton(authority))
+                .activated(true)
+                .build();
+
+        System.out.println("userServiceImpl" + user.getUserEmail());
+        return userRepository.save(user);
+
+    }
+
+    @Override
+    public int getUserByUserEmail(String userEmail) {
+        Optional<User> findUser = userRepository.findByUserEmail(userEmail);
+        if(!findUser.isPresent()){
+            return 0;
+        }
+        return 1;
+    }
+
+    @Override
+    public int deleteUserByUserEmail(String userEmail) {
+
+        Optional<User> findUser = userRepository.findByUserEmail(userEmail);
+        if (!findUser.isPresent()) {
+            return 1;
+        }
+
+        User user = findUser.get();
+        if (!user.getUserEmail().equals(userEmail)) {
+            return 1;
+        }
+
+        userRepository.delete(user);
+        return 0;
+    }
 
 }

@@ -3,10 +3,16 @@ package com.ssafy.bium.user;
 import com.ssafy.bium.common.Authority;
 import com.ssafy.bium.common.TimeBaseEntity;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 
 @Entity
 @Getter
@@ -14,6 +20,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@DynamicInsert
 public class User extends TimeBaseEntity {
 
     @Id
@@ -60,5 +67,32 @@ public class User extends TimeBaseEntity {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<Authority> authorities;
+
+    @Builder
+    public User(String userEmail, String userPw, String token, String userName, String userNickname,
+                int userRank, Long todayBium, Long topBium, Long totalBium, boolean is_admin, boolean activated) {
+        this.userEmail = userEmail;
+        this.userPw = userPw;
+        this.token = token;
+        this.userName = userName;
+        this.userNickname = userNickname;
+        this.userRank = userRank;
+        this.todayBium = todayBium;
+        this.topBium = topBium;
+        this.totalBium = totalBium;
+        this.is_admin = is_admin;
+
+        if (todayBium == null) {
+            this.todayBium = 0L;
+        }
+
+        if (topBium == null) {
+            this.topBium = 0L;
+        }
+
+        if (totalBium == null) {
+            this.totalBium = 0L;
+        }
+    }
 
 }

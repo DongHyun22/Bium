@@ -4,6 +4,8 @@ import com.ssafy.bium.config.jwt.JwtFilter;
 import com.ssafy.bium.config.jwt.TokenDto;
 import com.ssafy.bium.config.jwt.TokenProvider;
 import com.ssafy.bium.user.request.UserLoginPostReq;
+import com.ssafy.bium.user.User;
+import com.ssafy.bium.user.request.UserRegisterPostReq;
 import com.ssafy.bium.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -18,16 +20,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
+@RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class UserController {
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
-    public UserController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
-        this.tokenProvider = tokenProvider;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-    }
+    private final UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@Valid @RequestBody UserLoginPostReq userLoginPostReq) {
@@ -45,9 +44,31 @@ public class UserController {
         return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
     }
 
-    @GetMapping("/hello")
-    public ResponseEntity<String> hello() {
-        return ResponseEntity.ok("hello");
+    // 회원가입
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUp(@RequestBody UserRegisterPostReq registerInfo) {
+
+        System.out.println("userController" + registerInfo.getUserEmail());
+        User user = userService.setUser(registerInfo);
+        System.out.println(user);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 아이디 중복 체크
+    @GetMapping("/signup/check")
+    public ResponseEntity<?> emailCheck(@RequestParam String userEmail) {
+
+        int cnt = userService.getUserByUserEmail(userEmail);
+        return new ResponseEntity<>(cnt, HttpStatus.OK);
+    }
+
+    // 회원탈퇴
+    @PostMapping("profile/delete")
+    public ResponseEntity<?> deleteUser(@RequestParam String userEmail) {
+
+        int check = userService.deleteUserByUserEmail(userEmail);
+        return new ResponseEntity<>(check, HttpStatus.OK);
     }
 
 }
