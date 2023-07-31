@@ -1,6 +1,7 @@
 package com.ssafy.bium.config;
 
 import com.ssafy.bium.gameroom.request.GameRoomDto;
+import com.ssafy.bium.gameroom.request.SearchGameRoomDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,11 +35,9 @@ public class RedisConfig {
         return new LettuceConnectionFactory(redisConfiguration);
     }
 
-    @Primary
     @Bean
-    // TODO: 2023-07-26 (026)  GaneRoomDto -> Object로 변경하기
-    public RedisTemplate<String, GameRoomDto> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, GameRoomDto> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, ?> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, ?> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 
         // String 타입의 key를 사용하므로 StringRedisSerializer를 사용합니다.
@@ -49,7 +48,7 @@ public class RedisConfig {
 
         // Hash 자료구조를 사용할 때 필요한 설정입니다.
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
 
         // RedisTemplate을 초기화합니다.
         redisTemplate.afterPropertiesSet();

@@ -23,4 +23,14 @@ public class TimeBaseEntity {
     @Column(nullable = false)
     private LocalDateTime modifiedDate;
 
+    @PrePersist // 데이터 생성이 이루어질때 사전 작업
+    public void prePersist() {
+        this.createDate = LocalDateTime.now();
+        this.modifiedDate = this.createDate;
+    }
+
+    @PreUpdate // 데이터 수정이 이루어질때 사전 작업
+    public void preUpdate() {
+        this.modifiedDate = LocalDateTime.now();
+    }
 }

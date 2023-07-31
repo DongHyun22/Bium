@@ -6,19 +6,17 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class GameRoomListDto {
+public class DetailGameRoomDto {
     private String title;
-    private boolean start;
     private int gameRoomMovie;
-    private int curPeople;
     private int maxPeople;
+    private String gameRoomPw;
 
     @Builder
-    public GameRoomListDto(String title, boolean start, int gameRoomMovie, int curPeople, int maxPeople) {
+    public DetailGameRoomDto(String title, int gameRoomMovie, int maxPeople, String gameRoomPw) {
         this.title = title;
-        this.start = start;
         this.gameRoomMovie = gameRoomMovie;
-        this.curPeople = curPeople;
         this.maxPeople = maxPeople;
+        this.gameRoomPw = gameRoomPw;
     }
 }
