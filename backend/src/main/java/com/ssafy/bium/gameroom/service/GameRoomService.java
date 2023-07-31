@@ -15,4 +15,5 @@ public interface GameRoomService {
     Long enterGameRoom(EnterGameRoomDto enterGameRoomDto);
     DetailGameRoomDto searchGameRoom(String gameRoomId);
     Long modifyGameRoom(ModifyGameRoomDto request);
+    Long outGameRoom(String userGameRoomId);
 }

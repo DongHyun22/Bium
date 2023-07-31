@@ -125,4 +125,16 @@ public class GameRoomServiceImpl implements GameRoomService {
         gameRoomRepository.save(gameRoom).getGameRoomId();
         return null;
     }
+
+    @Override
+    public Long outGameRoom(String userGameRoomId) {
+        String gameRoomId = (String) redisTemplate.opsForHash().get("userGameRoom:" + userGameRoomId, "gameRoomId");
+        String temp = (String) redisTemplate.opsForHash().get("gameRoom:"+gameRoomId, "start");
+        boolean start = Boolean.parseBoolean(temp);
+        if(!start){
+            redisTemplate.delete(userGameRoomId);
+        }
+        return null;
+    }
+
 }

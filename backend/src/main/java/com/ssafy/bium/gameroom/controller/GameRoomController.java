@@ -64,5 +64,12 @@ public class GameRoomController {
     ) {
         return gameRoomService.modifyGameRoom(request);
     }
+
+    @PostMapping("/out")
+    public Long out(
+            @RequestParam String userGameRoomId
+    ) {
+        return gameRoomService.outGameRoom(userGameRoomId);
+    }
 }
 
