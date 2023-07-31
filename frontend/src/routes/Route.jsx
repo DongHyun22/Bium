@@ -7,9 +7,9 @@ function RouteLink() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/login/" element={<LoginPage />} />
-        <Route path="/signup/" element={<SignupPage />} />
+        <Route path="/api" element={<MainPage />} />
+        <Route path="/apilogin/" element={<LoginPage />} />
+        <Route path="/apisignup/" element={<SignupPage />} />
       </Routes>
     </div>
   );
