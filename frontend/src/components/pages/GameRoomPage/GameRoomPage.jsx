@@ -15,6 +15,7 @@ import {
 import UserVideoComponent from '../../atoms/UserVideoComponent';
 import { OpenVidu } from 'openvidu-browser';
 import { joinSession } from '../../../slices/video/videoThunkAction';
+import Timer from '../../atoms/Timer';
 
 function GameRoom() {
   const [isSecret, setIsSecret] = useState(false);
@@ -158,7 +159,7 @@ function GameRoom() {
               </p>
               <p>
                 <label> 비밀방 여부: </label>
-                <input className="form-control" type="checkbox" id="secretRoom" value={isSecret} onChange={handleChangeisSecret} required />
+                <input className="form-control" type="checkbox" id="secretRoom" value={isSecret} onChange={handleChangeisSecret} />
                 {isSecret && (
                   <div>
                     <label> Password: </label>
@@ -215,6 +216,7 @@ function GameRoom() {
                 <UserVideoComponent streamManager={sub} />
               </div>
             ))}
+            <Timer></Timer>
           </div>
         </div>
       ) : null}
