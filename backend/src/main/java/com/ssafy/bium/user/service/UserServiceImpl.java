@@ -21,7 +21,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
@@ -65,10 +65,10 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         System.out.println("userServiceImpl" + userRegisterInfo.getUserEmail());
+        System.out.println("password encoder: " + passwordEncoder.encode(userRegisterInfo.getUserPw()));
         User user = User.builder()
                 .userEmail(userRegisterInfo.getUserEmail())
                 .userPw(passwordEncoder.encode(userRegisterInfo.getUserPw()))
-//                .userRegisterInfo.getUserPw()
                 .userName(userRegisterInfo.getUserName())
                 .userNickname(userRegisterInfo.getUserNickname())
                 .authorities(Collections.singleton(authority))
