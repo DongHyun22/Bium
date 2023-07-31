@@ -6,58 +6,26 @@ import { userLogin } from '../../../slices/getLoginInfo';
 
 // 로그인 컴포넌트
 function Login() {
-  const [userMail, setUserMail] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const [userPw, setUserPw] = useState('');
   const dispatch = useDispatch();
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
-  // axios 요청 함수
-  // const getUserInfo = (email,password) => {
-  //     const API = 'http:localhost:8080/login'
-
-  //     console.log(email,password)
-
-  //     axios.post(API,{
-  //         userEmail: 'ssafy',
-  //         userPw: '1234',
-  //     },
-  //     {
-  //         // headers: {
-  //         //     Authorization: `Bearer ${token}`,
-  //         // },
-  //     })
-  //     .then((response) => {
-  //         console.log(response.data);
-  //         console.log('로그인 되었습니다.')
-  //         // userSlice의 actions를 불러옴
-  //         dispatch(loginActions.getUserInfo(email,password))
-  //     })
-  //     .catch((error) => {
-  //         console.log(error)
-  //         window.alert('로그인 실패')
-  //     })
-  // }
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!emailRegex.test(userMail)) {
+    if (!emailRegex.test(userEmail)) {
       alert('유효한 이메일 형식이 아닙니다.');
       return;
     }
-    const user = { userMail, userPw };
+    const user = { userEmail, userPw };
     dispatch(userLogin(user));
-
-    // const user = { userMail: 'ssafy', password: '1234' };
-
-    // axios 요청 함수
-    // getUserInfo(email,password);
   };
   const handleEmailChange = (e) => {
-    setUserMail(e.target.value);
-    console.log(userMail);
+    setUserEmail(e.target.value);
+    console.log(userEmail);
   };
   const handlePasswordChange = (e) => {
     setUserPw(e.target.value);
@@ -65,6 +33,7 @@ function Login() {
 
   return (
     <div>
+      {}
       <form onSubmit={handleSubmit}>
         <div className="loginId">
           <div>
@@ -72,7 +41,7 @@ function Login() {
               type="input"
               id="userEmail"
               placeholder="이메일을 입력해 주세요."
-              value={userMail}
+              value={userEmail}
               onChange={handleEmailChange}
             />
           </div>

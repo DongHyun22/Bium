@@ -6,17 +6,6 @@ const axiosApi = axios.create({
     'Content-type': 'application/json'
   }
 });
-async function login(user, success, fail) {
-  const axiosApi = axios.create({
-    baseURL: 'http://localhost:8080',
-    headers: {
-      ContentType: 'application/json'
-    }
-  });
-  console.log('user.js function login');
-  console.log(user);
-  await axiosApi.post(`/login`, user).then(success).catch(fail);
-}
 
 async function findById(userid, success, fail) {
   axiosApi.defaults.headers['accessToken'] = sessionStorage.getItem('accessToken');
@@ -29,4 +18,4 @@ async function tokenRegeneration(user, success, fail) {
   await axiosApi.post(`/user/refresh`, user).then(success).catch(fail);
 }
 
-export { login, findById, tokenRegeneration };
+export { findById, tokenRegeneration };

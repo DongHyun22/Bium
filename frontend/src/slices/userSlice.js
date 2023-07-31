@@ -6,7 +6,7 @@ const initialState = {
   nickname: '',
   todayBium: 0,
   totalBium: 0,
-  imageId: 0,
+  imageId: null,
   isLogin: false,
   isLoginError: false,
   userInfo: null,
@@ -19,7 +19,7 @@ const userSlice = createSlice({
   reducers: {
     setProfile(state, action) {
       state.nickname = action.payload;
-      console(action.payload);
+      console.log(action.payload);
       state.todayBium = action.payload;
       state.totalBium = action.payload;
       state.imageId = action.payload;
