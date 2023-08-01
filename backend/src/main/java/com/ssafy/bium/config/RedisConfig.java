@@ -36,10 +36,11 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, ?> redisTemplate() {
-        RedisTemplate<String, ?> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<?, ?> redisTemplate() {
+        RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
 
+        redisTemplate.setEnableTransactionSupport(true);
         // String 타입의 key를 사용하므로 StringRedisSerializer를 사용합니다.
         redisTemplate.setKeySerializer(new StringRedisSerializer());
 
