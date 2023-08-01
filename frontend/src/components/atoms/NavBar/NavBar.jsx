@@ -7,7 +7,7 @@ export const NavBar = () => {
       <Link to="/login">로그인/ </Link>
       <Link to="/signup">회원가입/ </Link>
       <Link to="/createroom">게임방 생성/ </Link>
-      <Link to="/gameroomlist">게임방 생성/ </Link>
+      <Link to="/gameroomlist">게임룸 보기/ </Link>
       <Link to="/gameroom">게임방입장/ </Link>
       <Link to="/profile/:nickname">프로필 화면/ </Link>
     </div>

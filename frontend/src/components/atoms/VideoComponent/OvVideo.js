@@ -1,7 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
+import { useSelector } from 'react-redux';
 
 const OpenViduVideoComponent = (props) => {
+  const join = useSelector((state) => state.video.join);
+
   console.log('제발 빨리 끝내고 잘 수 있으면 좋겠다', props);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -11,7 +14,7 @@ const OpenViduVideoComponent = (props) => {
     console.log('start');
     const MODEL_URL = process.env.PUBLIC_URL + '/models';
 
-    Promise.allSettled([
+    Promise.all([
       // THIS FOR FACE DETECT AND LOAD FROM YOU PUBLIC/MODELS DIRECTORY
       faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
       faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
@@ -22,14 +25,13 @@ const OpenViduVideoComponent = (props) => {
       // faceapi.nets.face
     ]).then((e) => {
       console.log('end');
-
       faceMyDetect();
     });
   };
 
   // 변경마다;
   useEffect(() => {
-    videoRef && loadModels();
+    join && videoRef && loadModels();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
