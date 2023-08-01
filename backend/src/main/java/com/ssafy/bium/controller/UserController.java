@@ -46,6 +46,8 @@ public class UserController {
         resultMap.put("message", "success");
         resultMap.put("httpHeaders", jwt.getAccessToken());
 
+        userService.setToken(userLoginPostReq.getUserEmail(), jwt.getRefreshToken());
+
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 
