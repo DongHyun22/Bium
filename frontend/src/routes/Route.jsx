@@ -11,7 +11,6 @@ function RouteLink() {
         <Route path="/" element={<MainPage />} />
         <Route path="/login/" element={<LoginPage />} />
         <Route path="/signup/" element={<SignupPage />} />
-        <Route path="/gamemake/" element={<GameMakePage />} />
       </Routes>
     </div>
   );
