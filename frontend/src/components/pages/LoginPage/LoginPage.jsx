@@ -1,14 +1,18 @@
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 // import { loginActions } from '../../../slices/userSlice.js';
 import { userLogin, getUserInfo } from '../../../slices/getLoginInfo';
+import { setIsLogin } from '../../../slices/userSlice';
 // import axios from 'axios';
 
 // 로그인 컴포넌트
 function Login() {
   const [userEmail, setUserEmail] = useState('');
   const [userPw, setUserPw] = useState('');
+  const isLogin = useSelector((state) => state.user.isLogin);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
@@ -23,10 +27,14 @@ function Login() {
     const user = { userEmail, userPw };
     dispatch(userLogin(user));
 
+    // console.log(userLogin(userEmail, userPw));
     const token = sessionStorage.getItem('accessToken');
     console.log('세션의 토큰을 변수에 담음');
-    // console.log(token);
-    dispatch(getUserInfo(token, userEmail));
+
+    if (isLogin === true) {
+      navigate('/api/');
+    } else {
+    }
   };
   const handleEmailChange = (e) => {
     setUserEmail(e.target.value);
@@ -34,7 +42,6 @@ function Login() {
   };
   const handlePasswordChange = (e) => {
     setUserPw(e.target.value);
-    
   };
 
   return (
