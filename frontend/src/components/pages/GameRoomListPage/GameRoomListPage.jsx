@@ -7,6 +7,7 @@ export const GameRoomListPage = () => {
   const onSelect = (event) => {
     setIndex(event.target.value);
   };
+
   return (
     <div>
       <button>방 만들기</button>
