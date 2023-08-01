@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 // import { loginActions } from '../../../slices/userSlice.js';
-import { userLogin } from '../../../slices/getLoginInfo';
+import { userLogin, getUserInfo } from '../../../slices/getLoginInfo';
 // import axios from 'axios';
 
 // 로그인 컴포넌트
@@ -22,13 +22,19 @@ function Login() {
     }
     const user = { userEmail, userPw };
     dispatch(userLogin(user));
+
+    const token = sessionStorage.getItem('accessToken');
+    console.log('세션의 토큰을 변수에 담음');
+    // console.log(token);
+    dispatch(getUserInfo(token, userEmail));
   };
   const handleEmailChange = (e) => {
     setUserEmail(e.target.value);
-    console.log(userEmail);
+    // console.log(userEmail);
   };
   const handlePasswordChange = (e) => {
     setUserPw(e.target.value);
+    
   };
 
   return (

@@ -12,6 +12,7 @@ export const userLogin = (user) => async (dispatch) => {
         return response;
       })
       .catch((err) => {
+        console.log('userLogin 실패');
         return err;
       });
     console.log(response);
@@ -33,16 +34,18 @@ export const userLogin = (user) => async (dispatch) => {
 };
 
 // 사용자 정보를 가져오는 동작 처리 함수
-export const getUserInfo = (token) => async (dispatch) => {
+export const getUserInfo = (token, Email) => async (dispatch) => {
   try {
     const decodedToken = jwtDecode(token);
     console.log(decodedToken);
-    const response = await axios
-      .get('http://localhost:8080/login', { headers: { Authorization: decodedToken.sub } })
+    const response = await axios.get(`http://localhost:8080/info/${Email}`, { headers: { Authorization: decodedToken.sub } })
       .then((response) => {
+        console.log("함수 확인")
+        console.log(response);
         return response;
       })
       .catch((err) => {
+        console.log('getUserInfo 실패');
         return err;
       });
   } catch (error) {
