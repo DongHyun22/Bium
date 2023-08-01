@@ -4,37 +4,54 @@ import GameReady from '../GameReadyPage/GameReadyPage';
 
 function CreateGame() {
   const [inputTitle, setInputTitle] = useState('');
-  const [titleList, setTitleList] = useState([]);
+  const [roomList, setRoomList] = useState(['1']);
   const videos = ['불', '물', '산', '야경'];
 
   const [selectedVideo, setSelectedVideo] = useState(videos[0]);
 
-  const [number, setNumber] = useState(0);
+  const [player, setPlayer] = useState(0);
 
   const [secret, setSecret] = useState(false);
 
-  const addItem = () => {
-    setTitleList([...titleList, inputTitle]);
-    setInputTitle(''); // 입력창의 내용 지움
-  };
+  const [showGameReadyPage, setShowGameReadyPage] = useState(false);
+  // const addItem = () => {
+  //   // let copyTitleList = [...titleList]
+  //   // copyTitleList.unshift(inputTitle)
+  //   // setTitleList(copyTitleList)
+
+  //   setTitleList([...titleList, inputTitle]);
+  //   console.log(titleList)
+  // };
 
   const handleDecrease = () => {
-    if (number > 0) {
-      setNumber(number - 1);
+    if (player > 0) {
+      setPlayer(player - 1);
     }
   };
 
   const handleIncrease = () => {
-    if (number < 8) {
-      setNumber(number + 1);
+    if (player < 8) {
+      setPlayer(player + 1);
     }
+  };
+
+  const handleCreateGame = () => {
+    const roomInfo = {
+      title: inputTitle,
+      videotype: selectedVideo,
+      currentplayers: player,
+      inSecret: secret
+    };
+    setRoomList([...roomList, roomInfo]);
+
+    setShowGameReadyPage(true);
   };
   return (
     <div>
       <p>방 제목</p>
       <input type="text" value={inputTitle} onChange={(event) => setInputTitle(event.target.value)}></input>
-      <button onClick={addItem}>추가</button>
-      <GameReady titleList={titleList}></GameReady>
+      {/* <button onClick={addItem}>추가</button>
+      <GameReady titleList={titleList}></GameReady> */}
       <hr></hr>
 
       <p>영상 종류</p>
@@ -55,7 +72,7 @@ function CreateGame() {
 
       <p>최대 인원</p>
       <div>
-        숫자 : {number}
+        숫자 : {player}
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <button onClick={handleIncrease}>▲</button>
         &nbsp;
@@ -63,8 +80,15 @@ function CreateGame() {
       </div>
       <hr></hr>
 
-      <p>비밀방</p>
-      <input type="radio" name="secret"></input>
+      <div>
+        <p>비밀방</p>
+        <input type="radio" name="secret"></input>
+      </div>
+
+      <button>취소</button>
+      <button onClick={handleCreateGame}>방 생성</button>
+
+      {/* {showGameReadyPage && <GameReady roomList={roomList} />} */}
     </div>
   );
 }
