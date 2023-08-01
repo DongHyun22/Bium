@@ -12,14 +12,14 @@ function RouteLink() {
   return (
     <div>
       <Routes>
-        <Route path="/api" element={<MainPage />} />
-        <Route path="/api/login" element={<LoginPage />} />
-        <Route path="/api/signup" element={<SignupPage />} />
-        <Route path="/api/createroom" element={<CreateGameRoom />} />
-        <Route path="/api/room" element={<GameRoomPage />} />
-        <Route path="/api/profile/:nickname" element={<ProfilePage />} />
-        <Route path="/api/gameready" element={<GameReadyPage />} />
-        <Route path="/api/gamemake" element={<GameMakePage />} />
+        <Route path="/" element={<MainPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/createroom" element={<CreateGameRoom />} />
+        <Route path="/room" element={<GameRoomPage />} />
+        <Route path="/profile/:nickname" element={<ProfilePage />} />
+        <Route path="/gameready" element={<GameReadyPage />} />
+        <Route path="/gamemake" element={<GameMakePage />} />
       </Routes>
     </div>
   );
