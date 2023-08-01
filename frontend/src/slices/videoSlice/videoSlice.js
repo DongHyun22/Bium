@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { joinSession } from './videoThunkAction';
+import { joinSession } from './videoThunkActionSlice';
 
 const initialState = {
   roomName: null,
@@ -16,7 +16,7 @@ const initialState = {
   roomPassword: null
 };
 
-export const video = createSlice({
+export const videoSlice = createSlice({
   name: 'video',
   initialState,
   reducers: {
@@ -88,7 +88,7 @@ export const video = createSlice({
       state.publisher = payload.publisher;
     });
     builder.addCase(joinSession.rejected, (state, { payload }) => {
-      console.log('joinSession fulfilled');
+      console.log('joinSession rejected');
     });
   }
 });
@@ -108,6 +108,6 @@ export const {
   leaveSession,
   enteredSubscriber,
   deleteSubscriber
-} = video.actions;
+} = videoSlice.actions;
 
-export default video.reducer;
+export default videoSlice.reducer;

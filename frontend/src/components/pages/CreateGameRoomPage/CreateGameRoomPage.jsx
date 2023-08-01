@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setMySessionId, setMyUserName, setRoomName, setRoomPassword } from '../../../slices/video/videoAction';
+import { setMySessionId, setMyUserName, setRoomName, setRoomPassword } from '../../../slices/videoSlice/videoSlice';
 
 export const CreateGameRoom = () => {
   const dispatch = useDispatch();

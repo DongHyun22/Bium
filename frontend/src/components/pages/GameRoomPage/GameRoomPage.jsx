@@ -11,11 +11,11 @@ import {
   setMainStreamManager,
   setMySessionId,
   setMyUserName
-} from '../../../slices/video/videoAction';
-import UserVideoComponent from '../../atoms/UserVideoComponent';
+} from '../../../slices/videoSlice/videoSlice';
+import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import { OpenVidu } from 'openvidu-browser';
-import { joinSession } from '../../../slices/video/videoThunkAction';
-import Timer from '../../atoms/Timer';
+import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
+import Timer from '../../atoms/Timer/Timer';
 import styles from './GamRoomPage.module.css';
 
 function GameRoom() {

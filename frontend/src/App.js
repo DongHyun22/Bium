@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import RouteLink from './routes/Route';
-import { NavBar } from './components/atoms/NavBar';
+import NavBar from './components/atoms/NavBar/NavBar';
 
 function App() {
   return (
