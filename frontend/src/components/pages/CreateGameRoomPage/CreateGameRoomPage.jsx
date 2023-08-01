@@ -83,3 +83,5 @@ export const CreateGameRoom = () => {
     </div>
   );
 };
+
+export default CreateGameRoom;
