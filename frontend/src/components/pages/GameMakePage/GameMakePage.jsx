@@ -3,7 +3,7 @@ import React from 'react';
 import GameReady from '../GameReadyPage/GameReadyPage';
 
 function CreateGame() {
-  const [inputTitle, setInputTitle] = useState('');
+  const [title, setTitle] = useState('');
   const [roomList, setRoomList] = useState(['1']);
   const videos = ['불', '물', '산', '야경'];
 
@@ -37,7 +37,7 @@ function CreateGame() {
 
   const handleCreateGame = () => {
     const roomInfo = {
-      title: inputTitle,
+      title,
       videotype: selectedVideo,
       currentplayers: player,
       inSecret: secret
@@ -49,7 +49,7 @@ function CreateGame() {
   return (
     <div>
       <p>방 제목</p>
-      <input type="text" value={inputTitle} onChange={(event) => setInputTitle(event.target.value)}></input>
+      <input type="text" value={title} onChange={(event) => setTitle(event.target.value)}></input>
       {/* <button onClick={addItem}>추가</button>
       <GameReady titleList={titleList}></GameReady> */}
       <hr></hr>
@@ -57,12 +57,7 @@ function CreateGame() {
       <p>영상 종류</p>
       {videos.map((video) => (
         <label key={video}>
-          <input
-            type="radio"
-            name="video"
-            onChange={(e) => setSelectedVideo(video)}
-            checked={video == selectedVideo}
-          ></input>
+          <input type="radio" name="video" onChange={(e) => setSelectedVideo(video)} checked={video == selectedVideo}></input>
           {video}
           &nbsp;
         </label>
