@@ -1,10 +1,8 @@
 import { useState, useEffect, useSelector } from 'react';
 import axios from 'axios';
-// import { setProfile } from '../../../slices/userSlice';
-import { Fragment } from 'react';
-import RankingItem from '../molecules/RankingItem';
+import RankingItem from '../molecules/RankingListItem';
 
-function useRanking() {
+function GetRanking() {
   // 헤더 인증용 토큰
   const [rank, setRank] = useState([]);
   const nickname = useSelector((state) => state.user.nickname);
@@ -25,7 +23,7 @@ function useRanking() {
   }, []);
 
   return (
-    <Fragment>
+    <>
       <div className="Ranking title">
         <p>Ranking</p>
       </div>
@@ -38,8 +36,8 @@ function useRanking() {
         </div>
         <p>...</p>
       </div>
-    </Fragment>
+    </>
   );
 }
 
-export { useRanking };
+export { GetRanking };

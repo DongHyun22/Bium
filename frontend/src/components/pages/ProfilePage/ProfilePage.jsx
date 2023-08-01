@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Fragment } from 'react';
 
 export const ProfilePage = () => {
   return (

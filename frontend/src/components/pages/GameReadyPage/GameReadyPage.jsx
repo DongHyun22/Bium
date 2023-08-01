@@ -11,12 +11,7 @@ function GameReady() {
     <div>
       <button>방 만들기</button>
       <p>방 제목 검색</p>
-      <input
-        type="text"
-        value={search}
-        onChange={(event) => setSearch(event.target.value)}
-        placeholder="제목을 검색하세요."
-      ></input>
+      <input type="text" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="제목을 검색하세요."></input>
       <button>검색</button>
       &nbsp;&nbsp;
       <select value={index} onChange={onSelect}>
