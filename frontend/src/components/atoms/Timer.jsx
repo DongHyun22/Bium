@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import styles from './Timer.module.css';
 export default function Timer() {
   // 시간을 담을 변수
   const [count, setCount] = useState(0);
@@ -20,7 +20,10 @@ export default function Timer() {
   }, [count]);
 
   return (
-    <div>
+    <div className={styles.timer}>
+      <p>
+        <b>당신의 비움 시간</b>
+      </p>
       <span>{count}</span>
     </div>
   );

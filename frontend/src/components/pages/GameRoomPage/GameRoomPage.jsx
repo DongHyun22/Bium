@@ -16,6 +16,7 @@ import UserVideoComponent from '../../atoms/UserVideoComponent';
 import { OpenVidu } from 'openvidu-browser';
 import { joinSession } from '../../../slices/video/videoThunkAction';
 import Timer from '../../atoms/Timer';
+import styles from './GamRoomPage.module.css';
 
 function GameRoom() {
   const [isSecret, setIsSecret] = useState(false);
@@ -201,22 +202,23 @@ function GameRoom() {
           <div id="room-information">
             <h1 id="room-name">{roomName}</h1>
           </div>
-
-          <div id="video-container" className="col-md-6">
-            {publisher !== undefined ? (
-              <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
-                <UserVideoComponent streamManager={publisher} />
-              </div>
-            ) : (
-              <h1>Publisher 발행중</h1>
-            )}
-            {subscribers.map((sub) => (
-              <div key={sub.id} className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(sub)}>
-                <span>{sub.id}</span>
-                <UserVideoComponent streamManager={sub} />
-              </div>
-            ))}
-            <Timer></Timer>
+          <div className={styles.backimage}>
+            <div id="video-container">
+              {publisher !== undefined ? (
+                <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
+                  <UserVideoComponent streamManager={publisher} />
+                </div>
+              ) : (
+                <h1>같이할 동료들을 연결 중</h1>
+              )}
+              {subscribers.map((sub) => (
+                <div key={sub.id} className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(sub)}>
+                  <span>{sub.id}</span>
+                  <UserVideoComponent streamManager={sub} />
+                </div>
+              ))}
+              <Timer></Timer>
+            </div>
           </div>
         </div>
       ) : null}
