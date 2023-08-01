@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/game")
+@CrossOrigin(origins = "*")
 public class GameRoomController {
     private final GameRoomService gameRoomService;
 
@@ -32,6 +33,7 @@ public class GameRoomController {
         Long gameRoomId = gameRoomService.createGameRoom(request, userEmail);
         return gameRoomId;
     }
+    // create
 
     @PostMapping("/enter")
     public String enter(
