@@ -5,6 +5,7 @@ import SignupPage from '../components/pages/SignupPage/SignupPage';
 import GameReadyPage from '../components/pages/GameReadyPage/GameReadyPage';
 import GameRoomPage from '../components/pages/GameRoomPage/GameRoomPage';
 import { CreateGameRoom } from '../components/pages/CreateGameRoomPage/CreateGameRoomPage';
+import { ProfilePage } from '../components/pages/ProfilePage/ProfilePage';
 
 function RouteLink() {
   return (
@@ -19,6 +20,7 @@ function RouteLink() {
         <Route path="/api/signup/" element={<SignupPage />} />
         <Route path="/api/createroom" element={<CreateGameRoom />} />
         <Route path="/api/room" element={<GameRoomPage />} />
+        <Route path="/api/profile/:nickname" element={<ProfilePage />} />
       </Routes>
     </div>
   );
