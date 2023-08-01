@@ -98,4 +98,30 @@ public class UserController {
         return new ResponseEntity<>(check, HttpStatus.OK);
     }
 
+    // 토큰과 유저 정보 반환
+    @GetMapping("/info/{userEmail}")
+    public ResponseEntity<Map<String, Object>> getInfo(
+            @PathVariable("userEmail") String userEmail,
+            HttpServletRequest request, Authentication authentication) {
+        System.out.println("hello");
+
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+//        if (tokenProvider.validateToken(request.getHeader("Authorization"))) {
+            try {
+//				로그인 사용자 정보.
+                User user = userService.getUserByUserEmail(userEmail);
+                resultMap.put("userInfo", user);
+                resultMap.put("message", "success");
+                status = HttpStatus.ACCEPTED;
+            } catch (Exception e) {
+                resultMap.put("message", e.getMessage());
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+//        } else {
+//            resultMap.put("message", "fail");
+//        }
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
 }
