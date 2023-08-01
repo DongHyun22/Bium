@@ -11,10 +11,11 @@ export const userLogin = (user) => async (dispatch) => {
       .then((response) => {
         return response;
       })
-      .catch((err) => {
-        return err;
+      .catch(() => {
+        console.log('userLogin 실패');
+        alert('로그인 실패');
       });
-    console.log(response);
+    console.log('getuserInfo의 response', response);
     if (response.data.message === 'success') {
       const accessToken = response.data.httpHeaders;
       sessionStorage.setItem('accessToken', accessToken);
@@ -33,16 +34,19 @@ export const userLogin = (user) => async (dispatch) => {
 };
 
 // 사용자 정보를 가져오는 동작 처리 함수
-export const getUserInfo = (token) => async (dispatch) => {
+export const getUserInfo = (token, Email) => async (dispatch) => {
   try {
     const decodedToken = jwtDecode(token);
     console.log(decodedToken);
     const response = await axios
-      .get('http://localhost:8080/login', { headers: { Authorization: decodedToken.sub } })
+      .get(`http://localhost:8080/info/${Email}`, { headers: { Authorization: decodedToken.sub } })
       .then((response) => {
+        console.log('함수 확인');
+        console.log(response);
         return response;
       })
       .catch((err) => {
+        console.log('getUserInfo 실패');
         return err;
       });
   } catch (error) {

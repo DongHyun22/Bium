@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-// import { loginActions } from '../../../slices/userSlice.js';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { userLogin } from '../../../slices/getLoginInfo';
-// import axios from 'axios';
 
 // 로그인 컴포넌트
 function Login() {
   const [userEmail, setUserEmail] = useState('');
   const [userPw, setUserPw] = useState('');
+  const isLogin = useSelector((state) => state.user.isLogin);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,29 +22,38 @@ function Login() {
     }
     const user = { userEmail, userPw };
     dispatch(userLogin(user));
+
+    console.log(userLogin(userEmail, userPw));
+    console.log('세션의 토큰을 변수에 담음');
+
+    if (isLogin === true) {
+      navigate('/api');
+    }
   };
+
   const handleEmailChange = (e) => {
     setUserEmail(e.target.value);
-    console.log(userEmail);
   };
+
   const handlePasswordChange = (e) => {
     setUserPw(e.target.value);
   };
 
   return (
     <div>
-      {}
       <form onSubmit={handleSubmit}>
         <div className="loginId">
-          <div>
+          <label id="userEmail">
+            이메일
             <input
               type="input"
               id="userEmail"
+              name="userEmail"
               placeholder="이메일을 입력해 주세요."
               value={userEmail}
               onChange={handleEmailChange}
             />
-          </div>
+          </label>
         </div>
         <div className="loginPassword">
           <div>

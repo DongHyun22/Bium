@@ -118,13 +118,6 @@ export default function SignUpPage() {
   };
 
   useEffect(() => {
-    // 입력값 확인용
-    // console.log(userEmail);
-    // console.log(password);
-    // console.log(isPasswordConfirmValid);
-    // console.log(name)
-
-    // 해당 값들이 입력되면 true, false 판단
     if (userEmail) {
       setIsEmailValid(validateEmail(userEmail));
     }
@@ -186,9 +179,7 @@ export default function SignUpPage() {
           name="passwordConfirm"
           required
         />
-        {passwordConfirm && (
-          <div>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>
-        )}
+        {passwordConfirm && <div>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>}
 
         <br></br>
         <p>이름</p>
