@@ -4,6 +4,8 @@ import com.ssafy.bium.gameroom.request.*;
 import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
 import com.ssafy.bium.gameroom.service.GameRoomService;
+import io.openvidu.java.client.OpenViduHttpException;
+import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,29 +27,20 @@ public class GameRoomController {
 
 
     @PostMapping("/create")
-    public Long create(
+    public String create(
             @RequestBody GameRoomDto request,
             @RequestParam String userEmail
-    ) {
+    ) throws OpenViduJavaClientException, OpenViduHttpException {
         // 방 생성
-        Long gameRoomId = gameRoomService.createGameRoom(request, userEmail);
-        return gameRoomId;
+        return gameRoomService.createGameRoom(request, userEmail);
     }
-    // create
 
     @PostMapping("/enter")
     public String enter(
-            @RequestParam Long gameRoomId,
-            @RequestParam String gameRoomPw,
+            @RequestBody EnterGameRoomDto request,
             @RequestParam String userEmail
-    ) {
-        EnterGameRoomDto enterGameRoomDto = EnterGameRoomDto.builder()
-                .gameRoomId(String.valueOf(gameRoomId))
-                .gameRoomPw(gameRoomPw)
-                .userEmail(userEmail)
-                .build();
-        String userGameRoomId = gameRoomService.enterGameRoom(enterGameRoomDto);
-        return userGameRoomId;
+    ) throws OpenViduJavaClientException, OpenViduHttpException {
+        return gameRoomService.enterGameRoom(request, userEmail);
     }
 
     @GetMapping("/modify")

@@ -11,4 +11,5 @@ public class GameRoomDto {
     private int movie; // 영상 종류
     private int maxPeople;
     private String pw;
+    private String customSessionId;
 }

@@ -22,9 +22,10 @@ public class GameRoom extends TimeBaseEntity {
     private int gameRoomMovie;
     private int curPeople;
     private int maxPeople;
+    private String customSessionId;
 
     @Builder
-    public GameRoom(String gameRoomId, String gameRoomTitle, boolean start, String gameRoomPw, int gameRoomMovie, int curPeople, int maxPeople) {
+    public GameRoom(String gameRoomId, String gameRoomTitle, boolean start, String gameRoomPw, int gameRoomMovie, int curPeople, int maxPeople, String customSessionId) {
         this.gameRoomId = gameRoomId;
         this.gameRoomTitle = gameRoomTitle;
         this.start = start;
@@ -32,5 +33,6 @@ public class GameRoom extends TimeBaseEntity {
         this.gameRoomMovie = gameRoomMovie;
         this.curPeople = curPeople;
         this.maxPeople = maxPeople;
+        this.customSessionId = customSessionId;
     }
 }

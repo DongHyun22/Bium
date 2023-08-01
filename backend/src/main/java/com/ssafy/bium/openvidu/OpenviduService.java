@@ -1,11 +1,16 @@
 package com.ssafy.bium.openvidu;
 
 import io.openvidu.java.client.*;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
 
+@Service
+@NoArgsConstructor
 public class OpenviduService {
     @Value("${OPENVIDU_URL}")
     private String OPENVIDU_URL;
