@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { joinSession } from './videoThunkAction';
+import { joinSession } from './videoThunkActionSlice';
 
 const initialState = {
+  join: false,
   roomName: null,
-  OV: {},
+  OV: null,
   session: undefined,
   token: undefined,
   publisher: undefined,
@@ -16,10 +17,13 @@ const initialState = {
   roomPassword: null
 };
 
-export const video = createSlice({
+export const videoSlice = createSlice({
   name: 'video',
   initialState,
   reducers: {
+    setJoin: (state, action) => {
+      state.join = action.payload;
+    },
     setRoomPassword: (state, action) => {
       state.roomPassword = action.payload.roompassword;
     },
@@ -61,13 +65,19 @@ export const video = createSlice({
       if (mySession) {
         mySession.disconnect();
       }
+      state.join = false;
+      state.roomName = null;
       state.OV = null;
       state.session = undefined;
-      state.subscribers = [];
-      state.mySessionId = 'SessionO';
-      state.myUserName = 'Leave';
-      state.mainStreamManager = undefined;
+      state.token = undefined;
       state.publisher = undefined;
+      state.mainStreamManager = undefined;
+      state.mySessionId = 'Session0';
+      state.myUserName = 'jihyeok';
+      state.subscribers = [];
+      state.isVideoPublished = true;
+      state.isAudioPublished = true;
+      state.roomPassword = null;
     },
     enteredSubscriber: (state, action) => {
       // console.log("여기가 문제라고??", action.payload)
@@ -88,12 +98,13 @@ export const video = createSlice({
       state.publisher = payload.publisher;
     });
     builder.addCase(joinSession.rejected, (state, { payload }) => {
-      console.log('joinSession fulfilled');
+      console.log('joinSession rejected');
     });
   }
 });
 
 export const {
+  setJoin,
   setRoomPassword,
   setRoomName,
   initOVSession,
@@ -108,6 +119,6 @@ export const {
   leaveSession,
   enteredSubscriber,
   deleteSubscriber
-} = video.actions;
+} = videoSlice.actions;
 
-export default video.reducer;
+export default videoSlice.reducer;

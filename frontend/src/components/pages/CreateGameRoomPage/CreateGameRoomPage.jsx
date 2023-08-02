@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setMySessionId, setMyUserName, setRoomName, setRoomPassword } from '../../../slices/video/videoAction';
+import { setMySessionId, setMyUserName, setRoomName, setRoomPassword, setJoin } from '../../../slices/videoSlice/videoSlice';
+import { useNavigate } from 'react-router-dom';
 
 export const CreateGameRoom = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [join, setJoin] = useState(false);
   const [isSecret, setIsSecret] = useState(false);
 
+  // const join = useSelector((state) => state.video.join);
   const roomPassword = useSelector((state) => state.video.roomPassword);
   const roomName = useSelector((state) => state.video.roomName);
   const mySessionId = useSelector((state) => state.video.mySessionId);
   const myUserName = useSelector((state) => state.video.myUserName);
+  // const session = useSelector((state) => state.video.session);
 
   const handleJoin = (event) => {
     console.log('handleJoin');
     event.preventDefault();
-    // setJoin(true);
+    // dispatch(setJoin(true));
+    navigate('/gameroom');
   };
 
   const handleChangeisSecret = (e) => {
@@ -39,11 +43,10 @@ export const CreateGameRoom = () => {
 
   return (
     <div>
-      CreateGameRoom
       <div id="join">
         <div id="img-div">{/* <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" /> */}</div>
         <div id="join-dialog" className="jumbotron vertical-center">
-          <h1> Join a video session </h1>
+          <h1> CreateGameRoom </h1>
           <form className="form-group" onSubmit={handleJoin}>
             <p>
               <label>RoomName: </label>
@@ -83,3 +86,5 @@ export const CreateGameRoom = () => {
     </div>
   );
 };
+
+export default CreateGameRoom;
