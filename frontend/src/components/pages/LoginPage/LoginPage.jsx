@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { userLogin } from '../../../slices/getLoginInfo';
+import { userLogin, getUserInfo } from '../../../slices/getLoginInfo';
 
 // 로그인 컴포넌트
 function LoginPage() {
@@ -12,12 +12,12 @@ function LoginPage() {
   const navigate = useNavigate();
 
   // 컴포넌트가 렌더링될 때와 isLogin 값이 변경될 때마다 실행
-  // useEffect(() => {
-  //   if (isLogin) {
-  //     navigate('/');
-  //     console.log('isLogin', isLogin);
-  //   }
-  // }, [isLogin]);
+  useEffect(() => {
+    if (isLogin) {
+      navigate('/');
+      console.log('isLogin', isLogin);
+    }
+  }, [isLogin]);
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -33,6 +33,11 @@ function LoginPage() {
 
     console.log(userLogin(userEmail, userPw));
     console.log('세션의 토큰을 변수에 담음');
+    dispatch(getUserInfo(userEmail));
+
+    if (isLogin === true) {
+      navigate('/');
+    }
   };
 
   const handleEmailChange = (e) => {
@@ -49,7 +54,13 @@ function LoginPage() {
         <div className="loginId">
           <label htmlFor="userEmail">
             이메일 &nbsp;
-            <input type="text" id="userEmail" placeholder="이메일을 입력해 주세요." value={userEmail} onChange={handleEmailChange} />
+            <input
+              type="text"
+              id="userEmail"
+              placeholder="이메일을 입력해 주세요."
+              value={userEmail}
+              onChange={handleEmailChange}
+            />
           </label>
         </div>
         <div className="loginPassword">

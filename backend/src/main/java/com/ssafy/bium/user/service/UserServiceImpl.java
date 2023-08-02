@@ -27,23 +27,17 @@ public class UserServiceImpl implements UserService {
 
 
 
-    public User login(UserLoginPostReq userLoginPostReq) {
-        String userEmail = userLoginPostReq.getUserEmail();
-        String userPw = userLoginPostReq.getUserPw();
+    public void setToken(String userEmail, String token) {
 
-        Optional<User> findUser = userRepository.findByUserEmail(userEmail);
-
-        if (!findUser.isPresent()) {
-            System.out.println("로그인 실패");
-            return null;
-            // 예외 처리
+        Optional<User> user = userRepository.findByUserEmail(userEmail);
+        if (user.isEmpty()) {
+            System.out.println("유저가 존재하지 않음");
         } else {
-            if (!findUser.get().getUserPw().equals(userPw)) {
-                System.out.println("비밀번호가 틀립니다.");
-                return null;
-            }
-            return findUser.get();
+            user.get().setToken(token);
+            userRepository.save(user.get());
         }
+
+
     }
 
     @Override

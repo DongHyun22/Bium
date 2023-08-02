@@ -12,4 +12,5 @@ public interface UserService {
     User getUserByUserEmail(String userEmail);
     int deleteUserByUserEmail(String userEmail);
     int deleteRefreshToken(String userEmail);
+    void setToken(String userEmail, String token);
 }
