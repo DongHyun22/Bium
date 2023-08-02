@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { userLogin } from '../../../slices/getLoginInfo';
+import { userLogin, getUserInfo } from '../../../slices/getLoginInfo';
 
 // 로그인 컴포넌트
 function LoginPage() {
@@ -33,6 +33,11 @@ function LoginPage() {
 
     console.log(userLogin(userEmail, userPw));
     console.log('세션의 토큰을 변수에 담음');
+    dispatch(getUserInfo(userEmail));
+
+    if (isLogin === true) {
+      navigate('/');
+    }
   };
 
   const handleEmailChange = (e) => {

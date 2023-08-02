@@ -3,10 +3,6 @@ import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
 export const NavBar = () => {
-  const navigate = useNavigate();
-  const isLogin = useSelector((state) => state.user.isLogin);
-  const [token, setToken] = useState(sessionStorage.getItem('accessToken'));
-  console.log('token', token);
   return (
     <div>
       {token === null ? (
