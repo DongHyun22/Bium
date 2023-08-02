@@ -36,15 +36,15 @@ function GameRoomPage() {
     dispatch(audioMute());
   };
 
-  useEffect(() => {
-    // componentDidMount
-    window.addEventListener('beforeunload', onbeforeunload);
+  //   useEffect(() => {
+  //     // componentDidMount
+  //     window.addEventListener('beforeunload', onbeforeunload);
 
-    // componentWillUnmount
-    return () => {
-      window.removeEventListener('beforeunload', onbeforeunload);
-    };
-  }, []);
+  //     // componentWillUnmount
+  //     return () => {
+  //       window.removeEventListener('beforeunload', onbeforeunload);
+  //     };
+  //   }, []);
 
   const onbeforeunload = (e) => {
     dispatch(leaveSession());
@@ -74,43 +74,43 @@ function GameRoomPage() {
     }
   }, [join]);
 
-  // --- 3) Specify the actions when events take place in the session ---
-  useEffect(() => {
-    if (session) {
-      // On every new Stream received...
-      const handleStreamCreated = (event) => {
-        const subscriber = session.subscribe(event.stream, undefined);
-        dispatch(enteredSubscriber(subscriber));
-      };
+  //   // --- 3) Specify the actions when events take place in the session ---
+  //   useEffect(() => {
+  //     if (session) {
+  //       // On every new Stream received...
+  //       const handleStreamCreated = (event) => {
+  //         const subscriber = session.subscribe(event.stream, undefined);
+  //         dispatch(enteredSubscriber(subscriber));
+  //       };
 
-      // On every Stream destroyed...
-      const handleStreamDestroyed = (event) => {
-        dispatch(deleteSubscriber(event.stream.streamManager));
-      };
+  //       // On every Stream destroyed...
+  //       const handleStreamDestroyed = (event) => {
+  //         dispatch(deleteSubscriber(event.stream.streamManager));
+  //       };
 
-      // On every asynchronous exception...
-      const handleException = (exception) => {
-        console.warn(exception);
-      };
+  //       // On every asynchronous exception...
+  //       const handleException = (exception) => {
+  //         console.warn(exception);
+  //       };
 
-      session.on('streamCreated', handleStreamCreated);
-      session.on('streamDestroyed', handleStreamDestroyed);
-      session.on('exception', handleException);
+  //       session.on('streamCreated', handleStreamCreated);
+  //       session.on('streamDestroyed', handleStreamDestroyed);
+  //       session.on('exception', handleException);
 
-      dispatch(joinSession({ OV, session, mySessionId, myUserName }));
+  //       dispatch(joinSession({ OV, session, mySessionId, myUserName }));
 
-      // Clean-up 함수 등록
-      return () => {
-        session.off('streamCreated', handleStreamCreated);
-        session.off('streamDestroyed', handleStreamDestroyed);
-        session.off('exception', handleException);
-        const mySession = session;
-        if (mySession) {
-          mySession.disconnect(); // 예시에서는 disconnect()로 대체하였으나, 이는 OpenVidu에 따라 다르게 적용될 수 있음
-        }
-      };
-    }
-  }, [session]);
+  //       // Clean-up 함수 등록
+  //       return () => {
+  //         session.off('streamCreated', handleStreamCreated);
+  //         session.off('streamDestroyed', handleStreamDestroyed);
+  //         session.off('exception', handleException);
+  //         const mySession = session;
+  //         if (mySession) {
+  //           mySession.disconnect(); // 예시에서는 disconnect()로 대체하였으나, 이는 OpenVidu에 따라 다르게 적용될 수 있음
+  //         }
+  //       };
+  //     }
+  //   }, [session]);
 
   const handleLeaveSession = () => {
     if (session) {
