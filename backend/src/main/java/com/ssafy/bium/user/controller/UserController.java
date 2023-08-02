@@ -128,11 +128,15 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
-    @GetMapping("profile/ranking")
-    public ResponseEntity<?> ranking () {
+    @GetMapping("profile/ranking/{userEmail}")
+    public ResponseEntity<?> ranking (@PathVariable("userEmail") String userEmail) {
 
+        Map<String, Object> resultMap = new HashMap<>();
         List<UserRankingGetRes> list = userService.getUserListTop5ByTotalBium();
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        UserRankingGetRes userRankingGetRes = userService.getUserByTotalBium(userEmail);
+        resultMap.put("ranking", list);
+        resultMap.put("myRanking", userRankingGetRes);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
 }

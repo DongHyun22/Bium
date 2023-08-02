@@ -102,8 +102,36 @@ public class UserServiceImpl implements UserService {
         List<UserRankingGetRes> list = userRepository.findTop5ByOrderByTotalBiumDesc()
                 .stream().map(UserRankingGetRes::new).collect(Collectors.toList());
         if (list.isEmpty()) {
-            System.out.println("랭킹 없음");
+            System.out.println("1~5위 랭킹 없음");
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).setRanking(i + 1);
         }
         return list;
+    }
+
+    @Override
+    public UserRankingGetRes getUserByTotalBium(String userEmail) {
+
+        List<UserRankingGetRes> list = userRepository.findUserByOrderByTotalBiumDesc()
+                .stream().map(UserRankingGetRes::new).collect(Collectors.toList());
+        if (list.isEmpty()) {
+            System.out.println("user 정보 없음");
+        }
+
+        int userRanking = 0;
+        UserRankingGetRes userRankingGetRes = new UserRankingGetRes();
+        for (UserRankingGetRes temp : list) {
+            userRanking++;
+            if (temp.getUserEmail().equals(userEmail)) {
+                userRankingGetRes = temp;
+                userRankingGetRes.setRanking(userRanking);
+                break;
+            }
+        }
+
+        return userRankingGetRes;
+
     }
 }
