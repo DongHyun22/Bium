@@ -2,7 +2,9 @@ package com.ssafy.bium.user.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.bium.user.User;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class UserModifyGetRes {
     @JsonProperty
     Long id;

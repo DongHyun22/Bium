@@ -5,6 +5,7 @@ import com.ssafy.bium.config.jwt.TokenDto;
 import com.ssafy.bium.config.jwt.TokenProvider;
 import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.User;
+import com.ssafy.bium.user.request.UserModifyPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
 import com.ssafy.bium.user.response.UserModifyGetRes;
 import com.ssafy.bium.user.response.UserRankingGetRes;
@@ -139,4 +140,17 @@ public class UserController {
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
+    @GetMapping("profile/modify/{userEmail}")
+    public ResponseEntity<?> getModifyData (@PathVariable("userEmail") String userEmail) {
+
+        UserModifyGetRes userModifyGetRes = userService.getModifyData(userEmail);
+        return new ResponseEntity<>(userModifyGetRes, HttpStatus.OK);
+    }
+
+    @PostMapping("profile/modify")
+    public ResponseEntity<?> modifyProfile (@RequestBody UserModifyPostReq userModifyPostReq) {
+
+        int result = userService.modifyProfile(userModifyPostReq);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -3,6 +3,7 @@ package com.ssafy.bium.user.service;
 import com.ssafy.bium.user.User;
 
 import com.ssafy.bium.user.request.UserLoginPostReq;
+import com.ssafy.bium.user.request.UserModifyPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
 import com.ssafy.bium.user.response.UserModifyGetRes;
 import com.ssafy.bium.user.response.UserRankingGetRes;
@@ -19,5 +20,6 @@ public interface UserService {
     void setToken(String userEmail, String token);
     List<UserRankingGetRes> getUserListTop5ByTotalBium();
     UserRankingGetRes getUserByTotalBium(String userEmail);
-//    UserModifyGetRes
+    UserModifyGetRes getModifyData(String userEmail);
+    int modifyProfile(UserModifyPostReq userModifyPostReq);
 }
