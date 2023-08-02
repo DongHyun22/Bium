@@ -6,8 +6,11 @@ import GameRoomListPage from '../components/pages/GameRoomListPage/GameRoomListP
 import GameRoomPage from '../components/pages/GameRoomPage/GameRoomPage';
 import CreateGameRoom from '../components/pages/CreateGameRoomPage/CreateGameRoomPage';
 import { ProfilePage } from '../components/pages/ProfilePage/ProfilePage';
+import { useSelector } from 'react-redux';
 
 function RouteLink() {
+  const isLogin = useSelector((state) => state.user.isLogin);
+
   return (
     <div>
       <Routes>
@@ -17,7 +20,7 @@ function RouteLink() {
         <Route path="/createroom" element={<CreateGameRoom />} />
         <Route path="/gameroomlist" element={<GameRoomListPage />} />
         <Route path="/gameroom" element={<GameRoomPage />} />
-        <Route path="/profile/:nickname" element={<ProfilePage />} />
+        <Route path="/profile/{userEmail}" element={<ProfilePage />} />
       </Routes>
     </div>
   );
