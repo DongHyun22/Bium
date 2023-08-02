@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
 import { useSelector } from 'react-redux';
+import { clearAllListeners } from '@reduxjs/toolkit';
 
 const OpenViduVideoComponent = (props) => {
   const join = useSelector((state) => state.video.join);
@@ -24,14 +25,25 @@ const OpenViduVideoComponent = (props) => {
 
       // faceapi.nets.face
     ]).then((e) => {
-      console.log('end');
-      faceMyDetect();
+      if (join) {
+        faceMyDetect();
+      }
     });
   };
 
-  // 변경마다;
+  // 한번 실행;
   useEffect(() => {
-    join && videoRef && loadModels();
+    if (join) {
+      videoRef && loadModels();
+    }
+    return () => {
+      console.log('stopoadModels');
+      clearInterval(loadModels);
+      console.log('stopfaceDtect');
+      clearInterval(faceMyDetect);
+      console.log('stoplister');
+      clearAllListeners();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -39,12 +51,13 @@ const OpenViduVideoComponent = (props) => {
     if (props && videoRef.current) {
       props.streamManager.addVideoElement(videoRef.current);
     }
+    return;
   }, [props]);
 
   //내 이미지로부터 인식하고 다시 그려주기
   const faceMyDetect = () => {
     setInterval(async () => {
-      console.log(videoRef.current);
+      console.log('하하하', videoRef.current);
       const videoElement = document.querySelector('#localVideo');
       const detections = await faceapi
         .detectSingleFace(videoElement, new faceapi.TinyFaceDetectorOptions())

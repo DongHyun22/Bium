@@ -6,18 +6,21 @@ import GameRoomListPage from '../components/pages/GameRoomListPage/GameRoomListP
 import GameRoomPage from '../components/pages/GameRoomPage/GameRoomPage';
 import CreateGameRoom from '../components/pages/CreateGameRoomPage/CreateGameRoomPage';
 import { ProfilePage } from '../components/pages/ProfilePage/ProfilePage';
+import PrivateRoute from './PricateRoute';
 
 function RouteLink() {
   return (
     <div>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/createroom" element={<CreateGameRoom />} />
-        <Route path="/gameroomlist" element={<GameRoomListPage />} />
-        <Route path="/gameroom" element={<GameRoomPage />} />
-        <Route path="/profile/:nickname" element={<ProfilePage />} />
+        <Route Component={PrivateRoute}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/createroom" element={<CreateGameRoom />} />
+          <Route path="/gameroomlist" element={<GameRoomListPage />} />
+          <Route path="/gameroom" element={<GameRoomPage />} />
+          <Route path="/profile/:nickname" element={<ProfilePage />} />
+        </Route>
       </Routes>
     </div>
   );

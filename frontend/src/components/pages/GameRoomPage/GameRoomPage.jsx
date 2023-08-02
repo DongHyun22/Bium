@@ -47,7 +47,7 @@ function GameRoomPage() {
   }, []);
 
   const onbeforeunload = (e) => {
-    leaveSession();
+    dispatch(leaveSession());
   };
 
   const handleMainVideoStream = (stream) => {
@@ -57,8 +57,12 @@ function GameRoomPage() {
   };
 
   useEffect(() => {
-    setJoin(true);
-  }, []);
+    dispatch(setJoin(true));
+
+    return () => {
+      dispatch(setJoin(false));
+    };
+  }, [join]);
 
   useEffect(() => {
     if (join) {
