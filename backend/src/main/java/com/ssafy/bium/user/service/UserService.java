@@ -4,6 +4,9 @@ import com.ssafy.bium.user.User;
 
 import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
+import com.ssafy.bium.user.response.UserRankingGetRes;
+
+import java.util.List;
 
 
 public interface UserService {
@@ -13,4 +16,5 @@ public interface UserService {
     int deleteUserByUserEmail(String userEmail);
     int deleteRefreshToken(String userEmail);
     void setToken(String userEmail, String token);
+    List<UserRankingGetRes> getUserListTop5ByTotalBium();
 }

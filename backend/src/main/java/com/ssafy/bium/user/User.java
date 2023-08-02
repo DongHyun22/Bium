@@ -6,7 +6,6 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,7 +33,7 @@ public class User extends TimeBaseEntity {
     @Column(nullable = false)
     private String userPw;
 
-    @Column(nullable = true)
+    @Column
     private String token;
 
     @Column(nullable = false)
@@ -56,9 +55,9 @@ public class User extends TimeBaseEntity {
     private Long totalBium;
 
     @Column(nullable = false)
-    private boolean is_admin;
+    private boolean isAdmin;
 
-    @Column(nullable = true)
+    @Column
     private boolean activated;
 
     @ManyToMany
@@ -70,7 +69,7 @@ public class User extends TimeBaseEntity {
 
     @Builder
     public User(String userEmail, String userPw, String token, String userName, String userNickname,
-                int userRank, Long todayBium, Long topBium, Long totalBium, boolean is_admin, boolean activated) {
+                int userRank, Long todayBium, Long topBium, Long totalBium, boolean isAdmin, boolean activated) {
         this.userEmail = userEmail;
         this.userPw = userPw;
         this.token = token;
@@ -80,7 +79,8 @@ public class User extends TimeBaseEntity {
         this.todayBium = todayBium;
         this.topBium = topBium;
         this.totalBium = totalBium;
-        this.is_admin = is_admin;
+        this.isAdmin = isAdmin;
+        this.activated = activated;
 
         if (todayBium == null) {
             this.todayBium = 0L;

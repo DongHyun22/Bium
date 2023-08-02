@@ -6,7 +6,9 @@ import com.ssafy.bium.user.User;
 import com.ssafy.bium.user.repository.UserRepository;
 import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
+import com.ssafy.bium.user.response.UserRankingGetRes;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -14,7 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -90,5 +94,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public int deleteRefreshToken(String userEmail) {
         return 0;
+    }
+
+    @Override
+    public List<UserRankingGetRes> getUserListTop5ByTotalBium() {
+
+        List<UserRankingGetRes> list = userRepository.findTop5ByOrderByTotalBiumDesc()
+                .stream().map(UserRankingGetRes::new).collect(Collectors.toList());
+        if (list.isEmpty()) {
+            System.out.println("랭킹 없음");
+        }
+        return list;
     }
 }

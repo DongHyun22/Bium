@@ -1,4 +1,4 @@
-package com.ssafy.bium.controller;
+package com.ssafy.bium.user.controller;
 
 import com.ssafy.bium.config.jwt.JwtFilter;
 import com.ssafy.bium.config.jwt.TokenDto;
@@ -6,6 +6,8 @@ import com.ssafy.bium.config.jwt.TokenProvider;
 import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.User;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
+import com.ssafy.bium.user.response.UserModifyGetRes;
+import com.ssafy.bium.user.response.UserRankingGetRes;
 import com.ssafy.bium.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -20,9 +22,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class UserController {
@@ -107,7 +111,7 @@ public class UserController {
 
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.UNAUTHORIZED;
-//        if (tokenProvider.validateToken(request.getHeader("Authorization"))) {
+        if (tokenProvider.validateToken(request.getHeader("Authorization"))) {
             try {
 //				로그인 사용자 정보.
                 User user = userService.getUserByUserEmail(userEmail);
@@ -118,10 +122,17 @@ public class UserController {
                 resultMap.put("message", e.getMessage());
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
             }
-//        } else {
-//            resultMap.put("message", "fail");
-//        }
+        } else {
+            resultMap.put("message", "fail");
+        }
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    @GetMapping("profile/ranking")
+    public ResponseEntity<?> ranking () {
+
+        List<UserRankingGetRes> list = userService.getUserListTop5ByTotalBium();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
 }
