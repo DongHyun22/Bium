@@ -14,13 +14,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,9 +26,9 @@ import java.util.stream.Collectors;
 public class GameRoomServiceImpl implements GameRoomService {
     private final GameRoomRepository gameRoomRepository;
     private final UserGameRoomRepository usergameRoomRepository;
+    private final RedisTemplate<String, String> gameRoomNum;
     private final RedisTemplate<String, GameRoom> redisTemplate;
     private final OpenviduService openviduService;
-//    private final HashOperations<String, String, GameRoom> hashOperations;
 
     @Override
     public List<GameRoomListDto> searchGameRooms(SearchGameRoomDto request) {
@@ -54,10 +52,7 @@ public class GameRoomServiceImpl implements GameRoomService {
         Map<String, Object> params = new HashMap<>();
         params.put("customSessionId", gameRoomDto.getCustomSessionId());
         String sessionId = openviduService.initializeSession(params);
-        // 방 정보가 없으면 실행
 
-        // 해쉬에서 찾기
-        // TODO: 2023-08-02 (002) 세션이 열려있으면 방 생성 불가하게 처리
         GameRoom gameRoom = GameRoom.builder()
                 .gameRoomId(String.valueOf(gri))
                 .gameRoomTitle(gameRoomDto.getTitle())
@@ -175,6 +170,24 @@ public class GameRoomServiceImpl implements GameRoomService {
 
     @Override
     public String deleteGameRoom(String gameRoomId) {
+        HashOperations<String, String, String> hash = redisTemplate.opsForHash();
+        SetOperations<String, String> set = gameRoomNum.opsForSet();
+        Set<String> userGameRoomNum = set.members("userGameRoom");
+        for(String s : userGameRoomNum){
+            // 게임에 접속되어있는 유저들 중에서 받아온 게임방아이디에 있는 유저들 찾기 -> scan 같은 빠른 메서드 찾기
+            if(Objects.equals(hash.get("userGameRoom:" + s, "gameRoomId"), gameRoomId)){
+                redisTemplate.delete("userGameRoom:" + s);
+                redisTemplate.opsForSet().remove("userGameRoom", Integer.parseInt(s));
+            }
+        }
+        redisTemplate.delete("gameRoom:" + gameRoomId);
+        redisTemplate.opsForSet().remove("GameRoom", Integer.parseInt(gameRoomId));
+//
+//        String hashKey = "customSessionId"; // 여기에 해당 키에 대한 해시 키 값을 지정하세요.
+//
+//        String value = hash.get("gameRoom:"+gameRoomId, hashKey);
+//        System.out.println(value);
+//        System.out.println(value.equals("SessionA"));
         // gameRoomId에 해당하는 userGameRoom 삭제
 //        System.out.println(redisTemplate.opsForHash().entries("userGameRoom"));
 //        Optional<GameRoom> findGameRoom = g           ameRoomRepository.findById(gameRoomId);
@@ -182,14 +195,6 @@ public class GameRoomServiceImpl implements GameRoomService {
 //            return "0";
         // 다 삭제하면 gameRoomId의 gameRoom 삭제
 
-
-//        HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
-//
-//        String hashKey = "customSessionId"; // 여기에 해당 키에 대한 해시 키 값을 지정하세요.
-//
-//        String value = hashOps.get("gameRoom:"+gameRoomId, hashKey);
-//        System.out.println(value);
-//        System.out.println(value.equals("SessionA"));
         return null;
     }
 
