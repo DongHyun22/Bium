@@ -1,4 +1,5 @@
 import {
+  setToken,
   setIsLogin,
   setIsLoginError,
   setIsValidToken,
@@ -27,6 +28,7 @@ export const userLogin = (user) => async (dispatch) => {
       const accessToken = response.data.httpHeaders;
       sessionStorage.setItem('accessToken', accessToken);
       // sessionStorage.setItem('refreshToken', refreshToken);
+      dispatch(setToken(accessToken));
       dispatch(setIsLogin(true));
       dispatch(setIsLoginError(false));
       dispatch(setIsValidToken(true));

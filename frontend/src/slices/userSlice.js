@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 // const initialStateValue= {email: "", password: ""}
 
 const initialState = {
+  token: sessionStorage.getItem('accessToken'),
   userEmail: '',
   nickname: '',
   todayBium: 0,
@@ -18,6 +19,9 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    setToken(state, action) {
+      state.token = action.payload;
+    },
     setUserEmail(state, action) {
       state.userEmail = action.payload;
     },
@@ -49,6 +53,7 @@ const userSlice = createSlice({
 });
 
 export const {
+  setToken,
   setUserEmail,
   setNickname,
   setTodayBium,

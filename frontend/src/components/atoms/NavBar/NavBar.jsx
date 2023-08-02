@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { setIsLogin, setToken } from '../../../slices/userSlice';
 
 export const NavBar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.user.token);
+  console.log('token', token);
   return (
     <div>
       {token === null ? (
@@ -15,7 +20,8 @@ export const NavBar = () => {
           <button
             onClick={() => {
               sessionStorage.removeItem('accessToken');
-              setToken(null);
+              dispatch(setToken(sessionStorage.getItem('accessToken')));
+              dispatch(setIsLogin(false));
               navigate('/');
             }}
           >
