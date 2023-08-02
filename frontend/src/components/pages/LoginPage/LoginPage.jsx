@@ -1,15 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLogin, getUserInfo } from '../../../slices/getLoginInfo';
 
 // 로그인 컴포넌트
-function Login() {
+function LoginPage() {
   const [userEmail, setUserEmail] = useState('');
   const [userPw, setUserPw] = useState('');
   const isLogin = useSelector((state) => state.user.isLogin);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // 컴포넌트가 렌더링될 때와 isLogin 값이 변경될 때마다 실행
+  // useEffect(() => {
+  //   if (isLogin) {
+  //     navigate('/');
+  //     console.log('isLogin', isLogin);
+  //   }
+  // }, [isLogin]);
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -44,12 +52,11 @@ function Login() {
     <div>
       <form onSubmit={handleSubmit}>
         <div className="loginId">
-          <label id="userEmail">
-            이메일
+          <label htmlFor="userEmail">
+            이메일 &nbsp;
             <input
-              type="input"
+              type="text"
               id="userEmail"
-              name="userEmail"
               placeholder="이메일을 입력해 주세요."
               value={userEmail}
               onChange={handleEmailChange}
@@ -57,7 +64,8 @@ function Login() {
           </label>
         </div>
         <div className="loginPassword">
-          <div>
+          <label htmlFor="userPassword">
+            비밀번호 &nbsp;
             <input
               type="password"
               id="userPassword"
@@ -65,7 +73,7 @@ function Login() {
               value={userPw}
               onChange={handlePasswordChange}
             />
-          </div>
+          </label>
         </div>
         <div>
           <button className="loginButton">로그인</button>
@@ -75,4 +83,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;

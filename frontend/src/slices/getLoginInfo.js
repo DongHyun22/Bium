@@ -7,7 +7,6 @@ import {
   setTodayBium,
   setTotalBium,
 } from './userSlice';
-import jwtDecode from 'jwt-decode';
 
 import axios from 'axios';
 
@@ -45,16 +44,17 @@ export const userLogin = (user) => async (dispatch) => {
 export const getUserInfo = (Email) => async (dispatch) => {
 
   try {
-    // const decodedToken = jwtDecode(token);
-    // console.log(decodedToken);
     const response = await axios.get(`http://localhost:8080/info/${Email}`);
     // console.log('함수 확인');
     console.log(response.data.userInfo);
     dispatch(setUserEmail(response.data.userInfo.userEmail ));
-    dispatch(setNickname( response.data.userInfo.nickname ));
+    dispatch(setNickname( response.data.userInfo.userNickname ));
     dispatch(setTodayBium( response.data.userInfo.todayBium ));
     dispatch(setTotalBium( response.data.userInfo.totalBium ));
-    console.log('setUserEmail입니다.', setUserEmail(setUserEmail(response.data.userInfo.userEmail )));
+    console.log('setUserEmail입니다.', (setUserEmail(response.data.userInfo.userEmail )));
+    console.log('setNickname입니다.', (setNickname(response.data.userInfo.userNickname )));
+    console.log('setTodayBium입니다.', (setTodayBium(response.data.userInfo.todayBium )));
+    console.log('setTotalBium입니다.', (setTotalBium(response.data.userInfo.totalBium )));
     return response.data;
   } catch (error) {
     console.error('토큰 만료되어 사용 불가능', error.response.status);

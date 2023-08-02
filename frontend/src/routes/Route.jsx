@@ -6,21 +6,23 @@ import GameRoomListPage from '../components/pages/GameRoomListPage/GameRoomListP
 import GameRoomPage from '../components/pages/GameRoomPage/GameRoomPage';
 import CreateGameRoom from '../components/pages/CreateGameRoomPage/CreateGameRoomPage';
 import { ProfilePage } from '../components/pages/ProfilePage/ProfilePage';
-import { useSelector } from 'react-redux';
+import PrivateRoute from './PrivateRoute';
 
-function RouteLink() {
-  const isLogin = useSelector((state) => state.user.isLogin);
-
+function RouteLink(props) {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route index element={<MainPage />} />
+        <Route element={<PrivateRoute authentication={false} />}>
+          <Route path="/login" element={<LoginPage />} />
+        </Route>
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/createroom" element={<CreateGameRoom />} />
         <Route path="/gameroomlist" element={<GameRoomListPage />} />
         <Route path="/gameroom" element={<GameRoomPage />} />
-        <Route path="/profile/{userEmail}" element={<ProfilePage />} />
+        <Route element={<PrivateRoute authentication={true} />}>
+          <Route path="/profile/:userEmail" element={<ProfilePage />} />
+        </Route>
       </Routes>
     </div>
   );
