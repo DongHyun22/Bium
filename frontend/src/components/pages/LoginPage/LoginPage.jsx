@@ -8,12 +8,13 @@ function LoginPage() {
   const [userEmail, setUserEmail] = useState('');
   const [userPw, setUserPw] = useState('');
   const isLogin = useSelector((state) => state.user.isLogin);
+  const token = useSelector((state) => state.user.token);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // 컴포넌트가 렌더링될 때와 isLogin 값이 변경될 때마다 실행
   useEffect(() => {
-    if (isLogin) {
+    if (isLogin || token !== null) {
       navigate('/');
       console.log('isLogin', isLogin);
     }

@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 export default function SignUpPage() {
   const navigate = useNavigate();
+  const token = useSelector((state) => state.user.token);
+  const isLogin = useSelector((state) => state.user.isLogin);
+  useEffect(() => {
+    if (isLogin || token !== null) {
+      navigate('/');
+      console.log('isLogin', isLogin);
+    }
+  }, [isLogin]);
   // 회원가입 요소
   const [userEmail, setUserEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -179,7 +188,9 @@ export default function SignUpPage() {
           name="passwordConfirm"
           required
         />
-        {passwordConfirm && <div>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>}
+        {passwordConfirm && (
+          <div>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>
+        )}
 
         <br></br>
         <p>이름</p>
