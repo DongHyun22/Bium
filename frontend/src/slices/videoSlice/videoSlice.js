@@ -2,8 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import { joinSession } from './videoThunkActionSlice';
 
 const initialState = {
+  join: false,
   roomName: null,
-  OV: {},
+  OV: null,
   session: undefined,
   token: undefined,
   publisher: undefined,
@@ -20,6 +21,9 @@ export const videoSlice = createSlice({
   name: 'video',
   initialState,
   reducers: {
+    setJoin: (state, action) => {
+      state.join = action.payload;
+    },
     setRoomPassword: (state, action) => {
       state.roomPassword = action.payload.roompassword;
     },
@@ -61,13 +65,19 @@ export const videoSlice = createSlice({
       if (mySession) {
         mySession.disconnect();
       }
+      state.join = false;
+      state.roomName = null;
       state.OV = null;
       state.session = undefined;
-      state.subscribers = [];
-      state.mySessionId = 'SessionO';
-      state.myUserName = 'Leave';
-      state.mainStreamManager = undefined;
+      state.token = undefined;
       state.publisher = undefined;
+      state.mainStreamManager = undefined;
+      state.mySessionId = 'Session0';
+      state.myUserName = 'jihyeok';
+      state.subscribers = [];
+      state.isVideoPublished = true;
+      state.isAudioPublished = true;
+      state.roomPassword = null;
     },
     enteredSubscriber: (state, action) => {
       // console.log("여기가 문제라고??", action.payload)
@@ -94,6 +104,7 @@ export const videoSlice = createSlice({
 });
 
 export const {
+  setJoin,
   setRoomPassword,
   setRoomName,
   initOVSession,
