@@ -1,8 +1,10 @@
 package com.ssafy.bium.gameroom.controller;
 
+import com.ssafy.bium.gameroom.UserGameRoom;
 import com.ssafy.bium.gameroom.request.*;
 import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
+import com.ssafy.bium.gameroom.response.UserGameRecordDto;
 import com.ssafy.bium.gameroom.service.GameRoomService;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
@@ -10,10 +12,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/game")
+@RequestMapping("/api/game")
 @CrossOrigin(origins = "*")
 public class GameRoomController {
     private final GameRoomService gameRoomService;
@@ -81,6 +84,13 @@ public class GameRoomController {
                 .record(record)
                 .build();
         return gameRoomService.overUserGameRoom(request);
+    }
+
+    @GetMapping("/stop")
+    public List<UserGameRecordDto> stop(
+            @RequestParam String gameRoomId
+    ) {
+        return gameRoomService.RecordGameRoom(gameRoomId);
     }
 
     // 게임 종료시 게임 기록 반환 및 게임 기록 유저에 저장

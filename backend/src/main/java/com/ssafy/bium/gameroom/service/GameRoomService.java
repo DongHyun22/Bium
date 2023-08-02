@@ -3,6 +3,7 @@ package com.ssafy.bium.gameroom.service;
 import com.ssafy.bium.gameroom.request.*;
 import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
+import com.ssafy.bium.gameroom.response.UserGameRecordDto;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 
@@ -18,4 +19,5 @@ public interface GameRoomService {
     String startGameRoom(String gameRoomId);
     String overUserGameRoom(OverUserGameRoomDto request);
     String deleteGameRoom(String gameRoomId);
+    List<UserGameRecordDto> RecordGameRoom(String gameRoomId);
 }

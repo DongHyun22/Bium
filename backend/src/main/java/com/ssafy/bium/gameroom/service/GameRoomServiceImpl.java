@@ -7,7 +7,9 @@ import com.ssafy.bium.gameroom.repository.UserGameRoomRepository;
 import com.ssafy.bium.gameroom.request.*;
 import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
+import com.ssafy.bium.gameroom.response.UserGameRecordDto;
 import com.ssafy.bium.openvidu.OpenviduService;
+import com.ssafy.bium.user.User;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
@@ -196,6 +198,34 @@ public class GameRoomServiceImpl implements GameRoomService {
         // 다 삭제하면 gameRoomId의 gameRoom 삭제
 
         return null;
+    }
+
+    @Override
+    public List<UserGameRecordDto> RecordGameRoom(String gameRoomId) {
+        HashOperations<String, String, String> hash = redisTemplate.opsForHash();
+        SetOperations<String, String> set = gameRoomNum.opsForSet();
+        Set<String> userGameRoomNum = set.members("userGameRoom");
+        List<UserGameRecordDto> userGameRecords = new ArrayList<>();
+        for(String s : userGameRoomNum){
+            // 게임에 접속되어있는 유저들 중에서 받아온 게임방아이디에 있는 유저들 찾기 -> scan 같은 빠른 메서드 찾기
+            if(Objects.equals(hash.get("userGameRoom:" + s, "gameRoomId"), gameRoomId)){
+                UserGameRecordDto userGameRecordDto = UserGameRecordDto.builder()
+                        .userEmail(hash.get("userGameRoom:" + s, "userEmail"))
+                        // TODO: 2023-08-03 (003) 유저 이메일 대신 유저 닉네임 넣기 
+                        .gameRecord(hash.get("userGameRoom:" + s, "gameRecord"))
+                        .build();
+                userGameRecords.add(userGameRecordDto);
+            }
+        }
+        Collections.sort(userGameRecords, new Comparator<>() {
+            @Override
+            public int compare(UserGameRecordDto o1, UserGameRecordDto o2) {
+                long value1 = Long.parseLong(o1.getGameRecord());
+                long value2 = Long.parseLong(o2.getGameRecord());
+                return Long.compare(value2, value1);
+            }
+        });
+        return userGameRecords;
     }
 
 
