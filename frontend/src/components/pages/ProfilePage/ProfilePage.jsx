@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styles from './ProfilePage.module.css';
-import {  useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { setUserEmail } from '../../../slices/userSlice';
-// import { GetRanking } from '../../organisms/RankingList'
-// import { setProfile } from '../../../slices/userSlice';
-// import { getUserInfo } from '../../../slices/getLoginInfo'
+import { GetRanking } from '../../organisms/RankingList';
+import { setProfile } from '../../../slices/userSlice';
+import { getUserInfo } from '../../../slices/getLoginInfo';
 import axios from 'axios';
 
 export function ProfilePage() {
@@ -28,37 +28,16 @@ export function ProfilePage() {
     setModalOpen(false);
   }
 
-  // const getUserInfo = async (e) => {
-  //   e.preventDefault();
-
-  //   const response = await axios.get(`http:http://localhost:8080/info/${userEmail}`)
-  //     .then((response) => {
-  //       return response.data;
-  //     })
-  //     .catch((error) => {
-  //       return error;
-  //     })
-
-  // }
-  // useEffect(() => {
-  //   const getUserInfo = async () => {
-  //     try {
-  //       const response = await axios.get(`http://localhost:8080/info/${userEmail}`);
-  //       dispatch(setUserEmail(response.data.userInfo.userEmail ));
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   getUserInfo();
-  // }, [userEmail, dispatch]);
+  useEffect(() => {
+    getUserInfo();
+  }, [userEmail, dispatch]);
 
   return (
     <>
       <h1>ProfilePage</h1>
       <div>
         <button onClick={openModal}>회원 정보 수정</button>
-        {modalOpen &&  (
+        {modalOpen && (
           <div className={styles.modal}>
             <h2>회원정보 수정</h2>
             <form>
@@ -67,11 +46,13 @@ export function ProfilePage() {
               <div>{todayBium}</div>
               <div>{totalyBium}</div>
             </form>
-            <button className={styles.overlay} onClick={closeModal}>닫기</button>
+            <button className={styles.overlay} onClick={closeModal}>
+              닫기
+            </button>
           </div>
         )}
       </div>
       {/* <GetRanking /> */}
     </>
   );
-};
+}
