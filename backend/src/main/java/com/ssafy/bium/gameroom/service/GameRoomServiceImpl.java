@@ -13,6 +13,7 @@ import com.ssafy.bium.user.User;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
@@ -35,6 +36,7 @@ public class GameRoomServiceImpl implements GameRoomService {
     @Override
     public List<GameRoomListDto> searchGameRooms(SearchGameRoomDto request) {
         // TODO: 2023-07-30 (030) paging, sort 구현
+//        Sort sort = Sort.by(Sort.Direction.ASC, )
         List<GameRoom> gameRooms = gameRoomRepository.findAll();
 
         return gameRooms.stream()
