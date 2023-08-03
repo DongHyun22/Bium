@@ -91,12 +91,11 @@ function createSession(props) {
         {
           params: {
             userEmail: 'user@example.com' // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
+          },
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
           }
-          // headers: {
-          //   // Authorization:
-          //   //   'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-          //   'Content-Type': 'application/json'
-          // }
         }
       );
 
