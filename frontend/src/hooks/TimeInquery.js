@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 // 서버에서 데이터를 받아와서 시간을 변환하는 함수
-function useGetBiumTime() {
+function useGetBiumTime(event) {
   const [time, setTime] = useState('');
 
   // 총 시간을 '시:분:초' 형태의 문자열로 변환하는 함수
@@ -16,19 +16,10 @@ function useGetBiumTime() {
       .padStart(2, '0')}`;
   };
 
+  // event가 바뀔 때만 setTime이 실행되도록 합니다.
   useEffect(() => {
-    const getTimeData = async () => {
-      try {
-        const response = await axios.get('URL이 없네요...');
-        const biumTime = response.data;
-
-        setTime(formatTime(biumTime));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getTimeData();
-  });
+    setTime(formatTime(event));
+  }, [event]); 
 
   return time;
 }

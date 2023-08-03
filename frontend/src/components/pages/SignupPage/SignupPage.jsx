@@ -148,7 +148,7 @@ export default function SignUpPage() {
   const handleSubmit = async (e) => {
     console.log(checkEmailDuplicate);
 
-    if (checkEmailDuplicate && isPasswordValid && isNameValid) {
+    if (checkEmailDuplicate && isEmailValid && isPasswordValid && isNameValid) {
       await goSignup(e);
 
       navigate('/login');

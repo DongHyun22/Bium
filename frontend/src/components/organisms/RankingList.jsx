@@ -1,4 +1,5 @@
-import { useState, useEffect, useSelector } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import RankingItem from '../molecules/RankingListItem';
 
@@ -12,7 +13,7 @@ function GetRanking() {
   useEffect(() => {
     // 랭킹 요청
     axios
-      .get(`http://localhost:8080/profile/ranking/${userEmail}`)
+      .get(`http://localhost:8080/api/profile/ranking/${userEmail}`)
       .then((response) => {
         setRank(response.data.ranking);
       })
