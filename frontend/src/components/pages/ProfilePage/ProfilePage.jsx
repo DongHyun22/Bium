@@ -53,7 +53,7 @@ export function ProfilePage() {
 
   const popSignout = () => {
     
-    const
+    
   }
 
   const signOutUser = async (e) => {
