@@ -1,4 +1,4 @@
-package com.ssafy.bium.controller;
+package com.ssafy.bium.user.controller;
 
 import com.ssafy.bium.config.jwt.JwtFilter;
 import com.ssafy.bium.config.jwt.TokenDto;
