@@ -89,12 +89,13 @@ function createSession(props) {
           customSessionId: props.mySessionId
         },
         {
-          params: {
-            userEmail: 'user@example.com' // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
-          },
+          // params: {
+          //   userEmail: 'user@example.com' // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
+          // },
           headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json'
+            'Access-Control-Allow-Origin': 'http://localhost:3000',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'POST'
           }
         }
       );
