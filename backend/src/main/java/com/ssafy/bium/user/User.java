@@ -61,7 +61,7 @@ public class User extends TimeBaseEntity {
     @Column(nullable = true)
     private boolean activated;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "user_authority",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
