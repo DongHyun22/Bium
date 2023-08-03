@@ -1,80 +1,87 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { loginActions } from '../../../slices/userSlice.js';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { userLogin, getUserInfo } from '../../../slices/getLoginInfo';
 
 // 로그인 컴포넌트
-function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const dispatch = useDispatch()
+function LoginPage() {
+  const [userEmail, setUserEmail] = useState('');
+  const [userPw, setUserPw] = useState('');
+  const isLogin = useSelector((state) => state.user.isLogin);
+  const token = useSelector((state) => state.user.token);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-
-    // axios 요청 함수
-    const getUserInfo = (email,password) => {
-        const API = 'url'
-
-        console.log(email,password)
-
-        axios.post(API,{
-            "email": email,
-            "password": password,
-        },
-        {
-            // headers: {
-            //     Authorization: `Bearer ${token}`,
-            // },
-        })
-        .then((response) => {
-            console.log(response.data);
-            console.log('로그인 되었습니다.')
-            // userSlice의 actions를 불러옴
-            dispatch(loginActions.getUserInfo(email,password))
-        })
-        .catch((error) => {
-            console.log(error)
-            window.alert('로그인 실패')
-        })
+  // 컴포넌트가 렌더링될 때와 isLogin 값이 변경될 때마다 실행
+  useEffect(() => {
+    if (isLogin || token !== null) {
+      navigate('/');
+      console.log('isLogin', isLogin);
     }
-    const handleSubmit = (e)=> {
-        e.preventDefault();
+  }, [isLogin]);
 
-        if (!emailRegex.test(email)) {
-            alert('유효한 이메일 형식이 아닙니다.');
-            return;
-        }
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-        // axios 요청 함수
-        getUserInfo(email,password);
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
+    if (!emailRegex.test(userEmail)) {
+      alert('유효한 이메일 형식이 아닙니다.');
+      return;
     }
-    return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <div className='loginId'>
-                    <div>
-                        <input 
-                        type="input" id="userEmail" placeholder='이메일을 입력해 주세요.' 
-                        value={email} onChange={(e)=> setEmail(e.target.value)}/>
-                    </div>
-                </div>
-                <div className='loginPassword'>
-                    <div>
-                        <input 
-                        type="password" id="userPassword" placeholder='비밀번호를 입력해 주세요.' 
-                        value={password} onChange={(e)=> setPassword(e.target.value)}/>
-                    </div>
-                </div>
-                <div>
-                    <button className='loginButton'>로그인</button>
-                </div>
-            </form>
+    const user = { userEmail, userPw };
+    dispatch(userLogin(user));
+
+    console.log(userLogin(userEmail, userPw));
+    console.log('세션의 토큰을 변수에 담음');
+    dispatch(getUserInfo(userEmail));
+
+    if (isLogin === true) {
+      navigate('/');
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    setUserEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setUserPw(e.target.value);
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <div className="loginId">
+          <label htmlFor="userEmail">
+            이메일 &nbsp;
+            <input
+              type="text"
+              id="userEmail"
+              placeholder="이메일을 입력해 주세요."
+              value={userEmail}
+              onChange={handleEmailChange}
+            />
+          </label>
         </div>
-        
-    )
+        <div className="loginPassword">
+          <label htmlFor="userPassword">
+            비밀번호 &nbsp;
+            <input
+              type="password"
+              id="userPassword"
+              placeholder="비밀번호를 입력해 주세요."
+              value={userPw}
+              onChange={handlePasswordChange}
+            />
+          </label>
+        </div>
+        <div>
+          <button className="loginButton">로그인</button>
+        </div>
+      </form>
+    </div>
+  );
 }
 
-
-export default Login
+export default LoginPage;
