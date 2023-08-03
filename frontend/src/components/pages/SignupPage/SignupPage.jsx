@@ -97,7 +97,7 @@ export default function SignUpPage() {
         userName: name,
         userNickname: nickname
       };
-      const response = await axios.post('http://localhost:8080/signup', userRegisterInfomation);
+      const response = await axios.post('http://localhost:8080/api/signup', userRegisterInfomation);
       return console.log(response.data);
     } catch (error) {
       console.error(error);
@@ -107,7 +107,7 @@ export default function SignUpPage() {
   const checkMail = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get('http://localhost:8080/signup/check', {
+      const response = await axios.get('http://localhost:8080/api/signup/check', {
         params: {
           userEmail: userEmail
         }
