@@ -67,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll() // 인증 없이 접근 허용
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/signup/check").permitAll()
+                .antMatchers("/game/**").permitAll()
 
 //                .anyRequest().authenticated() // 나머지는 인증 필요
 
