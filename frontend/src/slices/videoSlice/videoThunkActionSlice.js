@@ -58,11 +58,12 @@ async function getToken(props) {
 
 function createSession(props) {
   console.log('토큰있니....?');
-  const accessToken = props.accessToken;
+
   const userEmail = props.userEmail;
   console.log(props);
   return new Promise(async (resolve, reject) => {
     try {
+      const accessToken = sessionStorage.getItem('accessToken');
       console.log(accessToken, '비코좀...');
       // const response = await axios({
       //   url: `http://localhost:8080/api/game/create?userEmail=${userEmail}`,
@@ -93,9 +94,10 @@ function createSession(props) {
           //   userEmail: 'user@example.com' // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
           // },
           headers: {
-            'Access-Control-Allow-Origin': 'http://localhost:3000',
+            'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Methods': 'POST'
+            'Access-Control-Allow-Methods': 'POST',
+            Authorization: `Bearer ${accessToken}`
           }
         }
       );
