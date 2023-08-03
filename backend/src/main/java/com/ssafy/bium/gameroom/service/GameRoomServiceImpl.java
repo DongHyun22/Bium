@@ -68,19 +68,6 @@ public class GameRoomServiceImpl implements GameRoomService {
                 .customSessionId(gameRoomDto.getCustomSessionId())
                 .build();
         gameRoomRepository.save(gameRoom).getCustomSessionId();
-
-//        RedisAtomicLong counterUGR = new RedisAtomicLong("ugri", redisTemplate.getConnectionFactory());
-//        Long ugri = counterUGR.incrementAndGet();
-//        UserGameRoom userGameRoom = UserGameRoom.builder()
-//                .userGameRoomId(String.valueOf(ugri))
-//                .gameRoomId(String.valueOf(gri))
-//                .userEmail(userEmail)
-//                .isHost(true)
-//                .sequence(1)
-//                .gameRecord(0L)
-//                .build();
-//        usergameRoomRepository.save(userGameRoom);
-////        redisTemplate.opsForHash().put("gr", String.valueOf(generatedId), gameRoom);
         return sessionId;
     }
 
@@ -109,21 +96,20 @@ public class GameRoomServiceImpl implements GameRoomService {
         usergameRoomRepository.save(userGameRoom);
         return sessionId;
         // 입장한 사람의 정보를 뿌려줘야되네
-
     }
 
     @Override
     public DetailGameRoomDto searchGameRoom(String gameRoomId) {
         // 해당 gameRoomId에 해당하는 방 정보를 ModifyDto에 저장하여 리턴
-        String title = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "gameRoomTitle");
-        int gameRoomMovie = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "gameRoomMovie"));
-        int max = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "maxPeople"));
-        String gameRoomPw = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "gameRoomPw");
+        Optional<GameRoom> findGameRoom = gameRoomRepository.findById(gameRoomId);
+        if(!findGameRoom.isPresent())
+            return null;
+        GameRoom gameRoom = findGameRoom.get();
         DetailGameRoomDto modifyGameRoomDto = DetailGameRoomDto.builder()
-                .title(title)
-                .gameRoomMovie(gameRoomMovie)
-                .maxPeople(max)
-                .gameRoomPw(gameRoomPw)
+                .title(gameRoom.getGameRoomTitle())
+                .gameRoomMovie(gameRoom.getGameRoomMovie())
+                .maxPeople(gameRoom.getMaxPeople())
+                .gameRoomPw(gameRoom.getGameRoomPw())
                 .build();
         return modifyGameRoomDto;
     }
@@ -152,7 +138,6 @@ public class GameRoomServiceImpl implements GameRoomService {
             redisTemplate.delete("userGameRoom:" + userGameRoomId);
             redisTemplate.opsForSet().remove("userGameRoom", Integer.parseInt(userGameRoomId));
         }
-
 //        RedisAtomicLong counterUGR = new RedisAtomicLong("ugri", redisTemplate.getConnectionFactory());
 //        counterUGR.decrementAndGet();
         return gameRoomId;
@@ -194,7 +179,7 @@ public class GameRoomServiceImpl implements GameRoomService {
 //        System.out.println(value.equals("SessionA"));
         // gameRoomId에 해당하는 userGameRoom 삭제
 //        System.out.println(redisTemplate.opsForHash().entries("userGameRoom"));
-//        Optional<GameRoom> findGameRoom = g           ameRoomRepository.findById(gameRoomId);
+//        Optional<GameRoom> findGameRoom = gameRoomRepository.findById(gameRoomId);
 //        if(!findGameRoom.isPresent())
 //            return "0";
         // 다 삭제하면 gameRoomId의 gameRoom 삭제

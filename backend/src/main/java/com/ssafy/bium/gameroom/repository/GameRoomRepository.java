@@ -7,7 +7,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-public interface GameRoomRepository extends PagingAndSortingRepository<GameRoom, Long> {
+public interface GameRoomRepository extends PagingAndSortingRepository<GameRoom, String> {
     List<GameRoom> findAll();
-    GameRoom findGameRoomByGameRoomId(String gameRoomId);
+
 }

@@ -35,4 +35,8 @@ public class GameRoom extends TimeBaseEntity {
         this.maxPeople = maxPeople;
         this.customSessionId = customSessionId;
     }
+
+    public void modifyGameRoom() {
+
+    }
 }
