@@ -3,6 +3,7 @@ package com.ssafy.bium.user.service;
 import com.ssafy.bium.common.Authority;
 import com.ssafy.bium.config.jwt.TokenProvider;
 import com.ssafy.bium.user.User;
+import com.ssafy.bium.user.repository.AuthorityRepository;
 import com.ssafy.bium.user.repository.UserRepository;
 import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -37,15 +39,20 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user.get());
         }
 
-
     }
 
     @Override
     public User setUser(UserRegisterPostReq userRegisterInfo) {
 
-        Authority authority = Authority.builder()
-                .authorityName("ROLE_USER")
-                .build();
+        Optional<Authority> optionalAuthority = authorityRepository.findByAuthorityName("ROLE_USER");
+        Authority authority;
+        if (optionalAuthority.isEmpty()) {
+            authority = Authority.builder()
+                    .authorityName("ROLE_USER")
+                    .build();
+        } else {
+            authority = optionalAuthority.get();
+        }
 
         User user = User.builder()
                 .userEmail(userRegisterInfo.getUserEmail())
