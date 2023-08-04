@@ -1,17 +1,12 @@
 package com.ssafy.bium.user.service;
 
 import com.ssafy.bium.common.Authority;
-import com.ssafy.bium.config.jwt.TokenProvider;
 import com.ssafy.bium.user.User;
 import com.ssafy.bium.user.repository.AuthorityRepository;
 import com.ssafy.bium.user.repository.UserRepository;
 import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -23,9 +18,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final TokenProvider tokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 
 
@@ -56,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
         User user = User.builder()
                 .userEmail(userRegisterInfo.getUserEmail())
-                .userPw(passwordEncoder.encode(userRegisterInfo.getUserPw()))
+                .userPw(userRegisterInfo.getUserPw())
                 .userName(userRegisterInfo.getUserName())
                 .userNickname(userRegisterInfo.getUserNickname())
                 .authorities(Collections.singleton(authority))

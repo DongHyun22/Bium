@@ -1,20 +1,12 @@
 package com.ssafy.bium.user.controller;
 
-import com.ssafy.bium.config.jwt.JwtFilter;
-import com.ssafy.bium.config.jwt.TokenDto;
-import com.ssafy.bium.config.jwt.TokenProvider;
-import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.User;
+import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
 import com.ssafy.bium.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,8 +19,6 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 public class UserController {
 
-    private final TokenProvider tokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserService userService;
 
     @PostMapping("/login")
@@ -105,8 +95,7 @@ public class UserController {
     // 토큰과 유저 정보 반환
     @GetMapping("/info/{userEmail}")
     public ResponseEntity<Map<String, Object>> getInfo(
-            @PathVariable("userEmail") String userEmail,
-            HttpServletRequest request, Authentication authentication) {
+            @PathVariable("userEmail") String userEmail) {
         System.out.println("hello");
 
         Map<String, Object> resultMap = new HashMap<>();
