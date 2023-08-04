@@ -31,11 +31,11 @@ public class GameRoomController {
 
     @PostMapping("/create")
     public String create(
-            @RequestBody GameRoomDto request
-//            @RequestParam String userEmail
+            @RequestBody GameRoomDto request,
+            @RequestParam String userEmail
     ) throws OpenViduJavaClientException, OpenViduHttpException {
         // 방 생성
-        return gameRoomService.createGameRoom(request, "io@gmail.com");
+        return gameRoomService.createGameRoom(request, userEmail);
     }
 
     @PostMapping("/enter")
