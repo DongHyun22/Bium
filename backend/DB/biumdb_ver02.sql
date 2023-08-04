@@ -22,15 +22,8 @@ CREATE TABLE `User` (
                         `total_bium` BIGINT NOT NULL DEFAULT 0,
                         `is_admin` TINYINT NOT NULL DEFAULT 0,
                         `create_date` TIMESTAMP NOT NULL,
-                        `modified_date` TIMESTAMP NOT NULL,
-                        `activated` TINYINT NULL DEFAULT NULL
+                        `modified_date` TIMESTAMP NOT NULL
 );
-
-
-CREATE TABLE IF NOT EXISTS `authority` (
-        `authority_name` VARCHAR(100) NOT NULL,
-        PRIMARY KEY (`authority_name`));
-
 
 CREATE TABLE `Contest` (
                            `contest_id` BIGINT	NOT NULL,
@@ -83,15 +76,5 @@ ALTER TABLE `ContestRoom` ADD CONSTRAINT `PK_CONTESTROOM` PRIMARY KEY (`contest_
 
 ALTER TABLE `SNS_User` ADD CONSTRAINT `FK_User_TO_SNS_User_1` FOREIGN KEY (`user_id`) REFERENCES `User` (`user_id`);
 ALTER TABLE `Contest` ADD CONSTRAINT `FK_User_TO_Contest_1` FOREIGN KEY (`user_id`) REFERENCES `User` (`user_id`);
-
-
-
-CREATE TABLE IF NOT EXISTS `user_authority` (
-                            `user_id` BIGINT NOT NULL,
-                            `authority_name` VARCHAR(100) NULL DEFAULT NULL,
-                            FOREIGN KEY (`user_id`)
-                            REFERENCES `user` (`user_id`),
-                            FOREIGN KEY (`authority_name`)
-                            REFERENCES `authority` (`authority_name`));
 
 INSERT INTO hibernate_sequence (next_val) VALUES (1);

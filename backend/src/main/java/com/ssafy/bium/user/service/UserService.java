@@ -11,8 +11,5 @@ public interface UserService {
     User setUser(UserRegisterPostReq userRegisterInfo);
     User getUserByUserEmail(String userEmail);
     int deleteUserByUserEmail(String userEmail);
-    int deleteRefreshToken(String userEmail);
-    void setToken(String userEmail, String token);
-
     public User login(UserLoginPostReq userLoginPostReq);
 }
