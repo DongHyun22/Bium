@@ -94,6 +94,8 @@ export function ProfilePage() {
     <>
       <h1>ProfilePage</h1>
       <div>
+        <h3>닉네임</h3>
+        <h3>{savedEmail}</h3>
         <h3>오늘 비움량</h3>
         <h3>{todayBium}</h3>
         <h3>총 비움량</h3>
@@ -103,7 +105,7 @@ export function ProfilePage() {
           <div className={styles.modal}>
             <h2>회원정보 수정</h2>
             <form>
-              <div>{savedEmail}</div>
+              <div>{savedNickname}</div>
               <label>
                 닉네임:
                 <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
