@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,23 +23,11 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginPostReq userLoginPostReq) {
         Map<String, Object> resultMap = new HashMap<>();
-//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userLoginPostReq.getUserEmail(), userLoginPostReq.getUserPw());
-//
-//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//        TokenDto jwt = tokenProvider.createToken(authentication);
-//
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-//        resultMap.put("message", "success");
-//        resultMap.put("httpHeaders", jwt.getAccessToken());
-//
-//        userService.setToken(userLoginPostReq.getUserEmail(), jwt.getRefreshToken());
 
 
         userService.login(userLoginPostReq);
         resultMap.put("httpHeaders", "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjI5ODcwNzQ2NjJ9.lXRvR1Xv_W_WdAz15uw5VG4G6myl-fuj75tULle6vLs");
+        resultMap.put("message", "success");
 
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
@@ -51,7 +38,6 @@ public class UserController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
         try {
-            userService.deleteRefreshToken(userId);
             resultMap.put("message", "success");
             status = HttpStatus.ACCEPTED;
         } catch (Exception e) {
