@@ -1,13 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setJoin,
-  audioMute,
-  deleteSubscriber,
-  enteredSubscriber,
-  initOVSession,
-  leaveSession
-} from '../../../slices/videoSlice/videoSlice';
+import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import { OpenVidu } from 'openvidu-browser';
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
@@ -125,13 +118,7 @@ function GameRoomPage() {
             <h1 id="session-title">{mySessionId}</h1>
           </div>
           <div id="session-sidebar">
-            <input
-              className="btn btn-large btn-danger"
-              type="button"
-              id="buttonLeaveSession"
-              onClick={handleLeaveSession}
-              value="Leave session"
-            />
+            <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={handleLeaveSession} value="Leave session" />
             <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
           </div>
           <div id="room-information">

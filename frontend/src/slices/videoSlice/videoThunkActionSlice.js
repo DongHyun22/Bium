@@ -96,10 +96,12 @@ function createSession(props) {
         // console.log('개발자 설정을 통한 강제 리턴');
         return resolve(props.mySessionId);
       }, 1000);
+      console.log('여기는 create 세션이니까', response);
       return response;
     } catch (response) {
       console.log(response);
       let error = Object.assign({}, response);
+      // 세션이 있으면 409 에러를 주는데 그때는 세션이 벌써 있다는 것이다.
       if (error?.response?.status === 409) {
         return resolve('2번 오류야', props.mySessionId);
       }
