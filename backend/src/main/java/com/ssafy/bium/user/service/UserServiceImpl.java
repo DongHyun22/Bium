@@ -98,4 +98,9 @@ public class UserServiceImpl implements UserService {
     public int deleteRefreshToken(String userEmail) {
         return 0;
     }
+
+    @Override
+    public User login(UserLoginPostReq userLoginPostReq) {
+        return userRepository.findByUserEmail(userLoginPostReq.getUserEmail()).get();
+    }
 }
