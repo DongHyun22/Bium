@@ -1,23 +1,14 @@
 package com.ssafy.bium.user.controller;
 
-import com.ssafy.bium.config.jwt.JwtFilter;
-import com.ssafy.bium.config.jwt.TokenDto;
-import com.ssafy.bium.config.jwt.TokenProvider;
-import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.User;
+import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
 import com.ssafy.bium.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,26 +18,16 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 public class UserController {
 
-    private final TokenProvider tokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginPostReq userLoginPostReq) {
         Map<String, Object> resultMap = new HashMap<>();
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userLoginPostReq.getUserEmail(), userLoginPostReq.getUserPw());
 
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        TokenDto jwt = tokenProvider.createToken(authentication);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        userService.login(userLoginPostReq);
+        resultMap.put("httpHeaders", "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjI5ODcwNzQ2NjJ9.lXRvR1Xv_W_WdAz15uw5VG4G6myl-fuj75tULle6vLs");
         resultMap.put("message", "success");
-        resultMap.put("httpHeaders", jwt.getAccessToken());
-
-        userService.setToken(userLoginPostReq.getUserEmail(), jwt.getRefreshToken());
 
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
@@ -57,7 +38,6 @@ public class UserController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
         try {
-            userService.deleteRefreshToken(userId);
             resultMap.put("message", "success");
             status = HttpStatus.ACCEPTED;
         } catch (Exception e) {
@@ -101,8 +81,7 @@ public class UserController {
     // 토큰과 유저 정보 반환
     @GetMapping("/info/{userEmail}")
     public ResponseEntity<Map<String, Object>> getInfo(
-            @PathVariable("userEmail") String userEmail,
-            HttpServletRequest request, Authentication authentication) {
+            @PathVariable("userEmail") String userEmail) {
         System.out.println("hello");
 
         Map<String, Object> resultMap = new HashMap<>();
