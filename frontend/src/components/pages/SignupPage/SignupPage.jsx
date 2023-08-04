@@ -150,7 +150,7 @@ export default function SignUpPage() {
 
     if (checkEmailDuplicate && isEmailValid && isPasswordValid && isNameValid) {
       await goSignup(e);
-
+      alert('회원가입에 성공 하셨습니다.');
       navigate('/login');
     } else {
       alert('회원가입에 실패 하셨습니다.');

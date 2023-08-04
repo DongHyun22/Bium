@@ -24,26 +24,25 @@ function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     if (!emailRegex.test(userEmail)) {
       alert('유효한 이메일 형식이 아닙니다.');
       return;
     }
-    
+
     const user = { userEmail, userPw };
-    
+
     dispatch(userLogin(user))
       .then(() => {
         dispatch(getUserInfo(userEmail));
-        if (isLogin === true) {
-          navigate('/');
-        }
+        // if (isLogin === true) {
+        //   navigate('/');
+        // }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Login failed:', error);
       });
   };
-  
 
   const handleEmailChange = (e) => {
     setUserEmail(e.target.value);
