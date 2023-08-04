@@ -3,6 +3,7 @@ package com.ssafy.bium.user.controller;
 import com.ssafy.bium.user.User;
 import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
+import com.ssafy.bium.user.response.UserRankingGetRes;
 import com.ssafy.bium.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -87,20 +89,32 @@ public class UserController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.UNAUTHORIZED;
 //        if (tokenProvider.validateToken(request.getHeader("Authorization"))) {
-            try {
+        try {
 //				로그인 사용자 정보.
-                User user = userService.getUserByUserEmail(userEmail);
-                resultMap.put("userInfo", user);
-                resultMap.put("message", "success");
-                status = HttpStatus.ACCEPTED;
-            } catch (Exception e) {
-                resultMap.put("message", e.getMessage());
-                status = HttpStatus.INTERNAL_SERVER_ERROR;
-            }
+            User user = userService.getUserByUserEmail(userEmail);
+            resultMap.put("userInfo", user);
+            resultMap.put("message", "success");
+            status = HttpStatus.ACCEPTED;
+        } catch (Exception e) {
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
 //        } else {
 //            resultMap.put("message", "fail");
 //        }
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    @GetMapping("profile/ranking/{userEmail}")
+    public ResponseEntity<?> ranking(@PathVariable("userEmail") String userEmail) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        List<UserRankingGetRes> list = userService.getUserListTop5ByTotalBium();
+
+        UserRankingGetRes userRankingGetRes = userService.getUserByTotalBium(userEmail);
+        resultMap.put("ranking", list);
+        resultMap.put("myRanking", userRankingGetRes);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
 }
