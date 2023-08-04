@@ -52,7 +52,7 @@ export const joinSession = createAsyncThunk('videoAction/joinSession', async (pr
 async function getToken(props) {
   console.log('bbbbb는?');
   const newSessionId = await createSession(props);
-  const token = await createToken(newSessionId);
+  const token = await createToken(props);
   return token;
 }
 
@@ -80,27 +80,31 @@ function createSession(props) {
       //     'access-token': sessionStorage.getItem('accessToken')
       //   }
       // });
-      const response = await axios.post(
-        `http://localhost:8080/api/game/create`,
-        {
-          title: props.roomName,
-          movie: props.backgroundImage,
-          maxPeople: props.maxPeople,
-          pw: props.roomPassword,
-          customSessionId: props.mySessionId
-        },
-        {
-          // params: {
-          //   userEmail: 'user@example.com' // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
-          // },
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Methods': 'POST',
-            Authorization: `Bearer ${accessToken}`
+      const response = await axios
+        .post(
+          `http://localhost:8080/api/game/create`,
+          {
+            title: props.roomName,
+            movie: props.backgroundImage,
+            maxPeople: props.maxPeople,
+            pw: props.roomPassword,
+            customSessionId: props.mySessionId
+          },
+          {
+            // params: {
+            //   userEmail: 'user@example.com' // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
+            // },
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Methods': 'POST',
+              Authorization: `Bearer ${accessToken}`
+            }
           }
-        }
-      );
+        )
+        .then(() => {
+          console.log('세션생성은 완료');
+        });
 
       setTimeout(() => {
         // console.log('개발자 설정을 통한 강제 리턴');
@@ -123,13 +127,21 @@ function createToken(sessionId) {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + 'api/game/enter' + sessionId + '/connections',
-        {},
+        APPLICATION_SERVER_URL + 'api/game/enter',
         {
+          gameRoomId: props.roomName,
+          gameRoomPw: props.backgroundImage,
+          customSessionId: props.mySessionId
+        },
+        {
+          // params: {
+          //   userEmail: 'user@example.com' // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
+          // },
           headers: {
-            // Authorization:
-            //   'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-            'Content-Type': 'application/json'
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'POST',
+            Authorization: `Bearer ${accessToken}`
           }
         }
       );
