@@ -15,12 +15,12 @@ function RouteLink(props) {
         <Route index element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route element={<PrivateRoute isLogin={false} />}>
-          <Route path="/createroom" element={<CreateGameRoom />} />
-          <Route path="/gameroomlist" element={<GameRoomListPage />} />
-          <Route path="/gameroom" element={<GameRoomPage />} />
-          <Route path="/profile/:nickname" element={<ProfilePage />} />
-        </Route>
+        {/* <Route element={<PrivateRoute isLogin={false} />}> */}
+        <Route path="/createroom" element={<CreateGameRoom />} />
+        <Route path="/gameroomlist" element={<GameRoomListPage />} />
+        <Route path="/gameroom" element={<GameRoomPage />} />
+        <Route path="/profile/:nickname" element={<ProfilePage />} />
+        {/* </Route> */}
       </Routes>
     </div>
   );

@@ -188,9 +188,7 @@ export default function SignUpPage() {
           name="passwordConfirm"
           required
         />
-        {passwordConfirm && (
-          <div>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>
-        )}
+        {passwordConfirm && <div>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>}
 
         <br></br>
         <p>이름</p>

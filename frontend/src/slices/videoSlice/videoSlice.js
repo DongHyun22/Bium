@@ -3,12 +3,14 @@ import { joinSession } from './videoThunkActionSlice';
 
 const initialState = {
   join: false,
-  roomName: null,
+  roomName: '',
   OV: null,
   session: undefined,
   token: undefined,
   publisher: undefined,
-  mainStreamManager: undefined,
+  maxPeople: 8,
+  backgroundImage: 1,
+
   mySessionId: 'Session0',
   myUserName: 'jihyeok',
   subscribers: [],
@@ -21,6 +23,12 @@ export const videoSlice = createSlice({
   name: 'video',
   initialState,
   reducers: {
+    setBackgroundImage: (state, action) => {
+      state.join = action.payload;
+    },
+    setMaxPeople: (state, action) => {
+      state.join = action.payload;
+    },
     setJoin: (state, action) => {
       state.join = action.payload;
     },
@@ -31,7 +39,6 @@ export const videoSlice = createSlice({
       state.roomName = action.payload.roomName;
     },
     initOVSession: (state, action) => {
-      console.log('action 찍기', action);
       state.OV = action.payload.OV;
       state.session = action.payload.session;
     },
@@ -65,6 +72,7 @@ export const videoSlice = createSlice({
       if (mySession) {
         mySession.disconnect();
       }
+      state.maxPeople = 8;
       state.join = false;
       state.roomName = null;
       state.OV = null;
@@ -77,11 +85,12 @@ export const videoSlice = createSlice({
       state.subscribers = [];
       state.isVideoPublished = true;
       state.isAudioPublished = true;
-      state.roomPassword = null;
+      state.roomPassword = '';
     },
     enteredSubscriber: (state, action) => {
       // console.log("여기가 문제라고??", action.payload)
-      state.subscribers.push(action.payload);
+      state.subscribers = [...state.subscribers, action.payload];
+      // state.subscribers.push(action.payload)
     },
     deleteSubscriber: (state, action) => {
       let index = state.subscribers.indexOf(action.payload, 0);
@@ -104,6 +113,8 @@ export const videoSlice = createSlice({
 });
 
 export const {
+  setBackgroundImage,
+  setMaxPeople,
   setJoin,
   setRoomPassword,
   setRoomName,

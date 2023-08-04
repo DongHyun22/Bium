@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setMySessionId, setMyUserName, setRoomName, setRoomPassword, setJoin } from '../../../slices/videoSlice/videoSlice';
+import {
+  setMySessionId,
+  setMyUserName,
+  setRoomName,
+  setRoomPassword,
+  setJoin,
+  setMaxPeople,
+  setBackgroundImage
+} from '../../../slices/videoSlice/videoSlice';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export const CreateGameRoom = () => {
   const dispatch = useDispatch();
@@ -9,24 +18,34 @@ export const CreateGameRoom = () => {
 
   const [isSecret, setIsSecret] = useState(false);
 
-  // const join = useSelector((state) => state.video.join);
-  const roomPassword = useSelector((state) => state.video.roomPassword);
+  const backgroundImage = useSelector((state) => state.video.backgroundImage);
+  const maxPeople = useSelector((state) => state.video.maxPeople);
   const roomName = useSelector((state) => state.video.roomName);
+  const roomPassword = useSelector((state) => state.video.roomPassword);
   const mySessionId = useSelector((state) => state.video.mySessionId);
   const myUserName = useSelector((state) => state.video.myUserName);
   // const session = useSelector((state) => state.video.session);
 
-  const handleJoin = (event) => {
-    console.log('handleJoin');
+  const handleJoin = async (event) => {
     event.preventDefault();
-    // dispatch(setJoin(true));
-    navigate('/gameroom');
+    try {
+      dispatch(setJoin(true));
+      navigate('/gameroom');
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleChangeisSecret = (e) => {
     setIsSecret(!isSecret);
   };
 
+  const handleChangeBackground = (e) => {
+    dispatch(setBackgroundImage({ backgroundImage: e.target.value }));
+  };
+  const handleChangeMaxPeople = (e) => {
+    dispatch(setMaxPeople({ maxPeople: e.target.value }));
+  };
   const handleChangeRoomPassword = (e) => {
     dispatch(setRoomPassword({ roomPassword: e.target.value }));
   };
@@ -51,6 +70,27 @@ export const CreateGameRoom = () => {
             <p>
               <label>RoomName: </label>
               <input className="form-control" type="text" id="roomName" value={roomName} onChange={handleChangeRoomname} required />
+            </p>
+            <p>
+              <label>MaxPeople: </label>
+              <select className="form-control" id="maxPeople" value={maxPeople} onChange={handleChangeMaxPeople}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+              </select>
+            </p>
+            <p>
+              <label>backImage: </label>
+              <select className="form-control" id="backgroundImage" value={backgroundImage} onChange={handleChangeBackground}>
+                <option value="1">불</option>
+                <option value="2">물</option>
+                <option value="3">숲</option>
+              </select>
             </p>
             <p>
               <label>Participant: </label>

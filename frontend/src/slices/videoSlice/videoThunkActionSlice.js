@@ -1,17 +1,31 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080';
 
-export const joinSession = createAsyncThunk('videoAction/joinSession', async (data) => {
-  const OV = data.OV;
-  const session = data.session;
-  const mySessionId = data.mySessionId;
-  const myUserName = data.myUserName;
+export const joinSession = createAsyncThunk('videoAction/joinSession', async (props) => {
+  const accessToken = sessionStorage.getItem('accessToken');
+  console.log(accessToken);
+  console.log('props는 이거다', props);
+  const OV = props.OV;
+  const backgroundImage = props.backgroundImage;
+  const maxPeople = props.maxPeople;
+  const mySessionId = props.mySessionId;
+  const myUserName = props.myUserName;
+  const roomName = props.roomName;
+  const roomPassword = props.roomPassword;
+  const session = props.session;
 
+  console.log(123);
+  console.log(456);
   try {
-    const token = await getToken({ sessionId: mySessionId });
+    console.log('해줘');
+    const token = await getToken({ props, accessToken });
+    console.log('제발 이거는 되니?');
     if (myUserName && session) {
+      console.log('AAAAA');
+
       await session.connect(token, { clientData: myUserName });
       const publisher = await OV.initPublisherAsync(undefined, {
         audioSource: undefined, // The source of audio. If undefined default microphone
@@ -35,70 +49,107 @@ export const joinSession = createAsyncThunk('videoAction/joinSession', async (da
   }
 });
 
-async function getToken(mySessionId) {
-  console.log('4');
-  // console.log(mySessionId)
-
-  const newSessionId = await createSession(mySessionId.sessionId);
-  console.log('5', newSessionId);
-
-  const token = await createToken(newSessionId);
-
-  console.log('7');
-  console.log(token);
+async function getToken(props) {
+  console.log('bbbbb는?');
+  const newSessionId = await createSession(props);
+  const token = await createToken(props);
   return token;
 }
-function createSession(sessionId) {
+
+function createSession(props) {
+  console.log('토큰있니....?');
+
+  const userEmail = props.userEmail;
+  console.log(props);
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await axios.post(
-        APPLICATION_SERVER_URL + 'api/sessions',
-        { customSessionId: sessionId },
-        {
-          headers: {
-            // Authorization:
-            // 'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-            'Content-Type': 'application/json'
+      const accessToken = sessionStorage.getItem('accessToken');
+      console.log(accessToken, '비코좀...');
+      // const response = await axios({
+      //   url: `http://localhost:8080/api/game/create?userEmail=${userEmail}`,
+      //   method: 'POST',
+      //   data: {
+      //     title: props.roomName,
+      //     movie: props.backgroundImage,
+      //     maxPeople: props.maxPeople,
+      //     pw: props.roomPassword,
+      //     customSessionId: props.mySessionId
+      //   },
+      //   headers: {
+      //     Authorization: sessionStorage.getItem('accessToken'),
+      //     'access-token': sessionStorage.getItem('accessToken')
+      //   }
+      // });
+      const response = await axios
+        .post(
+          `http://localhost:8080/api/game/create`,
+          {
+            title: props.roomName,
+            movie: props.backgroundImage,
+            maxPeople: props.maxPeople,
+            pw: props.roomPassword,
+            customSessionId: props.mySessionId
+          },
+          {
+            // params: {
+            //   userEmail: 'user@example.com' // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
+            // },
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Methods': 'POST',
+              Authorization: `Bearer ${accessToken}`
+            }
           }
-        }
-      );
+        )
+        .then(() => {
+          console.log('세션생성은 완료');
+        });
 
       setTimeout(() => {
-        console.log('개발자 설정을 통한 강제 리턴');
-        console.log(sessionId);
-        return resolve(sessionId);
+        // console.log('개발자 설정을 통한 강제 리턴');
+        return resolve(props.mySessionId);
       }, 1000);
-      console.log(response, '엥');
       return response.data;
     } catch (response) {
       console.log(response);
       let error = Object.assign({}, response);
       if (error?.response?.status === 409) {
-        return resolve(sessionId);
+        return resolve(props.mySessionId);
       }
     }
   });
 }
 
 function createToken(sessionId) {
+  console.log('hhhhh');
+
   return new Promise(async (resolve, reject) => {
     try {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
-        {},
+        APPLICATION_SERVER_URL + 'api/game/enter',
         {
+          gameRoomId: props.roomName,
+          gameRoomPw: props.backgroundImage,
+          customSessionId: props.mySessionId
+        },
+        {
+          // params: {
+          //   userEmail: 'user@example.com' // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
+          // },
           headers: {
-            // Authorization:
-            //   'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
-            'Content-Type': 'application/json'
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'POST',
+            Authorization: `Bearer ${accessToken}`
           }
         }
       );
-      console.log('6');
-      console.log(response.data);
+      console.log('iiiii');
+      // console.log(response.data);
       return resolve(response.data);
     } catch (error) {
-      return reject(error);
+      console.log(reject(error));
     }
   });
 }

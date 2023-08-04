@@ -7,32 +7,32 @@ export const NavBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
-  console.log('token', token);
+  // console.log('token', token);
   return (
     <div>
-      {token === null ? (
-        <>
-          <Link to="/login">로그인/ </Link>
-          <Link to="/signup">회원가입/ </Link>
-        </>
-      ) : (
-        <>
-          <button
-            onClick={() => {
-              sessionStorage.removeItem('accessToken');
-              dispatch(setToken(sessionStorage.getItem('accessToken')));
-              dispatch(setIsLogin(false));
-              navigate('/');
-            }}
-          >
-            로그아웃
-          </button>
-          <Link to="/createroom">게임방 생성/ </Link>
-          <Link to="/gameroomlist">게임룸 보기/ </Link>
-          <Link to="/gameroom">게임방입장/ </Link>
-          <Link to="/profile/:nickname">프로필 화면/ </Link>
-        </>
-      )}
+      {/* {token === null ? ( */}
+      <>
+        <Link to="/login">로그인/ </Link>
+        <Link to="/signup">회원가입/ </Link>
+      </>
+      {/* ) : ( */}
+      <>
+        <button
+          onClick={() => {
+            sessionStorage.removeItem('accessToken');
+            dispatch(setToken(sessionStorage.getItem('accessToken')));
+            dispatch(setIsLogin(false));
+            navigate('/');
+          }}
+        >
+          로그아웃
+        </button>
+        <Link to="/createroom">게임방 생성/ </Link>
+        <Link to="/gameroomlist">게임룸 보기/ </Link>
+        <Link to="/gameroom">게임방입장/ </Link>
+        <Link to="/profile/:nickname">프로필 화면/ </Link>
+      </>
+      {/* )} */}
     </div>
   );
 };

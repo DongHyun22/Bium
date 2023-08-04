@@ -55,13 +55,7 @@ function LoginPage() {
         <div className="loginId">
           <label htmlFor="userEmail">
             이메일 &nbsp;
-            <input
-              type="text"
-              id="userEmail"
-              placeholder="이메일을 입력해 주세요."
-              value={userEmail}
-              onChange={handleEmailChange}
-            />
+            <input type="text" id="userEmail" placeholder="이메일을 입력해 주세요." value={userEmail} onChange={handleEmailChange} />
           </label>
         </div>
         <div className="loginPassword">
