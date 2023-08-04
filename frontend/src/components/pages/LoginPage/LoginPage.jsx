@@ -24,22 +24,26 @@ function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
     if (!emailRegex.test(userEmail)) {
       alert('유효한 이메일 형식이 아닙니다.');
       return;
     }
+    
     const user = { userEmail, userPw };
-    dispatch(userLogin(user));
-
-    console.log(userLogin(userEmail, userPw));
-    console.log('세션의 토큰을 변수에 담음');
-    dispatch(getUserInfo(userEmail));
-
-    if (isLogin === true) {
-      navigate('/');
-    }
+    
+    dispatch(userLogin(user))
+      .then(() => {
+        dispatch(getUserInfo(userEmail));
+        if (isLogin === true) {
+          navigate('/');
+        }
+      })
+      .catch(error => {
+        console.error('Login failed:', error);
+      });
   };
+  
 
   const handleEmailChange = (e) => {
     setUserEmail(e.target.value);
