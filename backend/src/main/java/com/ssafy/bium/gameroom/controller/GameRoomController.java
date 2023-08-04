@@ -16,7 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/game")
+@RequestMapping("/game")
 @CrossOrigin(origins = "*")
 public class GameRoomController {
     private final GameRoomService gameRoomService;
@@ -31,11 +31,11 @@ public class GameRoomController {
 
     @PostMapping("/create")
     public String create(
-            @RequestBody GameRoomDto request,
-            @RequestParam String userEmail
+            @RequestBody GameRoomDto request
+//            @RequestParam String userEmail
     ) throws OpenViduJavaClientException, OpenViduHttpException {
         // 방 생성
-        return gameRoomService.createGameRoom(request, userEmail);
+        return gameRoomService.createGameRoom(request, "io@gmail.com");
     }
 
     @PostMapping("/enter")
