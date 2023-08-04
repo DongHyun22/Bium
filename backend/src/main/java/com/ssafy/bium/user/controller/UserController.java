@@ -1,6 +1,7 @@
 package com.ssafy.bium.user.controller;
 
 import com.ssafy.bium.user.User;
+import com.ssafy.bium.user.request.FilePostReq;
 import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserModifyPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -98,16 +100,16 @@ public class UserController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.UNAUTHORIZED;
 //        if (tokenProvider.validateToken(request.getHeader("Authorization"))) {
-            try {
+        try {
 //				로그인 사용자 정보.
-                User user = userService.getUserByUserEmail(userEmail);
-                resultMap.put("userInfo", user);
-                resultMap.put("message", "success");
-                status = HttpStatus.ACCEPTED;
-            } catch (Exception e) {
-                resultMap.put("message", e.getMessage());
-                status = HttpStatus.INTERNAL_SERVER_ERROR;
-            }
+            User user = userService.getUserByUserEmail(userEmail);
+            resultMap.put("userInfo", user);
+            resultMap.put("message", "success");
+            status = HttpStatus.ACCEPTED;
+        } catch (Exception e) {
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
 //        } else {
 //            resultMap.put("message", "fail");
 //        }
@@ -115,14 +117,14 @@ public class UserController {
     }
 
     @GetMapping("profile/modify/{userEmail}")
-    public ResponseEntity<?> getModifyData (@PathVariable("userEmail") String userEmail) {
+    public ResponseEntity<?> getModifyData(@PathVariable("userEmail") String userEmail) {
 
         UserModifyGetRes userModifyGetRes = userService.getModifyData(userEmail);
         return new ResponseEntity<>(userModifyGetRes, HttpStatus.OK);
     }
 
     @PostMapping("profile/modify")
-    public ResponseEntity<?> modifyProfile (UserModifyPostReq userModifyPostReq, @RequestParam(value = "upfile", required = false) MultipartFile file) {
+    public ResponseEntity<?> modifyProfile(UserModifyPostReq userModifyPostReq, @RequestParam(value = "upfile", required = false) MultipartFile file) throws Exception {
 
         logger.debug("MultipartFile.isEmpty : {}", file.isEmpty());
 
@@ -133,18 +135,18 @@ public class UserController {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-//            FileInfoDto fileInfoDto = new FileInfoDto();
-//            String originalFileName = file.getOriginalFilename();
-//            if (!originalFileName.isEmpty()) {
-//                String saveFileName = UUID.randomUUID().toString()
-//                        + originalFileName.substring(originalFileName.lastIndexOf('.'));
-//                fileInfoDto.setSaveFolder(userDto.getUserId());
-//                fileInfoDto.setOriginalFile(originalFileName);
-//                fileInfoDto.setSaveFile(saveFileName);
-//                logger.debug("원본 파일 이름 : {}, 실제 저장 파일 이름 : {}", file.getOriginalFilename(), saveFileName);
-//                file.transferTo(new File(folder, saveFileName));
-//            }
-//            userDto.setFileInfo(fileInfoDto);
+            FilePostReq filePostReq = new FilePostReq();
+            String originalFileName = file.getOriginalFilename();
+            if (!originalFileName.isEmpty()) {
+                String saveFileName = UUID.randomUUID()
+                        + originalFileName.substring(originalFileName.lastIndexOf('.'));
+                filePostReq.setSaveFolder(userModifyPostReq.getUserEmail());
+                filePostReq.setOriginalFile(originalFileName);
+                filePostReq.setSaveFile(saveFileName);
+                logger.debug("원본 파일 이름 : {}, 실제 저장 파일 이름 : {}", file.getOriginalFilename(), saveFileName);
+                file.transferTo(new File(folder, saveFileName));
+            }
+//            userDto.setFileInfo(filePostReq);
         }
 
 

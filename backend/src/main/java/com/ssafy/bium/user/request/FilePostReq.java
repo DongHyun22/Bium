@@ -9,4 +9,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FilePostReq {
 
+    int idx;
+    String userEmail;
+    String saveFolder;
+    String originalFile;
+    String saveFile;
+
 }
