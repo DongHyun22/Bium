@@ -19,7 +19,7 @@ function useGetBiumTime(event) {
   // event가 바뀔 때만 setTime이 실행되도록 합니다.
   useEffect(() => {
     setTime(formatTime(event));
-  }, [event]); 
+  }, [event]);
 
   return time;
 }

@@ -25,7 +25,6 @@ export function ProfilePage() {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const todayBium = useGetBiumTime(savedTodayBium);
   const totalBium = useGetBiumTime(savedTotalBium);
-  
 
   // 회원 탈퇴 확인 모달의 상태를 관리하는 state
   const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState(false);
@@ -112,16 +111,26 @@ export function ProfilePage() {
               <br />
               <label>
                 비밀번호:
-                <input type="password" autoComplete="off" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </label>
               <br />
               <label>
                 비밀번호확인:
-                <input type="password" autoComplete="off" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={passwordConfirm}
+                  onChange={(e) => setPasswordConfirm(e.target.value)}
+                />
               </label>
             </form>
-            <button onClick={ modifyUserInfo }>수정하기</button>
-            <button onClick={ openDeleteConfirmModal }>회원 탈퇴</button>
+            <button onClick={modifyUserInfo}>수정하기</button>
+            <button onClick={openDeleteConfirmModal}>회원 탈퇴</button>
 
             <button className={styles.overlay} onClick={closeModal}>
               닫기
@@ -133,8 +142,8 @@ export function ProfilePage() {
           <div className={styles.modal}>
             <h2>정말로 탈퇴하시겠어요?</h2>
 
-            <button onClick={ confirmSignOut }>예</button>
-            <button onClick={ closeDeleteConfirmModal }>아니요</button>
+            <button onClick={confirmSignOut}>예</button>
+            <button onClick={closeDeleteConfirmModal}>아니요</button>
           </div>
         )}
       </div>
