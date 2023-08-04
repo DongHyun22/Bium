@@ -6,8 +6,7 @@ const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'htt
 
 export const joinSession = createAsyncThunk('videoAction/joinSession', async (props) => {
   const accessToken = sessionStorage.getItem('accessToken');
-  console.log(accessToken);
-  console.log('props는 이거다', props);
+  const userEmail = props.userEmail;
   const OV = props.OV;
   const backgroundImage = props.backgroundImage;
   const maxPeople = props.maxPeople;
@@ -59,27 +58,14 @@ async function getToken(props) {
 function createSession(props) {
   console.log('토큰있니....?');
 
-  const userEmail = props.userEmail;
   console.log(props);
   return new Promise(async (resolve, reject) => {
     try {
       const accessToken = sessionStorage.getItem('accessToken');
       console.log(accessToken, '비코좀...');
-      // const response = await axios({
-      //   url: `http://localhost:8080/api/game/create?userEmail=${userEmail}`,
-      //   method: 'POST',
-      //   data: {
-      //     title: props.roomName,
-      //     movie: props.backgroundImage,
-      //     maxPeople: props.maxPeople,
-      //     pw: props.roomPassword,
-      //     customSessionId: props.mySessionId
-      //   },
-      //   headers: {
-      //     Authorization: sessionStorage.getItem('accessToken'),
-      //     'access-token': sessionStorage.getItem('accessToken')
-      //   }
-      // });
+      const userEmail = props.props.userEmail;
+      console.log('여기 들어오나?', userEmail);
+
       const response = await axios
         .post(
           `http://localhost:8080/api/game/create`,
@@ -91,9 +77,9 @@ function createSession(props) {
             customSessionId: props.mySessionId
           },
           {
-            // params: {
-            //   userEmail: 'user@example.com' // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
-            // },
+            params: {
+              userEmail // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
+            },
             headers: {
               'Access-Control-Allow-Origin': '*',
               'Content-Type': 'application/json',
@@ -110,46 +96,58 @@ function createSession(props) {
         // console.log('개발자 설정을 통한 강제 리턴');
         return resolve(props.mySessionId);
       }, 1000);
-      return response.data;
+      return response;
     } catch (response) {
       console.log(response);
       let error = Object.assign({}, response);
       if (error?.response?.status === 409) {
-        return resolve(props.mySessionId);
+        return resolve('2번 오류야', props.mySessionId);
       }
     }
   });
 }
 
-function createToken(sessionId) {
+function createToken(props) {
   console.log('hhhhh');
+  console.log(props);
 
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await axios.post(
-        APPLICATION_SERVER_URL + 'api/game/enter',
-        {
-          gameRoomId: props.roomName,
-          gameRoomPw: props.backgroundImage,
-          customSessionId: props.mySessionId
-        },
-        {
-          // params: {
-          //   userEmail: 'user@example.com' // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
-          // },
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Methods': 'POST',
-            Authorization: `Bearer ${accessToken}`
+      const userEmail = props.props.userEmail;
+      const gameRoomId = props.props.roomName;
+      const gameRoomPw = props.props.roomPassword;
+      const customSessionId = props.props.mySessionId;
+
+      console.log('이메일 출력', userEmail, gameRoomId, gameRoomPw, customSessionId);
+      const accessToken = sessionStorage.getItem('accessToken');
+      const response = await axios
+        .post(
+          `http://localhost:8080/api/game/enter`,
+          {
+            gameRoomId: props.props.roomName,
+            gameRoomPw: props.props.roomPassword,
+            customSessionId: props.props.mySessionId
+          },
+          {
+            params: {
+              userEmail // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
+            },
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Methods': 'POST',
+              Authorization: `Bearer ${accessToken}`
+            }
           }
-        }
-      );
-      console.log('iiiii');
+        )
+        .then(() => {
+          console.log('iiiii');
+        });
+
       // console.log(response.data);
       return resolve(response.data);
     } catch (error) {
-      console.log(reject(error));
+      console.log(reject('3번 여기오류야....', error));
     }
   });
 }

@@ -16,7 +16,7 @@ const initialState = {
   subscribers: [],
   isVideoPublished: true,
   isAudioPublished: true,
-  roomPassword: null
+  roomPassword: ''
 };
 
 export const videoSlice = createSlice({
