@@ -2,14 +2,21 @@ package com.ssafy.bium.user.controller;
 
 import com.ssafy.bium.user.User;
 import com.ssafy.bium.user.request.UserLoginPostReq;
+import com.ssafy.bium.user.request.UserModifyPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
+import com.ssafy.bium.user.response.UserModifyGetRes;
 import com.ssafy.bium.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,12 +25,16 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 public class UserController {
 
+    public static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final UserService userService;
+
+    @Value("${file.imgPath}")
+    private String uploadImgPath;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginPostReq userLoginPostReq) {
         Map<String, Object> resultMap = new HashMap<>();
-
 
         userService.login(userLoginPostReq);
         resultMap.put("httpHeaders", "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjI5ODcwNzQ2NjJ9.lXRvR1Xv_W_WdAz15uw5VG4G6myl-fuj75tULle6vLs");
@@ -101,6 +112,44 @@ public class UserController {
 //            resultMap.put("message", "fail");
 //        }
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    @GetMapping("profile/modify/{userEmail}")
+    public ResponseEntity<?> getModifyData (@PathVariable("userEmail") String userEmail) {
+
+        UserModifyGetRes userModifyGetRes = userService.getModifyData(userEmail);
+        return new ResponseEntity<>(userModifyGetRes, HttpStatus.OK);
+    }
+
+    @PostMapping("profile/modify")
+    public ResponseEntity<?> modifyProfile (UserModifyPostReq userModifyPostReq, @RequestParam(value = "upfile", required = false) MultipartFile file) {
+
+        logger.debug("MultipartFile.isEmpty : {}", file.isEmpty());
+
+        if (!file.isEmpty()) {
+            String saveFolder = uploadImgPath + File.separator + userModifyPostReq.getUserEmail();
+            logger.debug("저장 폴더: {}", saveFolder);
+            File folder = new File(saveFolder);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+//            FileInfoDto fileInfoDto = new FileInfoDto();
+//            String originalFileName = file.getOriginalFilename();
+//            if (!originalFileName.isEmpty()) {
+//                String saveFileName = UUID.randomUUID().toString()
+//                        + originalFileName.substring(originalFileName.lastIndexOf('.'));
+//                fileInfoDto.setSaveFolder(userDto.getUserId());
+//                fileInfoDto.setOriginalFile(originalFileName);
+//                fileInfoDto.setSaveFile(saveFileName);
+//                logger.debug("원본 파일 이름 : {}, 실제 저장 파일 이름 : {}", file.getOriginalFilename(), saveFileName);
+//                file.transferTo(new File(folder, saveFileName));
+//            }
+//            userDto.setFileInfo(fileInfoDto);
+        }
+
+
+        int result = userService.modifyProfile(userModifyPostReq);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
