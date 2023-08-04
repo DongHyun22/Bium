@@ -13,4 +13,6 @@ public interface UserService {
     int deleteUserByUserEmail(String userEmail);
     int deleteRefreshToken(String userEmail);
     void setToken(String userEmail, String token);
+
+    public User login(UserLoginPostReq userLoginPostReq);
 }
