@@ -12,9 +12,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUserEmail(String userEmail);
 
-    @EntityGraph(attributePaths = "authorities")
-    Optional<User> findOneWithAuthoritiesByUserEmail(String userEmail);
-
     List<User> findTop5ByOrderByTotalBiumDesc();
 
     List<User> findUserByOrderByTotalBiumDesc();

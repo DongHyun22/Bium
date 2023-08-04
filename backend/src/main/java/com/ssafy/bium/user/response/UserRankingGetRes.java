@@ -24,12 +24,14 @@ public class UserRankingGetRes {
     int ranking;
 
     public UserRankingGetRes(User user) {
+
         this.id = user.getId();
         this.userEmail = user.getUserEmail();
         this.userNickname = user.getUserNickname();
         this.userRank = user.getUserRank();
         this.topBium = user.getTopBium();
         this.ranking = 0;
+
     }
 
 }

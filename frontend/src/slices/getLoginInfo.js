@@ -1,5 +1,13 @@
-import { setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } from './userSlice';
-import jwtDecode from 'jwt-decode';
+import {
+  setToken,
+  setIsLogin,
+  setIsLoginError,
+  setIsValidToken,
+  setUserEmail,
+  setNickname,
+  setTodayBium,
+  setTotalBium
+} from './userSlice';
 
 import axios from 'axios';
 
@@ -7,7 +15,7 @@ import axios from 'axios';
 export const userLogin = (user) => async (dispatch) => {
   try {
     const response = await axios
-      .post('http://localhost:8080/login', user)
+      .post('http://localhost:8080/api/login', user)
       .then((response) => {
         return response;
       })
@@ -20,6 +28,7 @@ export const userLogin = (user) => async (dispatch) => {
       const accessToken = response.data.httpHeaders;
       sessionStorage.setItem('accessToken', accessToken);
       // sessionStorage.setItem('refreshToken', refreshToken);
+      dispatch(setToken(accessToken));
       dispatch(setIsLogin(true));
       dispatch(setIsLoginError(false));
       dispatch(setIsValidToken(true));
@@ -34,25 +43,25 @@ export const userLogin = (user) => async (dispatch) => {
 };
 
 // 사용자 정보를 가져오는 동작 처리 함수
-export const getUserInfo = (token, Email) => async (dispatch) => {
+export const getUserInfo = (Email) => async (dispatch) => {
   try {
-    const decodedToken = jwtDecode(token);
-    console.log(decodedToken);
-    const response = await axios
-      .get(`http://localhost:8080/info/${Email}`, { headers: { Authorization: decodedToken.sub } })
-      .then((response) => {
-        console.log('함수 확인');
-        console.log(response);
-        return response;
-      })
-      .catch((err) => {
-        console.log('getUserInfo 실패');
-        return err;
-      });
+    const response = await axios.get(`http://localhost:8080/api/info/${Email}`);
+    // console.log('함수 확인');
+    console.log(response.data.userInfo);
+    dispatch(setUserEmail(response.data.userInfo.userEmail));
+    dispatch(setNickname(response.data.userInfo.userNickname));
+    dispatch(setTodayBium(response.data.userInfo.todayBium));
+    dispatch(setTotalBium(response.data.userInfo.totalBium));
+    console.log('setUserEmail입니다.', setUserEmail(response.data.userInfo.userEmail));
+    console.log('setNickname입니다.', setNickname(response.data.userInfo.userNickname));
+    console.log('setTodayBium입니다.', setTodayBium(response.data.userInfo.todayBium));
+    console.log('setTotalBium입니다.', setTotalBium(response.data.userInfo.totalBium));
+    return response.data;
   } catch (error) {
     console.error('토큰 만료되어 사용 불가능', error.response.status);
     dispatch(setIsValidToken(false));
     // await dispatch(tokenRegeneration());
+    return error;
   }
 };
 

@@ -14,6 +14,7 @@ public class UserModifyGetRes {
     String userNickname;
 
     public UserModifyGetRes(User user) {
+
         this.id = user.getId();
         this.userPw = user.getUserPw();
         this.userNickname = user.getUserNickname();

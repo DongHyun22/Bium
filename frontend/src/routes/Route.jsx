@@ -1,4 +1,4 @@
-import { Route, Routes, Redirect } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import MainPage from '../components/pages/MainPage/MainPage';
 import LoginPage from '../components/pages/LoginPage/LoginPage';
 import SignupPage from '../components/pages/SignupPage/SignupPage';
@@ -15,7 +15,7 @@ function RouteLink(props) {
         <Route index element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route element={<PrivateRoute authentication={false} />}>
+        <Route element={<PrivateRoute isLogin={false} />}>
           <Route path="/createroom" element={<CreateGameRoom />} />
           <Route path="/gameroomlist" element={<GameRoomListPage />} />
           <Route path="/gameroom" element={<GameRoomPage />} />

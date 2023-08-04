@@ -1,11 +1,9 @@
 package com.ssafy.bium.user.request;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 public class UserRegisterPostReq {
     String userEmail;
     String userPw;

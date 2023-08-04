@@ -1,12 +1,9 @@
 package com.ssafy.bium.user;
 
-import com.ssafy.bium.common.Authority;
 import com.ssafy.bium.common.TimeBaseEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
-import javax.persistence.*;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -57,19 +54,9 @@ public class User extends TimeBaseEntity {
     @Column(nullable = false)
     private boolean isAdmin;
 
-    @Column
-    private boolean activated;
-
-    @ManyToMany
-    @JoinTable(
-            name = "user_authority",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
-    private Set<Authority> authorities;
-
     @Builder
     public User(String userEmail, String userPw, String token, String userName, String userNickname,
-                int userRank, Long todayBium, Long topBium, Long totalBium, boolean isAdmin, boolean activated) {
+                int userRank, Long todayBium, Long topBium, Long totalBium, boolean isAdmin) {
         this.userEmail = userEmail;
         this.userPw = userPw;
         this.token = token;
@@ -80,7 +67,6 @@ public class User extends TimeBaseEntity {
         this.topBium = topBium;
         this.totalBium = totalBium;
         this.isAdmin = isAdmin;
-        this.activated = activated;
 
         if (todayBium == null) {
             this.todayBium = 0L;
