@@ -12,7 +12,7 @@ export default function SignUpPage() {
       navigate('/');
       console.log('isLogin', isLogin);
     }
-  }, [isLogin]);
+  }, [isLogin, navigate, token]);
   // 회원가입 요소
   const [userEmail, setUserEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -148,9 +148,9 @@ export default function SignUpPage() {
   const handleSubmit = async (e) => {
     console.log(checkEmailDuplicate);
 
-    if (checkEmailDuplicate && isPasswordValid && isNameValid) {
+    if (checkEmailDuplicate && isEmailValid && isPasswordValid && isNameValid) {
       await goSignup(e);
-
+      alert('회원가입에 성공 하셨습니다.');
       navigate('/login');
     } else {
       alert('회원가입에 실패 하셨습니다.');
