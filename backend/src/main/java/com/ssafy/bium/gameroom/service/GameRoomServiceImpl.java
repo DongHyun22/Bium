@@ -63,21 +63,34 @@ public class GameRoomServiceImpl implements GameRoomService {
         if(!(sessionId.equals(roomsessionId))){
             System.out.println("no session room");
         }
+        System.out.println(gameRoomDto.getGameRoomTitle());
+        GameRoom gameRoom = GameRoom.builder()
+                .gameRoomId(String.valueOf(gri))
+                .gameRoomTitle(gameRoomDto.getGameRoomTitle())
+                .start(false)
+                .gameRoomPw(gameRoomDto.getGameRoomPw())
+                .gameRoomMovie(gameRoomDto.getGameRoomMovie())
+                .curPeople(1)
+                .maxPeople(gameRoomDto.getMaxPeople())
+                .customSessionId(sessionId)
+                .build();
+        System.out.println(gameRoom.getGameRoomTitle());
+        gameRoomRepository.save(gameRoom).getCustomSessionId();
         // TODO: 2023-08-04 세션이 있으면 찾아서 id반환, 없으면 세션 생성
-        Optional<GameRoom> findGameRoom = gameRoomRepository.findByCustomSessionId(roomsessionId);
-        if(!findGameRoom.isPresent()){
-            GameRoom gameRoom = GameRoom.builder()
-                    .gameRoomId(String.valueOf(gri))
-                    .gameRoomTitle(gameRoomDto.getGameRoomTitle())
-                    .start(false)
-                    .gameRoomPw(gameRoomDto.getGameRoomPw())
-                    .gameRoomMovie(gameRoomDto.getGameRoomMovie())
-                    .curPeople(1)
-                    .maxPeople(gameRoomDto.getMaxPeople())
-                    .customSessionId(sessionId)
-                    .build();
-            gameRoomRepository.save(gameRoom).getCustomSessionId();
-        }
+//        Optional<GameRoom> findGameRoom = gameRoomRepository.findByCustomSessionId(roomsessionId);
+//        if(!findGameRoom.isPresent()){
+//            GameRoom gameRoom = GameRoom.builder()
+//                    .gameRoomId(String.valueOf(gri))
+//                    .gameRoomTitle(gameRoomDto.getGameRoomTitle())
+//                    .start(false)
+//                    .gameRoomPw(gameRoomDto.getGameRoomPw())
+//                    .gameRoomMovie(gameRoomDto.getGameRoomMovie())
+//                    .curPeople(1)
+//                    .maxPeople(gameRoomDto.getMaxPeople())
+//                    .customSessionId(sessionId)
+//                    .build();
+//            gameRoomRepository.save(gameRoom).getCustomSessionId();
+//        }
         return sessionId;
     }
 
@@ -109,6 +122,7 @@ public class GameRoomServiceImpl implements GameRoomService {
                 .build();
         usergameRoomRepository.save(userGameRoom);
         // 비밀번호
+
         return sessionId;
         // 입장한 사람의 정보를 뿌려줘야되네
     }
