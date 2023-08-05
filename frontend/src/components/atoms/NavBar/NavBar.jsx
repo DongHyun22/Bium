@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { PURGE } from 'redux-persist';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { setIsLogin, setToken } from '../../../slices/userSlice';
+import { setIsLogin, setToken, setUserEmail } from '../../../slices/userSlice';
 
 export const NavBar = () => {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ export const NavBar = () => {
   const token = useSelector((state) => state.user.token);
   const userEmail = useSelector((state) => state.user.userEmail);
   console.log('token', token);
+  console.log('userEmail', userEmail);
   return (
     <div>
       {token === null ? (
@@ -19,10 +21,13 @@ export const NavBar = () => {
       ) : (
         <>
           <button
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               sessionStorage.removeItem('accessToken');
-              dispatch(setToken(sessionStorage.getItem('accessToken')));
+              dispatch(setToken(null));
+              dispatch(setUserEmail(''));
               dispatch(setIsLogin(false));
+              dispatch({ type: PURGE, key: 'root', result: () => null });
               navigate('/');
             }}
           >

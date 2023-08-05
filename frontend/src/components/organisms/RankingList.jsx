@@ -9,7 +9,7 @@ function GetRanking() {
   const [rank, setRank] = useState([]);
   const [myRank, setMyRank] = useState([]);
   const userEmail = useSelector((state) => state.user.userEmail);
-  
+
   // 랭크에 본인 정보가 있는지 여부 파악
   const myRankExistsInRank = rank.some((item) => item.userNickname === myRank.userNickname);
 
@@ -54,14 +54,17 @@ function GetRanking() {
         </div>
         <p>...</p>
         <div>
-          {!myRankExistsInRank &&
+          {!myRankExistsInRank && (
             <div className={styles.myRanking}>
               <div>{myRank.ranking}</div>
+              &nbsp;
               <div>{myRank.userNickname}</div>
+              &nbsp;
               <div>{myRank.userRank}</div>
+              &nbsp;
               <div>{myRank.topBium}</div>
             </div>
-          }
+          )}
         </div>
       </div>
     </>
