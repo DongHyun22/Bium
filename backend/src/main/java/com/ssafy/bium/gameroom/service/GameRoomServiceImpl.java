@@ -85,7 +85,6 @@ public class GameRoomServiceImpl implements GameRoomService {
     public String enterGameRoom(EnterGameRoomDto enterGameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException {
             String gameRoomId = enterGameRoomDto.getGameRoomId();
         // TODO: 2023-08-04 패스워드에 맞춰서 입장
-
             // 게임방의 max인원이 꽉차면 입장 불가, 게임방이 진행중(start)이면 입장 불가, pw가 다르면 입장 불가
             int cur = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "curPeople"));
 //        GameRoom gameRoom = gameRoomRepository.findGameRoomByGameRoomId("5");
@@ -93,11 +92,13 @@ public class GameRoomServiceImpl implements GameRoomService {
             redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "curPeople", String.valueOf(++cur));
             // 유저게임방에 참가자 생성
             RedisAtomicLong counterUGR = new RedisAtomicLong("ugri", redisTemplate.getConnectionFactory());
-        // TODO: 2023-08-05 (005) uri대신에 userEmail로 변경 도입 
+        // TODO: 2023-08-05 (005) uri대신에 userEmail로 변경 도입
+
             Long ugri = counterUGR.incrementAndGet();
             Map<String, Object> params = new HashMap<>();
             params.put("customSessionId", enterGameRoomDto.getCustomSessionId());
             String sessionId = openviduService.createConnection(enterGameRoomDto.getCustomSessionId(), params);
+        System.out.println(sessionId);
             UserGameRoom userGameRoom = UserGameRoom.builder()
                 .userGameRoomId(String.valueOf(ugri))
                 .gameRoomId(String.valueOf(gameRoomId))
