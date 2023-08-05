@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import GameRoomListItem from './GameRoomListItemPage';
+import { useDispatch } from 'react-redux';
 
 export const GameRoomListPage = async () => {
+  const dispatch = useDispatch();
   try {
     const allRoom = await axios.get('url');
     // axios response
@@ -12,9 +14,10 @@ export const GameRoomListPage = async () => {
     return;
   }
 
+  const enterRoom = () => {};
   return (
     <div>
-      <GameRoomListItem allRoom></GameRoomListItem>
+      <GameRoomListItem allRoom onClick={enterRoom}></GameRoomListItem>
     </div>
   );
 };
