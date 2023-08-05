@@ -51,7 +51,7 @@ export const joinSession = createAsyncThunk('videoAction/joinSession', async (pr
 async function getToken(props) {
   console.log('bbbbb는?');
   const newSessionId = await createSession(props);
-  const token = await createToken(props);
+  const token = await createToken({ props, newSessionId });
   return token;
 }
 
@@ -66,32 +66,27 @@ function createSession(props) {
       const userEmail = props.props.userEmail;
       console.log('여기 들어오나?', userEmail);
 
-      const response = await axios
-        .post(
-          `http://localhost:8080/api/game/create`,
-          {
-            title: props.roomName,
-            movie: props.backgroundImage,
-            maxPeople: props.maxPeople,
-            pw: props.roomPassword,
-            customSessionId: props.mySessionId
+      const response = await axios.post(
+        `http://localhost:8080/api/game/create`,
+        {
+          title: props.roomName,
+          movie: props.backgroundImage,
+          maxPeople: props.maxPeople,
+          pw: props.roomPassword,
+          customSessionId: props.mySessionId
+        },
+        {
+          params: {
+            userEmail // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
           },
-          {
-            params: {
-              userEmail // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
-            },
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Methods': 'POST',
-              Authorization: `Bearer ${accessToken}`
-            }
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'POST',
+            Authorization: `Bearer ${accessToken}`
           }
-        )
-        .then(() => {
-          console.log('세션생성은 완료');
-        });
-
+        }
+      );
       setTimeout(() => {
         // console.log('개발자 설정을 통한 강제 리턴');
         return resolve(props.mySessionId);
@@ -118,7 +113,7 @@ function createToken(props) {
       const userEmail = props.props.userEmail;
       const gameRoomId = props.props.roomName;
       const gameRoomPw = props.props.roomPassword;
-      const customSessionId = props.props.mySessionId;
+      const customSessionId = props.newSessionId;
 
       console.log('이메일 출력', userEmail, gameRoomId, gameRoomPw, customSessionId);
       const accessToken = sessionStorage.getItem('accessToken');
@@ -128,7 +123,7 @@ function createToken(props) {
           {
             gameRoomId: props.props.roomName,
             gameRoomPw: props.props.roomPassword,
-            customSessionId: props.props.mySessionId
+            customSessionId: customSessionId
           },
           {
             params: {
