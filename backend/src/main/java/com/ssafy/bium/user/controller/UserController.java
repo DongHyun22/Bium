@@ -1,6 +1,7 @@
 package com.ssafy.bium.user.controller;
 
 import com.ssafy.bium.user.User;
+import com.ssafy.bium.user.repository.UserRepository;
 import com.ssafy.bium.user.request.FilePostReq;
 import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserModifyPostReq;
@@ -30,6 +31,7 @@ public class UserController {
     public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @Value("${file.imgPath}")
     private String uploadImgPath;
@@ -99,7 +101,6 @@ public class UserController {
 
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.UNAUTHORIZED;
-//        if (tokenProvider.validateToken(request.getHeader("Authorization"))) {
         try {
 //				로그인 사용자 정보.
             User user = userService.getUserByUserEmail(userEmail);
@@ -110,9 +111,6 @@ public class UserController {
             resultMap.put("message", e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-//        } else {
-//            resultMap.put("message", "fail");
-//        }
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
@@ -124,12 +122,20 @@ public class UserController {
     }
 
     @PostMapping("profile/modify")
-    public ResponseEntity<?> modifyProfile(UserModifyPostReq userModifyPostReq, @RequestParam(value = "upfile", required = false) MultipartFile file) throws Exception {
+    public ResponseEntity<?> modifyProfile(UserModifyPostReq userModifyPostReq) {
 
+        int result = userService.modifyProfile(userModifyPostReq);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("profile/img/{userEmail}")
+    public ResponseEntity<?> setProfileImg(@PathVariable(value = "userEmail") String userEmail,
+                                           @RequestParam(value = "upfile", required = false) MultipartFile file,
+                                           @RequestParam(value = "imgType") int imgType) throws Exception {
         logger.debug("MultipartFile.isEmpty : {}", file.isEmpty());
 
         if (!file.isEmpty()) {
-            String saveFolder = uploadImgPath + File.separator + userModifyPostReq.getUserEmail();
+            String saveFolder = uploadImgPath + File.separator + userEmail + File.separator + imgType;
             logger.debug("저장 폴더: {}", saveFolder);
             File folder = new File(saveFolder);
             if (!folder.exists()) {
@@ -140,17 +146,18 @@ public class UserController {
             if (!originalFileName.isEmpty()) {
                 String saveFileName = UUID.randomUUID()
                         + originalFileName.substring(originalFileName.lastIndexOf('.'));
-                filePostReq.setSaveFolder(userModifyPostReq.getUserEmail());
+
+                filePostReq.setUserId(userRepository.findByUserEmail(userEmail).get().getId());
+                filePostReq.setImageType(imgType);
+                filePostReq.setSaveFolder(userEmail);
                 filePostReq.setOriginalFile(originalFileName);
                 filePostReq.setSaveFile(saveFileName);
+
                 logger.debug("원본 파일 이름 : {}, 실제 저장 파일 이름 : {}", file.getOriginalFilename(), saveFileName);
                 file.transferTo(new File(folder, saveFileName));
             }
-//            userDto.setFileInfo(filePostReq);
+            userService.setImage(filePostReq);
         }
-
-
-        int result = userService.modifyProfile(userModifyPostReq);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

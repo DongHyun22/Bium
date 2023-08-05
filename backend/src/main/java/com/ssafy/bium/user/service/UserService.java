@@ -1,7 +1,9 @@
 package com.ssafy.bium.user.service;
 
+import com.ssafy.bium.image.Image;
 import com.ssafy.bium.user.User;
 
+import com.ssafy.bium.user.request.FilePostReq;
 import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserModifyPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
@@ -16,5 +18,6 @@ public interface UserService {
     public User login(UserLoginPostReq userLoginPostReq);
     UserModifyGetRes getModifyData(String userEmail);
     int modifyProfile(UserModifyPostReq userModifyPostReq);
+    Image setImage(FilePostReq filePostReq);
 
 }

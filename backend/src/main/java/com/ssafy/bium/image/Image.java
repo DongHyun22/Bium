@@ -11,7 +11,6 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class Image {
 
@@ -37,5 +36,22 @@ public class Image {
 
     @Column(name = "save_file")
     private String saveFile;
+
+    @Builder
+    public Image(Long imgId, Long userId, String imgTitle, int imgType, String saveFolder, String originalFile, String saveFile) {
+
+        this.imgId = imgId;
+        this.userId = userId;
+        this.imgTitle = imgTitle;
+        this.imgType = imgType;
+        this.saveFolder = saveFolder;
+        this.originalFile = originalFile;
+        this.saveFile = saveFile;
+
+        if (imgTitle == null) {
+            this.imgTitle = "imgTitle";
+        }
+
+    }
 
 }

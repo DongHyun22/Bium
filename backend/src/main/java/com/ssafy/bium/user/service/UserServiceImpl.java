@@ -1,7 +1,10 @@
 package com.ssafy.bium.user.service;
 
+import com.ssafy.bium.image.Image;
+import com.ssafy.bium.image.repository.ImageRepository;
 import com.ssafy.bium.user.User;
 import com.ssafy.bium.user.repository.UserRepository;
+import com.ssafy.bium.user.request.FilePostReq;
 import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserModifyPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
@@ -17,6 +20,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final ImageRepository imageRepository;
 
     @Override
     public User setUser(UserRegisterPostReq userRegisterInfo) {
@@ -95,4 +99,18 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public Image setImage(FilePostReq filePostReq) {
+
+        Image image = Image.builder()
+                .userId(filePostReq.getUserId())
+                .imgType(filePostReq.getImageType())
+                .saveFolder(filePostReq.getSaveFolder())
+                .originalFile(filePostReq.getOriginalFile())
+                .saveFile(filePostReq.getSaveFile())
+                .build();
+
+        Image result = imageRepository.save(image);
+        return result;
+    }
 }

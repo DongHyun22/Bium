@@ -9,8 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FilePostReq {
 
-    int idx;
-    String userEmail;
+    Long userId;
+    int imageType;
     String saveFolder;
     String originalFile;
     String saveFile;
