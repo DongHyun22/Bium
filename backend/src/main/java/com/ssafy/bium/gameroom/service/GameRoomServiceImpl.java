@@ -51,24 +51,33 @@ public class GameRoomServiceImpl implements GameRoomService {
 
     @Override
     public String createGameRoom(GameRoomDto gameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException {
+        // sessionId 구분!
+
         RedisAtomicLong counterGR = new RedisAtomicLong("gri", redisTemplate.getConnectionFactory());
         Long gri = counterGR.incrementAndGet();
         Map<String, Object> params = new HashMap<>();
-        params.put("customSessionId", gameRoomDto.getCustomSessionId());
-        String sessionId = openviduService.initializeSession(params);
+        // 세션id 생성
+        String sessionId = "gameRoom" + gri;
+        params.put("customSessionId", sessionId);
+        String roomsessionId = openviduService.initializeSession(params);
+        if(!(sessionId.equals(roomsessionId))){
+            System.out.println("no session room");
+        }
         // TODO: 2023-08-04 세션이 있으면 찾아서 id반환, 없으면 세션 생성
-        // TODO: 2023-08-04 세션아이디는 내가 pk값을 넣어서 만들어주기 gameRoom:1
-        GameRoom gameRoom = GameRoom.builder()
-                .gameRoomId(String.valueOf(gri))
-                .gameRoomTitle(gameRoomDto.getTitle())
-                .start(false)
-                .gameRoomPw(gameRoomDto.getPw())
-                .gameRoomMovie(gameRoomDto.getMovie())
-                .curPeople(1)
-                .maxPeople(gameRoomDto.getMaxPeople())
-                .customSessionId(gameRoomDto.getCustomSessionId())
-                .build();
-        gameRoomRepository.save(gameRoom).getCustomSessionId();
+        Optional<GameRoom> findGameRoom = gameRoomRepository.findByCustomSessionId(roomsessionId);
+        if(!findGameRoom.isPresent()){
+            GameRoom gameRoom = GameRoom.builder()
+                    .gameRoomId(String.valueOf(gri))
+                    .gameRoomTitle(gameRoomDto.getGameRoomTitle())
+                    .start(false)
+                    .gameRoomPw(gameRoomDto.getGameRoomPw())
+                    .gameRoomMovie(gameRoomDto.getGameRoomMovie())
+                    .curPeople(1)
+                    .maxPeople(gameRoomDto.getMaxPeople())
+                    .customSessionId(sessionId)
+                    .build();
+            gameRoomRepository.save(gameRoom).getCustomSessionId();
+        }
         return sessionId;
     }
 
@@ -84,6 +93,7 @@ public class GameRoomServiceImpl implements GameRoomService {
             redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "curPeople", String.valueOf(++cur));
             // 유저게임방에 참가자 생성
             RedisAtomicLong counterUGR = new RedisAtomicLong("ugri", redisTemplate.getConnectionFactory());
+        // TODO: 2023-08-05 (005) uri대신에 userEmail로 변경 도입 
             Long ugri = counterUGR.incrementAndGet();
             Map<String, Object> params = new HashMap<>();
             params.put("customSessionId", enterGameRoomDto.getCustomSessionId());
