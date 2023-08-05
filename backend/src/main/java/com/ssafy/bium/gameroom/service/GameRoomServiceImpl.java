@@ -56,7 +56,8 @@ public class GameRoomServiceImpl implements GameRoomService {
         Map<String, Object> params = new HashMap<>();
         params.put("customSessionId", gameRoomDto.getCustomSessionId());
         String sessionId = openviduService.initializeSession(params);
-
+        // TODO: 2023-08-04 세션이 있으면 찾아서 id반환, 없으면 세션 생성
+        // TODO: 2023-08-04 세션아이디는 내가 pk값을 넣어서 만들어주기 gameRoom:1
         GameRoom gameRoom = GameRoom.builder()
                 .gameRoomId(String.valueOf(gri))
                 .gameRoomTitle(gameRoomDto.getTitle())
@@ -74,6 +75,8 @@ public class GameRoomServiceImpl implements GameRoomService {
     @Override
     public String enterGameRoom(EnterGameRoomDto enterGameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException {
             String gameRoomId = enterGameRoomDto.getGameRoomId();
+        // TODO: 2023-08-04 패스워드에 맞춰서 입장
+
             // 게임방의 max인원이 꽉차면 입장 불가, 게임방이 진행중(start)이면 입장 불가, pw가 다르면 입장 불가
             int cur = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "curPeople"));
 //        GameRoom gameRoom = gameRoomRepository.findGameRoomByGameRoomId("5");
@@ -94,6 +97,7 @@ public class GameRoomServiceImpl implements GameRoomService {
                 .gameRecord(0L)
                 .build();
         usergameRoomRepository.save(userGameRoom);
+        // 비밀번호
         return sessionId;
         // 입장한 사람의 정보를 뿌려줘야되네
     }
