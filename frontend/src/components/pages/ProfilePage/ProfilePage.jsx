@@ -92,8 +92,7 @@ export function ProfilePage() {
   };
 
   useEffect(() => {
-
-    // 세션 스토리지에서 userEmail 값을 
+    // 세션 스토리지에서 userEmail 값을
     const sessionUserEmail = window.sessionStorage.getItem('userEmail');
 
     // 세션 스토리지와 스토어의 userEmail 값이 다른 경우 스토어를 업데이트합니다.
@@ -107,7 +106,7 @@ export function ProfilePage() {
       <h1>ProfilePage</h1>
       <div>
         <h3>닉네임</h3>
-        <h3>{savedEmail}</h3>
+        <h3>{savedNickname}</h3>
         <h3>오늘 비움량</h3>
         <h3>{todayBium}</h3>
         <h3>총 비움량</h3>
