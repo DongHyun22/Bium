@@ -7,6 +7,7 @@ import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserModifyPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
 import com.ssafy.bium.user.response.UserModifyGetRes;
+import com.ssafy.bium.user.response.UserRankingGetRes;
 import com.ssafy.bium.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -101,6 +103,7 @@ public class UserController {
 
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.UNAUTHORIZED;
+
         try {
 //				로그인 사용자 정보.
             User user = userService.getUserByUserEmail(userEmail);
@@ -112,6 +115,7 @@ public class UserController {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
+
     }
 
     @GetMapping("profile/modify/{userEmail}")
@@ -159,6 +163,20 @@ public class UserController {
             userService.setImage(filePostReq);
         }
         return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
+    @GetMapping("profile/ranking/{userEmail}")
+    public ResponseEntity<?> ranking(@PathVariable("userEmail") String userEmail) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        List<UserRankingGetRes> list = userService.getUserListTop5ByTotalBium();
+
+        UserRankingGetRes userRankingGetRes = userService.getUserByTotalBium(userEmail);
+        resultMap.put("ranking", list);
+        resultMap.put("myRanking", userRankingGetRes);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+
     }
 
 }

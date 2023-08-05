@@ -8,6 +8,9 @@ import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserModifyPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
 import com.ssafy.bium.user.response.UserModifyGetRes;
+import com.ssafy.bium.user.response.UserRankingGetRes;
+
+import java.util.List;
 
 
 public interface UserService {
@@ -19,5 +22,7 @@ public interface UserService {
     UserModifyGetRes getModifyData(String userEmail);
     int modifyProfile(UserModifyPostReq userModifyPostReq);
     Image setImage(FilePostReq filePostReq);
+    List<UserRankingGetRes> getUserListTop5ByTotalBium();
+    UserRankingGetRes getUserByTotalBium(String userEmail);
 
 }
