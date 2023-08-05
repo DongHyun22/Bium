@@ -89,10 +89,10 @@ function createSession(props) {
       );
       setTimeout(() => {
         // console.log('개발자 설정을 통한 강제 리턴');
-        return resolve(props.mySessionId);
+        return resolve(response.data);
       }, 1000);
-      console.log('여기는 create 세션이니까', response);
-      return response;
+      console.log('여기는 create 세션이니까', response.data);
+      return response.data;
     } catch (response) {
       console.log(response);
       let error = Object.assign({}, response);
@@ -117,31 +117,26 @@ function createToken(props) {
 
       console.log('이메일 출력', userEmail, gameRoomId, gameRoomPw, customSessionId);
       const accessToken = sessionStorage.getItem('accessToken');
-      const response = await axios
-        .post(
-          `http://localhost:8080/api/game/enter`,
-          {
-            gameRoomId: props.props.roomName,
-            gameRoomPw: props.props.roomPassword,
-            customSessionId: customSessionId
+      const response = await axios.post(
+        `http://localhost:8080/api/game/enter`,
+        {
+          gameRoomId: props.props.roomName,
+          gameRoomPw: props.props.roomPassword,
+          customSessionId: customSessionId
+        },
+        {
+          params: {
+            userEmail // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
           },
-          {
-            params: {
-              userEmail // 쿼리 파라미터로 userEmail을 보낼 수 있습니다
-            },
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Methods': 'POST',
-              Authorization: `Bearer ${accessToken}`
-            }
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'POST',
+            Authorization: `Bearer ${accessToken}`
           }
-        )
-        .then(() => {
-          console.log('iiiii');
-        });
+        }
+      );
 
-      // console.log(response.data);
       return resolve(response.data);
     } catch (error) {
       console.log(reject('3번 여기오류야....', error));
