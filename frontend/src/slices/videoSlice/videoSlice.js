@@ -77,18 +77,6 @@ export const videoSlice = createSlice({
   }
 });
 
-export const {
-  setJoin,
-  initOVSession,
-  setToken,
-  setPublisher,
-  setMainStreamManager,
-  setSubscribers,
-  videoMute,
-  audioMute,
-  leaveSession,
-  enteredSubscriber,
-  deleteSubscriber
-} = videoSlice.actions;
+export const { setJoin, initOVSession, setToken, setPublisher, setMainStreamManager, setSubscribers, videoMute, audioMute, leaveSession, enteredSubscriber, deleteSubscriber } = videoSlice.actions;
 
 export default videoSlice.reducer;

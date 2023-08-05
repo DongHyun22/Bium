@@ -1,31 +1,32 @@
+import { OpenVidu } from 'openvidu-browser';
+
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
-import { OpenVidu } from 'openvidu-browser';
-import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
-import Timer from '../../atoms/Timer/Timer';
-import styles from './GamRoomPage.module.css';
 import { useNavigate } from 'react-router-dom';
 
+import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
+import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
+
+import Timer from '../../atoms/Timer/Timer';
+import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
+
+import styles from './GamRoomPage.module.css';
+
 function GameRoomPage() {
-  console.log('start');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const join = useSelector((state) => state.video.join);
   const userEmail = useSelector((state) => state.user.userEmail);
 
-  const backgroundImage = useSelector((state) => state.video.backgroundImage);
-  const maxPeople = useSelector((state) => state.video.maxPeople);
-  const roomName = useSelector((state) => state.video.roomName);
-  const roomPassword = useSelector((state) => state.video.roomPassword);
-  const mySessionId = useSelector((state) => state.video.mySessionId);
+  const roomName = useSelector((state) => state.room.roomName);
+  const roomPassword = useSelector((state) => state.room.roomPassword);
+  const mySessionId = useSelector((state) => state.room.mySessionId);
+  const myUserName = useSelector((state) => state.room.myUserName);
+  const maxPeople = useSelector((state) => state.room.maxPeople);
+  const backgroundImage = useSelector((state) => state.room.backgroundImage);
 
-  const myUserName = useSelector((state) => state.video.myUserName);
+  const join = useSelector((state) => state.video.join);
   const OV = useSelector((state) => state.video.OV);
   const session = useSelector((state) => state.video.session);
-
   const publisher = useSelector((state) => state.video.publisher);
   const subscribers = useSelector((state) => state.video.subscribers);
 
@@ -46,6 +47,7 @@ function GameRoomPage() {
     }
   };
 
+  // 컴포넌트 마운트, 언마운트 시 session 값 초기화
   useEffect(() => {
     // componentDidMount
     window.addEventListener('beforeunload', onbeforeunload);
@@ -55,6 +57,7 @@ function GameRoomPage() {
     };
   }, []);
 
+  // join 의존성
   useEffect(() => {
     if (join) {
       const OV = new OpenVidu();
@@ -65,6 +68,7 @@ function GameRoomPage() {
     }
   }, [join]);
 
+  //세션이 있다면, 스트림을 넣어 될듯
   useEffect(() => {
     if (session) {
       // On every new Stream received...
