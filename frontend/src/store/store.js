@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { persistStore } from 'redux-persist';
 
 import userReducer from '../slices/userSlice';
 import videoReducer from '../slices/videoSlice/videoSlice';
@@ -13,3 +14,5 @@ export const store = configureStore({
       serializableCheck: false
     })
 });
+
+export const persistor = persistStore(store);

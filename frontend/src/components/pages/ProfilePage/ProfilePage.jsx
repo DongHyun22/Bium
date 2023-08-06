@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { setUserEmail } from '../../../slices/userSlice';
+import { setIsLogin, setUserEmail } from '../../../slices/userSlice';
 import { GetRanking } from '../../organisms/RankingList';
-import { getUserInfo } from '../../../slices/getLoginInfo';
 import useGetBiumTime from '../../../hooks/TimeInquery';
 import axios from 'axios';
 
@@ -18,6 +17,8 @@ export function ProfilePage() {
   const savedNickname = useSelector((state) => state.user.nickname);
   const savedTodayBium = useSelector((state) => state.user.todayBium);
   const savedTotalBium = useSelector((state) => state.user.totalBium);
+  // const confirmIslogin = useSelector((state) => state.user.isLogin);
+  // console.log(confirmIslogin);
 
   // 회원 정보 수정의 기본값은 store 기본값에 한정
   const [nickname, setNickname] = useState(savedNickname);
@@ -90,12 +91,22 @@ export function ProfilePage() {
     closeDeleteConfirmModal();
   };
 
+  useEffect(() => {
+    // 세션 스토리지에서 userEmail 값을
+    const sessionUserEmail = window.sessionStorage.getItem('userEmail');
+
+    // 세션 스토리지와 스토어의 userEmail 값이 다른 경우 스토어를 업데이트합니다.
+    if (sessionUserEmail && (!userEmail || userEmail === '')) {
+      dispatch(setUserEmail(sessionUserEmail));
+    }
+  }, [dispatch]);
+
   return (
     <>
       <h1>ProfilePage</h1>
       <div>
         <h3>닉네임</h3>
-        <h3>{savedEmail}</h3>
+        <h3>{savedNickname}</h3>
         <h3>오늘 비움량</h3>
         <h3>{todayBium}</h3>
         <h3>총 비움량</h3>

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-// const initialStateValue= {email: "", password: ""}
+import { persistReducer, PURGE } from 'redux-persist';
+import storageSession from 'redux-persist/lib/storage/session';
 
 const initialState = {
   token: sessionStorage.getItem('accessToken'),
@@ -13,6 +13,20 @@ const initialState = {
   isLoginError: false,
   userInfo: null,
   isValidToken: false
+};
+
+const persistConfig = {
+  key: 'user',
+  storage: storageSession,
+  whitelist: [
+    'token',
+    'userEmail',
+    'nickname',
+    'todayBium',
+    'totalBium',
+    'imageId',
+    'isLogin',
+  ]
 };
 
 const userSlice = createSlice({
@@ -64,4 +78,6 @@ export const {
   setIsValidToken,
   setUserInfo
 } = userSlice.actions;
-export default userSlice.reducer;
+
+const persistedReducer = persistReducer(persistConfig, userSlice.reducer);
+export default persistedReducer;
