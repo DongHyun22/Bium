@@ -33,9 +33,7 @@ export const GameRoomListPage = () => {
     gemeRoomapi();
   }, []);
 
-  const enterRoom = (allRoom) => {
-    console.log(allRoom);
-  };
+
 
   return (
     <div>
@@ -43,11 +41,9 @@ export const GameRoomListPage = () => {
       <h1>GGGG</h1>
       {allRooms !== [] ? (
         <>
-          <div onClick={enterRoom}>
             {allRooms.map((allRoom, index) => {
               return <GameRoomListItem key={index} allRoom={allRoom}></GameRoomListItem>;
             })}
-          </div>
         </>
       ) : null}
     </div>
