@@ -10,6 +10,7 @@ import io.openvidu.java.client.OpenViduJavaClientException;
 import java.util.List;
 
 public interface GameRoomService {
+    String test(String sessionId) throws OpenViduJavaClientException, OpenViduHttpException;
     List<GameRoomListDto> searchGameRooms();
     EnterGameRoomDto createGameRoom(GameRoomDto gameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException;
     String enterGameRoom(EnterGameRoomDto enterGameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException;

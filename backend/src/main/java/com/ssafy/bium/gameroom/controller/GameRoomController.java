@@ -21,6 +21,14 @@ import java.util.Map;
 public class GameRoomController {
     private final GameRoomService gameRoomService;
 
+    @GetMapping("/test")
+    public void test(
+            @RequestParam String sessionId
+    ) throws OpenViduJavaClientException, OpenViduHttpException {
+        gameRoomService.test(sessionId);
+    }
+
+
     @GetMapping("")
     public List<GameRoomListDto> list(
             // sort, keyword 변수 넣어서 정렬 및 검색 기능 구현

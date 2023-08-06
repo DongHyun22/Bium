@@ -31,6 +31,12 @@ public class GameRoomServiceImpl implements GameRoomService {
     private final OpenviduService openviduService;
 
     @Override
+    public String test(String sessionId) throws OpenViduJavaClientException, OpenViduHttpException {
+        openviduService.getData(sessionId);
+        return "";
+    }
+
+    @Override
     public List<GameRoomListDto> searchGameRooms() {
         List<GameRoom> gameRooms = gameRoomRepository.findAll();
 
