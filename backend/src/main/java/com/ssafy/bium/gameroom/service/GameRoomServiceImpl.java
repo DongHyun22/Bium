@@ -1,22 +1,19 @@
 package com.ssafy.bium.gameroom.service;
 
 import com.ssafy.bium.gameroom.GameRoom;
-import com.ssafy.bium.gameroom.UserGameRoom;
+import com.ssafy.bium.gameroom.Game;
 import com.ssafy.bium.gameroom.repository.GameRoomRepository;
-import com.ssafy.bium.gameroom.repository.UserGameRoomRepository;
+import com.ssafy.bium.gameroom.repository.GameRepository;
 import com.ssafy.bium.gameroom.request.*;
 import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
 import com.ssafy.bium.gameroom.response.UserGameRecordDto;
 import com.ssafy.bium.openvidu.OpenviduService;
-import com.ssafy.bium.user.User;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
 import org.springframework.stereotype.Service;
@@ -28,15 +25,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GameRoomServiceImpl implements GameRoomService {
     private final GameRoomRepository gameRoomRepository;
-    private final UserGameRoomRepository usergameRoomRepository;
+    private final GameRepository userGameRoomRepository;
     private final RedisTemplate<String, String> gameRoomNum;
     private final RedisTemplate<String, GameRoom> redisTemplate;
     private final OpenviduService openviduService;
 
     @Override
-    public List<GameRoomListDto> searchGameRooms(SearchGameRoomDto request) {
-        // TODO: 2023-07-30 (030) paging, sort 구현
-//        Sort sort = Sort.by(Sort.Direction.ASC, )
+    public List<GameRoomListDto> searchGameRooms() {
         List<GameRoom> gameRooms = gameRoomRepository.findAll();
 
         return gameRooms.stream()
@@ -56,7 +51,8 @@ public class GameRoomServiceImpl implements GameRoomService {
         RedisAtomicLong counterGR = new RedisAtomicLong("gri", redisTemplate.getConnectionFactory());
         Long gri = counterGR.incrementAndGet();
         Map<String, Object> params = new HashMap<>();
-        // 세션id 생성
+        // 세션id가 없으면
+        // 세션id 생성, 방 생성
         String sessionId = "gameRoom" + gri;
         params.put("customSessionId", sessionId);
         String roomsessionId = openviduService.initializeSession(params);
@@ -112,15 +108,15 @@ public class GameRoomServiceImpl implements GameRoomService {
             params.put("customSessionId", enterGameRoomDto.getCustomSessionId());
             String sessionId = openviduService.createConnection(enterGameRoomDto.getCustomSessionId(), params);
         System.out.println(sessionId);
-            UserGameRoom userGameRoom = UserGameRoom.builder()
-                .userGameRoomId(String.valueOf(ugri))
+            Game game = Game.builder()
+                .gameId(String.valueOf(ugri))
                 .gameRoomId(String.valueOf(gameRoomId))
                 .userEmail(userEmail)
                 .isHost(false)
                 .sequence(cur)
                 .gameRecord(0L)
                 .build();
-        usergameRoomRepository.save(userGameRoom);
+        userGameRoomRepository.save(game);
         // 비밀번호
 
         return sessionId;
@@ -135,7 +131,7 @@ public class GameRoomServiceImpl implements GameRoomService {
             return null;
         GameRoom gameRoom = findGameRoom.get();
         DetailGameRoomDto modifyGameRoomDto = DetailGameRoomDto.builder()
-                .title(gameRoom.getGameRoomTitle())
+                .gameRoomTitle(gameRoom.getGameRoomTitle())
                 .gameRoomMovie(gameRoom.getGameRoomMovie())
                 .maxPeople(gameRoom.getMaxPeople())
                 .gameRoomPw(gameRoom.getGameRoomPw())
@@ -148,7 +144,7 @@ public class GameRoomServiceImpl implements GameRoomService {
         int cur = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + request.getGameRoomId(), "curPeople"));
         GameRoom gameRoom = GameRoom.builder()
                 .gameRoomId(request.getGameRoomId())
-                .gameRoomTitle(request.getTitle())
+                .gameRoomTitle(request.getGameRoomTitle())
                 .start(false)
                 .gameRoomPw(request.getGameRoomPw())
                 .gameRoomMovie(request.getGameRoomMovie())
@@ -159,13 +155,13 @@ public class GameRoomServiceImpl implements GameRoomService {
     }
 
     @Override
-    public String outGameRoom(String userGameRoomId) {
-        String gameRoomId = (String) redisTemplate.opsForHash().get("userGameRoom:" + userGameRoomId, "gameRoomId");
+    public String outGameRoom(String gameId) {
+        String gameRoomId = (String) redisTemplate.opsForHash().get("game:" + gameId, "gameRoomId");
         String temp = (String) redisTemplate.opsForHash().get("gameRoom:"+gameRoomId, "start");
         boolean start = Boolean.parseBoolean(temp);
         if(!start){
-            redisTemplate.delete("userGameRoom:" + userGameRoomId);
-            redisTemplate.opsForSet().remove("userGameRoom", Integer.parseInt(userGameRoomId));
+            redisTemplate.delete("game:" + gameId);
+            redisTemplate.opsForSet().remove("game", Integer.parseInt(gameId));
         }
 //        RedisAtomicLong counterUGR = new RedisAtomicLong("ugri", redisTemplate.getConnectionFactory());
 //        counterUGR.decrementAndGet();
@@ -181,21 +177,21 @@ public class GameRoomServiceImpl implements GameRoomService {
     }
 
     @Override
-    public String overUserGameRoom(OverUserGameRoomDto request) {
-        redisTemplate.opsForHash().put("userGameRoom:"+request.getUserGameRoomId(), "gameRecord", String.valueOf(request.getRecord()));
-        return request.getUserGameRoomId();
+    public String overGame(OverGameDto request) {
+        redisTemplate.opsForHash().put("game:"+request.getGameId(), "gameRecord", String.valueOf(request.getGameRecord()));
+        return request.getGameId();
     }
 
     @Override
     public String deleteGameRoom(String gameRoomId) {
         HashOperations<String, String, String> hash = redisTemplate.opsForHash();
         SetOperations<String, String> set = gameRoomNum.opsForSet();
-        Set<String> userGameRoomNum = set.members("userGameRoom");
-        for(String s : userGameRoomNum){
+        Set<String> gameNum = set.members("game");
+        for(String s : gameNum){
             // 게임에 접속되어있는 유저들 중에서 받아온 게임방아이디에 있는 유저들 찾기 -> scan 같은 빠른 메서드 찾기
-            if(Objects.equals(hash.get("userGameRoom:" + s, "gameRoomId"), gameRoomId)){
-                redisTemplate.delete("userGameRoom:" + s);
-                redisTemplate.opsForSet().remove("userGameRoom", Integer.parseInt(s));
+            if(Objects.equals(hash.get("game:" + s, "gameRoomId"), gameRoomId)){
+                redisTemplate.delete("game:" + s);
+                redisTemplate.opsForSet().remove("game", Integer.parseInt(s));
             }
         }
         redisTemplate.delete("gameRoom:" + gameRoomId);
@@ -206,8 +202,8 @@ public class GameRoomServiceImpl implements GameRoomService {
 //        String value = hash.get("gameRoom:"+gameRoomId, hashKey);
 //        System.out.println(value);
 //        System.out.println(value.equals("SessionA"));
-        // gameRoomId에 해당하는 userGameRoom 삭제
-//        System.out.println(redisTemplate.opsForHash().entries("userGameRoom"));
+        // gameRoomId에 해당하는 game 삭제
+//        System.out.println(redisTemplate.opsForHash().entries("game"));
 //        Optional<GameRoom> findGameRoom = gameRoomRepository.findById(gameRoomId);
 //        if(!findGameRoom.isPresent())
 //            return "0";
@@ -220,15 +216,15 @@ public class GameRoomServiceImpl implements GameRoomService {
     public List<UserGameRecordDto> RecordGameRoom(String gameRoomId) {
         HashOperations<String, String, String> hash = redisTemplate.opsForHash();
         SetOperations<String, String> set = gameRoomNum.opsForSet();
-        Set<String> userGameRoomNum = set.members("userGameRoom");
+        Set<String> gameNum = set.members("game");
         List<UserGameRecordDto> userGameRecords = new ArrayList<>();
-        for(String s : userGameRoomNum){
+        for(String s : gameNum){
             // 게임에 접속되어있는 유저들 중에서 받아온 게임방아이디에 있는 유저들 찾기 -> scan 같은 빠른 메서드 찾기
-            if(Objects.equals(hash.get("userGameRoom:" + s, "gameRoomId"), gameRoomId)){
+            if(Objects.equals(hash.get("game:" + s, "gameRoomId"), gameRoomId)){
                 UserGameRecordDto userGameRecordDto = UserGameRecordDto.builder()
-                        .userEmail(hash.get("userGameRoom:" + s, "userEmail"))
+                        .userEmail(hash.get("game:" + s, "userEmail"))
                         // TODO: 2023-08-03 (003) 유저 이메일 대신 유저 닉네임 넣기 
-                        .gameRecord(hash.get("userGameRoom:" + s, "gameRecord"))
+                        .gameRecord(hash.get("game:" + s, "gameRecord"))
                         .build();
                 userGameRecords.add(userGameRecordDto);
             }

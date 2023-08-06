@@ -1,6 +1,6 @@
 package com.ssafy.bium.gameroom.controller;
 
-import com.ssafy.bium.gameroom.UserGameRoom;
+import com.ssafy.bium.gameroom.Game;
 import com.ssafy.bium.gameroom.request.*;
 import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
@@ -23,9 +23,9 @@ public class GameRoomController {
 
     @GetMapping("")
     public List<GameRoomListDto> list(
-            @RequestBody SearchGameRoomDto request
+            // sort, keyword 변수 넣어서 정렬 및 검색 기능 구현
     ) {
-        return gameRoomService.searchGameRooms(request);
+        return gameRoomService.searchGameRooms();
     }
 
 
@@ -62,9 +62,9 @@ public class GameRoomController {
 
     @PostMapping("/out")
     public String out(
-            @RequestParam String userGameRoomId
+            @RequestParam String gameId
     ) {
-        return gameRoomService.outGameRoom(userGameRoomId);
+        return gameRoomService.outGameRoom(gameId);
     }
 
     @PostMapping("/start")
@@ -76,14 +76,14 @@ public class GameRoomController {
 
     @PostMapping("/over")
     public String over(
-            @RequestParam String userGameRoomId,
-            @RequestParam Long record
+            @RequestParam String gameId,
+            @RequestParam Long gameRecord
     ){
-        OverUserGameRoomDto request = OverUserGameRoomDto.builder()
-                .userGameRoomId(userGameRoomId)
-                .record(record)
+        OverGameDto request = OverGameDto.builder()
+                .gameId(gameId)
+                .gameRecord(gameRecord)
                 .build();
-        return gameRoomService.overUserGameRoom(request);
+        return gameRoomService.overGame(request);
     }
 
     @GetMapping("/stop")

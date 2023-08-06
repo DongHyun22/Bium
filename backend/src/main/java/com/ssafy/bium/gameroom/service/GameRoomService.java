@@ -10,14 +10,14 @@ import io.openvidu.java.client.OpenViduJavaClientException;
 import java.util.List;
 
 public interface GameRoomService {
-    List<GameRoomListDto> searchGameRooms(SearchGameRoomDto request);
+    List<GameRoomListDto> searchGameRooms();
     String createGameRoom(GameRoomDto gameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException;
     String enterGameRoom(EnterGameRoomDto enterGameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException;
     DetailGameRoomDto searchGameRoom(String gameRoomId);
     String modifyGameRoom(ModifyGameRoomDto request);
-    String outGameRoom(String userGameRoomId);
+    String outGameRoom(String gameId);
     String startGameRoom(String gameRoomId);
-    String overUserGameRoom(OverUserGameRoomDto request);
+    String overGame(OverGameDto request);
     String deleteGameRoom(String gameRoomId);
     List<UserGameRecordDto> RecordGameRoom(String gameRoomId);
 }

@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class GameRoomListDto {
-    private String title;
+    private String gameRoomTitle;
     private boolean start;
     private int gameRoomMovie;
     private int curPeople;
     private int maxPeople;
 
     @Builder
-    public GameRoomListDto(String title, boolean start, int gameRoomMovie, int curPeople, int maxPeople) {
-        this.title = title;
+    public GameRoomListDto(String gameRoomTitle, boolean start, int gameRoomMovie, int curPeople, int maxPeople) {
+        this.gameRoomTitle = gameRoomTitle;
         this.start = start;
         this.gameRoomMovie = gameRoomMovie;
         this.curPeople = curPeople;
