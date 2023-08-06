@@ -13,13 +13,18 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.File;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,7 +139,7 @@ public class UserController {
 
     @PostMapping("profile/img/{userEmail}")
     public ResponseEntity<?> setProfileImg(@PathVariable(value = "userEmail") String userEmail,
-                                           @RequestParam(value = "upfile", required = false) MultipartFile file,
+                                           @RequestPart MultipartFile file,
                                            @RequestParam(value = "imgType") int imgType) throws Exception {
         logger.debug("MultipartFile.isEmpty : {}", file.isEmpty());
 
@@ -164,6 +169,35 @@ public class UserController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
 
+    }
+
+    // 이미지 조회
+    @GetMapping("/file/{sfolder}/{imgType}/{ofile}/{sfile}")
+    public ResponseEntity<Object> download(@PathVariable("sfolder") String sfolder,
+                                           @PathVariable("imgType") int imgType,
+                                           @PathVariable("ofile") String ofile,
+                                           @PathVariable("sfile") String sfile) {
+        logger.debug("download file info sfolder : {}, imgType : {}, ofile : {}, sfile : {}", sfolder, imgType, ofile, sfile);
+        String file = uploadImgPath + File.separator + sfolder + File.separator + imgType + File.separator + sfile;
+
+        try {
+            Path filePath = Paths.get(file);
+            Resource resource = new InputStreamResource(Files.newInputStream(filePath)); // 파일 resource 얻기
+
+            String contentType = Files.probeContentType(filePath);
+            if (contentType == null) {
+                // MIME 유형을 알아낼 수 없는 경우 일반적인 콘텐츠 유형으로 설정
+                contentType = "application/octet-stream";
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.valueOf(contentType));
+
+            return new ResponseEntity<Object>(resource, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<Object>(null, HttpStatus.CONFLICT);
+        }
     }
 
     @GetMapping("profile/ranking/{userEmail}")
