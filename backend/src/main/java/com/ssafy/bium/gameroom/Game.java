@@ -9,11 +9,12 @@ import org.springframework.data.redis.core.RedisHash;
 
 @Getter
 @NoArgsConstructor
-@RedisHash("userGameRoom")
-public class UserGameRoom {
+@RedisHash("game")
+public class Game {
+    // 유저게임방
 
     @Id
-    private String userGameRoomId;
+    private String gameId;
     private String gameRoomId;
     private String userEmail;
     private boolean isHost;
@@ -21,8 +22,8 @@ public class UserGameRoom {
     private Long gameRecord;
 
     @Builder
-    public UserGameRoom(String userGameRoomId, String gameRoomId, String userEmail, boolean isHost, int sequence, Long gameRecord) {
-        this.userGameRoomId = userGameRoomId;
+    public Game(String gameId, String gameRoomId, String userEmail, boolean isHost, int sequence, Long gameRecord) {
+        this.gameId = gameId;
         this.gameRoomId = gameRoomId;
         this.userEmail = userEmail;
         this.isHost = isHost;
@@ -30,3 +31,4 @@ public class UserGameRoom {
         this.gameRecord = gameRecord;
     }
 }
+

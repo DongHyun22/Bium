@@ -23,6 +23,7 @@ public class GameRoom extends TimeBaseEntity {
     private int curPeople;
     private int maxPeople;
     private String customSessionId;
+    // 생성 일자 넣어서 정렬 기능 추가
 
     @Builder
     public GameRoom(String gameRoomId, String gameRoomTitle, boolean start, String gameRoomPw, int gameRoomMovie, int curPeople, int maxPeople, String customSessionId) {

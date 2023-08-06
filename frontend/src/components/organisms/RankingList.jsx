@@ -43,13 +43,7 @@ function GetRanking() {
         </div>
         <div className="Ranking list">
           {rank.map((item, index) => (
-            <RankingItem
-              key={index}
-              nickname={item.userNickname}
-              rank={item.userRank}
-              topBium={item.topBium}
-              ranking={item.ranking}
-            />
+            <RankingItem key={index} nickname={item.userNickname} rank={item.userRank} topBium={item.topBium} ranking={item.ranking} />
           ))}
         </div>
         <p>...</p>

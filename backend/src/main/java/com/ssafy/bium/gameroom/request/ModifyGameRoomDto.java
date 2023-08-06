@@ -8,16 +8,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ModifyGameRoomDto {
     private String gameRoomId;
-    private String title;
+    private String gameRoomTitle;
     private int gameRoomMovie;
     private int maxPeople;
     private String gameRoomPw;
 
     @Builder
 
-    public ModifyGameRoomDto(String gameRoomId, String title, int gameRoomMovie, int maxPeople, String gameRoomPw) {
+    public ModifyGameRoomDto(String gameRoomId, String gameRoomTitle, int gameRoomMovie, int maxPeople, String gameRoomPw) {
         this.gameRoomId = gameRoomId;
-        this.title = title;
+        this.gameRoomTitle = gameRoomTitle;
         this.gameRoomMovie = gameRoomMovie;
         this.maxPeople = maxPeople;
         this.gameRoomPw = gameRoomPw;
