@@ -1,11 +1,10 @@
 import React from 'react';
 
 export const GameRoomListItem = (props) => {
-  console.log(props);
-  const roomTitle = props.roomTitle;
-  const roomPeople = props.roomPeople;
+  console.log('자식', props);
+  const roomTitle = props.allRoom.title;
+  const roomPeople = props.allRoom.maxPeople;
 
-  console.log(props);
   return (
     <div>
       <h3>{roomTitle}</h3>

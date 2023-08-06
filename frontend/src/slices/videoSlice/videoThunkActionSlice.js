@@ -119,8 +119,8 @@ function createToken(props) {
       const response = await axios.post(
         `http://localhost:8080/api/game/enter`,
         {
-          gameRoomId: props.props.roomName,
-          gameRoomPw: props.props.roomPassword,
+          gameRoomId: gameRoomId,
+          gameRoomPw: '',
           customSessionId: customSessionId
         },
         {
@@ -135,7 +135,7 @@ function createToken(props) {
           }
         }
       );
-
+      console.log(response);
       return resolve(response.data);
     } catch (error) {
       console.log(reject('3번 여기오류야....', error));
