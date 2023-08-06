@@ -30,7 +30,7 @@ public class GameRoomController {
 
 
     @PostMapping("/create")
-    public String create(
+    public EnterGameRoomDto create(
             @RequestBody GameRoomDto request,
             @RequestParam String userEmail
     ) throws OpenViduJavaClientException, OpenViduHttpException {

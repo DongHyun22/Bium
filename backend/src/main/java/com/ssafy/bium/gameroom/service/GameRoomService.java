@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface GameRoomService {
     List<GameRoomListDto> searchGameRooms();
-    String createGameRoom(GameRoomDto gameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException;
+    EnterGameRoomDto createGameRoom(GameRoomDto gameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException;
     String enterGameRoom(EnterGameRoomDto enterGameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException;
     DetailGameRoomDto searchGameRoom(String gameRoomId);
     String modifyGameRoom(ModifyGameRoomDto request);
