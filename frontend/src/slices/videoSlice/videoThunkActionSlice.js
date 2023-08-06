@@ -12,7 +12,7 @@ export const joinSession = createAsyncThunk('videoAction/joinSession', async (pr
   const maxPeople = props.maxPeople;
   const mySessionId = props.mySessionId;
   const myUserName = props.myUserName;
-  const roomName = props.roomName;
+  const roomTitle = props.roomTitle;
   const roomPassword = props.roomPassword;
   const session = props.session;
 
@@ -69,7 +69,7 @@ function createSession(props) {
       const response = await axios.post(
         `http://localhost:8080/api/game/create`,
         {
-          gameTitle: props.roomName,
+          gameTitle: props.roomTitle,
           gameRoomMovie: props.backgroundImage,
           maxPeople: props.maxPeople,
           gameRoomPw: props.roomPassword
@@ -110,7 +110,7 @@ function createToken(props) {
   return new Promise(async (resolve, reject) => {
     try {
       const userEmail = props.props.props.userEmail;
-      const gameRoomId = props.props.props.roomName;
+      const gameRoomId = props.props.props.roomTitle;
       const gameRoomPw = props.props.props.roomPassword;
       const customSessionId = props.newSessionId;
 
@@ -119,7 +119,7 @@ function createToken(props) {
       const response = await axios.post(
         `http://localhost:8080/api/game/enter`,
         {
-          gameRoomId: gameRoomId,
+          gameRoomId: 1,
           gameRoomPw: '',
           customSessionId: customSessionId
         },

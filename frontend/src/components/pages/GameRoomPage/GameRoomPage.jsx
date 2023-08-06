@@ -2,7 +2,7 @@ import { OpenVidu } from 'openvidu-browser';
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
@@ -11,15 +11,27 @@ import Timer from '../../atoms/Timer/Timer';
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 
 import styles from './GamRoomPage.module.css';
+import { setMySessionId } from '../../../slices/roomSlice/roomSlice';
 
 function GameRoomPage() {
   const dispatch = useDispatch();
+  const location = useLocation();
   const navigate = useNavigate();
+  const customSessionId = { ...location.state };
+
   const userEmail = useSelector((state) => state.user.userEmail);
 
-  const roomName = useSelector((state) => state.room.roomName);
+  const gameRoomTitle = useSelector((state) => state.room.roomTitle);
   const roomPassword = useSelector((state) => state.room.roomPassword);
+
+  //customSessionId 필요하다
+  //추가하자
+
   const mySessionId = useSelector((state) => state.room.mySessionId);
+  if (mySessionId === null) {
+    dispatch(setMySessionId(customSessionId));
+  }
+
   const myUserName = useSelector((state) => state.room.myUserName);
   const maxPeople = useSelector((state) => state.room.maxPeople);
   const backgroundImage = useSelector((state) => state.room.backgroundImage);
@@ -90,7 +102,7 @@ function GameRoomPage() {
       session.on('streamCreated', handleStreamCreated);
       session.on('streamDestroyed', handleStreamDestroyed);
       session.on('exception', handleException);
-      dispatch(joinSession({ OV, session, mySessionId, myUserName, roomName, backgroundImage, maxPeople, roomPassword, userEmail }));
+      dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail }));
 
       // Clean-up 함수 등록
       return () => {
@@ -126,7 +138,7 @@ function GameRoomPage() {
             <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
           </div>
           <div id="room-information">
-            <h1 id="room-name">{roomName}</h1>
+            <h1 id="room-name">{gameRoomTitle}</h1>
           </div>
           <div className={styles.backimage}>
             <div id="video-container">

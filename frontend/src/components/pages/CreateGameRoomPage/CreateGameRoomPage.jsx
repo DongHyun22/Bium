@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { setJoin } from '../../../slices/videoSlice/videoSlice';
-import { setRoomName, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } from '../../../slices/roomSlice/roomSlice';
+import { setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } from '../../../slices/roomSlice/roomSlice';
 
 export const CreateGameRoom = () => {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ export const CreateGameRoom = () => {
 
   const [isSecret, setIsSecret] = useState(false);
 
-  const roomName = useSelector((state) => state.room.roomName);
+  const gameRoomTitle = useSelector((state) => state.room.roomTitle);
   const roomPassword = useSelector((state) => state.room.roomPassword);
   const mySessionId = useSelector((state) => state.room.mySessionId);
   const myUserName = useSelector((state) => state.room.myUserName);
@@ -33,8 +33,8 @@ export const CreateGameRoom = () => {
     setIsSecret(!isSecret);
   };
 
-  const handleChangeRoomname = (e) => {
-    dispatch(setRoomName({ roomName: e.target.value }));
+  const handleChangeRoomTitle = (e) => {
+    dispatch(setRoomTitle({ gameRoomTitle: e.target.value }));
   };
   const handleChangeRoomPassword = (e) => {
     dispatch(setRoomPassword({ roomPassword: e.target.value }));
@@ -60,8 +60,8 @@ export const CreateGameRoom = () => {
           <h1> CreateGameRoom </h1>
           <form className="form-group" onSubmit={handleJoin}>
             <p>
-              <label>RoomName: </label>
-              <input className="form-control" type="text" id="roomName" value={roomName} onChange={handleChangeRoomname} required />
+              <label>GameRoomTitle: </label>
+              <input className="form-control" type="text" id="gameRoomTitle" value={gameRoomTitle} onChange={handleChangeRoomTitle} required />
             </p>
             <p>
               <label>MaxPeople: </label>
