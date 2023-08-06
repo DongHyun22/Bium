@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { all } from 'axios';
 import GameRoomListItem from './GameRoomListItemPage';
 import { useDispatch } from 'react-redux';
 
@@ -32,16 +32,22 @@ export const GameRoomListPage = () => {
   useEffect(() => {
     gemeRoomapi();
   }, []);
-  const enterRoom = () => {};
+
+  const enterRoom = (allRoom) => {
+    console.log(allRoom);
+  };
+
   return (
     <div>
       ggg
       <h1>GGGG</h1>
       {allRooms !== [] ? (
         <>
-          {allRooms.map((allRoom, index) => {
-            return <GameRoomListItem key={index} allRoom={allRoom}></GameRoomListItem>;
-          })}
+          <div onClick={enterRoom}>
+            {allRooms.map((allRoom, index) => {
+              return <GameRoomListItem key={index} allRoom={allRoom}></GameRoomListItem>;
+            })}
+          </div>
         </>
       ) : null}
     </div>

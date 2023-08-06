@@ -2,12 +2,12 @@ import React from 'react';
 
 export const GameRoomListItem = (props) => {
   console.log('자식', props);
-  const roomTitle = props.allRoom.title;
+  const gameRoomTitle = props.allRoom.gameRoomTitle;
   const roomPeople = props.allRoom.maxPeople;
 
   return (
     <div>
-      <h3>{roomTitle}</h3>
+      <h3>{gameRoomTitle}</h3>
       <h6>{roomPeople}</h6>
     </div>
   );
