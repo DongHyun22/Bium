@@ -17,8 +17,9 @@ function GameRoomPage() {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const customSessionId = { ...location.state };
 
+  const customSessionId = location.state;
+  console.log('uuuuuuu', customSessionId);
   const userEmail = useSelector((state) => state.user.userEmail);
 
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
@@ -28,14 +29,12 @@ function GameRoomPage() {
   //추가하자
 
   const mySessionId = useSelector((state) => state.room.mySessionId);
-  if (mySessionId === null) {
-    dispatch(setMySessionId(customSessionId));
+  if (location.state) {
+    dispatch(setMySessionId(location.state.customSessionId));
   }
-
   const myUserName = useSelector((state) => state.room.myUserName);
   const maxPeople = useSelector((state) => state.room.maxPeople);
   const backgroundImage = useSelector((state) => state.room.backgroundImage);
-
   const join = useSelector((state) => state.video.join);
   const OV = useSelector((state) => state.video.OV);
   const session = useSelector((state) => state.video.session);

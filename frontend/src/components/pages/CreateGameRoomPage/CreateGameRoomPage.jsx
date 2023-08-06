@@ -90,7 +90,7 @@ export const CreateGameRoom = () => {
             </p>
             <p>
               <label> Session: </label>
-              <input className="form-control" type="text" id="sessionId" value={mySessionId} onChange={handleChangeSessionId} required />
+              <input className="form-control" type="text" id="sessionId" value={mySessionId} onChange={handleChangeSessionId} />
             </p>
             <p>
               <label> 비밀방 여부: </label>

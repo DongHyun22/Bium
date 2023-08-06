@@ -4,7 +4,7 @@ import { joinSession } from './videoThunkActionSlice';
 const initialState = {
   join: false,
   OV: null,
-  session: undefined,
+  session: '',
   token: undefined,
   publisher: undefined,
   subscribers: [],

@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080';
 
 export const joinSession = createAsyncThunk('videoAction/joinSession', async (props) => {
+  console.log('제발 joinsession 확ㅇ니좀', props);
   const accessToken = sessionStorage.getItem('accessToken');
   const userEmail = props.userEmail;
   const OV = props.OV;
@@ -58,7 +59,7 @@ async function getToken(props) {
 function createSession(props) {
   console.log('토큰있니....?');
 
-  console.log(props);
+  console.log(props.props);
   return new Promise(async (resolve, reject) => {
     try {
       const accessToken = sessionStorage.getItem('accessToken');
@@ -69,10 +70,11 @@ function createSession(props) {
       const response = await axios.post(
         `http://localhost:8080/api/game/create`,
         {
-          gameTitle: props.roomTitle,
-          gameRoomMovie: props.backgroundImage,
-          maxPeople: props.maxPeople,
-          gameRoomPw: props.roomPassword
+          gameRoomTitle: props.props.gameRoomTitle,
+          gameRoomMovie: props.props.backgroundImage,
+          maxPeople: props.props.maxPeople,
+          gameRoomPw: props.props.roomPassword,
+          customSessionId: props.props.mySessionId
         },
         {
           params: {
@@ -112,7 +114,7 @@ function createToken(props) {
       const userEmail = props.props.props.userEmail;
       const gameRoomId = props.props.props.roomTitle;
       const gameRoomPw = props.props.props.roomPassword;
-      const customSessionId = props.newSessionId;
+      const customSessionId = props.newSessionId.customSessionId;
 
       console.log('이메일 출력', userEmail, gameRoomId, gameRoomPw, customSessionId);
       const accessToken = sessionStorage.getItem('accessToken');
