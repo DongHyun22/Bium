@@ -20,7 +20,7 @@ export const MainPage = () => {
 
   return (
     <div>
-      <h1>MainPage</h1>
+      {/* <h1>MainPage</h1> */}
       <div className={styles.mainpagebg}>
         <div className={styles.photo}>
           <button className={styles.biumlogobutton} onClick={goToHome}></button>
@@ -31,8 +31,7 @@ export const MainPage = () => {
           </div>
         </div>
         <div className={styles.rightBox}>
-          {/* <NavBar></NavBar>
-          <RouteLink></RouteLink> */}
+          <NavBar></NavBar>
           <div className={styles.rightContent}>
             <h3 className={styles.titleBium}>비 움</h3>
             <span className={styles.titleContent}>멍하니 있고 싶을 때</span>
