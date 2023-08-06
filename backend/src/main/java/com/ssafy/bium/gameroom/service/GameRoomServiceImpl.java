@@ -36,6 +36,7 @@ public class GameRoomServiceImpl implements GameRoomService {
 
         return gameRooms.stream()
                 .map(gameRoom -> new GameRoomListDto(
+                        gameRoom.getCustomSessionId(),
                         gameRoom.getGameRoomTitle(),
                         gameRoom.isStart(),
                         gameRoom.getGameRoomMovie(),
