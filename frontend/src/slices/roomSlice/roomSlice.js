@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  roomName: '',
+  roomTitle: '',
   roomPassword: '',
-  mySessionId: 'Session0',
+  mySessionId: '',
   myUserName: 'jihyeok',
   maxPeople: 8,
   backgroundImage: 1
@@ -13,8 +13,8 @@ export const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {
-    setRoomName: (state, action) => {
-      state.roomName = action.payload.roomName;
+    setRoomTitle: (state, action) => {
+      state.roomTitle = action.payload.roomTitle;
     },
     setRoomPassword: (state, action) => {
       state.roomPassword = action.payload.roompassword;
@@ -34,6 +34,6 @@ export const roomSlice = createSlice({
   }
 });
 
-export const { setRoomName, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } = roomSlice.actions;
+export const { setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } = roomSlice.actions;
 
 export default roomSlice.reducer;
