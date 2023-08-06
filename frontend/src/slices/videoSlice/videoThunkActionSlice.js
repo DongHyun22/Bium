@@ -69,11 +69,10 @@ function createSession(props) {
       const response = await axios.post(
         `http://localhost:8080/api/game/create`,
         {
-          title: props.roomName,
-          movie: props.backgroundImage,
+          gameTitle: props.roomName,
+          gameRoomMovie: props.backgroundImage,
           maxPeople: props.maxPeople,
-          pw: props.roomPassword,
-          customSessionId: props.mySessionId
+          gameRoomPw: props.roomPassword
         },
         {
           params: {
@@ -110,9 +109,9 @@ function createToken(props) {
 
   return new Promise(async (resolve, reject) => {
     try {
-      const userEmail = props.props.userEmail;
-      const gameRoomId = props.props.roomName;
-      const gameRoomPw = props.props.roomPassword;
+      const userEmail = props.props.props.userEmail;
+      const gameRoomId = props.props.props.roomName;
+      const gameRoomPw = props.props.props.roomPassword;
       const customSessionId = props.newSessionId;
 
       console.log('이메일 출력', userEmail, gameRoomId, gameRoomPw, customSessionId);
@@ -120,8 +119,8 @@ function createToken(props) {
       const response = await axios.post(
         `http://localhost:8080/api/game/enter`,
         {
-          gameRoomId: props.props.roomName,
-          gameRoomPw: props.props.roomPassword,
+          gameRoomId: gameRoomId,
+          gameRoomPw: '',
           customSessionId: customSessionId
         },
         {
@@ -136,7 +135,7 @@ function createToken(props) {
           }
         }
       );
-
+      console.log(response);
       return resolve(response.data);
     } catch (error) {
       console.log(reject('3번 여기오류야....', error));
