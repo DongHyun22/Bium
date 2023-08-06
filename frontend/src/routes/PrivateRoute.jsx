@@ -3,13 +3,14 @@ import { ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 
-export default function PrivateRoute({ isLogin }) {
+export default function PrivateRoute() {
   /**
    * 로그인 했는지 여부
    * 로그인 했을 경우 : true 라는 텍스트 반환
    * 로그인 안했을 경우 : null or false(로그아웃 버튼 눌렀을경우 false로 설정) 반환
    */
   const isAuthenticated = useSelector((state) => state.user.token);
+  const isLogin = useSelector((state) => state.user.isLogin);
 
   if (isLogin) {
     // 인증이 반드시 필요한 페이지

@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { persistStore } from 'redux-persist';
 
 import userReducer from '../slices/userSlice';
 import videoReducer from '../slices/videoSlice/videoSlice';
@@ -8,8 +9,7 @@ export const store = configureStore(
   {
     reducer: {
       user: userReducer,
-      video: videoReducer,
-      room: roomReducer
+      video: videoReducer
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
@@ -18,3 +18,5 @@ export const store = configureStore(
   },
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
+
+export const persistor = persistStore(store);
