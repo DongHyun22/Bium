@@ -22,6 +22,7 @@ public interface UserService {
     UserModifyGetRes getModifyData(String userEmail);
     int modifyProfile(UserModifyPostReq userModifyPostReq);
     Image setImage(FilePostReq filePostReq);
+    Image getImageData(String userEmail, int imgType);
     List<UserRankingGetRes> getUserListTop5ByTotalBium();
     UserRankingGetRes getUserByTotalBium(String userEmail);
 

@@ -9,7 +9,8 @@ export const store = configureStore(
   {
     reducer: {
       user: userReducer,
-      video: videoReducer
+      video: videoReducer,
+      room: roomReducer
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
