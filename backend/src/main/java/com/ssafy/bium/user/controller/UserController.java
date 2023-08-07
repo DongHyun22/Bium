@@ -1,5 +1,7 @@
 package com.ssafy.bium.user.controller;
 
+import com.ssafy.bium.image.Image;
+import com.ssafy.bium.image.response.ImageDataGetRes;
 import com.ssafy.bium.user.User;
 import com.ssafy.bium.user.repository.UserRepository;
 import com.ssafy.bium.user.request.FilePostReq;
@@ -137,6 +139,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // 이미지 저장
     @PostMapping("profile/img/{userEmail}")
     public ResponseEntity<?> setProfileImg(@PathVariable(value = "userEmail") String userEmail,
                                            @RequestPart MultipartFile file,
@@ -168,6 +171,17 @@ public class UserController {
             userService.setImage(filePostReq);
         }
         return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
+    // 이미지 조회를 위한 정보 요청
+    @GetMapping("/img/{userEmail}/{imgType}")
+    public ResponseEntity<?> getImgData(@PathVariable("userEmail") String userEmail,
+                                        @PathVariable("imgType") int imgType) {
+
+        Image image = userService.getImageData(userEmail, imgType);
+        ImageDataGetRes imageDataGetRes = new ImageDataGetRes(image);
+        return new ResponseEntity<>(imageDataGetRes, HttpStatus.OK);
 
     }
 

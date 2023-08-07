@@ -3,6 +3,7 @@ package com.ssafy.bium.user.service;
 import com.ssafy.bium.image.Image;
 import com.ssafy.bium.image.repository.ImageRepository;
 import com.ssafy.bium.user.User;
+import com.ssafy.bium.user.controller.UserController;
 import com.ssafy.bium.user.repository.UserRepository;
 import com.ssafy.bium.user.request.FilePostReq;
 import com.ssafy.bium.user.request.UserLoginPostReq;
@@ -11,7 +12,10 @@ import com.ssafy.bium.user.request.UserRegisterPostReq;
 import com.ssafy.bium.user.response.UserModifyGetRes;
 import com.ssafy.bium.user.response.UserRankingGetRes;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +24,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
+    public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
@@ -102,9 +108,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Image setImage(FilePostReq filePostReq) {
 
-        Image image = Image.builder()
+        Optional<Image> image = imageRepository.findByUserIdAndImgType(filePostReq.getUserId(), filePostReq.getImageType());
+        if (image.isPresent()) {
+            imageRepository.deleteImageByUserIdAndImgType(filePostReq.getUserId(), filePostReq.getImageType());
+        }
+
+        Image newImage = Image.builder()
                 .userId(filePostReq.getUserId())
                 .imgType(filePostReq.getImageType())
                 .saveFolder(filePostReq.getSaveFolder())
@@ -112,8 +124,28 @@ public class UserServiceImpl implements UserService {
                 .saveFile(filePostReq.getSaveFile())
                 .build();
 
-        Image result = imageRepository.save(image);
+        Image result = imageRepository.save(newImage);
         return result;
+    }
+
+    @Override
+    public Image getImageData(String userEmail, int imgType) {
+
+        Optional<User> user = userRepository.findByUserEmail(userEmail);
+        if (user.isEmpty()) {
+            logger.debug("해당 계정이 존재하지 않음");
+            return null;
+        }
+        Long userId = user.get().getId();
+
+        Optional<Image> image = imageRepository.findByUserIdAndImgType(userId, imgType);
+        if (image.isEmpty()) {
+            logger.debug("해당 계정의 {} type 이미지가 존재하지 않음", imgType);
+            return null;
+        }
+
+        return image.get();
+
     }
 
     public List<UserRankingGetRes> getUserListTop5ByTotalBium() {
