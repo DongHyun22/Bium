@@ -64,7 +64,7 @@ function createSession(props) {
     try {
       const accessToken = sessionStorage.getItem('accessToken');
       console.log(accessToken, '비코좀...');
-      const userEmail = props.props.userEmail;
+      const userEmail = props.props.gameRoomTitle;
       console.log('여기 들어오나?', userEmail);
 
       const response = await axios.post(
