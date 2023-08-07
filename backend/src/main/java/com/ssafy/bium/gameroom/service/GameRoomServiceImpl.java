@@ -9,9 +9,12 @@ import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
 import com.ssafy.bium.gameroom.response.UserGameRecordDto;
 import com.ssafy.bium.openvidu.OpenviduService;
+import com.ssafy.bium.user.User;
+import com.ssafy.bium.user.repository.UserRepository;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
@@ -23,12 +26,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GameRoomServiceImpl implements GameRoomService {
     private final GameRoomRepository gameRoomRepository;
     private final GameRepository userGameRoomRepository;
     private final RedisTemplate<String, String> gameRoomNum;
     private final RedisTemplate<String, GameRoom> redisTemplate;
     private final OpenviduService openviduService;
+    private final UserRepository userRepository;
 
     @Override
     public String test(String sessionId) throws OpenViduJavaClientException, OpenViduHttpException {
@@ -98,7 +103,7 @@ public class GameRoomServiceImpl implements GameRoomService {
         // 게임방의 현재 인원 1 증가
         redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "curPeople", String.valueOf(++cur));
         // 유저게임방에 참가자 생성
-        RedisAtomicLong counterUGR = new RedisAtomicLong("gi", redisTemplate.getConnectionFactory());
+        RedisAtomicLong counterUGR = new RedisAtomicLong("gameIndex", redisTemplate.getConnectionFactory());
         Long ugri = counterUGR.incrementAndGet();
         
         Map<String, Object> params = new HashMap<>();
@@ -175,7 +180,17 @@ public class GameRoomServiceImpl implements GameRoomService {
 
     @Override
     public String overGame(OverGameDto request) {
-        redisTemplate.opsForHash().put("game:" + request.getGameId(), "gameRecord", String.valueOf(request.getGameRecord()));
+        String gameId = request.getGameId();
+        String userEmail = (String) redisTemplate.opsForHash().get("game:" + gameId, "userEmail");
+        Optional<User> findUser = userRepository.findByUserEmail(userEmail);
+        if(findUser.isEmpty()){
+            log.debug("{} - 해당 유저는 존재하지 않습니다.", userEmail);
+            return "해당하는 유저가 없습니다."
+;        }
+        findUser.get().saveBium(request.getGameRecord());
+        userRepository.save(findUser.get());
+        // 비움량 저장
+        redisTemplate.opsForHash().put("game:" + gameId, "gameRecord", String.valueOf(request.getGameRecord()));
         return request.getGameId();
     }
 

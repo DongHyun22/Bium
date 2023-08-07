@@ -84,13 +84,8 @@ public class GameRoomController {
 
     @PostMapping("/over")
     public String over(
-            @RequestParam String gameId,
-            @RequestParam Long gameRecord
+            @RequestBody OverGameDto request
     ){
-        OverGameDto request = OverGameDto.builder()
-                .gameId(gameId)
-                .gameRecord(gameRecord)
-                .build();
         return gameRoomService.overGame(request);
     }
 
