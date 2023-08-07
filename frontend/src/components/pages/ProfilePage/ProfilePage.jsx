@@ -54,6 +54,7 @@ export function ProfilePage() {
         userNickname: name,
         userPw: password
       };
+      console.log(data);
       const response = await axios.post(`http://localhost:8080/api/profile/modify`, data, {
         headers: {
           'Access-Control-Allow-Origin': '*',
@@ -79,19 +80,34 @@ export function ProfilePage() {
   const signOutUser = async (e) => {
     e.preventDefault();
     try {
-      const response = axios.post(`http://localhost:8080/api/profile/delete`, {
-        params: {
-          userEmail: savedEmail
+      const response = await axios.post(
+        `http://localhost:8080/api/profile/delete`, 
+        {},
+        {
+          params: {
+            userEmail: savedEmail
+          },
+          headers: {
+            'Content-Type': 'application/json'
+          }
         }
-      });
+      );
+      console.log(response.data);
       if (response.data === 0) {
         sessionStorage.removeItem('accessToken');
         navigate('/');
       }
     } catch (error) {
+      console.log('에러났어요~');
+      if (error.response) {
+        console.log(error.response.data);
+      } else {
+        console.log(error.message);
+      }
       return error;
     }
   };
+
 
   // 회원 탈퇴 확인 모달을 열고 닫는 함수들
   const openDeleteConfirmModal = () => {
@@ -103,8 +119,8 @@ export function ProfilePage() {
   };
 
   // 회원 탈퇴 확인 모달에서 '예, 탈퇴합니다' 버튼을 눌렀을 때의 동작
-  const confirmSignOut = () => {
-    signOutUser();
+  const confirmSignOut = (e) => {
+    signOutUser(e);
     closeDeleteConfirmModal();
   };
 
