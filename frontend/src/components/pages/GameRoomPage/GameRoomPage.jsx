@@ -136,6 +136,7 @@ function GameRoomPage() {
       type: 'timer'
     });
     console.log('타이머 시작', data);
+
     if (publisher !== undefined) {
       console.log('쿠키 세션에 이벤트 추가', publisher);
       publisher.stream.session.on('signal:timer', (e) => {
