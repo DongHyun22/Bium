@@ -11,7 +11,8 @@ import Timer from '../../atoms/Timer/Timer';
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 
 import styles from './GamRoomPage.module.css';
-import { setMySessionId } from '../../../slices/roomSlice/roomSlice';
+import { setMySessionId, setStart } from '../../../slices/roomSlice/roomSlice';
+import { useState } from 'react';
 
 function GameRoomPage() {
   const dispatch = useDispatch();
@@ -24,6 +25,8 @@ function GameRoomPage() {
 
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
   const roomPassword = useSelector((state) => state.room.roomPassword);
+
+  const start = useSelector((state) => state.room.start);
 
   //customSessionId 필요하다
   //추가하자
@@ -123,7 +126,29 @@ function GameRoomPage() {
   // };
 
   // --- 3) Specify the actions when events take place in the session ---
-
+  const startSignal = (publisher) => {
+    console.log('여기는 스트림 매니저', publisher);
+    const data = {
+      message: 'start'
+    };
+    publisher.stream.session.signal({
+      data: JSON.stringify(data),
+      type: 'timer'
+    });
+    console.log('타이머 시작', data);
+    if (publisher !== undefined) {
+      console.log('쿠키 세션에 이벤트 추가', publisher);
+      publisher.stream.session.on('signal:timer', (e) => {
+        console.log(e);
+        const data = JSON.parse(e.data);
+        console.log('여기는 데이터', data);
+        if (data.message === 'start') {
+          console.log(333);
+          dispatch(setStart(true));
+        }
+      });
+    }
+  };
   return (
     <div>
       {/* join 이후 화면 */}
@@ -154,8 +179,15 @@ function GameRoomPage() {
                   <UserVideoComponent streamManager={sub} />
                 </div>
               ))}
-              <Timer></Timer>
             </div>
+            <button
+              onClick={() => {
+                startSignal(publisher);
+              }}
+            >
+              Start
+            </button>
+            <Timer></Timer>
           </div>
         </div>
       ) : null}
