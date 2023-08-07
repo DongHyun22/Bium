@@ -3,18 +3,13 @@ import { joinSession } from './videoThunkActionSlice';
 
 const initialState = {
   join: false,
-  roomName: null,
   OV: null,
-  session: undefined,
+  session: '',
   token: undefined,
   publisher: undefined,
-  mainStreamManager: undefined,
-  mySessionId: 'Session0',
-  myUserName: 'jihyeok',
   subscribers: [],
   isVideoPublished: true,
-  isAudioPublished: true,
-  roomPassword: null
+  isAudioPublished: true
 };
 
 export const videoSlice = createSlice({
@@ -24,14 +19,7 @@ export const videoSlice = createSlice({
     setJoin: (state, action) => {
       state.join = action.payload;
     },
-    setRoomPassword: (state, action) => {
-      state.roomPassword = action.payload.roompassword;
-    },
-    setRoomName: (state, action) => {
-      state.roomName = action.payload.roomName;
-    },
     initOVSession: (state, action) => {
-      console.log('action 찍기', action);
       state.OV = action.payload.OV;
       state.session = action.payload.session;
     },
@@ -40,12 +28,6 @@ export const videoSlice = createSlice({
     },
     setPublisher: (state, action) => {
       state.publisher = action.payload.publisher;
-    },
-    setMySessionId: (state, action) => {
-      state.mySessionId = action.payload.mySessionId;
-    },
-    setMyUserName: (state, action) => {
-      state.myUserName = action.payload.myUserName;
     },
     setSubscribers: (state, action) => {
       state.subscribers = action.payload.subscribers;
@@ -66,22 +48,16 @@ export const videoSlice = createSlice({
         mySession.disconnect();
       }
       state.join = false;
-      state.roomName = null;
       state.OV = null;
       state.session = undefined;
       state.token = undefined;
       state.publisher = undefined;
-      state.mainStreamManager = undefined;
-      state.mySessionId = 'Session0';
-      state.myUserName = 'jihyeok';
       state.subscribers = [];
       state.isVideoPublished = true;
       state.isAudioPublished = true;
-      state.roomPassword = null;
     },
     enteredSubscriber: (state, action) => {
-      // console.log("여기가 문제라고??", action.payload)
-      state.subscribers.push(action.payload);
+      state.subscribers = [...state.subscribers, action.payload];
     },
     deleteSubscriber: (state, action) => {
       let index = state.subscribers.indexOf(action.payload, 0);
@@ -93,8 +69,6 @@ export const videoSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(joinSession.fulfilled, (state, { payload }) => {
       console.log('joinSession fulfilled', payload);
-
-      state.mainStreamManager = payload.publisher;
       state.publisher = payload.publisher;
     });
     builder.addCase(joinSession.rejected, (state, { payload }) => {
@@ -103,22 +77,6 @@ export const videoSlice = createSlice({
   }
 });
 
-export const {
-  setJoin,
-  setRoomPassword,
-  setRoomName,
-  initOVSession,
-  setToken,
-  setPublisher,
-  setMainStreamManager,
-  setMySessionId,
-  setMyUserName,
-  setSubscribers,
-  videoMute,
-  audioMute,
-  leaveSession,
-  enteredSubscriber,
-  deleteSubscriber
-} = videoSlice.actions;
+export const { setJoin, initOVSession, setToken, setPublisher, setMainStreamManager, setSubscribers, videoMute, audioMute, leaveSession, enteredSubscriber, deleteSubscriber } = videoSlice.actions;
 
 export default videoSlice.reducer;

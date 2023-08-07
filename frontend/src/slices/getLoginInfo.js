@@ -1,13 +1,4 @@
-import {
-  setToken,
-  setIsLogin,
-  setIsLoginError,
-  setIsValidToken,
-  setUserEmail,
-  setNickname,
-  setTodayBium,
-  setTotalBium
-} from './userSlice';
+import { setToken, setIsLogin, setIsLoginError, setIsValidToken, setUserEmail, setNickname, setTodayBium, setTotalBium } from './userSlice';
 
 import axios from 'axios';
 

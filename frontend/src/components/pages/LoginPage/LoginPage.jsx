@@ -29,16 +29,19 @@ function LoginPage() {
       alert('유효한 이메일 형식이 아닙니다.');
       return;
     }
+
     const user = { userEmail, userPw };
-    dispatch(userLogin(user));
 
-    console.log(userLogin(userEmail, userPw));
-    console.log('세션의 토큰을 변수에 담음');
-    dispatch(getUserInfo(userEmail));
-
-    if (isLogin === true) {
-      navigate('/');
-    }
+    dispatch(userLogin(user))
+      .then(() => {
+        dispatch(getUserInfo(userEmail));
+        // if (isLogin === true) {
+        //   navigate('/');
+        // }
+      })
+      .catch((error) => {
+        console.error('Login failed:', error);
+      });
   };
 
   const handleEmailChange = (e) => {
@@ -55,13 +58,7 @@ function LoginPage() {
         <div className="loginId">
           <label htmlFor="userEmail">
             이메일 &nbsp;
-            <input
-              type="text"
-              id="userEmail"
-              placeholder="이메일을 입력해 주세요."
-              value={userEmail}
-              onChange={handleEmailChange}
-            />
+            <input type="text" id="userEmail" placeholder="이메일을 입력해 주세요." value={userEmail} onChange={handleEmailChange} />
           </label>
         </div>
         <div className="loginPassword">

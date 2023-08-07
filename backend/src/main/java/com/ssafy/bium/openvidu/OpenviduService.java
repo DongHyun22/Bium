@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -41,5 +42,35 @@ public class OpenviduService {
         ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
         Connection connection = session.createConnection(properties);
         return connection.getToken();
+    }
+    public String getData(String sessionId) throws OpenViduJavaClientException, OpenViduHttpException{
+        System.out.println("------------------------------------------");
+        List<Session> list = openvidu.getActiveSessions();
+        for (Session s : list){
+            System.out.println("세션 : " + s);
+        }
+        System.out.println("------------------------------------------");
+        Session session = openvidu.getActiveSession(sessionId);
+        if(session == null){
+            System.out.println("세션이 널입니다.");
+        }
+        else{
+            System.out.println(session.toString());
+        }
+//        System.out.println("session.createdAt()" + session.createdAt());
+        System.out.println("------------------------------------------");
+        System.out.println(session.getProperties());
+        List<Connection> connections = session.getActiveConnections();
+        Connection connection = connections.get(0);
+        System.out.println(connection);
+        System.out.println("------------------------------------------");
+        System.out.println("커넥션 투 스트링 " + connection.toString());
+        System.out.println("서버 데이터 " + connection.getServerData());
+        System.out.println("클라이언트 데이터 " + connection.getClientData());
+        System.out.println("connection.activeAt " + connection.activeAt());
+        System.out.println(connection.getPublishers());
+        System.out.println(connection.getSubscribers());
+
+        return "";
     }
 }

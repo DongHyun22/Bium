@@ -1,10 +1,11 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import { useSelector } from 'react-redux';
 import { clearAllListeners } from '@reduxjs/toolkit';
 
 const OpenViduVideoComponent = (props) => {
   const join = useSelector((state) => state.video.join);
+  const [failcount, setFailcount] = useState(0);
 
   console.log('제발 빨리 끝내고 잘 수 있으면 좋겠다', props);
   const videoRef = useRef(null);
@@ -59,27 +60,25 @@ const OpenViduVideoComponent = (props) => {
     setInterval(async () => {
       console.log('하하하', videoRef.current);
       const videoElement = document.querySelector('#localVideo');
-      const detections = await faceapi
-        .detectSingleFace(videoElement, new faceapi.TinyFaceDetectorOptions())
-        .withFaceLandmarks()
-        .withFaceExpressions();
 
       // DRAW YOU FACE IN WEBCAM
-      if (detections && canvasRef.current !== null) {
+      if (videoRef.current !== null) {
+        const detections = await faceapi.detectSingleFace(videoElement, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
         canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoElement);
         faceapi.matchDimensions(canvasRef.current, {
           width: 480,
           height: 270
         });
+        if (detections) {
+          const resized = faceapi.resizeResults(detections, {
+            width: 480,
+            height: 270
+          });
 
-        const resized = faceapi.resizeResults(detections, {
-          width: 480,
-          height: 270
-        });
-
-        faceapi.draw.drawDetections(canvasRef.current, resized);
-        faceapi.draw.drawFaceLandmarks(canvasRef.current, resized);
-        faceapi.draw.drawFaceExpressions(canvasRef.current, resized);
+          faceapi.draw.drawDetections(canvasRef.current, resized);
+          faceapi.draw.drawFaceLandmarks(canvasRef.current, resized);
+          faceapi.draw.drawFaceExpressions(canvasRef.current, resized);
+        }
       } else {
         return;
       }
@@ -88,7 +87,7 @@ const OpenViduVideoComponent = (props) => {
 
   return (
     <>
-      <video id="localVideo" autoPlay={true} ref={videoRef} />
+      <video id="localVideo" audio={false} autoPlay={true} ref={videoRef} />
       <canvas id="drawCanvas" ref={canvasRef} />
     </>
   );

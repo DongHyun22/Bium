@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 // 방 생성 시 요청받는 Dto
 public class GameRoomDto {
-    private String title;
-    private int movie; // 영상 종류
+    private String gameRoomTitle;
+    private int gameRoomMovie; // 영상 종류
     private int maxPeople;
-    private String pw;
+    private String gameRoomPw;
     private String customSessionId;
 }
