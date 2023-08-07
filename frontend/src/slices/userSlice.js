@@ -40,6 +40,7 @@ const userSlice = createSlice({
       state.userEmail = action.payload;
     },
     setNickname(state, action) {
+      console.log('닉네임 변경', action.payload);
       state.nickname = action.payload;
     },
     setTodayBium(state, action) {
