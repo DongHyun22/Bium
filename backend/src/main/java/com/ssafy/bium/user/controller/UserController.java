@@ -133,7 +133,7 @@ public class UserController {
     }
 
     @PostMapping("profile/modify")
-    public ResponseEntity<?> modifyProfile(UserModifyPostReq userModifyPostReq) {
+    public ResponseEntity<?> modifyProfile(@RequestBody UserModifyPostReq userModifyPostReq) {
 
         int result = userService.modifyProfile(userModifyPostReq);
         return new ResponseEntity<>(HttpStatus.OK);
