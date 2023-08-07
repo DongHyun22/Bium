@@ -36,7 +36,9 @@ export const NavBar = () => {
           <Link to="/createroom">게임방 생성/ </Link>
           <Link to="/gameroomlist">게임룸 보기/ </Link>
           <Link to="/gameroom">게임방입장/ </Link>
-          <Link to={`/profile/${userEmail}`} key={userEmail}>프로필 화면/ </Link>
+          <Link to={`/profile/${userEmail}`} key={userEmail}>
+            프로필 화면/{' '}
+          </Link>
         </>
       )}
     </div>

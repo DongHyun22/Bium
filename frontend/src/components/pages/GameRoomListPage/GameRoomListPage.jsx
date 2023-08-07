@@ -1,26 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios, { all } from 'axios';
+import GameRoomListItem from './GameRoomListItemPage';
+import { useDispatch } from 'react-redux';
 
 export const GameRoomListPage = () => {
-  const [search, setSearch] = useState('');
-  const [index, setIndex] = useState('0');
+  const dispatch = useDispatch();
+  const [allRooms, setAllRooms] = useState([]);
 
-  const onSelect = (event) => {
-    setIndex(event.target.value);
+  const gemeRoomapi = async () => {
+    try {
+      const response = await axios
+        .get(
+          'http://localhost:8080/api/game'
+          // { sort: 1, keyword: 'qwe' },
+          // {
+          //   headers: {
+          //     'Content-Type': 'application/json'
+          //   }
+          // }
+        )
+        .then((response) => {
+          setAllRooms(response.data);
+        });
+
+      // axios response
+      // 방제목, 인원
+    } catch (err) {
+      console.log(err);
+    }
   };
+  useEffect(() => {
+    gemeRoomapi();
+  }, []);
+
+
 
   return (
     <div>
-      <button>방 만들기</button>
-      <p>방 제목 검색</p>
-      <input type="text" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="제목을 검색하세요."></input>
-      <button>검색</button>
-      &nbsp;&nbsp;
-      <select value={index} onChange={onSelect}>
-        <option value="0">최신순</option>
-        <option value="1">잔여인원순</option>
-        <option value="2">오름차순</option>
-        <option value="3">내림차순</option>
-      </select>
+      ggg
+      <h1>GGGG</h1>
+      {allRooms !== [] ? (
+        <>
+            {allRooms.map((allRoom, index) => {
+              return <GameRoomListItem key={index} allRoom={allRoom}></GameRoomListItem>;
+            })}
+        </>
+      ) : null}
     </div>
   );
 };

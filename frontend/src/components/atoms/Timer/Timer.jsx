@@ -7,16 +7,16 @@ export default function Timer() {
 
   useEffect(() => {
     // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
-    const id = setInterval(() => {
+    const startTimer = setInterval(() => {
       // 타이머 숫자가 하나씩 줄어들도록
       setCount((count) => count + 1);
     }, 1000);
 
     // 0이 되면 카운트가 멈춤
     if (count === 100) {
-      clearInterval(id);
+      clearInterval(startTimer);
     }
-    return () => clearInterval(id);
+    return () => clearInterval(startTimer);
     // 카운트 변수가 바뀔때마다 useEffecct 실행
   }, [count]);
 
