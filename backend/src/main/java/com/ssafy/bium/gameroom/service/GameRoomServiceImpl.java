@@ -62,15 +62,15 @@ public class GameRoomServiceImpl implements GameRoomService {
         RedisAtomicLong counterGR = new RedisAtomicLong("gameRoomIndex", redisTemplate.getConnectionFactory());
         Map<String, Object> params = new HashMap<>();
         String sessionId;
-        Long gri = counterGR.get();
+        Long gameRoomIndex = counterGR.get();
         
         if(gameRoomDto.getCustomSessionId().isEmpty()){
-            gri = counterGR.incrementAndGet();
-            sessionId = "gameRoom" + gri;
+            gameRoomIndex = counterGR.incrementAndGet();
+            sessionId = "gameRoom" + gameRoomIndex;
             params.put("customSessionId", sessionId);
             openviduService.initializeSession(params);
             GameRoom gameRoom = GameRoom.builder()
-                    .gameRoomId(String.valueOf(gri))
+                    .gameRoomId(String.valueOf(gameRoomIndex))
                     .gameRoomTitle(gameRoomDto.getGameRoomTitle())
                     .start(false)
                     .gameRoomPw(gameRoomDto.getGameRoomPw())
@@ -85,7 +85,7 @@ public class GameRoomServiceImpl implements GameRoomService {
             sessionId = gameRoomDto.getCustomSessionId();
         }
         EnterGameRoomDto enterGameRoomDto = EnterGameRoomDto.builder()
-                .gameRoomId(String.valueOf(gri))
+                .gameRoomId(String.valueOf(gameRoomIndex))
                 .gameRoomPw(gameRoomDto.getGameRoomPw())
                 .customSessionId(sessionId)
                 .build();
@@ -104,14 +104,14 @@ public class GameRoomServiceImpl implements GameRoomService {
         redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "curPeople", String.valueOf(++cur));
         // 유저게임방에 참가자 생성
         RedisAtomicLong counterUGR = new RedisAtomicLong("gameIndex", redisTemplate.getConnectionFactory());
-        Long ugri = counterUGR.incrementAndGet();
+        Long gameIndex = counterUGR.incrementAndGet();
         
         Map<String, Object> params = new HashMap<>();
         params.put("customSessionId", enterGameRoomDto.getCustomSessionId());
         String sessionId = openviduService.createConnection(enterGameRoomDto.getCustomSessionId(), params);
         System.out.println(sessionId);
         Game game = Game.builder()
-                .gameId(String.valueOf(ugri))
+                .gameId(String.valueOf(gameIndex))
                 .gameRoomId(String.valueOf(gameRoomId))
                 .userEmail(userEmail)
                 .isHost(false)
