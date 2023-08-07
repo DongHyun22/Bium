@@ -6,6 +6,7 @@ import com.ssafy.bium.gameroom.repository.GameRoomRepository;
 import com.ssafy.bium.gameroom.repository.GameRepository;
 import com.ssafy.bium.gameroom.request.*;
 import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
+import com.ssafy.bium.gameroom.response.EnterUserDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
 import com.ssafy.bium.gameroom.response.UserGameRecordDto;
 import com.ssafy.bium.openvidu.OpenviduService;
@@ -93,7 +94,7 @@ public class GameRoomServiceImpl implements GameRoomService {
     }
 
     @Override
-    public String enterGameRoom(EnterGameRoomDto enterGameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException {
+    public EnterUserDto enterGameRoom(EnterGameRoomDto enterGameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException {
         String gameRoomId = enterGameRoomDto.getGameRoomId();
         // TODO: 2023-08-04 패스워드에 맞춰서 입장
         // TODO: 2023-08-06 (006) cur인원, 진행중 여부는 openvidu에서 설정 할 수 있을 것 같아요 
@@ -121,7 +122,11 @@ public class GameRoomServiceImpl implements GameRoomService {
         userGameRoomRepository.save(game);
         // 비밀번호
 
-        return sessionId;
+        EnterUserDto enterUserDto = EnterUserDto.builder()
+                .sessionId(sessionId)
+                .gameId(String.valueOf(gameIndex))
+                .build();
+        return enterUserDto;
         // 입장한 사람의 정보를 뿌려줘야되네
     }
 
