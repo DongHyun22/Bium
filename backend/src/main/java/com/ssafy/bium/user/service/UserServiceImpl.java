@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(UserLoginPostReq userLoginPostReq) {
-        return userRepository.findByUserEmail(userLoginPostReq.getUserEmail()).get();
+        return userRepository.findByUserEmailAndUserPw(userLoginPostReq.getUserEmail(), userLoginPostReq.getUserPw()).get();
     }
 
     @Override
