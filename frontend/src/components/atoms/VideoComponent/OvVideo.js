@@ -5,7 +5,6 @@ import { clearAllListeners } from '@reduxjs/toolkit';
 
 const OpenViduVideoComponent = (props) => {
   const join = useSelector((state) => state.video.join);
-  const [failcount, setFailcount] = useState(0);
 
   console.log('제발 빨리 끝내고 잘 수 있으면 좋겠다', props);
   const videoRef = useRef(null);
@@ -87,7 +86,7 @@ const OpenViduVideoComponent = (props) => {
 
   return (
     <>
-      <video id="localVideo" audio={false} autoPlay={true} ref={videoRef} />
+      <video id="localVideo" audio="false" autoPlay={true} ref={videoRef} />
       <canvas id="drawCanvas" ref={canvasRef} />
     </>
   );

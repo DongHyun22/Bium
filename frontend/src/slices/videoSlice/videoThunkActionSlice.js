@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setGameRoomId, setHost } from '../roomSlice/roomSlice';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080';
 
@@ -52,9 +53,14 @@ export const joinSession = createAsyncThunk('videoAction/joinSession', async (pr
 
 async function getToken(props) {
   console.log('bbbbb는?');
+
+  const dispatch = props.props.dispatch;
+  console.log(dispatch);
   const newSessionId = await createSession(props);
+  dispatch(setGameRoomId(newSessionId.gameRoomId));
   const token = await createToken({ props, newSessionId });
-  return token;
+  dispatch(setHost(token.host));
+  return token.sessionId;
 }
 
 function createSession(props) {
@@ -65,8 +71,7 @@ function createSession(props) {
     try {
       const accessToken = sessionStorage.getItem('accessToken');
       console.log(accessToken, '비코좀...');
-      const userEmail = props.props.gameRoomTitle;
-      console.log('여기 들어오나?', userEmail);
+      const userEmail = props.props.userEmail;
 
       const response = await axios.post(
         `http://localhost:8080/api/game/create`,
@@ -116,15 +121,18 @@ function createToken(props) {
       const gameRoomId = props.newSessionId.gameRoomId;
       const gameRoomPw = props.newSessionId.gameRoomPw;
       const customSessionId = props.newSessionId.customSessionId;
+      const host = props.newSessionId.host;
 
       console.log('이메일 출력', userEmail, gameRoomId, gameRoomPw, customSessionId);
+      console.log('호스트호스트 출력출력', host);
       const accessToken = sessionStorage.getItem('accessToken');
       const response = await axios.post(
         `http://localhost:8080/api/game/enter`,
         {
           gameRoomId,
           gameRoomPw,
-          customSessionId
+          customSessionId,
+          host
         },
         {
           params: {
@@ -138,7 +146,7 @@ function createToken(props) {
           }
         }
       );
-      console.log(response);
+      console.log('입장자야', response.data);
       return resolve(response.data);
     } catch (error) {
       console.log(reject('3번 여기오류야....', error));

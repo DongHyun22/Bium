@@ -13,6 +13,7 @@ import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import styles from './GamRoomPage.module.css';
 import { setMySessionId, setStart } from '../../../slices/roomSlice/roomSlice';
 import { useState } from 'react';
+import axios from 'axios';
 
 function GameRoomPage() {
   const dispatch = useDispatch();
@@ -25,8 +26,7 @@ function GameRoomPage() {
 
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
   const roomPassword = useSelector((state) => state.room.roomPassword);
-
-  const start = useSelector((state) => state.room.start);
+  const host = useSelector((state) => state.room.host);
 
   //customSessionId 필요하다
   //추가하자
@@ -43,6 +43,9 @@ function GameRoomPage() {
   const session = useSelector((state) => state.video.session);
   const publisher = useSelector((state) => state.video.publisher);
   const subscribers = useSelector((state) => state.video.subscribers);
+  const gameRoomId = useSelector((state) => state.room.gameRoomId);
+
+  const gameFallCount = useSelector((state) => state.room.gemeFallCount);
 
   const onbeforeunload = (e) => {
     dispatch(leaveSession());
@@ -69,7 +72,7 @@ function GameRoomPage() {
     return () => {
       window.removeEventListener('beforeunload', onbeforeunload);
     };
-  }, []);
+  }, [host]);
 
   // join 의존성
   useEffect(() => {
@@ -104,8 +107,8 @@ function GameRoomPage() {
       session.on('streamCreated', handleStreamCreated);
       session.on('streamDestroyed', handleStreamDestroyed);
       session.on('exception', handleException);
-      dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail }));
-
+      dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail, host, dispatch }));
+      console.log('여기는 호스트 로로고고고고곡고ㅗ', host);
       // Clean-up 함수 등록
       return () => {
         session.off('streamCreated', handleStreamCreated);
@@ -150,21 +153,69 @@ function GameRoomPage() {
       });
     }
   };
+
+  const gameStart = async () => {
+    try {
+      console.log('gameroom ID니까 ', gameRoomId);
+      const response = await axios
+        .post(
+          `http://localhost:8080/api/game/start`,
+          { gameRoomId },
+          {
+            params: { gameRoomId },
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Methods': 'POST'
+            }
+          }
+        )
+        .then(() => {
+          return response.data;
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const fallAxios = async () => {
+    try {
+      console.log('탈락 통신 테스트 ', gameRoomId);
+      console.log('탈락 통신 이메일 ', userEmail);
+
+      const response = await axios
+        .post(
+          `http://localhost:8080/api/game/over`,
+          { gameRoomId: gameRoomId, gameRecord: 23 },
+          {
+            params: { userEmail: userEmail },
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Methods': 'POST'
+            }
+          }
+        )
+        .then(() => {
+          return response.data;
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div>
       {/* join 이후 화면 */}
       {session !== undefined ? (
         <div id="session">
           <div id="session-header">
-            <h1 id="session-title">{mySessionId}</h1>
+            <h1 id="session-title">{gameRoomTitle}</h1>
           </div>
           <div id="session-sidebar">
             <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={handleLeaveSession} value="Leave session" />
             <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
-            <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
-          </div>
-          <div id="room-information">
-            <h1 id="room-name">{gameRoomTitle}</h1>
+            {host === true ? <button>이 버 튼</button> : null}
+            <button onClick={fallAxios}>탈락버튼</button>
           </div>
           <div className={styles.backimage}>
             <div id="video-container">
@@ -184,6 +235,7 @@ function GameRoomPage() {
             </div>
             <button
               onClick={() => {
+                gameStart();
                 startSignal(publisher);
               }}
             >
