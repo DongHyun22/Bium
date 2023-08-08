@@ -1,7 +1,10 @@
 package com.ssafy.bium.user.controller;
 
+import com.ssafy.bium.common.exception.UserLoginException;
 import com.ssafy.bium.image.Image;
 import com.ssafy.bium.image.response.ImageDataGetRes;
+import com.ssafy.bium.jwt.Token;
+import com.ssafy.bium.jwt.service.JwtService;
 import com.ssafy.bium.user.User;
 import com.ssafy.bium.user.repository.UserRepository;
 import com.ssafy.bium.user.request.FilePostReq;
@@ -39,6 +42,8 @@ public class UserController {
     public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
+    private final JwtService jwtService;
+
     private final UserRepository userRepository;
 
     @Value("${file.imgPath}")
@@ -46,10 +51,25 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginPostReq userLoginPostReq) {
+
+        User loginUser = null;
+
+        try {
+            loginUser = userService.login(userLoginPostReq);
+        } catch (UserLoginException e) {
+            logger.error("로그인 실패: {}", e);
+            return new ResponseEntity<>("아이디 혹은 비밀번호를 확인해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
         Map<String, Object> resultMap = new HashMap<>();
 
-        userService.login(userLoginPostReq);
-        resultMap.put("httpHeaders", "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjI5ODcwNzQ2NjJ9.lXRvR1Xv_W_WdAz15uw5VG4G6myl-fuj75tULle6vLs");
+        Token token = jwtService.create(userLoginPostReq.getUserEmail());
+        userService.saveRefreshToken(userLoginPostReq.getUserEmail(), token.getRefresh());
+
+        logger.debug("로그인 accessToken 정보 : {}", token.getAccess());
+        logger.debug("로그인 refreshToken 정보 : {}", token.getRefresh());
+
+        resultMap.put("httpHeaders", token.getAccess());
         resultMap.put("message", "success");
 
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
@@ -141,7 +161,7 @@ public class UserController {
     // 이미지 저장
     @PostMapping("/profile/img/{userEmail}")
     public ResponseEntity<?> setProfileImg(@PathVariable(value = "userEmail") String userEmail,
-                                           @RequestPart MultipartFile file,
+                                           @RequestParam("files") MultipartFile file,
                                            @RequestParam(value = "imgType") int imgType) throws Exception {
         logger.debug("MultipartFile.isEmpty : {}", file.isEmpty());
 

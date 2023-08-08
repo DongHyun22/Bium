@@ -1,5 +1,7 @@
 package com.ssafy.bium.user.service;
 
+import com.ssafy.bium.common.exception.ExceptionMessage;
+import com.ssafy.bium.common.exception.UserLoginException;
 import com.ssafy.bium.image.Image;
 import com.ssafy.bium.image.repository.ImageRepository;
 import com.ssafy.bium.user.User;
@@ -73,7 +75,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(UserLoginPostReq userLoginPostReq) {
-        return userRepository.findByUserEmailAndUserPw(userLoginPostReq.getUserEmail(), userLoginPostReq.getUserPw()).get();
+
+        Optional<User> user = userRepository.findByUserEmailAndUserPw(userLoginPostReq.getUserEmail(), userLoginPostReq.getUserPw());
+
+        if (user.isEmpty()) {
+            throw new UserLoginException(ExceptionMessage.LOGIN_EXCEPTION);
+        }
+
+        User loginUser = user.get();
+        return loginUser;
+    }
+
+    @Override
+    public void saveRefreshToken(String userEmail, String refreshToken) {
+
+        User user = getUser(userEmail);
+        user.changeToken(refreshToken);
+        userRepository.save(user);
+    }
+
+    @Override
+    public String getRefreshToken(String userEmail) {
+
+        User user = getUser(userEmail);
+        return user.getToken();
     }
 
     @Override
@@ -93,6 +118,7 @@ public class UserServiceImpl implements UserService {
     public int modifyProfile(UserModifyPostReq userModifyPostReq) {
 
         Optional<User> optionalUser = userRepository.findByUserEmail(userModifyPostReq.getUserEmail());
+
         if (optionalUser.isEmpty()) {
             System.out.println("해당 계정이 존재하지 않음");
             return 0;
@@ -186,4 +212,12 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    private User getUser(String userEmail) {
+
+        Optional<User> findUser = userRepository.findByUserEmail(userEmail);
+        if (findUser.isEmpty()) {
+            throw new UserLoginException("해당 계정이 존재하지 않음");
+        }
+        return findUser.get();
+    }
 }
