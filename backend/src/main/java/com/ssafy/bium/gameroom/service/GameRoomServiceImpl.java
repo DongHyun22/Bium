@@ -233,7 +233,7 @@ public class GameRoomServiceImpl implements GameRoomService {
     }
 
     @Override
-    public List<UserGameRecordDto> RecordGameRoom(String gameRoomId) {
+    public List<UserGameRecordDto> StopGameRoom(String gameRoomId) {
         HashOperations<String, String, String> hash = redisTemplate.opsForHash();
         SetOperations<String, String> set = gameRoomNum.opsForSet();
         Set<String> gameNum = set.members("game");
