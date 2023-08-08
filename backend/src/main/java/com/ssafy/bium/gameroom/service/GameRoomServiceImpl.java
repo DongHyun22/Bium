@@ -50,7 +50,7 @@ public class GameRoomServiceImpl implements GameRoomService {
                 .map(gameRoom -> new GameRoomListDto(
                         gameRoom.getCustomSessionId(),
                         gameRoom.getGameRoomTitle(),
-                        gameRoom.isStart(),
+                        gameRoom.getStart(),
                         gameRoom.getGameRoomMovie(),
                         gameRoom.getCurPeople(),
                         gameRoom.getMaxPeople()))
@@ -74,7 +74,7 @@ public class GameRoomServiceImpl implements GameRoomService {
             GameRoom gameRoom = GameRoom.builder()
                     .gameRoomId(String.valueOf(gameRoomIndex))
                     .gameRoomTitle(gameRoomDto.getGameRoomTitle())
-                    .start(false)
+                    .start("false")
                     .gameRoomPw(gameRoomDto.getGameRoomPw())
                     .gameRoomMovie(gameRoomDto.getGameRoomMovie())
                     .curPeople(1)
@@ -156,7 +156,7 @@ public class GameRoomServiceImpl implements GameRoomService {
         GameRoom gameRoom = GameRoom.builder()
                 .gameRoomId(request.getGameRoomId())
                 .gameRoomTitle(request.getGameRoomTitle())
-                .start(false)
+                .start("false")
                 .gameRoomPw(request.getGameRoomPw())
                 .gameRoomMovie(request.getGameRoomMovie())
                 .curPeople(cur)
@@ -168,9 +168,8 @@ public class GameRoomServiceImpl implements GameRoomService {
     @Override
     public String outGameRoom(String gameId) {
         String gameRoomId = (String) redisTemplate.opsForHash().get("game:" + gameId, "gameRoomId");
-        String temp = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "start");
-        boolean start = Boolean.parseBoolean(temp);
-        if (!start) {
+        String start = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "start");
+        if (start.equals("")) {
             redisTemplate.delete("game:" + gameId);
             redisTemplate.opsForSet().remove("game", Integer.parseInt(gameId));
         }
@@ -234,7 +233,7 @@ public class GameRoomServiceImpl implements GameRoomService {
     }
 
     @Override
-    public List<UserGameRecordDto> RecordGameRoom(String gameRoomId) {
+    public List<UserGameRecordDto> StopGameRoom(String gameRoomId) {
         HashOperations<String, String, String> hash = redisTemplate.opsForHash();
         SetOperations<String, String> set = gameRoomNum.opsForSet();
         Set<String> gameNum = set.members("game");
