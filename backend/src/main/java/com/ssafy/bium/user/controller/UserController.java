@@ -75,21 +75,6 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 
-    // 로그아웃
-    @GetMapping("/logout/{userEmail}")
-    public ResponseEntity<?> logout(@PathVariable("userEmail") String userId) {
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
-        try {
-            resultMap.put("message", "success");
-            status = HttpStatus.ACCEPTED;
-        } catch (Exception e) {
-            resultMap.put("message", e.getMessage());
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-    }
-
     // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserRegisterPostReq registerInfo) {
