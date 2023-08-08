@@ -169,7 +169,7 @@ public class GameRoomServiceImpl implements GameRoomService {
     public String outGameRoom(String gameId) {
         String gameRoomId = (String) redisTemplate.opsForHash().get("game:" + gameId, "gameRoomId");
         String start = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "start");
-        if (start.equals("")) {
+        if (start.equals("false")) {
             redisTemplate.delete("game:" + gameId);
             redisTemplate.opsForSet().remove("game", Integer.parseInt(gameId));
         }
