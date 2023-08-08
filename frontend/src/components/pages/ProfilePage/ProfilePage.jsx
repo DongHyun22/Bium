@@ -118,16 +118,13 @@ export function ProfilePage() {
           const originalFile = uploadResponse.data.originalFile;
 
           const getResponse = await axios.get(
-            `http://localhost:8080/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`
+            `http://localhost:8080/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
+            {responseType: "blob"}
           );
 
-          // const newFile = new File([getResponse.data], 'f58ec2ba-414d-47d6-bf53-ecb882956451');
+          let imgSrc = URL.createObjectURL(getResponse.data);
 
-          // const reader = new FileReader();
-          // reader.readAsDataURL(newFile);
-          // console.log('dfadadsd', reader);
-
-          console.log('조회 성공', getResponse);
+          console.log('조회 성공', imgSrc);
         } else {
           console.log('서버 응답 오류');
         }

@@ -146,7 +146,7 @@ public class UserController {
     // 이미지 저장
     @PostMapping("/profile/img/{userEmail}")
     public ResponseEntity<?> setProfileImg(@PathVariable(value = "userEmail") String userEmail,
-                                           @RequestParam("files") MultipartFile file,
+                                           @RequestParam("file") MultipartFile file,
                                            @RequestParam(value = "imgType") int imgType) throws Exception {
         logger.debug("MultipartFile.isEmpty : {}", file.isEmpty());
 
