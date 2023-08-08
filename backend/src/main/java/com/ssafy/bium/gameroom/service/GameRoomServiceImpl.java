@@ -22,6 +22,7 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -77,7 +78,7 @@ public class GameRoomServiceImpl implements GameRoomService {
                     .start("false")
                     .gameRoomPw(gameRoomDto.getGameRoomPw())
                     .gameRoomMovie(gameRoomDto.getGameRoomMovie())
-                    .curPeople(1)
+                    .curPeople(0)
                     .maxPeople(gameRoomDto.getMaxPeople())
                     .customSessionId(sessionId)
                     .build();
@@ -96,16 +97,13 @@ public class GameRoomServiceImpl implements GameRoomService {
         return enterGameRoomDto;
     }
 
+//    @Transactional 왜 적용이 안되지?
     @Override
     public EnterUserDto enterGameRoom(EnterGameRoomDto enterGameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException {
         String gameRoomId = enterGameRoomDto.getGameRoomId();
         // TODO: 2023-08-04 패스워드에 맞춰서 입장
-        // TODO: 2023-08-06 (006) cur인원, 진행중 여부는 openvidu에서 설정 할 수 있을 것 같아요 
         // 게임방의 max인원이 꽉차면 입장 불가, 게임방이 진행중(start)이면 입장 불가, pw가 다르면 입장 불가
-        int cur = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "curPeople"));
-//        GameRoom gameRoom = gameRoomRepository.findGameRoomByGameRoomId("5");
-        // 게임방의 현재 인원 1 증가
-        redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "curPeople", String.valueOf(++cur));
+
         // 유저게임방에 참가자 생성
         RedisAtomicLong counterUGR = new RedisAtomicLong("gameIndex", redisTemplate.getConnectionFactory());
         Long gameIndex = counterUGR.incrementAndGet();
@@ -113,7 +111,10 @@ public class GameRoomServiceImpl implements GameRoomService {
         Map<String, Object> params = new HashMap<>();
         params.put("customSessionId", enterGameRoomDto.getCustomSessionId());
         String sessionId = openviduService.createConnection(enterGameRoomDto.getCustomSessionId(), params);
-        System.out.println(sessionId);
+
+        int cur = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "curPeople"));
+        redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "curPeople", String.valueOf(++cur));
+
         Game game = Game.builder()
                 .gameId(String.valueOf(gameIndex))
                 .gameRoomId(String.valueOf(gameRoomId))
@@ -172,6 +173,8 @@ public class GameRoomServiceImpl implements GameRoomService {
         if (start.equals("false")) {
             redisTemplate.delete("game:" + gameId);
             redisTemplate.opsForSet().remove("game", Integer.parseInt(gameId));
+            int cur = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "curPeople"));
+            redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "curPeople", String.valueOf(--cur));
         }
 //        RedisAtomicLong counterUGR = new RedisAtomicLong("ugri", redisTemplate.getConnectionFactory());
 //        counterUGR.decrementAndGet();
