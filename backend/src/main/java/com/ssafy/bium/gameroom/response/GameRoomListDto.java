@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 public class GameRoomListDto {
     private String customSessionId;
     private String gameRoomTitle;
-    private boolean start;
+    private String start;
     private int gameRoomMovie;
     private int curPeople;
     private int maxPeople;
 
     @Builder
-    public GameRoomListDto(String customSessionId, String gameRoomTitle, boolean start, int gameRoomMovie, int curPeople, int maxPeople) {
+    public GameRoomListDto(String customSessionId, String gameRoomTitle, String start, int gameRoomMovie, int curPeople, int maxPeople) {
         this.customSessionId = customSessionId;
         this.gameRoomTitle = gameRoomTitle;
         this.start = start;
