@@ -161,6 +161,7 @@ function GameRoomPage() {
           <div id="session-sidebar">
             <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={handleLeaveSession} value="Leave session" />
             <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
+            <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
           </div>
           <div id="room-information">
             <h1 id="room-name">{gameRoomTitle}</h1>

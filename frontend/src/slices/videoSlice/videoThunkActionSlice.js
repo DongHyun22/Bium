@@ -16,6 +16,7 @@ export const joinSession = createAsyncThunk('videoAction/joinSession', async (pr
   const roomTitle = props.roomTitle;
   const roomPassword = props.roomPassword;
   const session = props.session;
+  const gameRoomId = '';
 
   console.log(123);
   console.log(456);
@@ -112,8 +113,8 @@ function createToken(props) {
   return new Promise(async (resolve, reject) => {
     try {
       const userEmail = props.props.props.userEmail;
-      const gameRoomId = props.props.props.roomTitle;
-      const gameRoomPw = props.props.props.roomPassword;
+      const gameRoomId = props.newSessionId.gameRoomId;
+      const gameRoomPw = props.newSessionId.gameRoomPw;
       const customSessionId = props.newSessionId.customSessionId;
 
       console.log('이메일 출력', userEmail, gameRoomId, gameRoomPw, customSessionId);
@@ -121,9 +122,9 @@ function createToken(props) {
       const response = await axios.post(
         `http://localhost:8080/api/game/enter`,
         {
-          gameRoomId: 1,
-          gameRoomPw: '',
-          customSessionId: customSessionId
+          gameRoomId,
+          gameRoomPw,
+          customSessionId
         },
         {
           params: {
