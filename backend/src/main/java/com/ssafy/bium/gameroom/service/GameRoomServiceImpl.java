@@ -6,12 +6,16 @@ import com.ssafy.bium.gameroom.repository.GameRoomRepository;
 import com.ssafy.bium.gameroom.repository.GameRepository;
 import com.ssafy.bium.gameroom.request.*;
 import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
+import com.ssafy.bium.gameroom.response.EnterUserDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
 import com.ssafy.bium.gameroom.response.UserGameRecordDto;
 import com.ssafy.bium.openvidu.OpenviduService;
+import com.ssafy.bium.user.User;
+import com.ssafy.bium.user.repository.UserRepository;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
@@ -23,12 +27,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GameRoomServiceImpl implements GameRoomService {
     private final GameRoomRepository gameRoomRepository;
     private final GameRepository userGameRoomRepository;
     private final RedisTemplate<String, String> gameRoomNum;
     private final RedisTemplate<String, GameRoom> redisTemplate;
     private final OpenviduService openviduService;
+    private final UserRepository userRepository;
 
     @Override
     public String test(String sessionId) throws OpenViduJavaClientException, OpenViduHttpException {
@@ -57,15 +63,15 @@ public class GameRoomServiceImpl implements GameRoomService {
         RedisAtomicLong counterGR = new RedisAtomicLong("gameRoomIndex", redisTemplate.getConnectionFactory());
         Map<String, Object> params = new HashMap<>();
         String sessionId;
-        Long gri = counterGR.get();
+        Long gameRoomIndex = counterGR.get();
         
         if(gameRoomDto.getCustomSessionId().isEmpty()){
-            gri = counterGR.incrementAndGet();
-            sessionId = "gameRoom" + gri;
+            gameRoomIndex = counterGR.incrementAndGet();
+            sessionId = "gameRoom" + gameRoomIndex;
             params.put("customSessionId", sessionId);
             openviduService.initializeSession(params);
             GameRoom gameRoom = GameRoom.builder()
-                    .gameRoomId(String.valueOf(gri))
+                    .gameRoomId(String.valueOf(gameRoomIndex))
                     .gameRoomTitle(gameRoomDto.getGameRoomTitle())
                     .start(false)
                     .gameRoomPw(gameRoomDto.getGameRoomPw())
@@ -80,7 +86,7 @@ public class GameRoomServiceImpl implements GameRoomService {
             sessionId = gameRoomDto.getCustomSessionId();
         }
         EnterGameRoomDto enterGameRoomDto = EnterGameRoomDto.builder()
-                .gameRoomId(String.valueOf(gri))
+                .gameRoomId(String.valueOf(gameRoomIndex))
                 .gameRoomPw(gameRoomDto.getGameRoomPw())
                 .customSessionId(sessionId)
                 .build();
@@ -88,7 +94,7 @@ public class GameRoomServiceImpl implements GameRoomService {
     }
 
     @Override
-    public String enterGameRoom(EnterGameRoomDto enterGameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException {
+    public EnterUserDto enterGameRoom(EnterGameRoomDto enterGameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException {
         String gameRoomId = enterGameRoomDto.getGameRoomId();
         // TODO: 2023-08-04 패스워드에 맞춰서 입장
         // TODO: 2023-08-06 (006) cur인원, 진행중 여부는 openvidu에서 설정 할 수 있을 것 같아요 
@@ -98,15 +104,15 @@ public class GameRoomServiceImpl implements GameRoomService {
         // 게임방의 현재 인원 1 증가
         redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "curPeople", String.valueOf(++cur));
         // 유저게임방에 참가자 생성
-        RedisAtomicLong counterUGR = new RedisAtomicLong("gi", redisTemplate.getConnectionFactory());
-        Long ugri = counterUGR.incrementAndGet();
+        RedisAtomicLong counterUGR = new RedisAtomicLong("gameIndex", redisTemplate.getConnectionFactory());
+        Long gameIndex = counterUGR.incrementAndGet();
         
         Map<String, Object> params = new HashMap<>();
         params.put("customSessionId", enterGameRoomDto.getCustomSessionId());
         String sessionId = openviduService.createConnection(enterGameRoomDto.getCustomSessionId(), params);
         System.out.println(sessionId);
         Game game = Game.builder()
-                .gameId(String.valueOf(ugri))
+                .gameId(String.valueOf(gameIndex))
                 .gameRoomId(String.valueOf(gameRoomId))
                 .userEmail(userEmail)
                 .isHost(false)
@@ -116,7 +122,11 @@ public class GameRoomServiceImpl implements GameRoomService {
         userGameRoomRepository.save(game);
         // 비밀번호
 
-        return sessionId;
+        EnterUserDto enterUserDto = EnterUserDto.builder()
+                .sessionId(sessionId)
+                .gameId(String.valueOf(gameIndex))
+                .build();
+        return enterUserDto;
         // 입장한 사람의 정보를 뿌려줘야되네
     }
 
@@ -175,7 +185,17 @@ public class GameRoomServiceImpl implements GameRoomService {
 
     @Override
     public String overGame(OverGameDto request) {
-        redisTemplate.opsForHash().put("game:" + request.getGameId(), "gameRecord", String.valueOf(request.getGameRecord()));
+        String gameId = request.getGameId();
+        String userEmail = (String) redisTemplate.opsForHash().get("game:" + gameId, "userEmail");
+        Optional<User> findUser = userRepository.findByUserEmail(userEmail);
+        if(findUser.isEmpty()){
+            log.debug("{} - 해당 유저는 존재하지 않습니다.", userEmail);
+            return "해당하는 유저가 없습니다."
+;        }
+        findUser.get().saveBium(request.getGameRecord());
+        userRepository.save(findUser.get());
+        // 비움량 저장
+        redisTemplate.opsForHash().put("game:" + gameId, "gameRecord", String.valueOf(request.getGameRecord()));
         return request.getGameId();
     }
 
