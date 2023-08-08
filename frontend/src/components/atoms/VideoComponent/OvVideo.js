@@ -1,9 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as faceapi from 'face-api.js';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setGameFallCount } from '../../../slices/roomSlice/roomSlice';
 
 const OpenViduVideoComponent = (props) => {
+  const dispatch = useDispatch();
   const join = useSelector((state) => state.video.join);
+  const gameFallCount = useSelector((state) => state.room.gemeFallCount);
 
   console.log('제발 빨리 끝내고 잘 수 있으면 좋겠다', props);
   const videoRef = useRef(null);
@@ -48,6 +51,9 @@ const OpenViduVideoComponent = (props) => {
       if (videoRef.current !== null) {
         const detections = await faceapi.detectSingleFace(videoElement, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
         console.log('짜증나네');
+        if (detections.expressions.neutral < 0.6) {
+          dispatch(setGameFallCount(gameFallCount + 1));
+        }
 
         canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoElement);
         faceapi.matchDimensions(canvasRef.current, {

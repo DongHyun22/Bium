@@ -11,6 +11,7 @@ import { setMySessionId, setStart } from '../../../slices/roomSlice/roomSlice';
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
 import styles from './GamRoomPage.module.css';
+import { FaceMatch } from 'face-api.js';
 
 function GameRoomPage() {
   const dispatch = useDispatch();
@@ -61,6 +62,11 @@ function GameRoomPage() {
     }
   };
 
+  useEffect(() => {
+    if (gameFallCount >= 2) {
+      fallAxios();
+    }
+  }, [gameFallCount]);
   // 컴포넌트 마운트, 언마운트 시 session 값 초기화
   useEffect(() => {
     // componentDidMount
