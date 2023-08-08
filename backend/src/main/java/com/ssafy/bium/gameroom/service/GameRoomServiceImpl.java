@@ -1,5 +1,7 @@
 package com.ssafy.bium.gameroom.service;
 
+import com.ssafy.bium.common.exception.ExceptionMessage;
+import com.ssafy.bium.common.exception.PasswordException;
 import com.ssafy.bium.gameroom.GameRoom;
 import com.ssafy.bium.gameroom.Game;
 import com.ssafy.bium.gameroom.repository.GameRoomRepository;
@@ -25,6 +27,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.ssafy.bium.common.exception.ExceptionMessage.NOT_MATCHING_PASSWORD;
 
 @Service
 @RequiredArgsConstructor
@@ -101,8 +105,11 @@ public class GameRoomServiceImpl implements GameRoomService {
     @Override
     public EnterUserDto enterGameRoom(EnterGameRoomDto enterGameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException {
         String gameRoomId = enterGameRoomDto.getGameRoomId();
-        // TODO: 2023-08-04 패스워드에 맞춰서 입장
-        // 게임방의 max인원이 꽉차면 입장 불가, 게임방이 진행중(start)이면 입장 불가, pw가 다르면 입장 불가
+        String gameRoomPw = enterGameRoomDto.getGameRoomPw();
+        String roomPw = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "gameRoomPw");
+        if(!gameRoomPw.equals(roomPw)){
+            throw new PasswordException(NOT_MATCHING_PASSWORD);
+        }
 
         // 유저게임방에 참가자 생성
         RedisAtomicLong counterUGR = new RedisAtomicLong("gameIndex", redisTemplate.getConnectionFactory());
