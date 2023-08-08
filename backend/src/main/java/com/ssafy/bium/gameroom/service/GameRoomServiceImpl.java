@@ -64,6 +64,7 @@ public class GameRoomServiceImpl implements GameRoomService {
         Map<String, Object> params = new HashMap<>();
         String sessionId;
         Long gameRoomIndex = counterGR.get();
+        boolean host = false;
         
         if(gameRoomDto.getCustomSessionId().isEmpty()){
             gameRoomIndex = counterGR.incrementAndGet();
@@ -81,6 +82,7 @@ public class GameRoomServiceImpl implements GameRoomService {
                     .customSessionId(sessionId)
                     .build();
             gameRoomRepository.save(gameRoom).getCustomSessionId();
+            host = true;
         }
         else{
             sessionId = gameRoomDto.getCustomSessionId();
@@ -89,6 +91,7 @@ public class GameRoomServiceImpl implements GameRoomService {
                 .gameRoomId(String.valueOf(gameRoomIndex))
                 .gameRoomPw(gameRoomDto.getGameRoomPw())
                 .customSessionId(sessionId)
+                .host(host)
                 .build();
         return enterGameRoomDto;
     }
@@ -115,7 +118,7 @@ public class GameRoomServiceImpl implements GameRoomService {
                 .gameId(String.valueOf(gameIndex))
                 .gameRoomId(String.valueOf(gameRoomId))
                 .userEmail(userEmail)
-                .isHost(false)
+                .host(enterGameRoomDto.isHost())
                 .sequence(cur)
                 .gameRecord(0L)
                 .build();
@@ -125,6 +128,7 @@ public class GameRoomServiceImpl implements GameRoomService {
         EnterUserDto enterUserDto = EnterUserDto.builder()
                 .sessionId(sessionId)
                 .gameId(String.valueOf(gameIndex))
+                .host(enterGameRoomDto.isHost())
                 .build();
         return enterUserDto;
         // 입장한 사람의 정보를 뿌려줘야되네
