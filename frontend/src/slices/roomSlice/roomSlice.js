@@ -18,19 +18,15 @@ export const roomSlice = createSlice({
   initialState,
   reducers: {
     setGameFallCount: (state, action) => {
-      console.log('fallCount Action !!!!!', action.payload);
       state.gameFallCount = action.payload;
     },
     setGameRoomId: (state, action) => {
-      console.log('gameroom Action !!!!!', action.payload);
       state.gameRoomId = action.payload;
     },
     setHost: (state, action) => {
-      console.log('host Action !!!!!', action.payload);
       state.host = action.payload;
     },
     setStart: (state, action) => {
-      console.log('start Action!!!!!!', action.payload);
       state.start = action.payload;
     },
     setRoomTitle: (state, action) => {

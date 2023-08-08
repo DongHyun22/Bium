@@ -1,19 +1,16 @@
-import { OpenVidu } from 'openvidu-browser';
-
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
-
-import Timer from '../../atoms/Timer/Timer';
-import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
-
-import styles from './GamRoomPage.module.css';
-import { setMySessionId, setStart } from '../../../slices/roomSlice/roomSlice';
-import { useState } from 'react';
+import { OpenVidu } from 'openvidu-browser';
 import axios from 'axios';
+
+import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
+import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
+import { setMySessionId, setStart } from '../../../slices/roomSlice/roomSlice';
+
+import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
+import Timer from '../../atoms/Timer/Timer';
+import styles from './GamRoomPage.module.css';
 
 function GameRoomPage() {
   const dispatch = useDispatch();
@@ -21,7 +18,6 @@ function GameRoomPage() {
   const navigate = useNavigate();
 
   const customSessionId = location.state;
-  console.log('uuuuuuu', customSessionId);
   const userEmail = useSelector((state) => state.user.userEmail);
 
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
@@ -46,6 +42,7 @@ function GameRoomPage() {
   const gameRoomId = useSelector((state) => state.room.gameRoomId);
 
   const gameFallCount = useSelector((state) => state.room.gemeFallCount);
+  const userlist = useSelector((state) => state.room.userlist);
 
   const onbeforeunload = (e) => {
     dispatch(leaveSession());
@@ -79,8 +76,7 @@ function GameRoomPage() {
     if (join) {
       const OV = new OpenVidu();
       const session = OV.initSession();
-      console.log('OV:', OV);
-      console.log('session:', session);
+
       dispatch(initOVSession({ OV, session }));
     }
   }, [join]);
@@ -92,7 +88,6 @@ function GameRoomPage() {
 
       const handleStreamCreated = (event) => {
         const subscriber = session.subscribe(event.stream, undefined);
-        console.log('나갔니?');
         dispatch(enteredSubscriber(subscriber));
       };
       // On every Stream destroyed...
@@ -108,7 +103,6 @@ function GameRoomPage() {
       session.on('streamDestroyed', handleStreamDestroyed);
       session.on('exception', handleException);
       dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail, host, dispatch }));
-      console.log('여기는 호스트 로로고고고고곡고ㅗ', host);
       // Clean-up 함수 등록
       return () => {
         session.off('streamCreated', handleStreamCreated);
@@ -130,7 +124,6 @@ function GameRoomPage() {
 
   // --- 3) Specify the actions when events take place in the session ---
   const startSignal = (publisher) => {
-    console.log('여기는 스트림 매니저', publisher);
     const data = {
       message: 'start'
     };
@@ -138,16 +131,13 @@ function GameRoomPage() {
       data: JSON.stringify(data),
       type: 'timer'
     });
-    console.log('타이머 시작', data);
 
     if (publisher !== undefined) {
       console.log('쿠키 세션에 이벤트 추가', publisher);
       publisher.stream.session.on('signal:timer', (e) => {
-        console.log(e);
         const data = JSON.parse(e.data);
-        console.log('여기는 데이터', data);
+
         if (data.message === 'start') {
-          console.log(333);
           dispatch(setStart(true));
         }
       });
@@ -178,8 +168,11 @@ function GameRoomPage() {
     }
   };
 
+  //게임 탈락
   const fallAxios = async () => {
     try {
+      console.log('p;ppppppp', subscribers);
+
       console.log('탈락 통신 테스트 ', gameRoomId);
       console.log('탈락 통신 이메일 ', userEmail);
 

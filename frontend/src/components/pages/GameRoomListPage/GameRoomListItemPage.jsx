@@ -6,7 +6,7 @@ import { setJoin } from '../../../slices/videoSlice/videoSlice';
 export const GameRoomListItem = (props) => {
   const navigator = useNavigate();
   const dispatch = useDispatch();
-  console.log('자식', props);
+
   const gameRoomTitle = props.allRoom.gameRoomTitle;
   const roomPeople = props.allRoom.maxPeople;
   const customSessionId = props.allRoom.customSessionId;

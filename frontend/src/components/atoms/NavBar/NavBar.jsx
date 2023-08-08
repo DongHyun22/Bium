@@ -9,8 +9,6 @@ export const NavBar = () => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
   const userEmail = useSelector((state) => state.user.userEmail);
-  console.log('token', token);
-  console.log('userEmail', userEmail);
   return (
     <div>
       {token === null ? (

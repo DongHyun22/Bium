@@ -54,7 +54,6 @@ export function ProfilePage() {
         userNickname: name,
         userPw: password
       };
-      console.log(data);
       const response = await axios.post(`http://localhost:8080/api/profile/modify`, data, {
         headers: {
           'Access-Control-Allow-Origin': '*',
@@ -63,10 +62,8 @@ export function ProfilePage() {
           // Authorization: `Bearer ${accessToken}`
         }
       });
-      
-      console.log(response.data);
+
       if (response.status === 200) {
-        console.log('회원 정보 수정 성공');
         dispatch(setNickname(name));
         // setName(updatedNickname);
         persistor.flush();
@@ -81,7 +78,7 @@ export function ProfilePage() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/profile/delete`, 
+        `http://localhost:8080/api/profile/delete`,
         {},
         {
           params: {
@@ -98,7 +95,6 @@ export function ProfilePage() {
         navigate('/');
       }
     } catch (error) {
-      console.log('에러났어요~');
       if (error.response) {
         console.log(error.response.data);
       } else {
@@ -107,7 +103,6 @@ export function ProfilePage() {
       return error;
     }
   };
-
 
   // 회원 탈퇴 확인 모달을 열고 닫는 함수들
   const openDeleteConfirmModal = () => {
@@ -124,9 +119,7 @@ export function ProfilePage() {
     closeDeleteConfirmModal();
   };
 
-  useEffect(() => {
-    
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -157,22 +150,12 @@ export function ProfilePage() {
               <br />
               <label>
                 비밀번호:
-                <input
-                  type="password"
-                  autoComplete="off"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <input type="password" autoComplete="off" value={password} onChange={(e) => setPassword(e.target.value)} />
               </label>
               <br />
               <label>
                 비밀번호확인:
-                <input
-                  type="password"
-                  autoComplete="off"
-                  value={passwordConfirm}
-                  onChange={(e) => setPasswordConfirm(e.target.value)}
-                />
+                <input type="password" autoComplete="off" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
               </label>
             </form>
             <button onClick={modifyUserInfo}>수정하기</button>

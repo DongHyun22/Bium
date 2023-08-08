@@ -12,7 +12,6 @@ const OpenViduVideoComponent = (props) => {
 
   //모델 불러오기
   const loadModels = () => {
-    console.log('start');
     const MODEL_URL = process.env.PUBLIC_URL + '/models';
 
     Promise.all([
@@ -37,11 +36,10 @@ const OpenViduVideoComponent = (props) => {
       videoRef && loadModels();
     }
     return () => {
-      console.log('stopoadModels');
       clearInterval(loadModels);
-      console.log('stopfaceDtect');
+
       clearInterval(faceMyDetect);
-      console.log('stoplister');
+
       clearAllListeners();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,7 +55,6 @@ const OpenViduVideoComponent = (props) => {
   //내 이미지로부터 인식하고 다시 그려주기
   const faceMyDetect = () => {
     setInterval(async () => {
-      console.log('하하하', videoRef.current);
       const videoElement = document.querySelector('#localVideo');
 
       // DRAW YOU FACE IN WEBCAM

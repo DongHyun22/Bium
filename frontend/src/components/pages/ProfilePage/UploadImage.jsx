@@ -27,7 +27,6 @@ function ImageUpload() {
       // 선택한 파일의 Blob 또는 File 객체를 URL 형태로 변환하는 역할
       setFileImage(file);
       dispatch(setImageId(URL.createObjectURL(file)));
-      console.log('userSliceImage', dispatch(setImageId(file)));
     }
   };
 
