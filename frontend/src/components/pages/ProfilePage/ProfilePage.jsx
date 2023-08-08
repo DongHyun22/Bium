@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { setIsLogin, setUserEmail } from '../../../slices/userSlice';
+import { setIsLogin, setNickname, setUserEmail } from '../../../slices/userSlice';
 import { GetRanking } from '../../organisms/RankingList';
 import useGetBiumTime from '../../../hooks/TimeInquery';
 import axios from 'axios';
+import { persistor } from '../../../store/store';
 
 export function ProfilePage() {
   const { userEmail } = useParams();
@@ -21,7 +22,7 @@ export function ProfilePage() {
   // console.log(confirmIslogin);
 
   // 회원 정보 수정의 기본값은 store 기본값에 한정
-  const [nickname, setNickname] = useState(savedNickname);
+  const [name, setName] = useState(savedNickname);
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const todayBium = useGetBiumTime(savedTodayBium);
@@ -43,18 +44,35 @@ export function ProfilePage() {
 
   const modifyUserInfo = async (e) => {
     e.preventDefault();
-    if (password !== passwordConfirm) {
-      return true;
-    }
+    try {
+      if (password !== passwordConfirm) {
+        return alert('비밀번호가 일치하지 않습니다.');
+      }
 
-    const response = axios.get(` http://localhost:8080/api/profile/modify/${savedEmail}`, {
-      nickname,
-      password
-    });
-
-    if (response.status === 200) {
-      // 통신이 성공한 경우 변경된 닉네임을 다시 스토어에 넣어준다.
-      dispatch(setNickname(response.data.userInfo.userNickname));
+      const data = {
+        userEmail: savedEmail,
+        userNickname: name,
+        userPw: password
+      };
+      console.log(data);
+      const response = await axios.post(`http://localhost:8080/api/profile/modify`, data, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Methods': 'POST'
+          // Authorization: `Bearer ${accessToken}`
+        }
+      });
+      
+      console.log(response.data);
+      if (response.status === 200) {
+        console.log('회원 정보 수정 성공');
+        dispatch(setNickname(name));
+        // setName(updatedNickname);
+        persistor.flush();
+      }
+    } catch (error) {
+      console.error('회원 정보 수정에 실패하였습니다.', error);
     }
   };
 
@@ -62,19 +80,34 @@ export function ProfilePage() {
   const signOutUser = async (e) => {
     e.preventDefault();
     try {
-      const response = axios.post(`http://localhost:8080/api/profile/delete`, {
-        params: {
-          userEmail: savedEmail
+      const response = await axios.post(
+        `http://localhost:8080/api/profile/delete`, 
+        {},
+        {
+          params: {
+            userEmail: savedEmail
+          },
+          headers: {
+            'Content-Type': 'application/json'
+          }
         }
-      });
+      );
+      console.log(response.data);
       if (response.data === 0) {
         sessionStorage.removeItem('accessToken');
         navigate('/');
       }
     } catch (error) {
+      console.log('에러났어요~');
+      if (error.response) {
+        console.log(error.response.data);
+      } else {
+        console.log(error.message);
+      }
       return error;
     }
   };
+
 
   // 회원 탈퇴 확인 모달을 열고 닫는 함수들
   const openDeleteConfirmModal = () => {
@@ -86,20 +119,14 @@ export function ProfilePage() {
   };
 
   // 회원 탈퇴 확인 모달에서 '예, 탈퇴합니다' 버튼을 눌렀을 때의 동작
-  const confirmSignOut = () => {
-    signOutUser();
+  const confirmSignOut = (e) => {
+    signOutUser(e);
     closeDeleteConfirmModal();
   };
 
   useEffect(() => {
-    // 세션 스토리지에서 userEmail 값을
-    const sessionUserEmail = window.sessionStorage.getItem('userEmail');
-
-    // 세션 스토리지와 스토어의 userEmail 값이 다른 경우 스토어를 업데이트합니다.
-    if (sessionUserEmail && (!userEmail || userEmail === '')) {
-      dispatch(setUserEmail(sessionUserEmail));
-    }
-  }, [dispatch]);
+    
+  }, []);
 
   return (
     <>
@@ -116,10 +143,16 @@ export function ProfilePage() {
           <div className={styles.modal}>
             <h2>회원정보 수정</h2>
             <form>
-              <div>{savedNickname}</div>
+              <div>{name}</div>
               <label>
                 닉네임:
-                <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
+                />
               </label>
               <br />
               <label>
