@@ -11,7 +11,7 @@ export const GameRoomListPage = () => {
     try {
       const response = await axios
         .get(
-          'http://localhost:8080/api/game'
+          'https://i9c205.p.ssafy.io/api/game'
           // { sort: 1, keyword: 'qwe' },
           // {
           //   headers: {

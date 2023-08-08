@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://i9c205.p.ssafy.io';
 
 export const joinSession = createAsyncThunk('videoAction/joinSession', async (props) => {
   console.log('제발 joinsession 확ㅇ니좀', props);
@@ -68,7 +68,7 @@ function createSession(props) {
       console.log('여기 들어오나?', userEmail);
 
       const response = await axios.post(
-        `http://localhost:8080/api/game/create`,
+        `https://i9c205.p.ssafy.io/api/game/create`,
         {
           gameRoomTitle: props.props.gameRoomTitle,
           gameRoomMovie: props.props.backgroundImage,
@@ -119,7 +119,7 @@ function createToken(props) {
       console.log('이메일 출력', userEmail, gameRoomId, gameRoomPw, customSessionId);
       const accessToken = sessionStorage.getItem('accessToken');
       const response = await axios.post(
-        `http://localhost:8080/api/game/enter`,
+        `https://i9c205.p.ssafy.io/api/game/enter`,
         {
           gameRoomId: 1,
           gameRoomPw: '',

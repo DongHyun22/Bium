@@ -16,7 +16,7 @@ function GetRanking() {
   useEffect(() => {
     // 랭킹 요청
     axios
-      .get(`http://localhost:8080/api/profile/ranking/${userEmail}`)
+      .get(`https://i9c205.p.ssafy.io/api/profile/ranking/${userEmail}`)
       .then((response) => {
         setRank(response.data.ranking);
         setMyRank(response.data.myRanking);

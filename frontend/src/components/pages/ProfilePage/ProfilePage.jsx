@@ -47,7 +47,7 @@ export function ProfilePage() {
       return true;
     }
 
-    const response = axios.get(` http://localhost:8080/api/profile/modify/${savedEmail}`, {
+    const response = axios.get(` https://i9c205.p.ssafy.io/api/profile/modify/${savedEmail}`, {
       nickname,
       password
     });
@@ -62,7 +62,7 @@ export function ProfilePage() {
   const signOutUser = async (e) => {
     e.preventDefault();
     try {
-      const response = axios.post(`http://localhost:8080/api/profile/delete`, {
+      const response = axios.post(`https://i9c205.p.ssafy.io/api/profile/delete`, {
         params: {
           userEmail: savedEmail
         }
