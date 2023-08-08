@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { setGameRoomId, setHost } from '../roomSlice/roomSlice';
+import { setGameId, setGameRoomId, setHost, setMySessionId } from '../roomSlice/roomSlice';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080';
 
@@ -47,8 +47,10 @@ export const joinSession = createAsyncThunk('videoAction/joinSession', async (pr
 async function getToken(props) {
   const dispatch = props.props.dispatch;
   const newSessionId = await createSession(props);
+  dispatch(setMySessionId(newSessionId.customSessionId));
   dispatch(setGameRoomId(newSessionId.gameRoomId));
   const token = await createToken({ props, newSessionId });
+  dispatch(setGameId(token.gameId));
   dispatch(setHost(token.host));
   return token.sessionId;
 }
@@ -82,6 +84,7 @@ function createSession(props) {
       );
       setTimeout(() => {
         // console.log('개발자 설정을 통한 강제 리턴');
+        console.log('여기는세션', response.data);
         return resolve(response.data);
       }, 1000);
       return response.data;
@@ -125,6 +128,8 @@ function createToken(props) {
           }
         }
       );
+      console.log('여기는토큰', response.data);
+
       return resolve(response.data);
     } catch (error) {}
   });

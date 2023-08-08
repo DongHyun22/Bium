@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import { useSelector } from 'react-redux';
-import { clearAllListeners } from '@reduxjs/toolkit';
 
 const OpenViduVideoComponent = (props) => {
   const join = useSelector((state) => state.video.join);
@@ -23,25 +22,14 @@ const OpenViduVideoComponent = (props) => {
       faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
 
       // faceapi.nets.face
-    ]).then((e) => {
-      if (join) {
-        faceMyDetect();
-      }
-    });
+    ]);
   };
-
   // 한번 실행;
   useEffect(() => {
     if (join) {
       videoRef && loadModels();
+      faceMyDetect();
     }
-    return () => {
-      clearInterval(loadModels);
-
-      clearInterval(faceMyDetect);
-
-      clearAllListeners();
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -49,17 +37,18 @@ const OpenViduVideoComponent = (props) => {
     if (props && videoRef.current) {
       props.streamManager.addVideoElement(videoRef.current);
     }
-    return;
+    return () => {};
   }, [props]);
 
-  //내 이미지로부터 인식하고 다시 그려주기
   const faceMyDetect = () => {
     setInterval(async () => {
       const videoElement = document.querySelector('#localVideo');
-
+      console.log('히히', videoRef);
       // DRAW YOU FACE IN WEBCAM
       if (videoRef.current !== null) {
         const detections = await faceapi.detectSingleFace(videoElement, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+        console.log('짜증나네');
+
         canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoElement);
         faceapi.matchDimensions(canvasRef.current, {
           width: 480,
@@ -75,12 +64,9 @@ const OpenViduVideoComponent = (props) => {
           faceapi.draw.drawFaceLandmarks(canvasRef.current, resized);
           faceapi.draw.drawFaceExpressions(canvasRef.current, resized);
         }
-      } else {
-        return;
       }
-    }, 8000);
+    }, 2000);
   };
-
   return (
     <>
       <video id="localVideo" audio="false" autoPlay={true} ref={videoRef} />

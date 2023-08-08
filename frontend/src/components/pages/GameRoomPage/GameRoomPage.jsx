@@ -42,7 +42,7 @@ function GameRoomPage() {
   const gameRoomId = useSelector((state) => state.room.gameRoomId);
 
   const gameFallCount = useSelector((state) => state.room.gemeFallCount);
-  const userlist = useSelector((state) => state.room.userlist);
+  const gameId = useSelector((state) => state.room.gameId);
 
   const onbeforeunload = (e) => {
     dispatch(leaveSession());
@@ -161,27 +161,48 @@ function GameRoomPage() {
           }
         )
         .then(() => {
-          return response.data;
+          return;
         });
     } catch (err) {
       console.log(err);
     }
   };
 
+  const endGame = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/game/stop`,
+
+        {
+          params: {
+            gameRoomId: gameRoomId
+          },
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'POST'
+          }
+        }
+      );
+      return;
+    } catch (err) {
+      console.log(err);
+    }
+  };
   //게임 탈락
   const fallAxios = async () => {
     try {
       console.log('p;ppppppp', subscribers);
 
       console.log('탈락 통신 테스트 ', gameRoomId);
+      console.log('탈락 통신 테스트 ', gameId);
       console.log('탈락 통신 이메일 ', userEmail);
 
       const response = await axios
         .post(
           `http://localhost:8080/api/game/over`,
-          { gameRoomId: gameRoomId, gameRecord: 23 },
+          { gameId: gameId, gameRecord: 23 },
           {
-            params: { userEmail: userEmail },
             headers: {
               'Access-Control-Allow-Origin': '*',
               'Content-Type': 'application/json',
@@ -190,7 +211,9 @@ function GameRoomPage() {
           }
         )
         .then(() => {
-          return response.data;
+          if (subscribers === []) {
+            endGame();
+          }
         });
     } catch (err) {
       console.log(err);
