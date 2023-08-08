@@ -86,4 +86,12 @@ public class User extends TimeBaseEntity {
         this.token = refreshToken;
     }
 
+    public void saveBium(Long bium){
+        this.todayBium += bium;
+        this.totalBium += bium;
+        if(this.topBium < bium){
+            this.topBium = bium;
+        }
+    }
+
 }

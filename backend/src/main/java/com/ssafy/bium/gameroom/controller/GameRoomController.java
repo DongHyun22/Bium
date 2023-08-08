@@ -3,6 +3,7 @@ package com.ssafy.bium.gameroom.controller;
 import com.ssafy.bium.gameroom.Game;
 import com.ssafy.bium.gameroom.request.*;
 import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
+import com.ssafy.bium.gameroom.response.EnterUserDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
 import com.ssafy.bium.gameroom.response.UserGameRecordDto;
 import com.ssafy.bium.gameroom.service.GameRoomService;
@@ -47,7 +48,7 @@ public class GameRoomController {
     }
 
     @PostMapping("/enter")
-    public String enter(
+    public EnterUserDto enter(
             @RequestBody EnterGameRoomDto request,
             @RequestParam String userEmail
     ) throws OpenViduJavaClientException, OpenViduHttpException {
@@ -84,13 +85,8 @@ public class GameRoomController {
 
     @PostMapping("/over")
     public String over(
-            @RequestParam String gameId,
-            @RequestParam Long gameRecord
+            @RequestBody OverGameDto request
     ){
-        OverGameDto request = OverGameDto.builder()
-                .gameId(gameId)
-                .gameRecord(gameRecord)
-                .build();
         return gameRoomService.overGame(request);
     }
 

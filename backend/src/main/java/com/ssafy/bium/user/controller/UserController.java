@@ -144,14 +144,14 @@ public class UserController {
 
     }
 
-    @GetMapping("profile/modify/{userEmail}")
+    @GetMapping("/profile/modify/{userEmail}")
     public ResponseEntity<?> getModifyData(@PathVariable("userEmail") String userEmail) {
 
         UserModifyGetRes userModifyGetRes = userService.getModifyData(userEmail);
         return new ResponseEntity<>(userModifyGetRes, HttpStatus.OK);
     }
 
-    @PostMapping("profile/modify")
+    @PostMapping("/profile/modify")
     public ResponseEntity<?> modifyProfile(@RequestBody UserModifyPostReq userModifyPostReq) {
 
         int result = userService.modifyProfile(userModifyPostReq);
@@ -159,7 +159,7 @@ public class UserController {
     }
 
     // 이미지 저장
-    @PostMapping("profile/img/{userEmail}")
+    @PostMapping("/profile/img/{userEmail}")
     public ResponseEntity<?> setProfileImg(@PathVariable(value = "userEmail") String userEmail,
                                            @RequestParam("files") MultipartFile file,
                                            @RequestParam(value = "imgType") int imgType) throws Exception {
@@ -233,7 +233,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("profile/ranking/{userEmail}")
+    @GetMapping("/profile/ranking/{userEmail}")
     public ResponseEntity<?> ranking(@PathVariable("userEmail") String userEmail) {
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -246,4 +246,20 @@ public class UserController {
 
     }
 
+    // 회원 탈퇴시 비밀번호 확인
+    @PostMapping("/profile/checkpw")
+    public ResponseEntity<?> checkPw(@RequestBody UserLoginPostReq userLoginPostReq) {
+
+        User user = userService.login(userLoginPostReq);
+
+        Map<String, Object> resultMap = new HashMap<>();
+
+        if (user == null) {
+            resultMap.put("message", "비밀번호가 일치하지 않음");
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+    }
 }
