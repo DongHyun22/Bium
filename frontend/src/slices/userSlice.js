@@ -9,6 +9,7 @@ const initialState = {
   todayBium: 0,
   totalBium: 0,
   imageId: null,
+  disturb: null,
   isLogin: false,
   isLoginError: false,
   userInfo: null,
@@ -18,15 +19,7 @@ const initialState = {
 const persistConfig = {
   key: 'user',
   storage: storageSession,
-  whitelist: [
-    'token',
-    'userEmail',
-    'nickname',
-    'todayBium',
-    'totalBium',
-    'imageId',
-    'isLogin',
-  ]
+  whitelist: ['token', 'userEmail', 'nickname', 'todayBium', 'totalBium', 'imageId', 'disturb', 'isLogin']
 };
 
 const userSlice = createSlice({
@@ -51,6 +44,9 @@ const userSlice = createSlice({
     setImageId(state, action) {
       state.imageId = action.payload;
     },
+    setDisturb(state, action) {
+      state.disturb = action.payload;
+    },
     setIsLogin(state, action) {
       state.isLogin = action.payload;
     },
@@ -73,6 +69,7 @@ export const {
   setTodayBium,
   setTotalBium,
   setImageId,
+  setDisturb,
   setIsLogin,
   setIsLoginError,
   setIsValidToken,

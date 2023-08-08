@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { setUserEmail, setImageId } from '../../../slices/userSlice';
+import { setUserEmail, setImageId, setDisturb } from '../../../slices/userSlice';
 import { GetRanking } from '../../organisms/RankingList';
 import { getUserInfo } from '../../../slices/getLoginInfo';
 import useGetBiumTime from '../../../hooks/TimeInquery';
@@ -19,6 +19,7 @@ export function ProfilePage() {
   const savedTodayBium = useSelector((state) => state.user.todayBium);
   const savedTotalBium = useSelector((state) => state.user.totalBium);
   const savedProfileImage = useSelector((state) => state.user.imageId);
+  const savedDisturbImage = useSelector((state) => state.user.disturb);
 
   // 회원 정보 수정의 기본값은 store 기본값에 한정
   const [nickname, setNickname] = useState(savedNickname);
@@ -27,6 +28,7 @@ export function ProfilePage() {
   const todayBium = useGetBiumTime(savedTodayBium);
   const totalBium = useGetBiumTime(savedTotalBium);
   const [profileimage, setProfileImage] = useState(null);
+  const [disturbImage, setDisturbImage] = useState(null);
 
   // 회원 탈퇴 확인 모달의 상태를 관리하는 state
   const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState(false);
@@ -34,32 +36,39 @@ export function ProfilePage() {
   // 회원 정보 수정 모달 오픈 여부
   const [modalOpen, setModalOpen] = useState(false);
 
-  // 파일 저장
-  const saveFileImage = (e) => {
+  // 프로필 이미지 저장
+  const saveProfile = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
     console.log('file', file);
     if (file) {
-      // setProfileImage(URL.createObjectURL(file));
       dispatch(setImageId(URL.createObjectURL(file)));
       setProfileImage(file);
-      console.log('dfasdfasdfa', file);
-      const blob = new Blob([JSON.stringify(file)], { type: 'image/png' });
-      console.log('sedfdafdfasdfd', blob);
+      console.log('프로필 이미지', file);
+    }
+  };
+  // 방해 이미지 저장
+  const saveDisturb = (e) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    console.log('file', file);
+    if (file) {
+      dispatch(setDisturb(URL.createObjectURL(file)));
+      setDisturbImage(file);
+      console.log('방해 이미지', file);
     }
   };
 
-  const sendToServer = async (e) => {
+  // 프로필 이미지 전송
+  const sendToProfile = async (e) => {
     e.preventDefault();
     if (profileimage) {
+      console.log('프로필 이미지', profileimage);
       const formData = new FormData();
-      const blobProfileImage = new Blob([JSON.stringify(profileimage)], { type: 'image/png' });
-      // console.log('역이ㅕㄱ이ㅕㅣ', blobProfileImage);
-      formData.append('file', blobProfileImage);
-      console.log('adfdsfasdfa', e.target.file);
+      formData.append('file', profileimage);
       // formData.append('file', new Blob([JSON.stringify(profileimage)], { type: 'application/json' }));
       for (let pair of formData.entries()) {
-        console.log('formdat', pair[0] + ', ' + pair[1]);
+        console.log('프로필 이미지 formData', pair[0] + ', ' + pair[1]);
       }
       console.log(formData);
       try {
@@ -69,7 +78,6 @@ export function ProfilePage() {
           },
           headers: {
             'Content-Type': 'multipart/form-data'
-            // Accept: 'application/json'
           },
           transformRequest: [
             function () {
@@ -90,23 +98,70 @@ export function ProfilePage() {
       }
     }
   };
-  useEffect(() => {
-    if (savedProfileImage) {
-      setProfileImage(savedProfileImage);
-      console.log('savedProfileImage1', savedProfileImage);
-      console.log('setProfileImage1', setProfileImage);
-    } else {
-      setProfileImage(null);
-    }
-  }, [savedProfileImage]);
 
-  // 파일 삭제
-  const deleteFileImage = () => {
+  // 방해 이미지 전송
+  const sendToDisturb = async (e) => {
+    e.preventDefault();
     if (profileimage) {
-      URL.revokeObjectURL(profileimage);
+      console.log('방해이미지', profileimage);
+      const formData = new FormData();
+      formData.append('file', profileimage);
+      // formData.append('file', new Blob([JSON.stringify(profileimage)], { type: 'application/json' }));
+      for (let pair of formData.entries()) {
+        console.log('방해이미지 formData', pair[0] + ', ' + pair[1]);
+      }
+      console.log(formData);
+      try {
+        const response = await axios.post(`http://localhost:8080/api/profile/img/${savedEmail}`, formData, {
+          params: {
+            imgType: 2
+          },
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          transformRequest: [
+            function () {
+              return formData;
+            }
+          ]
+        });
+        console.log(response.data);
+        // if (response.status === 200 && response.data.imageUrl) {
+        if (response.status === 200) {
+          dispatch(setDisturb(response.data.imageUrl));
+          console.log('서버 전송 성공', response);
+        } else {
+          console.log('서버 응답 오류');
+        }
+      } catch (error) {
+        console.log('전송 실패', error);
+      }
     }
-    setProfileImage(null);
-    dispatch(setImageId(null));
+  };
+  // useEffect(() => {
+  //   if (savedProfileImage) {
+  //     setProfileImage(savedProfileImage);
+  //     console.log('savedProfileImage1', savedProfileImage);
+  //     console.log('setProfileImage1', setProfileImage);
+  //   } else {
+  //     setProfileImage(null);
+  //   }
+  // }, [savedProfileImage]);
+
+  // 프로필 이미지 삭제
+  const deleteProfile = () => {
+    if (profileimage) {
+      setProfileImage(null);
+      dispatch(setImageId(null));
+    }
+  };
+
+  // 방해 이미지 삭제
+  const deleteDisturb = () => {
+    if (disturbImage) {
+      setDisturbImage(null);
+      dispatch(setDisturb(null));
+    }
   };
 
   function openModal() {
@@ -173,14 +228,25 @@ export function ProfilePage() {
       <h1>ProfilePage</h1>
       <div>
         <div>
-          <p>이미지</p>
+          <p>프로필 이미지</p>
           {savedProfileImage && <img src={savedProfileImage} alt="미리보기" />}
           <div>
-            <input name="file" type="file" accept="image/*" onChange={saveFileImage}></input>
+            <input name="file" type="file" accept="image/*" onChange={saveProfile}></input>
           </div>
-          <button onClick={sendToServer}>이미지 서버 전송</button>
+          <button onClick={sendToProfile}>이미지 서버 전송</button>
           <div>
-            <button onClick={deleteFileImage}>삭제</button>
+            <button onClick={deleteProfile}>삭제</button>
+          </div>
+        </div>
+        <div>
+          <p>방해 이미지</p>
+          {savedDisturbImage && <img src={savedDisturbImage} alt="미리보기" />}
+          <div>
+            <input name="file" type="file" accept="image/*" onChange={saveDisturb}></input>
+          </div>
+          <button onClick={sendToDisturb}>이미지 서버 전송</button>
+          <div>
+            <button onClick={deleteDisturb}>삭제</button>
           </div>
         </div>
         <h3>닉네임</h3>
