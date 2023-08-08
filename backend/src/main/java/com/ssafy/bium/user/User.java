@@ -79,6 +79,11 @@ public class User extends TimeBaseEntity {
         if (totalBium == null) {
             this.totalBium = 0L;
         }
+
+    }
+
+    public void changeToken(String refreshToken) {
+        this.token = refreshToken;
     }
 
 }
