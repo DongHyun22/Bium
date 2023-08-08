@@ -2,7 +2,16 @@ import React, { useState, useEffect } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { setNickname, setUserEmail, setImageId, setDisturb } from '../../../slices/userSlice';
+import {
+  setNickname,
+  setUserEmail,
+  setImageId,
+  setDisturb,
+  setImgType,
+  setSaveFile,
+  setSaveFolder,
+  setOriginalFile
+} from '../../../slices/userSlice';
 import { GetRanking } from '../../organisms/RankingList';
 import { getUserInfo } from '../../../slices/getLoginInfo';
 import useGetBiumTime from '../../../hooks/TimeInquery';
@@ -21,6 +30,10 @@ export function ProfilePage() {
   const savedTotalBium = useSelector((state) => state.user.totalBium);
   const savedProfileImage = useSelector((state) => state.user.imageId);
   const savedDisturbImage = useSelector((state) => state.user.disturb);
+  const saveFile = useSelector((state) => state.user.saveFile);
+  const saveFolder = useSelector((state) => state.user.saveFolder);
+  const imgType = useSelector((state) => state.user.imgType);
+  const originalFile = useSelector((state) => state.user.originalFile);
 
   // 회원 정보 수정의 기본값은 store 기본값에 한정
   const [name, setName] = useState(savedNickname);
@@ -73,7 +86,7 @@ export function ProfilePage() {
       }
       console.log(formData);
       try {
-        const response = await axios.post(`http://localhost:8080/api/profile/img/${savedEmail}`, formData, {
+        const uploadResponse = await axios.post(`http://localhost:8080/api/profile/img/${savedEmail}`, formData, {
           params: {
             imgType: 1
           },
@@ -86,11 +99,35 @@ export function ProfilePage() {
             }
           ]
         });
-        console.log(response.data);
+        console.log(uploadResponse.data);
         // if (response.status === 200 && response.data.imageUrl) {
-        if (response.status === 200) {
-          dispatch(setImageId(response.data.imageUrl));
-          console.log('서버 전송 성공', response);
+        if (uploadResponse.status === 200) {
+          dispatch(setImageId(uploadResponse.data.saveFile));
+
+          // dispatch(setSaveFolder(response.data.saveFolder))
+          // dispatch(setSaveFile(response.data.saveFile))
+          // dispatch(setImgType(response.data.imgType))
+          // dispatch(setOriginalFile(response.data.originalFile))
+
+          console.log(dispatch(setImageId(uploadResponse.data.saveFile)));
+          console.log('서버 전송 성공', uploadResponse.data.saveFile);
+
+          const saveFile = uploadResponse.data.saveFile;
+          const saveFolder = uploadResponse.data.saveFolder;
+          const imgType = uploadResponse.data.imgType;
+          const originalFile = uploadResponse.data.originalFile;
+
+          const getResponse = await axios.get(
+            `http://localhost:8080/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`
+          );
+
+          // const newFile = new File([getResponse.data], 'f58ec2ba-414d-47d6-bf53-ecb882956451');
+
+          // const reader = new FileReader();
+          // reader.readAsDataURL(newFile);
+          // console.log('dfadadsd', reader);
+
+          console.log('조회 성공', getResponse);
         } else {
           console.log('서버 응답 오류');
         }
@@ -99,6 +136,17 @@ export function ProfilePage() {
       }
     }
   };
+
+  // // 프로필 이미지 조회
+  // const getImage = () => {
+  //   try {
+  //     const response = axios.get(`http://localhost:8080/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`)
+  //     console.log(response)
+  //     console.log('조회 성공', response)
+  //   } catch(error) {
+  //     console.log('조회 실패', error)
+  //   }
+  // }
 
   // 방해 이미지 전송
   const sendToDisturb = async (e) => {
@@ -129,7 +177,7 @@ export function ProfilePage() {
         console.log(response.data);
         // if (response.status === 200 && response.data.imageUrl) {
         if (response.status === 200) {
-          dispatch(setDisturb(response.data.imageUrl));
+          dispatch(setDisturb(response.data.saveFile));
           console.log('서버 전송 성공', response);
         } else {
           console.log('서버 응답 오류');
