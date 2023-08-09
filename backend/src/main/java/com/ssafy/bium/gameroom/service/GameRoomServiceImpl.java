@@ -83,6 +83,7 @@ public class GameRoomServiceImpl implements GameRoomService {
                     .gameRoomPw(gameRoomDto.getGameRoomPw())
                     .gameRoomMovie(gameRoomDto.getGameRoomMovie())
                     .curPeople(0)
+                    .startPeople(0)
                     .maxPeople(gameRoomDto.getMaxPeople())
                     .customSessionId(sessionId)
                     .build();
@@ -168,6 +169,7 @@ public class GameRoomServiceImpl implements GameRoomService {
                 .gameRoomPw(request.getGameRoomPw())
                 .gameRoomMovie(request.getGameRoomMovie())
                 .curPeople(cur)
+                .startPeople(0)
                 .maxPeople(request.getMaxPeople())
                 .build();
         return gameRoomRepository.save(gameRoom).getGameRoomId();
@@ -190,26 +192,62 @@ public class GameRoomServiceImpl implements GameRoomService {
 
     @Override
     public String startGameRoom(String gameRoomId) {
-        String temp = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "start");
-        boolean start = !(Boolean.parseBoolean(temp));
-        redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "start", String.valueOf(start));
+        String start = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "start");
+        if(start.equals("false")){
+            start = "true";
+        }
+        String startPeople = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "curPeople");
+
+        redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "start", start);
+        redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "startPeople", startPeople);
         return gameRoomId;
     }
 
     @Override
-    public String overGame(OverGameDto request) {
+    public List<UserGameRecordDto> overGame(OverGameDto request) {
+        HashOperations<String, String, String> hash = redisTemplate.opsForHash();
+        SetOperations<String, String> set = gameRoomNum.opsForSet();
+
         String gameId = request.getGameId();
-        String userEmail = (String) redisTemplate.opsForHash().get("game:" + gameId, "userEmail");
+        String gameRoomId = (String) hash.get("game:" + gameId, "gameRoomId");
+        String userEmail = (String) hash.get("game:" + gameId, "userEmail");
         Optional<User> findUser = userRepository.findByUserEmail(userEmail);
         if(findUser.isEmpty()){
             log.debug("{} - 해당 유저는 존재하지 않습니다.", userEmail);
-            return "해당하는 유저가 없습니다."
-;        }
+            return null;
+        }
         findUser.get().saveBium(request.getGameRecord());
         userRepository.save(findUser.get());
         // 비움량 저장
-        redisTemplate.opsForHash().put("game:" + gameId, "gameRecord", String.valueOf(request.getGameRecord()));
-        return request.getGameId();
+        hash.put("game:" + gameId, "gameRecord", String.valueOf(request.getGameRecord()));
+
+        int survivor = Integer.parseInt((String) hash.get("gameRoom:" + gameRoomId, "startPeople"));
+        hash.put("gameRoom:" + gameRoomId, "startPeople", String.valueOf(--survivor));
+        if(survivor == 0){
+            Set<String> gameNum = set.members("game");
+            List<UserGameRecordDto> userGameRecords = new ArrayList<>();
+            for(String s : gameNum){
+                // 게임에 접속되어있는 유저들 중에서 받아온 게임방아이디에 있는 유저들 찾기 -> scan 같은 빠른 메서드 찾기
+                if(Objects.equals(hash.get("game:" + s, "gameRoomId"), gameRoomId)){
+                    UserGameRecordDto userGameRecordDto = UserGameRecordDto.builder()
+                            .userEmail(hash.get("game:" + s, "userEmail"))
+                            // TODO: 2023-08-03 (003) 유저 이메일 대신 유저 닉네임 넣기
+                            .gameRecord(hash.get("game:" + s, "gameRecord"))
+                            .build();
+                    userGameRecords.add(userGameRecordDto);
+                }
+            }
+            Collections.sort(userGameRecords, new Comparator<>() {
+                @Override
+                public int compare(UserGameRecordDto o1, UserGameRecordDto o2) {
+                    long value1 = Long.parseLong(o1.getGameRecord());
+                    long value2 = Long.parseLong(o2.getGameRecord());
+                    return Long.compare(value2, value1);
+                }
+            });
+            return userGameRecords;
+        }
+        return null;
     }
 
     @Override
