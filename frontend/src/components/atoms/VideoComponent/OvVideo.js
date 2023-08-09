@@ -1,14 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { setGameFallCount } from '../../../slices/roomSlice/roomSlice';
 
 const OpenViduVideoComponent = (props) => {
   const dispatch = useDispatch();
   const join = useSelector((state) => state.video.join);
-  const gameFallCount = useSelector((state) => state.room.gameFallCount);
+  const [count, setCount] = useEffect(0);
 
-  console.log('제발 빨리 끝내고 잘 수 있으면 좋겠다', gameFallCount);
   const videoRef = useRef(null);
 
   //모델 불러오기
@@ -22,8 +20,6 @@ const OpenViduVideoComponent = (props) => {
       faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
       faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
       faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
-
-      // faceapi.nets.face
     ]);
   };
   // 한번 실행;
@@ -39,27 +35,33 @@ const OpenViduVideoComponent = (props) => {
     }
     return () => {};
   }, [props]);
-
   useEffect(() => {
-    const faceMyDetect = async () => {
-      const videoElement = document.querySelector('#localVideo');
-      console.log('얼굴시작');
+    const FaceMyDetect = (props) => {
+      setInterval(async () => {
+        console.log('ggg');
 
-      // DRAW YOU FACE IN WEBCAM
-      if (videoRef.current !== null) {
-        const detections = await faceapi.detectSingleFace(videoElement, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
-        if (detections && detections.expressions.neutral < 0.6) {
-          dispatch(setGameFallCount(gameFallCount + 1));
-          console.log(detections.expressions);
-          console.log(gameFallCount);
+        // DRAW YOU FACE IN WEBCAM
+        if (videoRef.current !== null) {
+          const detections = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+          if (detections && detections.expressions.neutral < 0.6) {
+            console.log(detections.expressions);
+          }
         }
-      }
+      }, 1000);
+    };
+    FaceMyDetect();
+    return () => {
+      console.log('clear');
+      clearInterval(FaceMyDetect);
     };
   }, []);
 
   return (
     <>
       <video id="localVideo" audio="false" autoPlay={true} ref={videoRef} />
+
+      <p>당신의 탈락카운트</p>
+      <p>{}</p>
     </>
   );
 };
