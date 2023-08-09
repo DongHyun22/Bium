@@ -11,6 +11,7 @@ import com.ssafy.bium.user.request.FilePostReq;
 import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserModifyPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
+import com.ssafy.bium.user.response.MailGetRes;
 import com.ssafy.bium.user.response.UserModifyGetRes;
 import com.ssafy.bium.user.response.UserRankingGetRes;
 import com.ssafy.bium.user.service.UserService;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -73,21 +75,6 @@ public class UserController {
         resultMap.put("message", "success");
 
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-    }
-
-    // 로그아웃
-    @GetMapping("/logout/{userEmail}")
-    public ResponseEntity<?> logout(@PathVariable("userEmail") String userId) {
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
-        try {
-            resultMap.put("message", "success");
-            status = HttpStatus.ACCEPTED;
-        } catch (Exception e) {
-            resultMap.put("message", e.getMessage());
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
     // 회원가입
@@ -161,7 +148,7 @@ public class UserController {
     // 이미지 저장
     @PostMapping("/profile/img/{userEmail}")
     public ResponseEntity<?> setProfileImg(@PathVariable(value = "userEmail") String userEmail,
-                                           @RequestParam("files") MultipartFile file,
+                                           @RequestParam("file") MultipartFile file,
                                            @RequestParam(value = "imgType") int imgType) throws Exception {
         logger.debug("MultipartFile.isEmpty : {}", file.isEmpty());
 
@@ -266,5 +253,29 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
+    }
+
+    // 이메일로 비밀번호 재설정
+    @Transactional
+    @GetMapping("/findpw/{userEmail}")
+    public ResponseEntity<?> sendEmail(@PathVariable("userEmail") String userEmail){
+        logger.debug("sendEmail input info : {}", userEmail);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        try {
+
+            MailGetRes mailGetRes = userService.createMailAndChangePassword(userEmail);
+            userService.sendMail(mailGetRes);
+            resultMap.put("message", "success");
+            status = HttpStatus.ACCEPTED;
+
+        } catch (Exception e) {
+            logger.error("임시 비밀번호 발급 실패 : {}", e);
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 }
