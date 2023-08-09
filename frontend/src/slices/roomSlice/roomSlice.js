@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { act } from 'react-dom/test-utils';
+import { persistReducer } from 'redux-persist';
+
+import storageSession from 'redux-persist/lib/storage/session';
 
 const initialState = {
   roomTitle: '',
@@ -7,13 +9,38 @@ const initialState = {
   mySessionId: '',
   myUserName: 'jihyeok',
   maxPeople: 8,
-  backgroundImage: 1
+  backgroundImage: 1,
+  start: false,
+  host: false,
+  gameId: null,
+  gameRoomId: '',
+  gameFallCount: 0
+};
+const persistConfig = {
+  key: 'room',
+  storage: storageSession,
+  whitelist: ['gameFallCount']
 };
 
 export const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {
+    setGameId: (state, action) => {
+      state.gameId = action.payload;
+    },
+    setGameFallCount: (state, action) => {
+      state.gameFallCount = action.payload;
+    },
+    setGameRoomId: (state, action) => {
+      state.gameRoomId = action.payload;
+    },
+    setHost: (state, action) => {
+      state.host = action.payload;
+    },
+    setStart: (state, action) => {
+      state.start = action.payload;
+    },
     setRoomTitle: (state, action) => {
       state.roomTitle = action.payload.gameRoomTitle;
     },
@@ -21,7 +48,6 @@ export const roomSlice = createSlice({
       state.roomPassword = action.payload.roompassword;
     },
     setMySessionId: (state, action) => {
-      console.log('actioooon  실행중', action.payload);
       state.mySessionId = action.payload;
     },
     setMyUserName: (state, action) => {
@@ -36,6 +62,8 @@ export const roomSlice = createSlice({
   }
 });
 
-export const { setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } = roomSlice.actions;
+export const { setGameId, setGameFallCount, setGameRoomId, setHost, setStart, setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } = roomSlice.actions;
 
-export default roomSlice.reducer;
+const persistedReducer = persistReducer(persistConfig, roomSlice.reducer);
+
+export default persistedReducer;

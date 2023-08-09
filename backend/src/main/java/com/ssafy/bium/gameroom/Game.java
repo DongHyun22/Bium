@@ -12,21 +12,20 @@ import org.springframework.data.redis.core.RedisHash;
 @RedisHash("game")
 public class Game {
     // 유저게임방
-
     @Id
     private String gameId;
     private String gameRoomId;
     private String userEmail;
-    private boolean isHost;
+    private boolean host;
     private int sequence;
     private Long gameRecord;
 
     @Builder
-    public Game(String gameId, String gameRoomId, String userEmail, boolean isHost, int sequence, Long gameRecord) {
+    public Game(String gameId, String gameRoomId, String userEmail, boolean host, int sequence, Long gameRecord) {
         this.gameId = gameId;
         this.gameRoomId = gameRoomId;
         this.userEmail = userEmail;
-        this.isHost = isHost;
+        this.host = host;
         this.sequence = sequence;
         this.gameRecord = gameRecord;
     }

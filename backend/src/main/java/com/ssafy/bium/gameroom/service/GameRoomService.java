@@ -21,5 +21,5 @@ public interface GameRoomService {
     String startGameRoom(String gameRoomId);
     String overGame(OverGameDto request);
     String deleteGameRoom(String gameRoomId);
-    List<UserGameRecordDto> RecordGameRoom(String gameRoomId);
+    List<UserGameRecordDto> StopGameRoom(String gameRoomId);
 }
