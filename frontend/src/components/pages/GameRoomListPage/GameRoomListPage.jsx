@@ -9,20 +9,10 @@ export const GameRoomListPage = () => {
 
   const gemeRoomapi = async () => {
     try {
-      const response = await axios
-        .get(
-          'http://localhost:8080/api/game'
-          // { sort: 1, keyword: 'qwe' },
-          // {
-          //   headers: {
-          //     'Content-Type': 'application/json'
-          //   }
-          // }
-        )
-        .then((response) => {
-          setAllRooms(response.data);
-        });
-
+      const response = await axios.get('http://localhost:8080/api/game').then((response) => {
+        console.log(response.data);
+        setAllRooms(response.data);
+      });
       // axios response
       // 방제목, 인원
     } catch (err) {
@@ -42,7 +32,11 @@ export const GameRoomListPage = () => {
             return <GameRoomListItem key={index} allRoom={allRoom}></GameRoomListItem>;
           })}
         </>
-      ) : null}
+      ) : (
+        <>
+          <h2>안뜨는데?</h2>
+        </>
+      )}
     </div>
   );
 };

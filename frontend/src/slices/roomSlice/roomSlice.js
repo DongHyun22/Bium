@@ -1,7 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-
-import storageSession from 'redux-persist/lib/storage/session';
 
 const initialState = {
   roomTitle: '',
@@ -16,11 +13,6 @@ const initialState = {
   gameRoomId: '',
   gameFallCount: 0
 };
-const persistConfig = {
-  key: 'room',
-  storage: storageSession,
-  whitelist: ['gameFallCount']
-};
 
 export const roomSlice = createSlice({
   name: 'room',
@@ -28,9 +20,6 @@ export const roomSlice = createSlice({
   reducers: {
     setGameId: (state, action) => {
       state.gameId = action.payload;
-    },
-    setGameFallCount: (state, action) => {
-      state.gameFallCount = action.payload;
     },
     setGameRoomId: (state, action) => {
       state.gameRoomId = action.payload;
@@ -62,8 +51,6 @@ export const roomSlice = createSlice({
   }
 });
 
-export const { setGameId, setGameFallCount, setGameRoomId, setHost, setStart, setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } = roomSlice.actions;
+export const { setGameId, setGameRoomId, setHost, setStart, setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } = roomSlice.actions;
 
-const persistedReducer = persistReducer(persistConfig, roomSlice.reducer);
-
-export default persistedReducer;
+export default roomSlice.reducer;
