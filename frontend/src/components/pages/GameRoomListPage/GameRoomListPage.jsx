@@ -9,20 +9,10 @@ export const GameRoomListPage = () => {
 
   const gemeRoomapi = async () => {
     try {
-      const response = await axios
-        .get(
-          'https://i9c205.p.ssafy.io/api/game'
-          // { sort: 1, keyword: 'qwe' },
-          // {
-          //   headers: {
-          //     'Content-Type': 'application/json'
-          //   }
-          // }
-        )
-        .then((response) => {
-          setAllRooms(response.data);
-        });
-
+      const response = await axios.get('https://i9c205.p.ssafy.io/api/game').then((response) => {
+        console.log(response.data);
+        setAllRooms(response.data);
+      });
       // axios response
       // 방제목, 인원
     } catch (err) {
@@ -33,19 +23,20 @@ export const GameRoomListPage = () => {
     gemeRoomapi();
   }, []);
 
-
-
   return (
     <div>
-      ggg
-      <h1>GGGG</h1>
+      <h1>게임방 목록</h1>
       {allRooms !== [] ? (
         <>
-            {allRooms.map((allRoom, index) => {
-              return <GameRoomListItem key={index} allRoom={allRoom}></GameRoomListItem>;
-            })}
+          {allRooms.map((allRoom, index) => {
+            return <GameRoomListItem key={index} allRoom={allRoom}></GameRoomListItem>;
+          })}
         </>
-      ) : null}
+      ) : (
+        <>
+          <h2>안뜨는데?</h2>
+        </>
+      )}
     </div>
   );
 };

@@ -3,12 +3,15 @@ package com.ssafy.bium.gameroom.controller;
 import com.ssafy.bium.gameroom.Game;
 import com.ssafy.bium.gameroom.request.*;
 import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
+import com.ssafy.bium.gameroom.response.EnterUserDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
 import com.ssafy.bium.gameroom.response.UserGameRecordDto;
 import com.ssafy.bium.gameroom.service.GameRoomService;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,7 +50,7 @@ public class GameRoomController {
     }
 
     @PostMapping("/enter")
-    public String enter(
+    public EnterUserDto enter(
             @RequestBody EnterGameRoomDto request,
             @RequestParam String userEmail
     ) throws OpenViduJavaClientException, OpenViduHttpException {
@@ -83,14 +86,9 @@ public class GameRoomController {
     }
 
     @PostMapping("/over")
-    public String over(
-            @RequestParam String gameId,
-            @RequestParam Long gameRecord
+    public List<UserGameRecordDto> over(
+            @RequestBody OverGameDto request
     ){
-        OverGameDto request = OverGameDto.builder()
-                .gameId(gameId)
-                .gameRecord(gameRecord)
-                .build();
         return gameRoomService.overGame(request);
     }
 
@@ -98,7 +96,7 @@ public class GameRoomController {
     public List<UserGameRecordDto> stop(
             @RequestParam String gameRoomId
     ) {
-        return gameRoomService.RecordGameRoom(gameRoomId);
+        return gameRoomService.StopGameRoom(gameRoomId);
     }
 
     // 게임 종료시 게임 기록 반환 및 게임 기록 유저에 저장

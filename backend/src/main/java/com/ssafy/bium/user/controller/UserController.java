@@ -1,13 +1,17 @@
 package com.ssafy.bium.user.controller;
 
+import com.ssafy.bium.common.exception.UserLoginException;
 import com.ssafy.bium.image.Image;
 import com.ssafy.bium.image.response.ImageDataGetRes;
+import com.ssafy.bium.jwt.Token;
+import com.ssafy.bium.jwt.service.JwtService;
 import com.ssafy.bium.user.User;
 import com.ssafy.bium.user.repository.UserRepository;
 import com.ssafy.bium.user.request.FilePostReq;
 import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserModifyPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
+import com.ssafy.bium.user.response.MailGetRes;
 import com.ssafy.bium.user.response.UserModifyGetRes;
 import com.ssafy.bium.user.response.UserRankingGetRes;
 import com.ssafy.bium.user.service.UserService;
@@ -18,12 +22,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.File;
-import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,6 +44,8 @@ public class UserController {
     public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
+    private final JwtService jwtService;
+
     private final UserRepository userRepository;
 
     @Value("${file.imgPath}")
@@ -47,28 +53,28 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginPostReq userLoginPostReq) {
+
+        User loginUser = null;
+
+        try {
+            loginUser = userService.login(userLoginPostReq);
+        } catch (UserLoginException e) {
+            logger.error("로그인 실패: {}", e);
+            return new ResponseEntity<>("아이디 혹은 비밀번호를 확인해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
         Map<String, Object> resultMap = new HashMap<>();
 
-        userService.login(userLoginPostReq);
-        resultMap.put("httpHeaders", "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjI5ODcwNzQ2NjJ9.lXRvR1Xv_W_WdAz15uw5VG4G6myl-fuj75tULle6vLs");
+        Token token = jwtService.create(userLoginPostReq.getUserEmail());
+        userService.saveRefreshToken(userLoginPostReq.getUserEmail(), token.getRefresh());
+
+        logger.debug("로그인 accessToken 정보 : {}", token.getAccess());
+        logger.debug("로그인 refreshToken 정보 : {}", token.getRefresh());
+
+        resultMap.put("httpHeaders", token.getAccess());
         resultMap.put("message", "success");
 
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-    }
-
-    // 로그아웃
-    @GetMapping("/logout/{userEmail}")
-    public ResponseEntity<?> logout(@PathVariable("userEmail") String userId) {
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
-        try {
-            resultMap.put("message", "success");
-            status = HttpStatus.ACCEPTED;
-        } catch (Exception e) {
-            resultMap.put("message", e.getMessage());
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
     // 회원가입
@@ -125,24 +131,24 @@ public class UserController {
 
     }
 
-    @GetMapping("profile/modify/{userEmail}")
+    @GetMapping("/profile/modify/{userEmail}")
     public ResponseEntity<?> getModifyData(@PathVariable("userEmail") String userEmail) {
 
         UserModifyGetRes userModifyGetRes = userService.getModifyData(userEmail);
         return new ResponseEntity<>(userModifyGetRes, HttpStatus.OK);
     }
 
-    @PostMapping("profile/modify")
-    public ResponseEntity<?> modifyProfile(UserModifyPostReq userModifyPostReq) {
+    @PostMapping("/profile/modify")
+    public ResponseEntity<?> modifyProfile(@RequestBody UserModifyPostReq userModifyPostReq) {
 
         int result = userService.modifyProfile(userModifyPostReq);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // 이미지 저장
-    @PostMapping("profile/img/{userEmail}")
+    @PostMapping("/profile/img/{userEmail}")
     public ResponseEntity<?> setProfileImg(@PathVariable(value = "userEmail") String userEmail,
-                                           @RequestPart MultipartFile file,
+                                           @RequestParam("file") MultipartFile file,
                                            @RequestParam(value = "imgType") int imgType) throws Exception {
         logger.debug("MultipartFile.isEmpty : {}", file.isEmpty());
 
@@ -167,10 +173,15 @@ public class UserController {
 
                 logger.debug("원본 파일 이름 : {}, 실제 저장 파일 이름 : {}", file.getOriginalFilename(), saveFileName);
                 file.transferTo(new File(folder, saveFileName));
+
+                userService.setImage(filePostReq);
+
+                Image image = userService.getImageData(userEmail, imgType);
+                ImageDataGetRes imageDataGetRes = new ImageDataGetRes(image);
+                return new ResponseEntity<>(imageDataGetRes, HttpStatus.OK);
             }
-            userService.setImage(filePostReq);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -214,7 +225,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("profile/ranking/{userEmail}")
+    @GetMapping("/profile/ranking/{userEmail}")
     public ResponseEntity<?> ranking(@PathVariable("userEmail") String userEmail) {
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -227,4 +238,44 @@ public class UserController {
 
     }
 
+    // 회원 탈퇴시 비밀번호 확인
+    @PostMapping("/profile/checkpw")
+    public ResponseEntity<?> checkPw(@RequestBody UserLoginPostReq userLoginPostReq) {
+
+        User user = userService.login(userLoginPostReq);
+
+        Map<String, Object> resultMap = new HashMap<>();
+
+        if (user == null) {
+            resultMap.put("message", "비밀번호가 일치하지 않음");
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+    }
+
+    // 이메일로 비밀번호 재설정
+    @Transactional
+    @GetMapping("/findpw/{userEmail}")
+    public ResponseEntity<?> sendEmail(@PathVariable("userEmail") String userEmail){
+        logger.debug("sendEmail input info : {}", userEmail);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        try {
+
+            MailGetRes mailGetRes = userService.createMailAndChangePassword(userEmail);
+            userService.sendMail(mailGetRes);
+            resultMap.put("message", "success");
+            status = HttpStatus.ACCEPTED;
+
+        } catch (Exception e) {
+            logger.error("임시 비밀번호 발급 실패 : {}", e);
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
 }

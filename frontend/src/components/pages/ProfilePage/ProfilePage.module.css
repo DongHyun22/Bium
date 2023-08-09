@@ -1,3 +1,24 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: 2fr 3fr; 
+  gap: 16px;
+  grid-template-areas: 
+  "header header"
+  "side-left side-right";
+}
+
+.header {
+  grid-area: header;
+}
+
+.side-left {
+  grid-area: side-left;
+}
+
+.side-right {
+  grid-area: side-right;
+}
+
 .modal {
   position: fixed;
   top: 50%;
@@ -15,4 +36,10 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 1000;
+}
+
+img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
 }

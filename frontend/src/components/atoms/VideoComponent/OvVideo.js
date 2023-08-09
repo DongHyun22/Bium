@@ -1,19 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as faceapi from 'face-api.js';
-import { useSelector } from 'react-redux';
-import { clearAllListeners } from '@reduxjs/toolkit';
+import { useDispatch, useSelector } from 'react-redux';
+import { setGameFallCount } from '../../../slices/roomSlice/roomSlice';
 
 const OpenViduVideoComponent = (props) => {
+  const dispatch = useDispatch();
   const join = useSelector((state) => state.video.join);
-  const [failcount, setFailcount] = useState(0);
 
-  console.log('제발 빨리 끝내고 잘 수 있으면 좋겠다', props);
   const videoRef = useRef(null);
-  const canvasRef = useRef(null);
+  const gameFallCount = useSelector((state) => state.room.gameFallCount);
 
   //모델 불러오기
   const loadModels = () => {
-    console.log('start');
     const MODEL_URL = process.env.PUBLIC_URL + '/models';
 
     Promise.all([
@@ -23,72 +21,48 @@ const OpenViduVideoComponent = (props) => {
       faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
       faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
       faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
-
-      // faceapi.nets.face
-    ]).then((e) => {
-      if (join) {
-        faceMyDetect();
-      }
-    });
+    ]);
   };
-
   // 한번 실행;
   useEffect(() => {
     if (join) {
       videoRef && loadModels();
     }
-    return () => {
-      console.log('stopoadModels');
-      clearInterval(loadModels);
-      console.log('stopfaceDtect');
-      clearInterval(faceMyDetect);
-      console.log('stoplister');
-      clearAllListeners();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (props && videoRef.current) {
       props.streamManager.addVideoElement(videoRef.current);
     }
-    return;
-  }, [props]);
+    return () => {};
+  }, []);
 
-  //내 이미지로부터 인식하고 다시 그려주기
-  const faceMyDetect = () => {
-    setInterval(async () => {
-      console.log('하하하', videoRef.current);
-      const videoElement = document.querySelector('#localVideo');
-
-      // DRAW YOU FACE IN WEBCAM
-      if (videoRef.current !== null) {
-        const detections = await faceapi.detectSingleFace(videoElement, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
-        canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoElement);
-        faceapi.matchDimensions(canvasRef.current, {
-          width: 480,
-          height: 270
-        });
-        if (detections) {
-          const resized = faceapi.resizeResults(detections, {
-            width: 480,
-            height: 270
-          });
-
-          faceapi.draw.drawDetections(canvasRef.current, resized);
-          faceapi.draw.drawFaceLandmarks(canvasRef.current, resized);
-          faceapi.draw.drawFaceExpressions(canvasRef.current, resized);
+  useEffect(() => {
+    const FaceMyDetect = () => {
+      setInterval(async () => {
+        // DRAW YOU FACE IN WEBCAM
+        if (videoRef.current !== null) {
+          const detections = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+          if (detections && detections.expressions.neutral < 0.6) {
+            console.log(detections.expressions);
+            dispatch(setGameFallCount(1));
+          }
         }
-      } else {
-        return;
-      }
-    }, 8000);
-  };
+      }, 1000);
+    };
+    FaceMyDetect();
+    return () => {
+      console.log('clear');
+      clearInterval(FaceMyDetect);
+    };
+  }, []);
 
   return (
     <>
-      <video id="localVideo" audio={false} autoPlay={true} ref={videoRef} />
-      <canvas id="drawCanvas" ref={canvasRef} />
+      <video id="localVideo" audio="false" autoPlay={true} ref={videoRef} />
+
+      <p>당신의 탈락카운트</p>
+      <p>{gameFallCount}</p>
     </>
   );
 };
