@@ -1,6 +1,6 @@
 .gridContainer {
   display: grid;
-  grid-template-columns: 4fr 6fr; 
+  grid-template-columns: 2fr 3fr; 
   gap: 16px;
   grid-template-areas: 
   "header header"

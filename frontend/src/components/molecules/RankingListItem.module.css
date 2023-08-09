@@ -5,21 +5,21 @@
 }
 
 .position {
-  flex: 0 1 1; 
-  width: 10vh;
+  width: 12vw;
+  text-align: center;
 }
 
 .nickname {
-  flex: 0 1 3;
-  width: 30vh;
+  width: 16vw;
+  text-align: center;
 }
 
 .rank {
-  flex: 0 1 2;
-  width: 20vh;
+  width: 8vw;
+  text-align: center;
 }
 
 .topBium {
-  flex: 0 1 4;
-  width: 40vh;
+  width: 24vw;
+  text-align: center;
 }

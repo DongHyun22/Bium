@@ -3,12 +3,15 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import RankingItem from '../molecules/RankingListItem';
 import styles from './RankingList.module.css';
+import useGetBiumTime from '../../hooks/TimeInquery';
 
 function GetRanking() {
   // 헤더 인증용 토큰
   const [rank, setRank] = useState([]);
   const [myRank, setMyRank] = useState([]);
   const userEmail = useSelector((state) => state.user.userEmail);
+
+  const myRecord = useGetBiumTime(myRank.topBium);
 
   // 랭크에 본인 정보가 있는지 여부 파악
   const myRankExistsInRank = rank.some((item) => item.userNickname === myRank.userNickname);
@@ -42,18 +45,13 @@ function GetRanking() {
           {rank.map((item, index) => (
             <RankingItem key={index} nickname={item.userNickname} rank={item.userRank} topBium={item.topBium} ranking={item.ranking} />
           ))}
-        </div>
-        <p>...</p>
-        <div>
+          <p>...</p>
           {!myRankExistsInRank && (
             <div className={styles.myRanking}>
               <div>{myRank.ranking}</div>
-              &nbsp;
               <div>{myRank.userNickname}</div>
-              &nbsp;
               <div>{myRank.userRank}</div>
-              &nbsp;
-              <div>{myRank.topBium}</div>
+              <div>{myRecord}</div>
             </div>
           )}
         </div>
