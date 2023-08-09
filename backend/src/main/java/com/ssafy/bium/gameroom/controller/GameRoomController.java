@@ -86,7 +86,7 @@ public class GameRoomController {
     }
 
     @PostMapping("/over")
-    public String over(
+    public List<UserGameRecordDto> over(
             @RequestBody OverGameDto request
     ){
         return gameRoomService.overGame(request);
