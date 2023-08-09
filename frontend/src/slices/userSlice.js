@@ -63,23 +63,7 @@ const userSlice = createSlice({
   }
 });
 
-<<<<<<< HEAD
-export const {
-  setToken,
-  setUserEmail,
-  setNickname,
-  setTodayBium,
-  setTotalBium,
-  setImageId,
-  setDisturb,
-  setIsLogin,
-  setIsLoginError,
-  setIsValidToken,
-  setUserInfo
-} = userSlice.actions;
-=======
-export const { setToken, setUserEmail, setNickname, setTodayBium, setTotalBium, setImageId, setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } = userSlice.actions;
->>>>>>> 25008d7535bf65708c0319293cda59da5f597788
+export const { setToken, setUserEmail, setNickname, setTodayBium, setTotalBium, setImageId, setDisturb, setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } = userSlice.actions;
 
 const persistedReducer = persistReducer(persistConfig, userSlice.reducer);
 export default persistedReducer;

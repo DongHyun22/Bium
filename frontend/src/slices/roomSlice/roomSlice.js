@@ -11,7 +11,7 @@ const initialState = {
   host: false,
   gameId: null,
   gameRoomId: '',
-  gameFallCount: 6
+  gameFallCount: 0
 };
 
 export const roomSlice = createSlice({
