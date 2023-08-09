@@ -7,13 +7,13 @@ const RankingItem = ({ nickname, rank, topBium, ranking }) => (
       변환한뒤 최고기록을 시 : 분 : 초의 형식으로 표시 */
 
   <div className={styles.rankingItem}>
-    <div className="rankingPosition">{ranking}</div>
+    <div className={styles.position}>{ranking}</div>
     &nbsp;&nbsp;&nbsp;
-    <div className="rankingNickname">{nickname}</div>
+    <div className={styles.nickname}>{nickname}</div>
     &nbsp;&nbsp;&nbsp;
-    <div className="rankingRank">{rank}</div>
+    <div className={styles.rank}>{rank}</div>
     &nbsp;&nbsp;&nbsp;
-    <div className="rankingTopBium">{useGetBiumTime(topBium)}</div>
+    <div className={styles.topBium}>{useGetBiumTime(topBium)}</div>
   </div>
 );
 
