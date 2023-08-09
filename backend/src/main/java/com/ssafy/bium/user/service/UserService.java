@@ -19,9 +19,12 @@ public interface UserService {
     User getUserByUserEmail(String userEmail);
     int deleteUserByUserEmail(String userEmail);
     public User login(UserLoginPostReq userLoginPostReq);
+    void saveRefreshToken(String userEmail, String refreshToken);
+    Object getRefreshToken(String userEmail);
     UserModifyGetRes getModifyData(String userEmail);
     int modifyProfile(UserModifyPostReq userModifyPostReq);
     Image setImage(FilePostReq filePostReq);
+    Image getImageData(String userEmail, int imgType);
     List<UserRankingGetRes> getUserListTop5ByTotalBium();
     UserRankingGetRes getUserByTotalBium(String userEmail);
 
