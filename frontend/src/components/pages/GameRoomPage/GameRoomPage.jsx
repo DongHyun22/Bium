@@ -155,7 +155,7 @@ function GameRoomPage() {
       console.log('gameroom ID니까 ', gameRoomId);
       const response = await axios
         .post(
-          `http://localhost:8080/api/game/start`,
+          `https://i9c205.p.ssafy.io/api/game/start`,
           { gameRoomId },
           {
             params: { gameRoomId },
@@ -177,7 +177,7 @@ function GameRoomPage() {
   const endGame = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/game/stop`,
+        `https://i9c205.p.ssafy.io/api/game/stop`,
 
         {
           params: {
@@ -206,7 +206,7 @@ function GameRoomPage() {
 
       const response = await axios
         .post(
-          `http://localhost:8080/api/game/over`,
+          `https://i9c205.p.ssafy.io/api/game/over`,
           { gameId: gameId, gameRecord: 23 },
           {
             headers: {

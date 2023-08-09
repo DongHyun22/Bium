@@ -58,7 +58,7 @@ function LoginPage() {
   const findPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`http://localhost:8080/api/findpw/${passwordEmail}`);
+      const response = await axios.get(`https://i9c205.p.ssafy.io/api/findpw/${passwordEmail}`);
       alert('임시 비밀번호가 이메일로 전송되었습니다.');
       console.log('전송 성공', response);
     } catch (error) {
@@ -80,25 +80,13 @@ function LoginPage() {
         <div className="loginId">
           <label htmlFor="userEmail">
             이메일 &nbsp;
-            <input
-              type="text"
-              id="userEmail"
-              placeholder="이메일을 입력해 주세요."
-              value={userEmail}
-              onChange={handleEmailChange}
-            />
+            <input type="text" id="userEmail" placeholder="이메일을 입력해 주세요." value={userEmail} onChange={handleEmailChange} />
           </label>
         </div>
         <div className="loginPassword">
           <label htmlFor="userPassword">
             비밀번호 &nbsp;
-            <input
-              type="password"
-              id="userPassword"
-              placeholder="비밀번호를 입력해 주세요."
-              value={userPw}
-              onChange={handlePasswordChange}
-            />
+            <input type="password" id="userPassword" placeholder="비밀번호를 입력해 주세요." value={userPw} onChange={handlePasswordChange} />
           </label>
         </div>
         <div>

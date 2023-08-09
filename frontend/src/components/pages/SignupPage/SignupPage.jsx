@@ -97,7 +97,7 @@ export default function SignUpPage() {
         userName: name,
         userNickname: nickname
       };
-      const response = await axios.post('http://localhost:8080/api/signup', userRegisterInfomation);
+      const response = await axios.post('https://i9c205.p.ssafy.io/api/signup', userRegisterInfomation);
       return console.log(response.data);
     } catch (error) {
       console.error(error);
@@ -107,7 +107,7 @@ export default function SignUpPage() {
   const checkMail = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get('http://localhost:8080/api/signup/check', {
+      const response = await axios.get('https://i9c205.p.ssafy.io/api/signup/check', {
         params: {
           userEmail: userEmail
         }
@@ -171,34 +171,16 @@ export default function SignUpPage() {
       <form onSubmit={handleSubmit}>
         <label>
           비밀번호:
-          <input
-            type="password"
-            autoComplete="off"
-            placeholder="Password"
-            value={password}
-            onChange={handleChange}
-            name="password"
-            required
-          />
+          <input type="password" autoComplete="off" placeholder="Password" value={password} onChange={handleChange} name="password" required />
         </label>
         {password && <div>{isPasswordValid ? <p>{rightPassword}</p> : <p>{wrongPassword}</p>}</div>}
         <br />
         <label>
           비밀번호 확인:
-          <input
-            type="password"
-            autoComplete="off"
-            placeholder="Confirm password"
-            value={passwordConfirm}
-            onChange={handleChange}
-            name="passwordConfirm"
-            required
-          />
+          <input type="password" autoComplete="off" placeholder="Confirm password" value={passwordConfirm} onChange={handleChange} name="passwordConfirm" required />
         </label>
         <br />
-        {passwordConfirm && (
-          <div>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>
-        )}
+        {passwordConfirm && <div>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>}
 
         <label>
           이름:

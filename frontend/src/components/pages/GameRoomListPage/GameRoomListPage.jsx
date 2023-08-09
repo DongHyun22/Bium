@@ -9,7 +9,7 @@ export const GameRoomListPage = () => {
 
   const gemeRoomapi = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/game').then((response) => {
+      const response = await axios.get('https://i9c205.p.ssafy.io/api/game').then((response) => {
         console.log(response.data);
         setAllRooms(response.data);
       });
