@@ -1,4 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
+
+import storageSession from 'redux-persist/lib/storage/session';
 
 const initialState = {
   roomTitle: '',
@@ -7,15 +10,35 @@ const initialState = {
   myUserName: 'jihyeok',
   maxPeople: 8,
   backgroundImage: 1,
-  start: false
+  start: false,
+  host: false,
+  gameId: null,
+  gameRoomId: '',
+  gameFallCount: 0
+};
+const persistConfig = {
+  key: 'room',
+  storage: storageSession,
+  whitelist: ['gameFallCount']
 };
 
 export const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {
+    setGameId: (state, action) => {
+      state.gameId = action.payload;
+    },
+    setGameFallCount: (state, action) => {
+      state.gameFallCount = action.payload;
+    },
+    setGameRoomId: (state, action) => {
+      state.gameRoomId = action.payload;
+    },
+    setHost: (state, action) => {
+      state.host = action.payload;
+    },
     setStart: (state, action) => {
-      console.log('actrionㅅ;ㄹ헹', action.payload);
       state.start = action.payload;
     },
     setRoomTitle: (state, action) => {
@@ -39,6 +62,8 @@ export const roomSlice = createSlice({
   }
 });
 
-export const { setStart, setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } = roomSlice.actions;
+export const { setGameId, setGameFallCount, setGameRoomId, setHost, setStart, setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } = roomSlice.actions;
 
-export default roomSlice.reducer;
+const persistedReducer = persistReducer(persistConfig, roomSlice.reducer);
+
+export default persistedReducer;

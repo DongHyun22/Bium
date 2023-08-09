@@ -1,19 +1,19 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as faceapi from 'face-api.js';
-import { useSelector } from 'react-redux';
-import { clearAllListeners } from '@reduxjs/toolkit';
+import { useDispatch, useSelector } from 'react-redux';
+import { setGameFallCount } from '../../../slices/roomSlice/roomSlice';
 
 const OpenViduVideoComponent = (props) => {
+  const dispatch = useDispatch();
   const join = useSelector((state) => state.video.join);
-  const [failcount, setFailcount] = useState(0);
+  const gameFallCount = useSelector((state) => state.room.gameFallCount);
 
-  console.log('제발 빨리 끝내고 잘 수 있으면 좋겠다', props);
+  console.log('제발 빨리 끝내고 잘 수 있으면 좋겠다', gameFallCount);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
   //모델 불러오기
   const loadModels = () => {
-    console.log('start');
     const MODEL_URL = process.env.PUBLIC_URL + '/models';
 
     Promise.all([
@@ -25,26 +25,13 @@ const OpenViduVideoComponent = (props) => {
       faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
 
       // faceapi.nets.face
-    ]).then((e) => {
-      if (join) {
-        faceMyDetect();
-      }
-    });
+    ]);
   };
-
   // 한번 실행;
   useEffect(() => {
     if (join) {
       videoRef && loadModels();
     }
-    return () => {
-      console.log('stopoadModels');
-      clearInterval(loadModels);
-      console.log('stopfaceDtect');
-      clearInterval(faceMyDetect);
-      console.log('stoplister');
-      clearAllListeners();
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -52,42 +39,50 @@ const OpenViduVideoComponent = (props) => {
     if (props && videoRef.current) {
       props.streamManager.addVideoElement(videoRef.current);
     }
-    return;
+    return () => {};
   }, [props]);
 
-  //내 이미지로부터 인식하고 다시 그려주기
-  const faceMyDetect = () => {
-    setInterval(async () => {
-      console.log('하하하', videoRef.current);
-      const videoElement = document.querySelector('#localVideo');
+  useEffect(() => {
+    const faceMyDetect = () => {
+      setInterval(async () => {
+        const videoElement = document.querySelector('#localVideo');
+        // DRAW YOU FACE IN WEBCAM
+        if (videoRef.current !== null) {
+          const detections = await faceapi.detectSingleFace(videoElement, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+          if (detections && detections.expressions.neutral < 0.6) {
+            dispatch(setGameFallCount(gameFallCount + 1));
+            console.log(detections.expressions);
+            console.log(gameFallCount);
+          }
 
-      // DRAW YOU FACE IN WEBCAM
-      if (videoRef.current !== null) {
-        const detections = await faceapi.detectSingleFace(videoElement, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
-        canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoElement);
-        faceapi.matchDimensions(canvasRef.current, {
-          width: 480,
-          height: 270
-        });
-        if (detections) {
-          const resized = faceapi.resizeResults(detections, {
+          canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoElement);
+          faceapi.matchDimensions(canvasRef.current, {
             width: 480,
             height: 270
           });
+          if (detections) {
+            const resized = faceapi.resizeResults(detections, {
+              width: 480,
+              height: 270
+            });
 
-          faceapi.draw.drawDetections(canvasRef.current, resized);
-          faceapi.draw.drawFaceLandmarks(canvasRef.current, resized);
-          faceapi.draw.drawFaceExpressions(canvasRef.current, resized);
+            faceapi.draw.drawDetections(canvasRef.current, resized);
+            faceapi.draw.drawFaceLandmarks(canvasRef.current, resized);
+            faceapi.draw.drawFaceExpressions(canvasRef.current, resized);
+          }
         }
-      } else {
-        return;
-      }
-    }, 8000);
-  };
+      }, 2000);
+    };
+    faceMyDetect();
+    return () => {
+      console.log('clear');
+      clearInterval(faceMyDetect);
+    };
+  }, []);
 
   return (
     <>
-      <video id="localVideo" audio={false} autoPlay={true} ref={videoRef} />
+      <video id="localVideo" audio="false" autoPlay={true} ref={videoRef} />
       <canvas id="drawCanvas" ref={canvasRef} />
     </>
   );

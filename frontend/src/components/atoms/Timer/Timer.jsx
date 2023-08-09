@@ -11,11 +11,8 @@ export default function GameTimer() {
   const [ovHour, setOvHour] = useState(0);
 
   useEffect(() => {
-    console.log(start);
-    console.log('왜 타이머 시작 안해?');
     // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
     if (start === true) {
-      console.log('여기 실행햬?');
       const startTimer = setInterval(() => {
         setTotalCount(totalCount + 1);
       }, 1000);
@@ -28,7 +25,6 @@ export default function GameTimer() {
       return () => {
         clearInterval(startTimer);
         // setStart(false);
-        console.log('여기는 count를 초기화 하는 곳');
         // setTotalCount(0);
       };
     }
