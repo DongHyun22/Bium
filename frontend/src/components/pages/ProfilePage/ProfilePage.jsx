@@ -23,8 +23,9 @@ export function ProfilePage() {
 
   // 회원 정보 수정의 기본값은 store 기본값에 한정
   const [name, setName] = useState(savedNickname);
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [existingPassword, setExistingPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newpasswordConfirm, setNewPasswordConfirm] = useState('');
   const todayBium = useGetBiumTime(savedTodayBium);
   const totalBium = useGetBiumTime(savedTotalBium);
 
@@ -38,21 +39,60 @@ export function ProfilePage() {
     setModalOpen(true);
   }
 
+  // 모달창을 닫을 시 기존 input에 입력된 값 초기화
   function closeModal() {
     setModalOpen(false);
+    setName(savedNickname);
+    setExistingPassword('');
+    setNewPassword('');
+    setNewPasswordConfirm('');
   }
+
+  // 기존 비밀번호 확인
+  const checkPassword = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/profile/checkpw`,
+        {
+          userEmail: savedEmail,
+          userPw: existingPassword
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      console.log(response.data);
+      if (response.status === 200) {
+        return true;
+      }
+      console.log(response.status);
+      return false;
+    } catch (error) {
+      return error;
+    }
+  };
 
   const modifyUserInfo = async (e) => {
     e.preventDefault();
+
+    if (checkPassword === false) {
+      alert('잘못된 비밀번호를 입력하셨습니다.');
+      return; 
+    }
+
     try {
-      if (password !== passwordConfirm) {
+      if (newPassword !== newpasswordConfirm) {
         return alert('비밀번호가 일치하지 않습니다.');
       }
 
       const data = {
         userEmail: savedEmail,
         userNickname: name,
-        userPw: password
+        userPw: newPassword
       };
       console.log(data);
       const response = await axios.post(`http://localhost:8080/api/profile/modify`, data, {
@@ -63,13 +103,14 @@ export function ProfilePage() {
           // Authorization: `Bearer ${accessToken}`
         }
       });
-      
+
       console.log(response.data);
       if (response.status === 200) {
         console.log('회원 정보 수정 성공');
         dispatch(setNickname(name));
         // setName(updatedNickname);
         persistor.flush();
+        closeModal();
       }
     } catch (error) {
       console.error('회원 정보 수정에 실패하였습니다.', error);
@@ -79,9 +120,15 @@ export function ProfilePage() {
   // 회원 탈퇴 요청
   const signOutUser = async (e) => {
     e.preventDefault();
+
+    if (checkPassword === false) {
+      alert('잘못된 비밀번호를 입력하셨습니다.');
+      return; 
+    }
+
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/profile/delete`, 
+        `http://localhost:8080/api/profile/delete`,
         {},
         {
           params: {
@@ -108,7 +155,6 @@ export function ProfilePage() {
     }
   };
 
-
   // 회원 탈퇴 확인 모달을 열고 닫는 함수들
   const openDeleteConfirmModal = () => {
     setDeleteConfirmModalOpen(true);
@@ -124,14 +170,19 @@ export function ProfilePage() {
     closeDeleteConfirmModal();
   };
 
-  useEffect(() => {
-    
-  }, []);
+  useEffect(() => {}, []);
 
   return (
-    <>
-      <h1>ProfilePage</h1>
-      <div>
+    <div className={styles.gridContainer}>
+      <div className={styles.header}>
+        <div>
+          <img src="" alt="" />
+        </div>
+        <div>
+          <h1>ProfilePage</h1>
+        </div>
+      </div>
+      <div className={styles.sideLeft}>
         <h3>닉네임</h3>
         <h3>{savedNickname}</h3>
         <h3>오늘 비움량</h3>
@@ -156,12 +207,22 @@ export function ProfilePage() {
               </label>
               <br />
               <label>
+                기존비밀번호:
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={existingPassword}
+                  onChange={(e) => setExistingPassword(e.target.value)}
+                />
+              </label>
+              <br />
+              <label>
                 비밀번호:
                 <input
                   type="password"
                   autoComplete="off"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
                 />
               </label>
               <br />
@@ -170,8 +231,8 @@ export function ProfilePage() {
                 <input
                   type="password"
                   autoComplete="off"
-                  value={passwordConfirm}
-                  onChange={(e) => setPasswordConfirm(e.target.value)}
+                  value={newpasswordConfirm}
+                  onChange={(e) => setNewPasswordConfirm(e.target.value)}
                 />
               </label>
             </form>
@@ -193,7 +254,9 @@ export function ProfilePage() {
           </div>
         )}
       </div>
-      <GetRanking />
-    </>
+      <div className={styles.sideRight}>
+        <GetRanking />
+      </div>
+    </div>
   );
 }

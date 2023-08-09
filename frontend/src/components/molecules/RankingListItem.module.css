@@ -2,5 +2,24 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+}
+
+.position {
+  flex: 0 1 1; 
+  width: 10vh;
+}
+
+.nickname {
+  flex: 0 1 3;
+  width: 30vh;
+}
+
+.rank {
+  flex: 0 1 2;
+  width: 20vh;
+}
+
+.topBium {
+  flex: 0 1 4;
+  width: 40vh;
 }

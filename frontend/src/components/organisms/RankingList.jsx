@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import RankingItem from '../molecules/RankingListItem';
@@ -27,21 +27,18 @@ function GetRanking() {
   }, []);
 
   return (
-    <>
-      <div className="Ranking title">
+    <React.Fragment className={styles.rankingContainer}>
+      <div className={styles.rankingTitle}>
         <p>Ranking</p>
       </div>
       <div>
-        <div>
+        <div className={styles.catalog}>
           <span>순위</span>
-          &nbsp;
           <span>닉네임</span>
-          &nbsp;
           <span>티어</span>
-          &nbsp;
           <span>최고기록</span>
         </div>
-        <div className="Ranking list">
+        <div className={styles.rankingList}>
           {rank.map((item, index) => (
             <RankingItem key={index} nickname={item.userNickname} rank={item.userRank} topBium={item.topBium} ranking={item.ranking} />
           ))}
@@ -61,7 +58,7 @@ function GetRanking() {
           )}
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 }
 
