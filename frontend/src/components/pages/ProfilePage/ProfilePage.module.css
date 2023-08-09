@@ -37,3 +37,9 @@
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 1000;
 }
+
+img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}

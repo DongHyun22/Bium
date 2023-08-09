@@ -6,10 +6,11 @@ import { setJoin } from '../../../slices/videoSlice/videoSlice';
 export const GameRoomListItem = (props) => {
   const navigator = useNavigate();
   const dispatch = useDispatch();
-  console.log('자식', props);
+
   const gameRoomTitle = props.allRoom.gameRoomTitle;
   const roomPeople = props.allRoom.maxPeople;
   const customSessionId = props.allRoom.customSessionId;
+  const gameStart = props.allRoom.start;
 
   const enterRoom = (e) => {
     dispatch(setJoin(true));
@@ -17,14 +18,18 @@ export const GameRoomListItem = (props) => {
     navigator('/gameroom', { state: { customSessionId: `${e}` } });
   };
   return (
-    <div
-      onClick={() => {
-        enterRoom(customSessionId);
-      }}
-    >
-      <h3>{gameRoomTitle}</h3>
-      <h6>{roomPeople}</h6>
-    </div>
+    <>
+      {gameStart === false ? (
+        <div
+          onClick={() => {
+            enterRoom(customSessionId);
+          }}
+        >
+          <h3>{gameRoomTitle}</h3>
+          <h6>{roomPeople}</h6>
+        </div>
+      ) : null}
+    </>
   );
 };
 export default GameRoomListItem;
