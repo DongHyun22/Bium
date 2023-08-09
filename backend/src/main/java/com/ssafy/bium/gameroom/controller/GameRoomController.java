@@ -94,7 +94,7 @@ public class GameRoomController {
     public List<UserGameRecordDto> stop(
             @RequestParam String gameRoomId
     ) {
-        return gameRoomService.RecordGameRoom(gameRoomId);
+        return gameRoomService.StopGameRoom(gameRoomId);
     }
 
     // 게임 종료시 게임 기록 반환 및 게임 기록 유저에 저장

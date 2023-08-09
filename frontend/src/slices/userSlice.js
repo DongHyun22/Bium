@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { persistReducer, PURGE } from 'redux-persist';
+import { persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
 
 const initialState = {
@@ -63,6 +63,7 @@ const userSlice = createSlice({
   }
 });
 
+<<<<<<< HEAD
 export const {
   setToken,
   setUserEmail,
@@ -76,6 +77,9 @@ export const {
   setIsValidToken,
   setUserInfo
 } = userSlice.actions;
+=======
+export const { setToken, setUserEmail, setNickname, setTodayBium, setTotalBium, setImageId, setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } = userSlice.actions;
+>>>>>>> 25008d7535bf65708c0319293cda59da5f597788
 
 const persistedReducer = persistReducer(persistConfig, userSlice.reducer);
 export default persistedReducer;
