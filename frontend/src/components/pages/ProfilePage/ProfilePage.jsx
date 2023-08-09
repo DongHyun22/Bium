@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { setNickname, setUserEmail, setImageId, setDisturb } from '../../../slices/userSlice';
+import { setNickname, setImageId, setDisturb } from '../../../slices/userSlice';
 import { GetRanking } from '../../organisms/RankingList';
-import { getUserInfo } from '../../../slices/getLoginInfo';
 import useGetBiumTime from '../../../hooks/TimeInquery';
 import axios from 'axios';
 import { persistor } from '../../../store/store';
@@ -32,6 +31,9 @@ export function ProfilePage() {
   const totalBium = useGetBiumTime(savedTotalBium);
   const [profileimage, setProfileImage] = useState(null);
   const [disturbImage, setDisturbImage] = useState(null);
+
+  // 프로필 이미지와 방해이미지가 바뀌는 상태를 관리하는 state
+  const [showProfile, setShowProfile] = useState(true);
 
   // 회원 탈퇴 확인 모달의 상태를 관리하는 state
   const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState(false);
@@ -332,16 +334,15 @@ export function ProfilePage() {
     <div className={styles.gridContainer}>
       <div className={styles.header}>
         <div>
-          <img src="" alt="" />
         </div>
         <div>
           <h1>ProfilePage</h1>
         </div>
       </div>
       <div className={styles.sideLeft}>
+      {showProfile ? (
         <div>
           <p>프로필 이미지</p>
-          {/* {savedProfileImage && <img src={savedProfileImage} alt="미리보기" />} */}
           {savedProfileImage ? (
             <img src={savedProfileImage} alt="미리보기" />
           ) : (
@@ -355,9 +356,9 @@ export function ProfilePage() {
             <button onClick={deleteProfile}>삭제</button>
           </div>
         </div>
+      ) : (
         <div>
           <p>방해 이미지</p>
-          {/* {savedDisturbImage && <img src={savedDisturbImage} alt="미리보기" />} */}
           {savedDisturbImage ? (
             <img src={savedDisturbImage} alt="미리보기" />
           ) : (
@@ -371,6 +372,8 @@ export function ProfilePage() {
             <button onClick={deleteDisturb}>삭제</button>
           </div>
         </div>
+      )}
+      <button onClick={() => setShowProfile(!showProfile)}>토글 이미지</button>
         <h3>닉네임</h3>
         <h3>{savedEmail}</h3>
         <h3>오늘 비움량</h3>
