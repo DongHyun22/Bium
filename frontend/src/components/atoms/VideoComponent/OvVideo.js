@@ -43,7 +43,9 @@ const OpenViduVideoComponent = (props) => {
   }, [props]);
 
   useEffect(() => {
-    const faceMyDetect = () => {
+    const faceMyDetect = (props) => {
+      console.log(props);
+      const gameFallCount = props.gameFallCount;
       setInterval(async () => {
         const videoElement = document.querySelector('#localVideo');
         // DRAW YOU FACE IN WEBCAM
@@ -54,26 +56,25 @@ const OpenViduVideoComponent = (props) => {
             console.log(detections.expressions);
             console.log(gameFallCount);
           }
+          // canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoElement);
+          // faceapi.matchDimensions(canvasRef.current, {
+          //   width: 480,
+          //   height: 270
+          // });
+          // if (detections) {
+          //   const resized = faceapi.resizeResults(detections, {
+          //     width: 480,
+          //     height: 270
+          //   });
 
-          canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoElement);
-          faceapi.matchDimensions(canvasRef.current, {
-            width: 480,
-            height: 270
-          });
-          if (detections) {
-            const resized = faceapi.resizeResults(detections, {
-              width: 480,
-              height: 270
-            });
-
-            faceapi.draw.drawDetections(canvasRef.current, resized);
-            faceapi.draw.drawFaceLandmarks(canvasRef.current, resized);
-            faceapi.draw.drawFaceExpressions(canvasRef.current, resized);
-          }
+          //   faceapi.draw.drawDetections(canvasRef.current, resized);
+          //   faceapi.draw.drawFaceLandmarks(canvasRef.current, resized);
+          //   faceapi.draw.drawFaceExpressions(canvasRef.current, resized);
+          // }
         }
       }, 2000);
     };
-    faceMyDetect();
+    faceMyDetect({ gameFallCount });
     return () => {
       console.log('clear');
       clearInterval(faceMyDetect);
