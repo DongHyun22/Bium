@@ -8,6 +8,7 @@ import { getUserInfo } from '../../../slices/getLoginInfo';
 import useGetBiumTime from '../../../hooks/TimeInquery';
 import axios from 'axios';
 import { persistor } from '../../../store/store';
+import emptyprofile from '../../../asset/backgroudimage/emptyprofile.png';
 
 export function ProfilePage() {
   const { userEmail } = useParams();
@@ -37,6 +38,7 @@ export function ProfilePage() {
   // 회원 정보 수정 모달 오픈 여부
   const [modalOpen, setModalOpen] = useState(false);
 
+  console.log('dafdfadsf', savedProfileImage);
   // 프로필 이미지 저장
   const saveProfile = (e) => {
     e.preventDefault();
@@ -48,6 +50,7 @@ export function ProfilePage() {
       console.log('프로필 이미지', file);
     }
   };
+
   // 방해 이미지 저장
   const saveDisturb = (e) => {
     e.preventDefault();
@@ -171,15 +174,6 @@ export function ProfilePage() {
       }
     }
   };
-  // useEffect(() => {
-  //   if (savedProfileImage) {
-  //     setProfileImage(savedProfileImage);
-  //     console.log('savedProfileImage1', savedProfileImage);
-  //     console.log('setProfileImage1', setProfileImage);
-  //   } else {
-  //     setProfileImage(null);
-  //   }
-  // }, [savedProfileImage]);
 
   // 프로필 이미지 삭제
   const deleteProfile = () => {
@@ -294,7 +288,12 @@ export function ProfilePage() {
       <div>
         <div>
           <p>프로필 이미지</p>
-          {savedProfileImage && <img src={savedProfileImage} alt="미리보기" />}
+          {/* {savedProfileImage && <img src={savedProfileImage} alt="미리보기" />} */}
+          {savedProfileImage ? (
+            <img src={savedProfileImage} alt="미리보기" />
+          ) : (
+            <img src={emptyprofile} alt="미리보기" />
+          )}
           <div>
             <input name="file" type="file" accept="image/*" onChange={saveProfile}></input>
           </div>
@@ -305,7 +304,12 @@ export function ProfilePage() {
         </div>
         <div>
           <p>방해 이미지</p>
-          {savedDisturbImage && <img src={savedDisturbImage} alt="미리보기" />}
+          {/* {savedDisturbImage && <img src={savedDisturbImage} alt="미리보기" />} */}
+          {savedDisturbImage ? (
+            <img src={savedDisturbImage} alt="미리보기" />
+          ) : (
+            <img src={emptyprofile} alt="미리보기" />
+          )}
           <div>
             <input name="file" type="file" accept="image/*" onChange={saveDisturb}></input>
           </div>
