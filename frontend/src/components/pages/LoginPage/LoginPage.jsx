@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userLogin, getUserInfo } from '../../../slices/getLoginInfo';
 import styles from './LoginPage.module.css';
 import axios from 'axios';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 // 로그인 컴포넌트
 function LoginPage() {
@@ -58,7 +59,7 @@ function LoginPage() {
   const findPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`https://i9c205.p.ssafy.io/api/findpw/${passwordEmail}`);
+      const response = await axios.get(APPLICATION_SERVER_URL + `/api/findpw/${passwordEmail}`);
       alert('임시 비밀번호가 이메일로 전송되었습니다.');
       console.log('전송 성공', response);
     } catch (error) {

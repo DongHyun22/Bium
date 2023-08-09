@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import OpenViduVideoComponent from './OvVideo';
 import { useSelector } from 'react-redux';
 
@@ -9,8 +9,10 @@ const UserVideoComponent = (props) => {
   const OV = useSelector((state) => state.video.OV);
   const session = useSelector((state) => state.video.session);
   const subscribers = useSelector((state) => state.video.subscribers);
+  const disturbImage = useSelector((state) => state.user.imageId);
 
-  console.log('확인해', OV, session, subscribers);
+  const [disturb, setDisturb] = useState(false);
+  const start = useSelector((state) => state.room.start);
   return (
     <div>
       <div>
@@ -18,7 +20,20 @@ const UserVideoComponent = (props) => {
       </div>
       {props.streamManager !== undefined ? (
         <div className="streamcomponent">
-          <OpenViduVideoComponent streamManager={props.streamManager} />
+          <button
+            onClick={() => {
+              setDisturb(true);
+            }}
+          >
+            방해하기 버튼
+          </button>
+          {disturb && start === false ? (
+            <>
+              <img src={disturbImage} alt="사진이 없어..." />
+            </>
+          ) : (
+            <OpenViduVideoComponent streamManager={props.streamManager} />
+          )}
         </div>
       ) : null}
     </div>

@@ -2,14 +2,15 @@ import React, { useRef, useEffect, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { setGameFallCount } from '../../../slices/roomSlice/roomSlice';
+import { Publisher } from 'openvidu-browser';
 
 const OpenViduVideoComponent = (props) => {
   const dispatch = useDispatch();
-  const join = useSelector((state) => state.video.join);
-
   const videoRef = useRef(null);
-  const gameFallCount = useSelector((state) => state.room.gameFallCount);
 
+  const join = useSelector((state) => state.video.join);
+  const publisher = useSelector((state) => state.video.publisher);
+  const start = useSelector((state) => state.room.start);
   //모델 불러오기
   const loadModels = () => {
     const MODEL_URL = process.env.PUBLIC_URL + '/models';
@@ -40,8 +41,9 @@ const OpenViduVideoComponent = (props) => {
   useEffect(() => {
     const FaceMyDetect = () => {
       setInterval(async () => {
+        console.log('1');
         // DRAW YOU FACE IN WEBCAM
-        if (videoRef.current !== null) {
+        if (videoRef.current !== null && props.streamManager === publisher) {
           const detections = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
           if (detections && detections.expressions.neutral < 0.6) {
             console.log(detections.expressions);
@@ -50,19 +52,18 @@ const OpenViduVideoComponent = (props) => {
         }
       }, 1000);
     };
-    FaceMyDetect();
+    if (start === true) {
+      FaceMyDetect();
+    }
     return () => {
       console.log('clear');
       clearInterval(FaceMyDetect);
     };
-  }, []);
+  }, [start]);
 
   return (
     <>
       <video id="localVideo" audio="false" autoPlay={true} ref={videoRef} />
-
-      <p>당신의 탈락카운트</p>
-      <p>{gameFallCount}</p>
     </>
   );
 };

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios, { all } from 'axios';
+import axios from 'axios';
 import GameRoomListItem from './GameRoomListItemPage';
 import { useDispatch } from 'react-redux';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export const GameRoomListPage = () => {
   const dispatch = useDispatch();
@@ -9,8 +10,7 @@ export const GameRoomListPage = () => {
 
   const gemeRoomapi = async () => {
     try {
-      const response = await axios.get('https://i9c205.p.ssafy.io/api/game').then((response) => {
-        console.log(response.data);
+      const response = await axios.get(APPLICATION_SERVER_URL + '/api/game').then((response) => {
         setAllRooms(response.data);
       });
       // axios response
@@ -34,7 +34,7 @@ export const GameRoomListPage = () => {
         </>
       ) : (
         <>
-          <h2>안뜨는데?</h2>
+          <h2>방이 없어요?</h2>
         </>
       )}
     </div>

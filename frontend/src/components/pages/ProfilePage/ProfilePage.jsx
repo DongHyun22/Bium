@@ -8,6 +8,7 @@ import useGetBiumTime from '../../../hooks/TimeInquery';
 import axios from 'axios';
 import { persistor } from '../../../store/store';
 import emptyprofile from '../../../asset/backgroudimage/emptyprofile.png';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export function ProfilePage() {
   const { userEmail } = useParams();
@@ -78,7 +79,7 @@ export function ProfilePage() {
       }
       console.log(formData);
       try {
-        const profileResponse = await axios.post(`https://i9c205.p.ssafy.io/api/profile/img/${savedEmail}`, formData, {
+        const profileResponse = await axios.post(APPLICATION_SERVER_URL + `/api/profile/img/${savedEmail}`, formData, {
           params: {
             imgType: 1
           },
@@ -104,7 +105,7 @@ export function ProfilePage() {
           const imgType = profileResponse.data.imgType;
           const originalFile = profileResponse.data.originalFile;
 
-          const getProfileResponse = await axios.get(`https://i9c205.p.ssafy.io/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
+          const getProfileResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
 
           const imgSrc = URL.createObjectURL(getProfileResponse.data);
           dispatch(setImageId(imgSrc));
@@ -132,7 +133,7 @@ export function ProfilePage() {
       }
       console.log(formData);
       try {
-        const disturbResponse = await axios.post(`https://i9c205.p.ssafy.io/api/profile/img/${savedEmail}`, formData, {
+        const disturbResponse = await axios.post(APPLICATION_SERVER_URL + `/api/profile/img/${savedEmail}`, formData, {
           params: {
             imgType: 2
           },
@@ -156,7 +157,7 @@ export function ProfilePage() {
           const imgType = disturbResponse.data.imgType;
           const originalFile = disturbResponse.data.originalFile;
 
-          const getDisturbResponse = await axios.get(`https://i9c205.p.ssafy.io/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
+          const getDisturbResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
 
           const imgSrc = URL.createObjectURL(getDisturbResponse.data);
           dispatch(setDisturb(imgSrc));
@@ -207,7 +208,7 @@ export function ProfilePage() {
 
     try {
       const response = await axios.post(
-        `https://i9c205.p.ssafy.io/api/profile/checkpw`,
+        APPLICATION_SERVER_URL + `/api/profile/checkpw`,
         {
           userEmail: savedEmail,
           userPw: existingPassword
@@ -247,7 +248,7 @@ export function ProfilePage() {
         userNickname: name,
         userPw: newPassword
       };
-      const response = await axios.post(`https://i9c205.p.ssafy.io/api/profile/modify`, data, {
+      const response = await axios.post(APPLICATION_SERVER_URL + `/api/profile/modify`, data, {
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
@@ -279,8 +280,8 @@ export function ProfilePage() {
 
     try {
       const response = await axios.post(
-        `https://i9c205.p.ssafy.io/api/profile/delete`,
-        `https://i9c205.p.ssafy.io/api/profile/delete`,
+        APPLICATION_SERVER_URL + `/api/profile/delete`,
+        APPLICATION_SERVER_URL + `/api/profile/delete`,
         {},
         {
           params: {
