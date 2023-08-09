@@ -2,16 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-  setNickname,
-  setUserEmail,
-  setImageId,
-  setDisturb,
-  setImgType,
-  setSaveFile,
-  setSaveFolder,
-  setOriginalFile
-} from '../../../slices/userSlice';
+import { setNickname, setUserEmail, setImageId, setDisturb } from '../../../slices/userSlice';
 import { GetRanking } from '../../organisms/RankingList';
 import { getUserInfo } from '../../../slices/getLoginInfo';
 import useGetBiumTime from '../../../hooks/TimeInquery';
@@ -30,10 +21,6 @@ export function ProfilePage() {
   const savedTotalBium = useSelector((state) => state.user.totalBium);
   const savedProfileImage = useSelector((state) => state.user.imageId);
   const savedDisturbImage = useSelector((state) => state.user.disturb);
-  const saveFile = useSelector((state) => state.user.saveFile);
-  const saveFolder = useSelector((state) => state.user.saveFolder);
-  const imgType = useSelector((state) => state.user.imgType);
-  const originalFile = useSelector((state) => state.user.originalFile);
 
   // 회원 정보 수정의 기본값은 store 기본값에 한정
   const [name, setName] = useState(savedNickname);
@@ -80,13 +67,12 @@ export function ProfilePage() {
       console.log('프로필 이미지', profileimage);
       const formData = new FormData();
       formData.append('file', profileimage);
-      // formData.append('file', new Blob([JSON.stringify(profileimage)], { type: 'application/json' }));
       for (let pair of formData.entries()) {
         console.log('프로필 이미지 formData', pair[0] + ', ' + pair[1]);
       }
       console.log(formData);
       try {
-        const uploadResponse = await axios.post(`http://localhost:8080/api/profile/img/${savedEmail}`, formData, {
+        const profileResponse = await axios.post(`http://localhost:8080/api/profile/img/${savedEmail}`, formData, {
           params: {
             imgType: 1
           },
@@ -99,31 +85,28 @@ export function ProfilePage() {
             }
           ]
         });
-        console.log(uploadResponse.data);
-        // if (response.status === 200 && response.data.imageUrl) {
-        if (uploadResponse.status === 200) {
-          dispatch(setImageId(uploadResponse.data.saveFile));
+        console.log(profileResponse.data);
+        if (profileResponse.status === 200) {
+          dispatch(setImageId(profileResponse.data.saveFile));
 
-          // dispatch(setSaveFolder(response.data.saveFolder))
-          // dispatch(setSaveFile(response.data.saveFile))
-          // dispatch(setImgType(response.data.imgType))
-          // dispatch(setOriginalFile(response.data.originalFile))
+          console.log(dispatch(setImageId(profileResponse.data.saveFile)));
+          console.log('서버 전송 성공', profileResponse.data.saveFile);
 
-          console.log(dispatch(setImageId(uploadResponse.data.saveFile)));
-          console.log('서버 전송 성공', uploadResponse.data.saveFile);
+          // 프로필 이미지 조회
+          const saveFile = profileResponse.data.saveFile;
+          const saveFolder = profileResponse.data.saveFolder;
+          const imgType = profileResponse.data.imgType;
+          const originalFile = profileResponse.data.originalFile;
 
-          const saveFile = uploadResponse.data.saveFile;
-          const saveFolder = uploadResponse.data.saveFolder;
-          const imgType = uploadResponse.data.imgType;
-          const originalFile = uploadResponse.data.originalFile;
-
-          const getResponse = await axios.get(
+          const getProfileResponse = await axios.get(
             `http://localhost:8080/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
-            {responseType: "blob"}
+            { responseType: 'blob' }
           );
 
-          let imgSrc = URL.createObjectURL(getResponse.data);
+          const imgSrc = URL.createObjectURL(getProfileResponse.data);
+          dispatch(setImageId(imgSrc));
 
+          console.log('seTtidmfd', setImageId(imgSrc));
           console.log('조회 성공', imgSrc);
         } else {
           console.log('서버 응답 오류');
@@ -134,31 +117,19 @@ export function ProfilePage() {
     }
   };
 
-  // // 프로필 이미지 조회
-  // const getImage = () => {
-  //   try {
-  //     const response = axios.get(`http://localhost:8080/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`)
-  //     console.log(response)
-  //     console.log('조회 성공', response)
-  //   } catch(error) {
-  //     console.log('조회 실패', error)
-  //   }
-  // }
-
   // 방해 이미지 전송
   const sendToDisturb = async (e) => {
     e.preventDefault();
-    if (profileimage) {
-      console.log('방해이미지', profileimage);
+    if (disturbImage) {
+      console.log('방해이미지', disturbImage);
       const formData = new FormData();
-      formData.append('file', profileimage);
-      // formData.append('file', new Blob([JSON.stringify(profileimage)], { type: 'application/json' }));
+      formData.append('file', disturbImage);
       for (let pair of formData.entries()) {
         console.log('방해이미지 formData', pair[0] + ', ' + pair[1]);
       }
       console.log(formData);
       try {
-        const response = await axios.post(`http://localhost:8080/api/profile/img/${savedEmail}`, formData, {
+        const disturbResponse = await axios.post(`http://localhost:8080/api/profile/img/${savedEmail}`, formData, {
           params: {
             imgType: 2
           },
@@ -171,11 +142,27 @@ export function ProfilePage() {
             }
           ]
         });
-        console.log(response.data);
-        // if (response.status === 200 && response.data.imageUrl) {
-        if (response.status === 200) {
-          dispatch(setDisturb(response.data.saveFile));
-          console.log('서버 전송 성공', response);
+        console.log(disturbResponse.data);
+        if (disturbResponse.status === 200) {
+          dispatch(setDisturb(disturbResponse.data.saveFile));
+          console.log('서버 전송 성공', disturbResponse);
+
+          // 방해 이미지 조회
+          const saveFile = disturbResponse.data.saveFile;
+          const saveFolder = disturbResponse.data.saveFolder;
+          const imgType = disturbResponse.data.imgType;
+          const originalFile = disturbResponse.data.originalFile;
+
+          const getDisturbResponse = await axios.get(
+            `http://localhost:8080/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
+            { responseType: 'blob' }
+          );
+
+          const imgSrc = URL.createObjectURL(getDisturbResponse.data);
+          dispatch(setDisturb(imgSrc));
+
+          console.log('seTtidmfd', setDisturb(imgSrc));
+          console.log('조회 성공', imgSrc);
         } else {
           console.log('서버 응답 오류');
         }
@@ -338,7 +325,7 @@ export function ProfilePage() {
           <div className={styles.modal}>
             <h2>회원정보 수정</h2>
             <form>
-              <div>{profileimage && <img src={profileimage} alt="미리보기" />}</div>
+              <div>{savedProfileImage && <img src={savedProfileImage} alt="미리보기" />}</div>
               <div>{savedNickname}</div>
               <label>
                 닉네임:
