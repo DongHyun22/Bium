@@ -18,6 +18,9 @@ export const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {
+    setGameFallCount: (state, action) => {
+      state.gameFallCount = state.gameFallCount + action.payload;
+    },
     setGameId: (state, action) => {
       state.gameId = action.payload;
     },
@@ -51,6 +54,6 @@ export const roomSlice = createSlice({
   }
 });
 
-export const { setGameId, setGameRoomId, setHost, setStart, setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } = roomSlice.actions;
+export const { setGameFallCount, setGameId, setGameRoomId, setHost, setStart, setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } = roomSlice.actions;
 
 export default roomSlice.reducer;

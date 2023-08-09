@@ -1,13 +1,14 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import { useDispatch, useSelector } from 'react-redux';
+import { setGameFallCount } from '../../../slices/roomSlice/roomSlice';
 
 const OpenViduVideoComponent = (props) => {
   const dispatch = useDispatch();
   const join = useSelector((state) => state.video.join);
-  // const [count, setCount] = useEffect(0);
 
   const videoRef = useRef(null);
+  const gameFallCount = useSelector((state) => state.room.gameFallCount);
 
   //모델 불러오기
   const loadModels = () => {
@@ -34,20 +35,17 @@ const OpenViduVideoComponent = (props) => {
       props.streamManager.addVideoElement(videoRef.current);
     }
     return () => {};
-  }, [props]);
+  }, []);
 
   useEffect(() => {
     const FaceMyDetect = () => {
-      console.log();
-      // const count = props.count
       setInterval(async () => {
-        console.log('ggg');
-
         // DRAW YOU FACE IN WEBCAM
         if (videoRef.current !== null) {
           const detections = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
           if (detections && detections.expressions.neutral < 0.6) {
             console.log(detections.expressions);
+            dispatch(setGameFallCount(1));
           }
         }
       }, 1000);
@@ -64,7 +62,7 @@ const OpenViduVideoComponent = (props) => {
       <video id="localVideo" audio="false" autoPlay={true} ref={videoRef} />
 
       <p>당신의 탈락카운트</p>
-      {/* <p>{count}</p> */}
+      <p>{gameFallCount}</p>
     </>
   );
 };
