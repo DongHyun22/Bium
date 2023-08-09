@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { setNickname, setUserEmail, setImageId, setDisturb } from '../../../slices/userSlice';
+import { setNickname, setImageId, setDisturb } from '../../../slices/userSlice';
 import { GetRanking } from '../../organisms/RankingList';
-import { getUserInfo } from '../../../slices/getLoginInfo';
 import useGetBiumTime from '../../../hooks/TimeInquery';
 import axios from 'axios';
 import { persistor } from '../../../store/store';
@@ -25,12 +24,16 @@ export function ProfilePage() {
 
   // 회원 정보 수정의 기본값은 store 기본값에 한정
   const [name, setName] = useState(savedNickname);
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [existingPassword, setExistingPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newpasswordConfirm, setNewPasswordConfirm] = useState('');
   const todayBium = useGetBiumTime(savedTodayBium);
   const totalBium = useGetBiumTime(savedTotalBium);
   const [profileimage, setProfileImage] = useState(null);
   const [disturbImage, setDisturbImage] = useState(null);
+
+  // 프로필 이미지와 방해이미지가 바뀌는 상태를 관리하는 state
+  const [showProfile, setShowProfile] = useState(true);
 
   // 회원 탈퇴 확인 모달의 상태를 관리하는 state
   const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState(false);
@@ -195,21 +198,60 @@ export function ProfilePage() {
     setModalOpen(true);
   }
 
+  // 모달창을 닫을 시 기존 input에 입력된 값 초기화
   function closeModal() {
     setModalOpen(false);
+    setName(savedNickname);
+    setExistingPassword('');
+    setNewPassword('');
+    setNewPasswordConfirm('');
   }
+
+  // 기존 비밀번호 확인
+  const checkPassword = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/profile/checkpw`,
+        {
+          userEmail: savedEmail,
+          userPw: existingPassword
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      console.log(response.data);
+      if (response.status === 200) {
+        return true;
+      }
+      console.log(response.status);
+      return false;
+    } catch (error) {
+      return error;
+    }
+  };
 
   const modifyUserInfo = async (e) => {
     e.preventDefault();
+
+    if (checkPassword === false) {
+      alert('잘못된 비밀번호를 입력하셨습니다.');
+      return; 
+    }
+
     try {
-      if (password !== passwordConfirm) {
+      if (newPassword !== newpasswordConfirm) {
         return alert('비밀번호가 일치하지 않습니다.');
       }
 
       const data = {
         userEmail: savedEmail,
         userNickname: name,
-        userPw: password
+        userPw: newPassword
       };
       const response = await axios.post(`http://localhost:8080/api/profile/modify`, data, {
         headers: {
@@ -220,11 +262,13 @@ export function ProfilePage() {
         }
       });
 
+
       console.log(response.data);
       if (response.status === 200) {
         dispatch(setNickname(name));
         // setName(updatedNickname);
         persistor.flush();
+        closeModal();
       }
     } catch (error) {
       console.error('회원 정보 수정에 실패하였습니다.', error);
@@ -234,8 +278,15 @@ export function ProfilePage() {
   // 회원 탈퇴 요청
   const signOutUser = async (e) => {
     e.preventDefault();
+
+    if (checkPassword === false) {
+      alert('잘못된 비밀번호를 입력하셨습니다.');
+      return; 
+    }
+
     try {
       const response = await axios.post(
+        `http://localhost:8080/api/profile/delete`,
         `http://localhost:8080/api/profile/delete`,
         {},
         {
@@ -280,12 +331,18 @@ export function ProfilePage() {
   useEffect(() => {}, []);
 
   return (
-    <>
-      <h1>ProfilePage</h1>
-      <div>
+    <div className={styles.gridContainer}>
+      <div className={styles.header}>
+        <div>
+        </div>
+        <div>
+          <h1>ProfilePage</h1>
+        </div>
+      </div>
+      <div className={styles.sideLeft}>
+      {showProfile ? (
         <div>
           <p>프로필 이미지</p>
-          {/* {savedProfileImage && <img src={savedProfileImage} alt="미리보기" />} */}
           {savedProfileImage ? (
             <img src={savedProfileImage} alt="미리보기" />
           ) : (
@@ -299,9 +356,9 @@ export function ProfilePage() {
             <button onClick={deleteProfile}>삭제</button>
           </div>
         </div>
+      ) : (
         <div>
           <p>방해 이미지</p>
-          {/* {savedDisturbImage && <img src={savedDisturbImage} alt="미리보기" />} */}
           {savedDisturbImage ? (
             <img src={savedDisturbImage} alt="미리보기" />
           ) : (
@@ -315,6 +372,8 @@ export function ProfilePage() {
             <button onClick={deleteDisturb}>삭제</button>
           </div>
         </div>
+      )}
+      <button onClick={() => setShowProfile(!showProfile)}>토글 이미지</button>
         <h3>닉네임</h3>
         <h3>{savedEmail}</h3>
         <h3>오늘 비움량</h3>
@@ -340,13 +399,33 @@ export function ProfilePage() {
               </label>
               <br />
               <label>
+                기존비밀번호:
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={existingPassword}
+                  onChange={(e) => setExistingPassword(e.target.value)}
+                />
+              </label>
+              <br />
+              <label>
                 비밀번호:
-                <input type="password" autoComplete="off" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
               </label>
               <br />
               <label>
                 비밀번호확인:
-                <input type="password" autoComplete="off" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={newpasswordConfirm}
+                  onChange={(e) => setNewPasswordConfirm(e.target.value)}
+                />
               </label>
             </form>
             <button onClick={modifyUserInfo}>수정하기</button>
@@ -367,7 +446,9 @@ export function ProfilePage() {
           </div>
         )}
       </div>
-      <GetRanking />
-    </>
+      <div className={styles.sideRight}>
+        <GetRanking />
+      </div>
+    </div>
   );
 }
