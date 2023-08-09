@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 const OpenViduVideoComponent = (props) => {
   const dispatch = useDispatch();
   const join = useSelector((state) => state.video.join);
-  const [count, setCount] = useEffect(0);
+  // const [count, setCount] = useEffect(0);
 
   const videoRef = useRef(null);
 
@@ -35,8 +35,11 @@ const OpenViduVideoComponent = (props) => {
     }
     return () => {};
   }, [props]);
+
   useEffect(() => {
-    const FaceMyDetect = (props) => {
+    const FaceMyDetect = () => {
+      console.log();
+      // const count = props.count
       setInterval(async () => {
         console.log('ggg');
 
@@ -61,7 +64,7 @@ const OpenViduVideoComponent = (props) => {
       <video id="localVideo" audio="false" autoPlay={true} ref={videoRef} />
 
       <p>당신의 탈락카운트</p>
-      <p>{}</p>
+      {/* <p>{count}</p> */}
     </>
   );
 };
