@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios, { all } from 'axios';
 import GameRoomListItem from './GameRoomListItemPage';
 import { useDispatch } from 'react-redux';
+import styles from './GameRoomList.module.css';
 
 export const GameRoomListPage = () => {
   const dispatch = useDispatch();
@@ -26,17 +27,19 @@ export const GameRoomListPage = () => {
   return (
     <div>
       <h1>게임방 목록</h1>
-      {allRooms !== [] ? (
-        <>
-          {allRooms.map((allRoom, index) => {
-            return <GameRoomListItem key={index} allRoom={allRoom}></GameRoomListItem>;
-          })}
-        </>
-      ) : (
-        <>
-          <h2>안뜨는데?</h2>
-        </>
-      )}
+      <div className={styles.container}>
+        {allRooms !== [] ? (
+          <>
+            {allRooms.map((allRoom, index) => {
+              return <GameRoomListItem key={index} allRoom={allRoom}></GameRoomListItem>;
+            })}
+          </>
+        ) : (
+          <>
+            <h2>안뜨는데?</h2>
+          </>
+        )}
+      </div>
     </div>
   );
 };

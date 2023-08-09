@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { setJoin } from '../../../slices/videoSlice/videoSlice';
+import styles from './GameRoomList.module.css';
 
 export const GameRoomListItem = (props) => {
   const navigator = useNavigate();
@@ -26,6 +27,7 @@ export const GameRoomListItem = (props) => {
           onClick={() => {
             enterRoom(customSessionId);
           }}
+          className={styles.listItem}
         >
           <h3>게임방 제목 : {gameRoomTitle}</h3>
           <h6>{maxPeople}</h6>
