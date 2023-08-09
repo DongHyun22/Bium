@@ -186,10 +186,15 @@ public class UserController {
 
                 logger.debug("원본 파일 이름 : {}, 실제 저장 파일 이름 : {}", file.getOriginalFilename(), saveFileName);
                 file.transferTo(new File(folder, saveFileName));
+
+                userService.setImage(filePostReq);
+
+                Image image = userService.getImageData(userEmail, imgType);
+                ImageDataGetRes imageDataGetRes = new ImageDataGetRes(image);
+                return new ResponseEntity<>(imageDataGetRes, HttpStatus.OK);
             }
-            userService.setImage(filePostReq);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
