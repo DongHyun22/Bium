@@ -42,7 +42,7 @@ function GameRoomPage() {
   const subscribers = useSelector((state) => state.video.subscribers);
   const gameRoomId = useSelector((state) => state.room.gameRoomId);
 
-  const gameFallCount = useSelector((state) => state.room.gemeFallCount);
+  const gameFallCount = useSelector((state) => state.room.gameFallCount);
   const gameId = useSelector((state) => state.room.gameId);
 
   const onbeforeunload = (e) => {
@@ -64,7 +64,7 @@ function GameRoomPage() {
 
   useEffect(() => {
     if (gameFallCount >= 2) {
-      fallAxios();
+      // fallAxios();
     }
   }, [gameFallCount]);
   // 컴포넌트 마운트, 언마운트 시 session 값 초기화
@@ -238,6 +238,9 @@ function GameRoomPage() {
             <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
             {host === true ? <button>이 버 튼</button> : null}
             <button onClick={fallAxios}>탈락버튼</button>
+
+            <h3>당신의 탈락 카운트</h3>
+            <h1>{gameFallCount}</h1>
           </div>
           <div className={styles.backimage}>
             <div id="video-container">

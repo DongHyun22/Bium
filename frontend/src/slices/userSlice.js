@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { persistReducer, PURGE } from 'redux-persist';
+import { persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
 
 const initialState = {
