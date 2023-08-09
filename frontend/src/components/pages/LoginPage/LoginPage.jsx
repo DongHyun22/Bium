@@ -16,7 +16,6 @@ function LoginPage() {
   useEffect(() => {
     if (isLogin || token !== null) {
       navigate('/');
-      console.log('isLogin', isLogin);
     }
   }, [isLogin]);
 
@@ -64,13 +63,7 @@ function LoginPage() {
         <div className="loginPassword">
           <label htmlFor="userPassword">
             비밀번호 &nbsp;
-            <input
-              type="password"
-              id="userPassword"
-              placeholder="비밀번호를 입력해 주세요."
-              value={userPw}
-              onChange={handlePasswordChange}
-            />
+            <input type="password" id="userPassword" placeholder="비밀번호를 입력해 주세요." value={userPw} onChange={handlePasswordChange} />
           </label>
         </div>
         <div>

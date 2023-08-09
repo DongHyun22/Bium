@@ -33,17 +33,14 @@ export const GameRoomListPage = () => {
     gemeRoomapi();
   }, []);
 
-
-
   return (
     <div>
-      ggg
-      <h1>GGGG</h1>
+      <h1>게임방 목록</h1>
       {allRooms !== [] ? (
         <>
-            {allRooms.map((allRoom, index) => {
-              return <GameRoomListItem key={index} allRoom={allRoom}></GameRoomListItem>;
-            })}
+          {allRooms.map((allRoom, index) => {
+            return <GameRoomListItem key={index} allRoom={allRoom}></GameRoomListItem>;
+          })}
         </>
       ) : null}
     </div>

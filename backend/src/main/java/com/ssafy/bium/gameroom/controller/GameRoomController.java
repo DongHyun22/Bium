@@ -10,6 +10,8 @@ import com.ssafy.bium.gameroom.service.GameRoomService;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -94,7 +96,7 @@ public class GameRoomController {
     public List<UserGameRecordDto> stop(
             @RequestParam String gameRoomId
     ) {
-        return gameRoomService.RecordGameRoom(gameRoomId);
+        return gameRoomService.StopGameRoom(gameRoomId);
     }
 
     // 게임 종료시 게임 기록 반환 및 게임 기록 유저에 저장

@@ -9,10 +9,12 @@ import lombok.NoArgsConstructor;
 public class EnterUserDto {
     private String sessionId;
     private String gameId;
+    private boolean host;
 
     @Builder
-    public EnterUserDto(String sessionId, String gameId) {
+    public EnterUserDto(String sessionId, String gameId, boolean host) {
         this.sessionId = sessionId;
         this.gameId = gameId;
+        this.host = host;
     }
 }
