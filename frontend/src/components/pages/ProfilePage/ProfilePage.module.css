@@ -46,6 +46,10 @@ img {
 
 .imageUpload {
   background-color: white;
-  border-radius: 20%;
+  /* border-radius: 20%; */
   /* border: none; */
+}
+
+.imageInput {
+  display: none;
 }

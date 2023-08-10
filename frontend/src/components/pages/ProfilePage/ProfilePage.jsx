@@ -355,17 +355,12 @@ export function ProfilePage() {
         {showProfile ? (
           <div>
             <h3>프로필 이미지</h3>
-            {/* {savedProfileImage ? (
-              <img src={savedProfileImage} alt="미리보기" />
-            ) : (
-              <img src={emptyprofile} alt="미리보기" />
-            )} */}
             <div>
               <input
                 name="file"
                 type="file"
                 accept="image/*"
-                style={{ display: 'none' }}
+                className={styles.imageInput}
                 ref={profileImageInput}
                 onChange={saveProfile}
               ></input>
@@ -385,17 +380,12 @@ export function ProfilePage() {
         ) : (
           <div>
             <h3>방해 이미지</h3>
-            {/* {savedDisturbImage ? (
-              <img src={savedDisturbImage} alt="미리보기" />
-            ) : (
-              <img src={emptyprofile} alt="미리보기" />
-            )} */}
             <div>
               <input
                 name="file"
                 type="file"
                 accept="image/*"
-                style={{ display: 'none' }}
+                className={styles.imageInput}
                 ref={disturbImageInput}
                 onChange={saveDisturb}
               ></input>
