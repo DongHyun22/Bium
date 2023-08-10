@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export default function SignUpPage() {
   const navigate = useNavigate();
@@ -97,7 +98,7 @@ export default function SignUpPage() {
         userName: name,
         userNickname: nickname
       };
-      const response = await axios.post('https://i9c205.p.ssafy.io/api/signup', userRegisterInfomation);
+      const response = await axios.post(APPLICATION_SERVER_URL + '/api/signup', userRegisterInfomation);
       return console.log(response.data);
     } catch (error) {
       console.error(error);
@@ -107,7 +108,7 @@ export default function SignUpPage() {
   const checkMail = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get('https://i9c205.p.ssafy.io/api/signup/check', {
+      const response = await axios.get(APPLICATION_SERVER_URL + '/api/signup/check', {
         params: {
           userEmail: userEmail
         }

@@ -5,6 +5,8 @@ import RankingItem from '../molecules/RankingListItem';
 import styles from './RankingList.module.css';
 import useGetBiumTime from '../../hooks/TimeInquery';
 
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+
 function GetRanking() {
   // 헤더 인증용 토큰
   const [rank, setRank] = useState([]);
@@ -19,7 +21,7 @@ function GetRanking() {
   useEffect(() => {
     // 랭킹 요청
     axios
-      .get(`https://i9c205.p.ssafy.io/api/profile/ranking/${userEmail}`)
+      .get(APPLICATION_SERVER_URL + `/api/profile/ranking/${userEmail}`)
       .then((response) => {
         setRank(response.data.ranking);
         setMyRank(response.data.myRanking);
