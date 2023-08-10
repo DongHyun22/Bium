@@ -9,23 +9,155 @@
     font-family: GangwonEdu_OTFBoldA;
 }
 
-.container {
+.containerItems {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     flex-wrap: wrap;
-    padding: 50px;
+    padding: 5em 10em 5em 10em;
     background-color: #f7f7f7;
+}
+
+.containerTitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 5em 10em 5em 10em;
+}
+
+.title {
+    flex: 2;
+    justify-content: space-between;
+}
+
+.title h1 {
+    display: inline-block;
+    margin-right: 0.5em;
 }
 
 .listItem {
     width: 20em;
-    margin: 1em;
-    padding: 2em;
+    margin: 1.5em;
     background-color: white;
     border-radius: 1em;
     box-shadow: 0 3px 6px rgba(0,0,0,0.08), 0 3px 6px rgba(0,0,0,0.16);
 }
 
+.listItemThumbnail {
+    background: url('../../../asset/backgroudimage/gameRoomListItemTest.jpg');
+    width: 20em;
+    height: 7em;
+    border-radius: 1em 1em 0 0;
+    padding: 0;
+}
+
+.listItemContents {
+    padding: 1em;
+}
+
+.listItem h3 {
+    color: gray;
+    margin: 0;
+}
+
 .listItem:hover {
     box-shadow: 0 14px 28px rgba(0,0,0,0.17), 0 10px 10px rgba(0,0,0,0.14);
 }
+
+.BtnGameCreate {
+    align-items: center;
+    background-color: #f7f7f7;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 1em;
+    box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+    box-sizing: border-box;
+    color: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 16px;
+    font-weight: 600;
+    justify-content: center;
+    line-height: 1.25;
+    min-height: 3rem;
+    padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+    text-decoration: none;
+    transition: all 250ms;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: baseline;
+    width: auto;
+   }
+   
+   .BtnGameCreate:hover,
+   .BtnGameCreate:focus {
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+    color: rgba(0, 0, 0, 0.65);
+   }
+   
+   .BtnGameCreate:hover {
+    transform: translateY(-1px);
+   }
+   
+   .BtnGameCreate:active {
+    background-color: #F0F0F1;
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+    color: rgba(0, 0, 0, 0.65);
+    transform: translateY(0);
+   }
+
+   .search {
+    flex: 1;
+    align-items: end;
+    text-align: center;
+  }
+  
+  .search__input {
+    font-family: inherit;
+    font-size: inherit;
+    background-color: #f7f7f7;
+    border: none;
+    color: #646464;
+    padding: 0.7rem 1rem;
+    border-radius: 1em;
+    width: 12em;
+    transition: all ease-in-out .5s;
+    margin-right: -2rem;
+  }
+  
+  .search__input:hover, .search__input:focus {
+    box-shadow: 0 0 1em #00000013;
+  }
+  
+  .search__input:focus {
+    outline: none;
+    background-color: #fff;
+  }
+  
+  .search__input::-webkit-input-placeholder {
+    font-weight: 100;
+    color: #ccc;
+  }
+  
+  .search__input:focus + .search__button {
+    background-color: #fff;
+  }
+  
+  .search__button {
+    border: none;
+    background-color: #f7f7f7;
+    margin-top: .1em;
+  }
+  
+  .search__button:hover {
+    cursor: pointer;
+  }
+  
+  .search__icon {
+    height: 2em;
+    width: 2em;
+    fill: #fff;
+  }
