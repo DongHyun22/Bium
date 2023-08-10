@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { setGameFallCount } from '../../../slices/roomSlice/roomSlice';
-import { Publisher } from 'openvidu-browser';
 
 const OpenViduVideoComponent = (props) => {
   const dispatch = useDispatch();
