@@ -1,13 +1,13 @@
 import React from 'react';
 
 const EndGameRank = (props) => {
-  const nickname = props.nickname;
-  const biumTime = props.biumSecond;
+  const nickname = props.rank.nickname;
+  const biumTime = props.rank.gameRecord;
   return (
     <>
-      <p>
+      <span>
         순위, {nickname}, {biumTime}
-      </p>
+      </span>
     </>
   );
 };

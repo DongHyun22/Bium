@@ -4,21 +4,29 @@ const initialState = {
   roomTitle: '',
   roomPassword: '',
   mySessionId: '',
-  myUserName: 'jihyeok',
-  maxPeople: 8,
-  backgroundImage: 1,
+  myUserName: '',
+  maxPeople: '8',
+  backgroundImage: '1',
   start: false,
   host: false,
   gameId: null,
   gameRoomId: '',
   gameFallCount: 0,
-  biumSecond: 0
+  biumSecond: 0,
+  gameRankList: null,
+  rankModal: false
 };
 
 export const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {
+    setRankModal: (state, action) => {
+      state.rankModal = action.payload;
+    },
+    setGameRankList: (state, action) => {
+      state.gameRankList = action.payload;
+    },
     setBiumSecond: (state, action) => {
       state.biumSecond = state.biumSecond + action.payload;
     },
@@ -35,7 +43,6 @@ export const roomSlice = createSlice({
       state.host = action.payload;
     },
     setStart: (state, action) => {
-      console.log('타이머 바뀜', action.payload);
       state.start = action.payload;
     },
     setRoomTitle: (state, action) => {
@@ -51,15 +58,29 @@ export const roomSlice = createSlice({
       state.myUserName = action.payload.myUserName;
     },
     setMaxPeople: (state, action) => {
-      state.join = action.payload;
+      state.maxPeople = action.payload;
     },
     setBackgroundImage: (state, action) => {
-      state.join = action.payload;
+      state.backgroundImage = action.payload;
     }
   }
 });
 
-export const { setBiumSecond, setGameFallCount, setGameId, setGameRoomId, setHost, setStart, setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } =
-  roomSlice.actions;
+export const {
+  setRankModal,
+  setGameRankList,
+  setBiumSecond,
+  setGameFallCount,
+  setGameId,
+  setGameRoomId,
+  setHost,
+  setStart,
+  setRoomTitle,
+  setRoomPassword,
+  setMySessionId,
+  setMyUserName,
+  setMaxPeople,
+  setBackgroundImage
+} = roomSlice.actions;
 
 export default roomSlice.reducer;

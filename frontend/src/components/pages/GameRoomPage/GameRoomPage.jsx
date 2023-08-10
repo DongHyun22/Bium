@@ -6,14 +6,17 @@ import axios from 'axios';
 
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
 import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import { setGameFallCount, setMySessionId, setStart } from '../../../slices/roomSlice/roomSlice';
+import { setGameFallCount, setGameRankList, setMySessionId, setRankModal, setStart } from '../../../slices/roomSlice/roomSlice';
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
 import styles from './GamRoomPage.module.css';
 import EndGameRank from '../../molecules/EndGameRank/EndGameRank';
+import img1 from '../../../asset/backgroudimage/firebase1.jpg';
+import img2 from '../../../asset/backgroudimage/firebase2.gif';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+let backImage = '';
 
 function GameRoomPage() {
   const dispatch = useDispatch();
@@ -31,7 +34,7 @@ function GameRoomPage() {
   if (location.state) {
     dispatch(setMySessionId(location.state.customSessionId));
   }
-  const myUserName = useSelector((state) => state.room.myUserName);
+  const myUserName = useSelector((state) => state.user.nickname);
   const maxPeople = useSelector((state) => state.room.maxPeople);
   const backgroundImage = useSelector((state) => state.room.backgroundImage);
   const join = useSelector((state) => state.video.join);
@@ -44,9 +47,14 @@ function GameRoomPage() {
   const gameFallCount = useSelector((state) => state.room.gameFallCount);
   const biumSecond = useSelector((state) => state.room.biumSecond);
   const start = useSelector((state) => state.room.start);
+  const gameRankList = useSelector((state) => state.room.gameRankList);
+  const rankModal = useSelector((state) => state.room.rankModal);
 
-  const [rankModal, setRankModal] = useState(false);
-  const [gameRankList, setGameRankList] = useState([]);
+  if (backgroundImage === '1') {
+    backImage = img2;
+  } else if (backgroundImage === '2') {
+    backImage = img1;
+  }
 
   const onbeforeunload = (e) => {
     dispatch(leaveSession());
@@ -74,7 +82,7 @@ function GameRoomPage() {
     return () => {
       window.removeEventListener('beforeunload', onbeforeunload);
     };
-  }, [host]);
+  });
 
   // join 의존성
   useEffect(() => {
@@ -131,9 +139,7 @@ function GameRoomPage() {
 
   useEffect(() => {
     if (publisher !== undefined) {
-      console.log('쿠키 세션에 이벤트 추가', publisher);
       publisher.stream.session.on('signal:timer', (e) => {
-        console.log('여기는 데이터야...', e);
         dispatch(setStart(true));
       });
     }
@@ -153,7 +159,6 @@ function GameRoomPage() {
   const gameOut = async () => {
     try {
       const response = await axios.post(APPLICATION_SERVER_URL + '/api/game/out', {}, { params: { gameId } });
-      console.log(response);
     } catch (err) {
       return;
     }
@@ -161,7 +166,6 @@ function GameRoomPage() {
 
   const gameStart = async () => {
     try {
-      console.log('gameroom ID니까 ', gameRoomId);
       const response = await axios.post(
         APPLICATION_SERVER_URL + '/api/game/start',
         { gameRoomId },
@@ -174,15 +178,13 @@ function GameRoomPage() {
           }
         }
       );
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   const endGame = async () => {
     try {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + '/api/game/stop',
+        APPLICATION_SERVER_URL + '/api/game/delete',
 
         {
           params: {
@@ -195,28 +197,23 @@ function GameRoomPage() {
           }
         }
       );
-      return;
     } catch (err) {
-      console.log(err);
+      return;
     }
   };
 
   const modalSignal = (props) => {
-    console.log('여기는 데이터인데', props);
-
-    const data = {
+    const rankdata = {
       gameRankList: props.ranking
     };
     props.publisher.stream.session.signal({
-      data: JSON.stringify(data),
+      data: JSON.stringify(rankdata),
       type: 'gamerank'
     });
   };
   //게임 탈락
   const fallAxios = async () => {
-    console.log('비움시간', biumSecond);
     try {
-      console.log('당신은 탈락했습니다');
       const response = await axios.post(
         APPLICATION_SERVER_URL + '/api/game/over',
         { gameId: gameId, gameRecord: biumSecond },
@@ -235,85 +232,93 @@ function GameRoomPage() {
         modalSignal({ publisher, ranking });
       }
     } catch (err) {
-      console.log(err);
+      return;
     }
   };
   useEffect(() => {
     if (publisher !== undefined) {
-      console.log('쿠키 세션에 이벤트 추가', publisher);
       publisher.stream.session.on('signal:gamerank', (e) => {
-        console.log('여기는 랭크리스트야...', JSON.parse(e.data).gameRankList);
-        setGameRankList(JSON.parse(e.data).gameRankList);
-        setRankModal(true);
-        console.log(rankModal);
+        dispatch(setGameRankList(JSON.parse(e.data).gameRankList));
+        dispatch(setRankModal(true));
       });
     }
   }, [start]);
 
+  useEffect(() => {
+    if (rankModal === true) {
+      setTimeout(() => {
+        endGame();
+        dispatch(setGameRankList(null));
+        dispatch(setRankModal(false));
+        dispatch(setJoin(false));
+        dispatch(leaveSession());
+        navigate('/gameroomlist');
+      }, 6000);
+    }
+  }, [gameRankList]);
   useEffect(() => {
     if (gameFallCount > 1 && gameFallCount < 3) {
       fallAxios();
     }
   }, [gameFallCount]);
   return (
-    <div>
-      {/* join 이후 화면 */}
-      {session !== undefined ? (
-        <div id="session">
-          <div id="session-header">
-            <h1 id="session-title">{gameRoomTitle}</h1>
-          </div>
-          <div id="session-sidebar">
-            <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={handleLeaveSession} value="Leave session" />
-            <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
-            {host === true ? <button>수정</button> : null}
-          </div>
-          {gameRankList === null ? <h3>트루</h3> : <h3>팰스</h3>}
+    <>
+      {rankModal && gameRankList !== null ? (
+        <>
+          <>{gameRankList !== null ? <h3>최종 순위표</h3> : null}</>
+          {gameRankList.map((rank) => (
+            <EndGameRank key={rank.id} rank={rank} />
+          ))}
+        </>
+      ) : (
+        <div>
+          {/* join 이후 화면 */}
+          {session !== undefined ? (
+            <div id="session" style={{ backgroundImage: `url(${backImage})` }}>
+              <div id="session-header">
+                <h1 id="session-title">{gameRoomTitle}</h1>
+              </div>
+              <div id="session-sidebar">
+                <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={handleLeaveSession} value="Leave session" />
+                <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
+                {host === true ? <button>수정</button> : null}
+              </div>
 
-          {rankModal && gameRankList !== [] ? (
-            <div>
-              {gameRankList.map((rank, id) => {
-                return <EndGameRank rank={rank}></EndGameRank>;
-              })}
-            </div>
-          ) : (
-            <>
-              <h6>하나루</h6>
-            </>
-          )}
-          <h3>당신의 탈락 카운트{start ? <> {gameFallCount}</> : null}</h3>
-          <div className={styles.backimage}>
-            <div id="video-container">
-              {publisher !== undefined ? (
-                <div className="stream-container col-md-6 col-xs-6">
-                  <UserVideoComponent streamManager={publisher} />
+              <h3>당신의 탈락 카운트{start ? <> {gameFallCount}</> : null}</h3>
+              <div className={styles.backimage}>
+                <div id="video-container">
+                  {publisher !== undefined ? (
+                    <div className="stream-container col-md-6 col-xs-6">
+                      <UserVideoComponent streamManager={publisher} />
+                    </div>
+                  ) : (
+                    <h1>같이할 동료들을 연결 중</h1>
+                  )}
+                  {subscribers.map((sub) => (
+                    <div key={sub.id} className="stream-container col-md-6 col-xs-6">
+                      <span>{sub.id}</span>
+                      <UserVideoComponent streamManager={sub} />
+                    </div>
+                  ))}
                 </div>
-              ) : (
-                <h1>같이할 동료들을 연결 중</h1>
-              )}
-              {subscribers.map((sub) => (
-                <div key={sub.id} className="stream-container col-md-6 col-xs-6">
-                  <span>{sub.id}</span>
-                  <UserVideoComponent streamManager={sub} />
-                </div>
-              ))}
-            </div>
-            {host ? (
-              <button
-                onClick={() => {
-                  gameStart();
-                  startSignal(publisher);
-                }}
-              >
-                Start
-              </button>
-            ) : null}
+                {host ? (
+                  <button
+                    onClick={() => {
+                      gameStart();
+                      startSignal(publisher);
+                    }}
+                  >
+                    Start
+                  </button>
+                ) : null}
 
-            {start ? <Timer></Timer> : null}
-          </div>
+                {start ? <Timer></Timer> : null}
+              </div>
+            </div>
+          ) : null}
         </div>
-      ) : null}
-    </div>
+      )}
+    </>
   );
 }
 export default GameRoomPage;
