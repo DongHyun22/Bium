@@ -249,14 +249,17 @@ function GameRoomPage() {
                 </div>
               ))}
             </div>
-            <button
-              onClick={() => {
-                gameStart();
-                startSignal(publisher);
-              }}
-            >
-              Start
-            </button>
+            {host ? (
+              <button
+                onClick={() => {
+                  gameStart();
+                  startSignal(publisher);
+                }}
+              >
+                Start
+              </button>
+            ) : null}
+
             {start ? <Timer></Timer> : null}
           </div>
         </div>
