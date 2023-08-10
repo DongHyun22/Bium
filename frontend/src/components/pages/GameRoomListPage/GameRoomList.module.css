@@ -80,7 +80,7 @@
     justify-content: center;
     line-height: 1.25;
     min-height: 3rem;
-    padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+    padding: calc(.875rem - 1px) calc(1rem - 1px);
     text-decoration: none;
     transition: all 250ms;
     user-select: none;

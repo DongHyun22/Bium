@@ -55,7 +55,7 @@ function LoginPage() {
   const handlePasswordChange = (e) => {
     setUserPw(e.target.value);
   };
-
+  
   const goToSignUp = () => {
     return navigate('/signup');
   };
@@ -101,30 +101,29 @@ function LoginPage() {
         <div>
           <button className="loginButton">로그인</button>
         </div>
-        </form>
-        <div>
-          <button onClick={openModal} className={styles.findpasswordbutton}>
-            비밀번호 찾기
-          </button>
-          {passwordModal && (
-            <div className={styles.modal}>
-              <h2>비밀번호 찾기</h2>
-              <form>
-                <label>
-                  이메일:
-                  <input type="text" value={passwordEmail} onChange={(e) => setPasswordEmail(e.target.value)}></input>
-                </label>
-              </form>
-              <br></br>
-              <button className={styles.overlay} onClick={findPassword}>
-                전송
-              </button>
-              <button className={styles.overlay} onClick={closeModal}>
-                닫기
-              </button>
-            </div>
-          )}
-        </div>
+      </form>
+      <div>
+        <button onClick={openModal} className={styles.findpasswordbutton}>
+          비밀번호 찾기
+        </button>
+        {passwordModal && (
+          <div className={styles.modal}>
+            <h2>비밀번호 찾기</h2>
+            <form>
+              <label>
+                이메일:
+                <input type="text" value={passwordEmail} onChange={(e) => setPasswordEmail(e.target.value)}></input>
+              </label>
+            </form>
+            <br></br>
+            <button className={styles.overlay} onClick={findPassword}>
+              전송
+            </button>
+            <button className={styles.overlay} onClick={closeModal}>
+              닫기
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
