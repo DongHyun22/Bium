@@ -6,13 +6,10 @@ import { setJoin } from '../../../slices/videoSlice/videoSlice';
 export const GameRoomListItem = (props) => {
   const navigator = useNavigate();
   const dispatch = useDispatch();
-  console.log('bmfhtm', props);
   const gameRoomTitle = props.allRoom.gameRoomTitle;
   const maxPeople = props.allRoom.maxPeople;
   const customSessionId = props.allRoom.customSessionId;
   const gameStart = props.allRoom.start;
-
-  console.log(gameStart);
 
   const enterRoom = (e) => {
     dispatch(setJoin(true));

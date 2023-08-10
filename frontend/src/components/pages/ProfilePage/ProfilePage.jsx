@@ -8,6 +8,8 @@ import useGetBiumTime from '../../../hooks/TimeInquery';
 import axios from 'axios';
 import { persistor } from '../../../store/store';
 import emptyprofile from '../../../asset/backgroudimage/emptyprofile.png';
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export function ProfilePage() {
   const { userEmail } = useParams();
@@ -80,7 +82,7 @@ export function ProfilePage() {
       }
       console.log(formData);
       try {
-        const profileResponse = await axios.post(`http://localhost:8080/api/profile/img/${savedEmail}`, formData, {
+        const profileResponse = await axios.post(APPLICATION_SERVER_URL + `/api/profile/img/${savedEmail}`, formData, {
           params: {
             imgType: 1
           },
@@ -107,7 +109,7 @@ export function ProfilePage() {
           const originalFile = profileResponse.data.originalFile;
 
           const getProfileResponse = await axios.get(
-            `http://localhost:8080/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
+            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
             { responseType: 'blob' }
           );
 
@@ -137,7 +139,7 @@ export function ProfilePage() {
       }
       console.log(formData);
       try {
-        const disturbResponse = await axios.post(`http://localhost:8080/api/profile/img/${savedEmail}`, formData, {
+        const disturbResponse = await axios.post(APPLICATION_SERVER_URL + `/api/profile/img/${savedEmail}`, formData, {
           params: {
             imgType: 2
           },
@@ -162,7 +164,7 @@ export function ProfilePage() {
           const originalFile = disturbResponse.data.originalFile;
 
           const getDisturbResponse = await axios.get(
-            `http://localhost:8080/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
+            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
             { responseType: 'blob' }
           );
 
@@ -215,7 +217,7 @@ export function ProfilePage() {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/profile/checkpw`,
+        APPLICATION_SERVER_URL + `/api/profile/checkpw`,
         {
           userEmail: savedEmail,
           userPw: existingPassword
@@ -255,7 +257,7 @@ export function ProfilePage() {
         userNickname: name,
         userPw: newPassword
       };
-      const response = await axios.post(`http://localhost:8080/api/profile/modify`, data, {
+      const response = await axios.post(APPLICATION_SERVER_URL + `/api/profile/modify`, data, {
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
@@ -287,8 +289,8 @@ export function ProfilePage() {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/profile/delete`,
-        `http://localhost:8080/api/profile/delete`,
+        APPLICATION_SERVER_URL + `/api/profile/delete`,
+        APPLICATION_SERVER_URL + `/api/profile/delete`,
         {},
         {
           params: {
