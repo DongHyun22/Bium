@@ -233,14 +233,17 @@ public class GameRoomServiceImpl implements GameRoomService {
         int survivor = Integer.parseInt((String) hash.get("gameRoom:" + gameRoomId, "startPeople"));
         hash.put("gameRoom:" + gameRoomId, "startPeople", String.valueOf(--survivor));
         if(survivor == 0){
-            Set<String> gameNum = set.members("game");
+            Set<String> gameNum = set.members("game"); // 참가중인 게임 멤버 리스트 가져오기?
+            // TODO: 2023-08-10 게임방에 참가하고 있는 멤버(게임키)를 저장하는 리스트를 도메인에 저장 
             List<UserGameRecordDto> userGameRecords = new ArrayList<>();
             for(String s : gameNum){
-                // 게임에 접속되어있는 유저들 중에서 받아온 게임방아이디에 있는 유저들 찾기 -> scan 같은 빠른 메서드 찾기
+                // TODO: 2023-08-10 해당 게임방에 참가한 유저이메일 찾기 -> scan 같은 빠른 메서드 찾기
+                //  현재 구현 방법 : 게임에 접속되어있는 유저들 중에서 받아온 게임방아이디에 있는 유저들 찾기
                 if(Objects.equals(hash.get("game:" + s, "gameRoomId"), gameRoomId)){
+                    String findUserEmail = hash.get("game:" + s, "userEmail");
+                    String userNickname = userRepository.findByUserEmail(findUserEmail).get().getUserNickname();
                     UserGameRecordDto userGameRecordDto = UserGameRecordDto.builder()
-                            .userEmail(hash.get("game:" + s, "userEmail"))
-                            // TODO: 2023-08-03 (003) 유저 이메일 대신 유저 닉네임 넣기
+                            .userNickname(userNickname)
                             .gameRecord(hash.get("game:" + s, "gameRecord"))
                             .build();
                     userGameRecords.add(userGameRecordDto);
@@ -298,8 +301,10 @@ public class GameRoomServiceImpl implements GameRoomService {
         for(String s : gameNum){
             // 게임에 접속되어있는 유저들 중에서 받아온 게임방아이디에 있는 유저들 찾기 -> scan 같은 빠른 메서드 찾기
             if(Objects.equals(hash.get("game:" + s, "gameRoomId"), gameRoomId)){
+                String userEmail = hash.get("game:" + s, "userEmail");
+                String userNickname = userRepository.findByUserEmail(userEmail).get().getUserNickname();
                 UserGameRecordDto userGameRecordDto = UserGameRecordDto.builder()
-                        .userEmail(hash.get("game:" + s, "userEmail"))
+                        .userNickname(userNickname)
                         // TODO: 2023-08-03 (003) 유저 이메일 대신 유저 닉네임 넣기 
                         .gameRecord(hash.get("game:" + s, "gameRecord"))
                         .build();
