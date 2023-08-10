@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'GangwonEdu_OTFBoldA';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .modal {
   position: fixed;
   top: 50%;
@@ -79,7 +86,7 @@ form {
   /* margin-left: 60%; */
   flex-direction: column;
   display: flex;
-  top: 20%;
+  margin-bottom: 8%;
   /* margin-left: 5%; */
   /* justify-content: center; */
   /* align-items: center; */
@@ -99,11 +106,14 @@ form {
 
 .leftcontent h3 {
   cursor: pointer;
-  font-size: 30px;
+  font-size: 35px;
+  text-decoration: underline;
+  font-family: 'GangwonEdu_OTFBoldA';
 }
 
 .leftcontent p {
-  font-size: 20px;
+  font-size: 25px;
+  font-family: 'GangwonEdu_OTFBoldA';
 }
 
 .loginid,
@@ -115,7 +125,7 @@ form {
 
 .titlelogin {
   position: absolute;
-  top: 10px;
+  top: 3%;
   margin-left: 2%;
   transform: translateY(-60%);
   border-bottom: 2px solid #333;
@@ -127,7 +137,7 @@ label {
   font-weight: bold;
   /* justify-content: center; */
   /* padding: 10px; */
-  margin-bottom: 20px;
+  margin-top: 5%;
   margin-left: 13%;
 }
 
@@ -136,34 +146,38 @@ label {
   border: 1px solid #ccc;
   border-radius: 8px;
   width: 80%;
+  margin-top: 1%;
   /* max-width: 400px; */
 }
 
 .buttoncontainer {
   display: flex;
   justify-content: space-evenly;
+  margin-left: 2%;
   /* margin: 0 13%; */
 }
 
 .loginbutton {
   font-size: 20px;
-  padding: 15px 60px;
+  padding: 15px 40px;
   background-color: rgb(126, 124, 124);
   color: aliceblue;
   border: none;
   cursor: pointer;
   border-radius: 8px;
   margin-bottom: 20px;
+  width: 30%;
   /* margin-left: 20px; */
 }
 
 .cancelbutton {
   font-size: 20px;
-  padding: 15px 70px;
+  padding: 15px 40px;
   border: none;
   cursor: pointer;
   border-radius: 8px;
   margin-bottom: 20px;
+  width: 30%;
   /* margin-left: 10px; */
 }
 
@@ -173,6 +187,8 @@ label {
   margin-right: 10%;
   /* margin-bottom: 5%; */
   cursor: pointer;
+  /* margin-bottom: 10%; */
+  text-decoration: underline;
 }
 
 .passwordinput {
