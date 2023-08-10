@@ -56,6 +56,14 @@ function LoginPage() {
     setUserPw(e.target.value);
   };
 
+  const goToSignUp = () => {
+    return navigate('/signup');
+  };
+
+  const goToMainPage = () => {
+    return navigate('/');
+  };
+
   const findPassword = async (e) => {
     e.preventDefault();
     try {
@@ -76,44 +84,75 @@ function LoginPage() {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div className="loginId">
-          <label htmlFor="userEmail">
-            이메일 &nbsp;
-            <input type="text" id="userEmail" placeholder="이메일을 입력해 주세요." value={userEmail} onChange={handleEmailChange} />
-          </label>
+    <div className={styles.loginpagebg}>
+      <div className={styles.photo}>
+        <h1 className={styles.titlebium}>비 움</h1>
+        <div className={styles.circle}>
+          <div className={styles.circlelogo}></div>
         </div>
-        <div className="loginPassword">
-          <label htmlFor="userPassword">
-            비밀번호 &nbsp;
-            <input type="password" id="userPassword" placeholder="비밀번호를 입력해 주세요." value={userPw} onChange={handlePasswordChange} />
-          </label>
+        <div className={styles.leftcontent}>
+          <p>아직 비움의 회원이 아니세요?</p>
+          <h3 onClick={goToSignUp}>회원가입</h3>
         </div>
-        <div>
-          <button className="loginButton">로그인</button>
-        </div>
-      </form>
-      <div>
-        <button onClick={openModal}>비밀번호 찾기</button>
-        {passwordModal && (
-          <div className={styles.modal}>
-            <h2>비밀번호 찾기</h2>
-            <form>
-              <label>
-                이메일:
-                <input type="text" value={passwordEmail} onChange={(e) => setPasswordEmail(e.target.value)}></input>
-              </label>
-            </form>
-            <br></br>
-            <button className={styles.overlay} onClick={findPassword}>
-              전송
-            </button>
-            <button className={styles.overlay} onClick={closeModal}>
-              닫기
-            </button>
+      </div>
+
+      <div className={styles.rightbox}>
+        <h1 className={styles.titlelogin}>로그인</h1>
+        <form onSubmit={handleSubmit}>
+          <div className={styles.loginid}>
+            <label htmlFor="userEmail">
+              이메일 <br></br>
+              <input
+                type="text"
+                id="userEmail"
+                placeholder="이메일을 입력해 주세요."
+                value={userEmail}
+                onChange={handleEmailChange}
+              />
+            </label>
           </div>
-        )}
+          <div className={styles.loginpassword}>
+            <label htmlFor="userPassword">
+              비밀번호 <br></br>
+              <input
+                type="password"
+                id="userPassword"
+                placeholder="비밀번호를 입력해 주세요."
+                value={userPw}
+                onChange={handlePasswordChange}
+              />
+            </label>
+          </div>
+          <div className={styles.buttoncontainer}>
+            <button className={styles.cancelbutton} onClick={goToMainPage}>
+              취소
+            </button>
+            <button className={styles.loginbutton}>로그인</button>
+          </div>
+        </form>
+        <div>
+          <button onClick={openModal} className={styles.findpasswordbutton}>
+            비밀번호 찾기
+          </button>
+          {passwordModal && (
+            <div className={styles.modal}>
+              <h2>비밀번호 찾기</h2>
+              <form>
+                <label>
+                  이메일:
+                  <input type="text" value={passwordEmail} onChange={(e) => setPasswordEmail(e.target.value)}></input>
+                </label>
+              </form>
+              <br></br>
+              <button className={styles.overlay} onClick={findPassword}>
+                전송
+              </button>
+              <button className={styles.overlay} onClick={closeModal}>
+                닫기
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

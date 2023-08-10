@@ -1,0 +1,25 @@
+@font-face {
+    font-family: 'GangwonEdu_OTFBoldA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    font-family: GangwonEdu_OTFBoldA;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    width: 100%;
+    height: 100vh;
+  
+}
+
+.photo {
+    background: url('../../../asset/backgroudimage/firebase1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
