@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -8,11 +8,15 @@ import useGetBiumTime from '../../../hooks/TimeInquery';
 import axios from 'axios';
 import { persistor } from '../../../store/store';
 import emptyprofile from '../../../asset/backgroudimage/emptyprofile.png';
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export function ProfilePage() {
   const { userEmail } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const profileImageInput = useRef();
+  const disturbImageInput = useRef();
 
   // 기존 스토어의 유저 정보
   const savedEmail = useSelector((state) => state.user.userEmail);
@@ -77,7 +81,7 @@ export function ProfilePage() {
       }
       console.log(formData);
       try {
-        const profileResponse = await axios.post(`http://localhost:8080/api/profile/img/${savedEmail}`, formData, {
+        const profileResponse = await axios.post(APPLICATION_SERVER_URL + `/api/profile/img/${savedEmail}`, formData, {
           params: {
             imgType: 1
           },
@@ -104,7 +108,7 @@ export function ProfilePage() {
           const originalFile = profileResponse.data.originalFile;
 
           const getProfileResponse = await axios.get(
-            `http://localhost:8080/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
+            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
             { responseType: 'blob' }
           );
 
@@ -134,7 +138,7 @@ export function ProfilePage() {
       }
       console.log(formData);
       try {
-        const disturbResponse = await axios.post(`http://localhost:8080/api/profile/img/${savedEmail}`, formData, {
+        const disturbResponse = await axios.post(APPLICATION_SERVER_URL + `/api/profile/img/${savedEmail}`, formData, {
           params: {
             imgType: 2
           },
@@ -159,7 +163,7 @@ export function ProfilePage() {
           const originalFile = disturbResponse.data.originalFile;
 
           const getDisturbResponse = await axios.get(
-            `http://localhost:8080/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
+            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
             { responseType: 'blob' }
           );
 
@@ -179,7 +183,7 @@ export function ProfilePage() {
 
   // 프로필 이미지 삭제
   const deleteProfile = () => {
-    if (profileimage) {
+    if (savedProfileImage) {
       setProfileImage(null);
       dispatch(setImageId(null));
     }
@@ -187,7 +191,7 @@ export function ProfilePage() {
 
   // 방해 이미지 삭제
   const deleteDisturb = () => {
-    if (disturbImage) {
+    if (savedDisturbImage) {
       setDisturbImage(null);
       dispatch(setDisturb(null));
     }
@@ -210,7 +214,7 @@ export function ProfilePage() {
   const checkPassword = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/profile/checkpw`,
+        APPLICATION_SERVER_URL + `/api/profile/checkpw`,
         {
           userEmail: savedEmail,
           userPw: existingPassword
@@ -242,6 +246,7 @@ export function ProfilePage() {
     if (validatePassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
       return;
+      return;
     }
 
     try {
@@ -254,7 +259,7 @@ export function ProfilePage() {
         userNickname: name,
         userPw: newPassword
       };
-      const response = await axios.post(`http://localhost:8080/api/profile/modify`, data, {
+      const response = await axios.post(APPLICATION_SERVER_URL + `/api/profile/modify`, data, {
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
@@ -285,11 +290,13 @@ export function ProfilePage() {
     if (validatePassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
       return;
+      return;
     }
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/profile/delete`,
+        APPLICATION_SERVER_URL + `/api/profile/delete`,
+        APPLICATION_SERVER_URL + `/api/profile/delete`,
         {},
         {
           params: {
@@ -315,6 +322,16 @@ export function ProfilePage() {
     }
   };
 
+  // 프로필 이미지 업로드 버튼
+  const onClickProfileUpload = () => {
+    profileImageInput.current.click();
+  };
+
+  // 방해 이미지 업로드 버튼
+  const onClickDisturbUpload = () => {
+    disturbImageInput.current.click();
+  };
+
   // 회원 탈퇴 확인 모달을 열고 닫는 함수들
   const openDeleteConfirmModal = () => {
     setDeleteConfirmModalOpen(true);
@@ -334,6 +351,7 @@ export function ProfilePage() {
     <div className={styles.gridContainer}>
       <div className={styles.header}>
         <div></div>
+        <div></div>
         <div>
           <h1>ProfilePage</h1>
         </div>
@@ -341,32 +359,50 @@ export function ProfilePage() {
       <div className={styles.sideLeft}>
         {showProfile ? (
           <div>
-            <p>프로필 이미지</p>
-            {savedProfileImage ? (
-              <img src={savedProfileImage} alt="미리보기" />
-            ) : (
-              <img src={emptyprofile} alt="미리보기" />
-            )}
+            <h3>프로필 이미지</h3>
             <div>
-              <input name="file" type="file" accept="image/*" onChange={saveProfile}></input>
+              <input
+                name="file"
+                type="file"
+                accept="image/*"
+                className={styles.imageInput}
+                ref={profileImageInput}
+                onChange={saveProfile}
+              ></input>
+              <button onClick={onClickProfileUpload} className={styles.imageUpload}>
+                {savedProfileImage ? (
+                  <img src={savedProfileImage} alt="미리보기" />
+                ) : (
+                  <img src={emptyprofile} alt="미리보기" />
+                )}
+              </button>
             </div>
-            <button onClick={sendToProfile}>이미지 서버 전송</button>
+            <button onClick={sendToProfile}>이미지 저장</button>
             <div>
               <button onClick={deleteProfile}>삭제</button>
             </div>
           </div>
         ) : (
           <div>
-            <p>방해 이미지</p>
-            {savedDisturbImage ? (
-              <img src={savedDisturbImage} alt="미리보기" />
-            ) : (
-              <img src={emptyprofile} alt="미리보기" />
-            )}
+            <h3>방해 이미지</h3>
             <div>
-              <input name="file" type="file" accept="image/*" onChange={saveDisturb}></input>
+              <input
+                name="file"
+                type="file"
+                accept="image/*"
+                className={styles.imageInput}
+                ref={disturbImageInput}
+                onChange={saveDisturb}
+              ></input>
+              <button onClick={onClickDisturbUpload} className={styles.imageUpload}>
+                {savedDisturbImage ? (
+                  <img src={savedDisturbImage} alt="미리보기" />
+                ) : (
+                  <img src={emptyprofile} alt="미리보기" />
+                )}
+              </button>
             </div>
-            <button onClick={sendToDisturb}>이미지 서버 전송</button>
+            <button onClick={sendToDisturb}>이미지 저장</button>
             <div>
               <button onClick={deleteDisturb}>삭제</button>
             </div>
