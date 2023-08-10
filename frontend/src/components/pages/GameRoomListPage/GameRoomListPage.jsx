@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios, { all } from 'axios';
+import axios from 'axios';
 import GameRoomListItem from './GameRoomListItemPage';
 import { useDispatch } from 'react-redux';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 import styles from './GameRoomList.module.css';
 
 export const GameRoomListPage = () => {
@@ -10,8 +11,7 @@ export const GameRoomListPage = () => {
 
   const gemeRoomapi = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/game').then((response) => {
-        console.log(response.data);
+      const response = await axios.get(APPLICATION_SERVER_URL + '/api/game').then((response) => {
         setAllRooms(response.data);
       });
       // axios response
@@ -52,7 +52,8 @@ export const GameRoomListPage = () => {
           </>
         ) : (
           <>
-            <h2>안뜨는데?</h2>
+            <h2>생성된 게임방이 없습니다.</h2>
+            <h2>+ 버튼을 통해 게임방을 만들어요!</h2>
           </>
         )}
       </div>

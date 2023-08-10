@@ -36,10 +36,13 @@ import static com.ssafy.bium.common.exception.ExceptionMessage.NOT_MATCHING_PASS
 public class GameRoomServiceImpl implements GameRoomService {
     private final GameRoomRepository gameRoomRepository;
     private final GameRepository userGameRoomRepository;
+    private final UserRepository userRepository;
+
     private final RedisTemplate<String, String> gameRoomNum;
     private final RedisTemplate<String, GameRoom> redisTemplate;
+
     private final OpenviduService openviduService;
-    private final UserRepository userRepository;
+
 
     @Override
     public String test(String sessionId) throws OpenViduJavaClientException, OpenViduHttpException {
@@ -50,7 +53,6 @@ public class GameRoomServiceImpl implements GameRoomService {
     @Override
     public List<GameRoomListDto> searchGameRooms() {
         List<GameRoom> gameRooms = gameRoomRepository.findAll();
-
         return gameRooms.stream()
                 .map(gameRoom -> new GameRoomListDto(
                         gameRoom.getCustomSessionId(),
@@ -71,11 +73,15 @@ public class GameRoomServiceImpl implements GameRoomService {
         Long gameRoomIndex = counterGR.get();
         boolean host = false;
         
-        if(gameRoomDto.getCustomSessionId().isEmpty()){
+        if(gameRoomDto.getCustomSessionId().isEmpty()){ // 게임방을 생성한 경우에 실행 ( 세션Id 미보유 )
             gameRoomIndex = counterGR.incrementAndGet();
+            // 게임방 인덱스 증가
             sessionId = "gameRoom" + gameRoomIndex;
             params.put("customSessionId", sessionId);
             openviduService.initializeSession(params);
+            // 오픈비두에게 세션 생성 요청
+            host = true;
+            // 방장 체크
             GameRoom gameRoom = GameRoom.builder()
                     .gameRoomId(String.valueOf(gameRoomIndex))
                     .gameRoomTitle(gameRoomDto.getGameRoomTitle())
@@ -88,10 +94,11 @@ public class GameRoomServiceImpl implements GameRoomService {
                     .customSessionId(sessionId)
                     .build();
             gameRoomRepository.save(gameRoom).getCustomSessionId();
-            host = true;
+            // redis에 게임방 저장
         }
-        else{
+        else{ // 게임방에 입장한 경우에 실행 ( 세션ID 보유 )
             sessionId = gameRoomDto.getCustomSessionId();
+            // 받은 세션 아이디로 설정
         }
         EnterGameRoomDto enterGameRoomDto = EnterGameRoomDto.builder()
                 .gameRoomId(String.valueOf(gameRoomIndex))
@@ -217,6 +224,8 @@ public class GameRoomServiceImpl implements GameRoomService {
             return null;
         }
         findUser.get().saveBium(request.getGameRecord());
+        Long totalBium = findUser.get().getTotalBium();
+        findUser.get().chageRank(totalBium);
         userRepository.save(findUser.get());
         // 비움량 저장
         hash.put("game:" + gameId, "gameRecord", String.valueOf(request.getGameRecord()));
@@ -224,14 +233,17 @@ public class GameRoomServiceImpl implements GameRoomService {
         int survivor = Integer.parseInt((String) hash.get("gameRoom:" + gameRoomId, "startPeople"));
         hash.put("gameRoom:" + gameRoomId, "startPeople", String.valueOf(--survivor));
         if(survivor == 0){
-            Set<String> gameNum = set.members("game");
+            Set<String> gameNum = set.members("game"); // 참가중인 게임 멤버 리스트 가져오기?
+            // TODO: 2023-08-10 게임방에 참가하고 있는 멤버(게임키)를 저장하는 리스트를 도메인에 저장 
             List<UserGameRecordDto> userGameRecords = new ArrayList<>();
             for(String s : gameNum){
-                // 게임에 접속되어있는 유저들 중에서 받아온 게임방아이디에 있는 유저들 찾기 -> scan 같은 빠른 메서드 찾기
+                // TODO: 2023-08-10 해당 게임방에 참가한 유저이메일 찾기 -> scan 같은 빠른 메서드 찾기
+                //  현재 구현 방법 : 게임에 접속되어있는 유저들 중에서 받아온 게임방아이디에 있는 유저들 찾기
                 if(Objects.equals(hash.get("game:" + s, "gameRoomId"), gameRoomId)){
+                    String findUserEmail = hash.get("game:" + s, "userEmail");
+                    String userNickname = userRepository.findByUserEmail(findUserEmail).get().getUserNickname();
                     UserGameRecordDto userGameRecordDto = UserGameRecordDto.builder()
-                            .userEmail(hash.get("game:" + s, "userEmail"))
-                            // TODO: 2023-08-03 (003) 유저 이메일 대신 유저 닉네임 넣기
+                            .userNickname(userNickname)
                             .gameRecord(hash.get("game:" + s, "gameRecord"))
                             .build();
                     userGameRecords.add(userGameRecordDto);
@@ -289,8 +301,10 @@ public class GameRoomServiceImpl implements GameRoomService {
         for(String s : gameNum){
             // 게임에 접속되어있는 유저들 중에서 받아온 게임방아이디에 있는 유저들 찾기 -> scan 같은 빠른 메서드 찾기
             if(Objects.equals(hash.get("game:" + s, "gameRoomId"), gameRoomId)){
+                String userEmail = hash.get("game:" + s, "userEmail");
+                String userNickname = userRepository.findByUserEmail(userEmail).get().getUserNickname();
                 UserGameRecordDto userGameRecordDto = UserGameRecordDto.builder()
-                        .userEmail(hash.get("game:" + s, "userEmail"))
+                        .userNickname(userNickname)
                         // TODO: 2023-08-03 (003) 유저 이메일 대신 유저 닉네임 넣기 
                         .gameRecord(hash.get("game:" + s, "gameRecord"))
                         .build();

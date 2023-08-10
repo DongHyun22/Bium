@@ -11,13 +11,20 @@ const initialState = {
   host: false,
   gameId: null,
   gameRoomId: '',
-  gameFallCount: 0
+  gameFallCount: 0,
+  biumSecond: 0
 };
 
 export const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {
+    setBiumSecond: (state, action) => {
+      state.biumSecond = state.biumSecond + action.payload;
+    },
+    setGameFallCount: (state, action) => {
+      state.gameFallCount = state.gameFallCount + action.payload;
+    },
     setGameId: (state, action) => {
       state.gameId = action.payload;
     },
@@ -28,6 +35,7 @@ export const roomSlice = createSlice({
       state.host = action.payload;
     },
     setStart: (state, action) => {
+      console.log('타이머 바뀜', action.payload);
       state.start = action.payload;
     },
     setRoomTitle: (state, action) => {
@@ -51,6 +59,7 @@ export const roomSlice = createSlice({
   }
 });
 
-export const { setGameId, setGameRoomId, setHost, setStart, setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } = roomSlice.actions;
+export const { setBiumSecond, setGameFallCount, setGameId, setGameRoomId, setHost, setStart, setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } =
+  roomSlice.actions;
 
 export default roomSlice.reducer;

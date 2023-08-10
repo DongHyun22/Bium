@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userLogin, getUserInfo } from '../../../slices/getLoginInfo';
 import styles from './LoginPage.module.css';
 import axios from 'axios';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 // 로그인 컴포넌트
 function LoginPage() {
@@ -66,7 +67,7 @@ function LoginPage() {
   const findPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`http://localhost:8080/api/findpw/${passwordEmail}`);
+      const response = await axios.get(APPLICATION_SERVER_URL + `/api/findpw/${passwordEmail}`);
       alert('임시 비밀번호가 이메일로 전송되었습니다.');
       console.log('전송 성공', response);
     } catch (error) {
@@ -83,50 +84,22 @@ function LoginPage() {
   }
 
   return (
-    <div className={styles.loginpagebg}>
-      <div className={styles.photo}>
-        <h1 className={styles.titlebium}>비 움</h1>
-        <div className={styles.circle}>
-          <div className={styles.circlelogo}></div>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <div className="loginId">
+          <label htmlFor="userEmail">
+            이메일 &nbsp;
+            <input type="text" id="userEmail" placeholder="이메일을 입력해 주세요." value={userEmail} onChange={handleEmailChange} />
+          </label>
         </div>
-        <div className={styles.leftcontent}>
-          <p>아직 비움의 회원이 아니세요?</p>
-          <h3 onClick={goToSignUp}>회원가입</h3>
+        <div className="loginPassword">
+          <label htmlFor="userPassword">
+            비밀번호 &nbsp;
+            <input type="password" id="userPassword" placeholder="비밀번호를 입력해 주세요." value={userPw} onChange={handlePasswordChange} />
+          </label>
         </div>
-      </div>
-
-      <div className={styles.rightbox}>
-        <h1 className={styles.titlelogin}>로그인</h1>
-        <form onSubmit={handleSubmit}>
-          <div className={styles.loginid}>
-            <label htmlFor="userEmail">
-              이메일 <br></br>
-              <input
-                type="text"
-                id="userEmail"
-                placeholder="이메일을 입력해 주세요."
-                value={userEmail}
-                onChange={handleEmailChange}
-              />
-            </label>
-          </div>
-          <div className={styles.loginpassword}>
-            <label htmlFor="userPassword">
-              비밀번호 <br></br>
-              <input
-                type="password"
-                id="userPassword"
-                placeholder="비밀번호를 입력해 주세요."
-                value={userPw}
-                onChange={handlePasswordChange}
-              />
-            </label>
-          </div>
-        <div className={styles.buttoncontainer}>
-          <button className={styles.cancelbutton} onClick={goToMainPage}>
-            취소
-          </button>
-          <button className={styles.loginbutton}>로그인</button>
+        <div>
+          <button className="loginButton">로그인</button>
         </div>
         </form>
         <div>
