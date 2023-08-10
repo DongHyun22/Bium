@@ -19,7 +19,7 @@ public interface GameRoomService {
     String modifyGameRoom(ModifyGameRoomDto request);
     String outGameRoom(String gameId);
     String startGameRoom(String gameRoomId);
-    String overGame(OverGameDto request);
+    List<UserGameRecordDto> overGame(OverGameDto request);
     String deleteGameRoom(String gameRoomId);
     List<UserGameRecordDto> StopGameRoom(String gameRoomId);
 }

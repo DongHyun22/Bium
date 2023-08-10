@@ -10,6 +10,8 @@ import com.ssafy.bium.gameroom.service.GameRoomService;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -84,7 +86,7 @@ public class GameRoomController {
     }
 
     @PostMapping("/over")
-    public String over(
+    public List<UserGameRecordDto> over(
             @RequestBody OverGameDto request
     ){
         return gameRoomService.overGame(request);

@@ -1,3 +1,24 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 16px;
+  grid-template-areas:
+    'header header'
+    'side-left side-right';
+}
+
+.header {
+  grid-area: header;
+}
+
+.side-left {
+  grid-area: side-left;
+}
+
+.side-right {
+  grid-area: side-right;
+}
+
 .modal {
   position: fixed;
   top: 50%;
@@ -21,4 +42,14 @@ img {
   width: 200px;
   height: 200px;
   object-fit: cover;
+}
+
+.imageUpload {
+  background-color: white;
+  /* border-radius: 20%; */
+  /* border: none; */
+}
+
+.imageInput {
+  display: none;
 }

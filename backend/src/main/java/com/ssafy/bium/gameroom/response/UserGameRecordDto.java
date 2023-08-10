@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class UserGameRecordDto {
-    private String userEmail;
+    private String userNickname;
     private String gameRecord;
 
     @Builder
-    public UserGameRecordDto(String userEmail, String gameRecord) {
-        this.userEmail = userEmail;
+    public UserGameRecordDto(String userNickname, String gameRecord) {
+        this.userNickname = userNickname;
         this.gameRecord = gameRecord;
     }
 }

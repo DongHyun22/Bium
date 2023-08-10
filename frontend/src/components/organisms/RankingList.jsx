@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import RankingItem from '../molecules/RankingListItem';
 import styles from './RankingList.module.css';
+import useGetBiumTime from '../../hooks/TimeInquery';
+
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 function GetRanking() {
   // 헤더 인증용 토큰
@@ -10,13 +13,15 @@ function GetRanking() {
   const [myRank, setMyRank] = useState([]);
   const userEmail = useSelector((state) => state.user.userEmail);
 
+  const myRecord = useGetBiumTime(myRank.topBium);
+
   // 랭크에 본인 정보가 있는지 여부 파악
   const myRankExistsInRank = rank.some((item) => item.userNickname === myRank.userNickname);
 
   useEffect(() => {
     // 랭킹 요청
     axios
-      .get(`http://localhost:8080/api/profile/ranking/${userEmail}`)
+      .get(APPLICATION_SERVER_URL + `/api/profile/ranking/${userEmail}`)
       .then((response) => {
         setRank(response.data.ranking);
         setMyRank(response.data.myRanking);
@@ -27,41 +32,33 @@ function GetRanking() {
   }, []);
 
   return (
-    <>
-      <div className="Ranking title">
+    <React.Fragment className={styles.rankingContainer}>
+      <div className={styles.rankingTitle}>
         <p>Ranking</p>
       </div>
       <div>
-        <div>
+        <div className={styles.catalog}>
           <span>순위</span>
-          &nbsp;
           <span>닉네임</span>
-          &nbsp;
           <span>티어</span>
-          &nbsp;
           <span>최고기록</span>
         </div>
-        <div className="Ranking list">
+        <div className={styles.rankingList}>
           {rank.map((item, index) => (
             <RankingItem key={index} nickname={item.userNickname} rank={item.userRank} topBium={item.topBium} ranking={item.ranking} />
           ))}
-        </div>
-        <p>...</p>
-        <div>
+          <p>...</p>
           {!myRankExistsInRank && (
             <div className={styles.myRanking}>
               <div>{myRank.ranking}</div>
-              &nbsp;
               <div>{myRank.userNickname}</div>
-              &nbsp;
               <div>{myRank.userRank}</div>
-              &nbsp;
-              <div>{myRank.topBium}</div>
+              <div>{myRecord}</div>
             </div>
           )}
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 }
 

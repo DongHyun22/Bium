@@ -6,9 +6,8 @@ import { setJoin } from '../../../slices/videoSlice/videoSlice';
 export const GameRoomListItem = (props) => {
   const navigator = useNavigate();
   const dispatch = useDispatch();
-
   const gameRoomTitle = props.allRoom.gameRoomTitle;
-  const roomPeople = props.allRoom.maxPeople;
+  const maxPeople = props.allRoom.maxPeople;
   const customSessionId = props.allRoom.customSessionId;
   const gameStart = props.allRoom.start;
 
@@ -19,14 +18,14 @@ export const GameRoomListItem = (props) => {
   };
   return (
     <>
-      {gameStart === false ? (
+      {gameStart === 'false' ? (
         <div
           onClick={() => {
             enterRoom(customSessionId);
           }}
         >
-          <h3>{gameRoomTitle}</h3>
-          <h6>{roomPeople}</h6>
+          <h3>게임방 제목 : {gameRoomTitle}</h3>
+          <h6>{maxPeople}</h6>
         </div>
       ) : null}
     </>
