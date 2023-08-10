@@ -11,9 +11,7 @@ function useGetBiumTime(event) {
     const minute = Math.floor((seconds % 3600) / 60);
     const second = seconds % 60;
     // 시, 분, 초가 한자리 수인 경우 0을 붙여 '02:04:09'와 같은 형태로 표현
-    return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:${second
-      .toString()
-      .padStart(2, '0')}`;
+    return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:${second.toString().padStart(2, '0')}`;
   };
 
   // event가 바뀔 때만 setTime이 실행되도록 합니다.

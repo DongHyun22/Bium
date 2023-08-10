@@ -6,7 +6,7 @@ import GameRoomListPage from '../components/pages/GameRoomListPage/GameRoomListP
 import GameRoomPage from '../components/pages/GameRoomPage/GameRoomPage';
 import CreateGameRoom from '../components/pages/CreateGameRoomPage/CreateGameRoomPage';
 import { ProfilePage } from '../components/pages/ProfilePage/ProfilePage';
-import PrivateRoute from './PricateRoute';
+import PrivateRoute from './PrivateRoute';
 
 function RouteLink(props) {
   return (
