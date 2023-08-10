@@ -27,10 +27,10 @@ function GetRanking() {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [userEmail]);
 
   return (
-    <React.Fragment className={styles.rankingContainer}>
+    <div className={styles.rankingContainer}>
       <div className={styles.rankingTitle}>
         <p>Ranking</p>
       </div>
@@ -56,7 +56,7 @@ function GetRanking() {
           )}
         </div>
       </div>
-    </React.Fragment>
+    </div>
   );
 }
 

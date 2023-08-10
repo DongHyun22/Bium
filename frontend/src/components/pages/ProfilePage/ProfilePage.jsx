@@ -41,7 +41,6 @@ export function ProfilePage() {
   // 회원 정보 수정 모달 오픈 여부
   const [modalOpen, setModalOpen] = useState(false);
 
-  console.log('dafdfadsf', savedProfileImage);
   // 프로필 이미지 저장
   const saveProfile = (e) => {
     e.preventDefault();
@@ -208,9 +207,7 @@ export function ProfilePage() {
   }
 
   // 기존 비밀번호 확인
-  const checkPassword = async (e) => {
-    e.preventDefault();
-
+  const checkPassword = async () => {
     try {
       const response = await axios.post(
         `http://localhost:8080/api/profile/checkpw`,
@@ -224,23 +221,27 @@ export function ProfilePage() {
           }
         }
       );
-      console.log(response.data);
+      console.log('비밀번호 확인', response.status);
       if (response.status === 200) {
         return true;
       }
       console.log(response.status);
       return false;
     } catch (error) {
-      return error;
+      console.log('너 오류난 거야', error);
+      return false;
     }
   };
 
   const modifyUserInfo = async (e) => {
     e.preventDefault();
 
-    if (checkPassword === false) {
+    const validatePassword = await checkPassword();
+
+    console.log(validatePassword);
+    if (validatePassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
-      return; 
+      return;
     }
 
     try {
@@ -262,8 +263,7 @@ export function ProfilePage() {
         }
       });
 
-
-      console.log(response.data);
+      console.log(response);
       if (response.status === 200) {
         dispatch(setNickname(name));
         // setName(updatedNickname);
@@ -279,14 +279,16 @@ export function ProfilePage() {
   const signOutUser = async (e) => {
     e.preventDefault();
 
-    if (checkPassword === false) {
+    const validatePassword = await checkPassword();
+
+    console.log(validatePassword);
+    if (validatePassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
-      return; 
+      return;
     }
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/profile/delete`,
         `http://localhost:8080/api/profile/delete`,
         {},
         {
@@ -328,59 +330,56 @@ export function ProfilePage() {
     closeDeleteConfirmModal();
   };
 
-  useEffect(() => {}, []);
-
   return (
     <div className={styles.gridContainer}>
       <div className={styles.header}>
-        <div>
-        </div>
+        <div></div>
         <div>
           <h1>ProfilePage</h1>
         </div>
       </div>
       <div className={styles.sideLeft}>
-      {showProfile ? (
-        <div>
-          <p>프로필 이미지</p>
-          {savedProfileImage ? (
-            <img src={savedProfileImage} alt="미리보기" />
-          ) : (
-            <img src={emptyprofile} alt="미리보기" />
-          )}
+        {showProfile ? (
           <div>
-            <input name="file" type="file" accept="image/*" onChange={saveProfile}></input>
+            <p>프로필 이미지</p>
+            {savedProfileImage ? (
+              <img src={savedProfileImage} alt="미리보기" />
+            ) : (
+              <img src={emptyprofile} alt="미리보기" />
+            )}
+            <div>
+              <input name="file" type="file" accept="image/*" onChange={saveProfile}></input>
+            </div>
+            <button onClick={sendToProfile}>이미지 서버 전송</button>
+            <div>
+              <button onClick={deleteProfile}>삭제</button>
+            </div>
           </div>
-          <button onClick={sendToProfile}>이미지 서버 전송</button>
+        ) : (
           <div>
-            <button onClick={deleteProfile}>삭제</button>
+            <p>방해 이미지</p>
+            {savedDisturbImage ? (
+              <img src={savedDisturbImage} alt="미리보기" />
+            ) : (
+              <img src={emptyprofile} alt="미리보기" />
+            )}
+            <div>
+              <input name="file" type="file" accept="image/*" onChange={saveDisturb}></input>
+            </div>
+            <button onClick={sendToDisturb}>이미지 서버 전송</button>
+            <div>
+              <button onClick={deleteDisturb}>삭제</button>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div>
-          <p>방해 이미지</p>
-          {savedDisturbImage ? (
-            <img src={savedDisturbImage} alt="미리보기" />
-          ) : (
-            <img src={emptyprofile} alt="미리보기" />
-          )}
-          <div>
-            <input name="file" type="file" accept="image/*" onChange={saveDisturb}></input>
-          </div>
-          <button onClick={sendToDisturb}>이미지 서버 전송</button>
-          <div>
-            <button onClick={deleteDisturb}>삭제</button>
-          </div>
-        </div>
-      )}
-      <button onClick={() => setShowProfile(!showProfile)}>토글 이미지</button>
+        )}
+        <button onClick={() => setShowProfile(!showProfile)}>토글 이미지</button>
         <h3>닉네임</h3>
-        <h3>{savedEmail}</h3>
-        <h3>오늘 비움량</h3>
-        <h3>{todayBium}</h3>
-        <h3>총 비움량</h3>
-        <h3>{totalBium}</h3>
-        <button onClick={openModal}>회원 정보 수정</button>
+        <h3>{savedNickname}</h3>
+        <h3>오늘 비움량 : {todayBium}</h3>
+        <h3>총 비움량 {totalBium}</h3>
+        <button className={styles.modifyButton} onClick={openModal}>
+          회원 정보 수정
+        </button>
         {modalOpen && (
           <div className={styles.modal}>
             <h2>회원정보 수정</h2>
