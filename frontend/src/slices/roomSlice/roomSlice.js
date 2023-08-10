@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { act } from 'react-dom/test-utils';
 
 const initialState = {
   roomTitle: '',
@@ -7,13 +6,38 @@ const initialState = {
   mySessionId: '',
   myUserName: 'jihyeok',
   maxPeople: 8,
-  backgroundImage: 1
+  backgroundImage: 1,
+  start: false,
+  host: false,
+  gameId: null,
+  gameRoomId: '',
+  gameFallCount: 0,
+  biumSecond: 0
 };
 
 export const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {
+    setBiumSecond: (state, action) => {
+      state.biumSecond = state.biumSecond + action.payload;
+    },
+    setGameFallCount: (state, action) => {
+      state.gameFallCount = state.gameFallCount + action.payload;
+    },
+    setGameId: (state, action) => {
+      state.gameId = action.payload;
+    },
+    setGameRoomId: (state, action) => {
+      state.gameRoomId = action.payload;
+    },
+    setHost: (state, action) => {
+      state.host = action.payload;
+    },
+    setStart: (state, action) => {
+      console.log('타이머 바뀜', action.payload);
+      state.start = action.payload;
+    },
     setRoomTitle: (state, action) => {
       state.roomTitle = action.payload.gameRoomTitle;
     },
@@ -21,7 +45,6 @@ export const roomSlice = createSlice({
       state.roomPassword = action.payload.roompassword;
     },
     setMySessionId: (state, action) => {
-      console.log('actioooon  실행중', action.payload);
       state.mySessionId = action.payload;
     },
     setMyUserName: (state, action) => {
@@ -36,6 +59,7 @@ export const roomSlice = createSlice({
   }
 });
 
-export const { setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } = roomSlice.actions;
+export const { setBiumSecond, setGameFallCount, setGameId, setGameRoomId, setHost, setStart, setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } =
+  roomSlice.actions;
 
 export default roomSlice.reducer;

@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setGameId, setGameRoomId, setHost, setMySessionId } from '../roomSlice/roomSlice';
 
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export const joinSession = createAsyncThunk('videoAction/joinSession', async (props) => {
-  console.log('제발 joinsession 확ㅇ니좀', props);
   const accessToken = sessionStorage.getItem('accessToken');
   const userEmail = props.userEmail;
   const OV = props.OV;
@@ -16,16 +16,11 @@ export const joinSession = createAsyncThunk('videoAction/joinSession', async (pr
   const roomTitle = props.roomTitle;
   const roomPassword = props.roomPassword;
   const session = props.session;
+  const gameRoomId = '';
 
-  console.log(123);
-  console.log(456);
   try {
-    console.log('해줘');
     const token = await getToken({ props, accessToken });
-    console.log('제발 이거는 되니?');
     if (myUserName && session) {
-      console.log('AAAAA');
-
       await session.connect(token, { clientData: myUserName });
       const publisher = await OV.initPublisherAsync(undefined, {
         audioSource: undefined, // The source of audio. If undefined default microphone
@@ -50,25 +45,24 @@ export const joinSession = createAsyncThunk('videoAction/joinSession', async (pr
 });
 
 async function getToken(props) {
-  console.log('bbbbb는?');
+  const dispatch = props.props.dispatch;
   const newSessionId = await createSession(props);
+  dispatch(setMySessionId(newSessionId.customSessionId));
+  dispatch(setGameRoomId(newSessionId.gameRoomId));
   const token = await createToken({ props, newSessionId });
-  return token;
+  dispatch(setGameId(token.gameId));
+  dispatch(setHost(token.host));
+  return token.sessionId;
 }
 
 function createSession(props) {
-  console.log('토큰있니....?');
-
-  console.log(props.props);
   return new Promise(async (resolve, reject) => {
     try {
       const accessToken = sessionStorage.getItem('accessToken');
-      console.log(accessToken, '비코좀...');
-      const userEmail = props.props.gameRoomTitle;
-      console.log('여기 들어오나?', userEmail);
+      const userEmail = props.props.userEmail;
 
       const response = await axios.post(
-        `http://localhost:8080/api/game/create`,
+        APPLICATION_SERVER_URL + '/api/game/create',
         {
           gameRoomTitle: props.props.gameRoomTitle,
           gameRoomMovie: props.props.backgroundImage,
@@ -90,12 +84,11 @@ function createSession(props) {
       );
       setTimeout(() => {
         // console.log('개발자 설정을 통한 강제 리턴');
+        console.log('여기는세션', response.data);
         return resolve(response.data);
       }, 1000);
-      console.log('여기는 create 세션이니까', response.data);
       return response.data;
     } catch (response) {
-      console.log(response);
       let error = Object.assign({}, response);
       // 세션이 있으면 409 에러를 주는데 그때는 세션이 벌써 있다는 것이다.
       if (error?.response?.status === 409) {
@@ -106,24 +99,22 @@ function createSession(props) {
 }
 
 function createToken(props) {
-  console.log('hhhhh');
-  console.log(props);
-
   return new Promise(async (resolve, reject) => {
     try {
       const userEmail = props.props.props.userEmail;
-      const gameRoomId = props.props.props.roomTitle;
-      const gameRoomPw = props.props.props.roomPassword;
+      const gameRoomId = props.newSessionId.gameRoomId;
+      const gameRoomPw = props.newSessionId.gameRoomPw;
       const customSessionId = props.newSessionId.customSessionId;
+      const host = props.newSessionId.host;
 
-      console.log('이메일 출력', userEmail, gameRoomId, gameRoomPw, customSessionId);
       const accessToken = sessionStorage.getItem('accessToken');
       const response = await axios.post(
-        `http://localhost:8080/api/game/enter`,
+        APPLICATION_SERVER_URL + '/api/game/enter',
         {
-          gameRoomId: 1,
-          gameRoomPw: '',
-          customSessionId: customSessionId
+          gameRoomId,
+          gameRoomPw,
+          customSessionId,
+          host
         },
         {
           params: {
@@ -137,10 +128,9 @@ function createToken(props) {
           }
         }
       );
-      console.log(response);
+      console.log('여기는토큰', response.data);
+
       return resolve(response.data);
-    } catch (error) {
-      console.log(reject('3번 여기오류야....', error));
-    }
+    } catch (error) {}
   });
 }

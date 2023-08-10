@@ -68,12 +68,9 @@ export const videoSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(joinSession.fulfilled, (state, { payload }) => {
-      console.log('joinSession fulfilled', payload);
       state.publisher = payload.publisher;
     });
-    builder.addCase(joinSession.rejected, (state, { payload }) => {
-      console.log('joinSession rejected');
-    });
+    builder.addCase(joinSession.rejected, (state, { payload }) => {});
   }
 });
 

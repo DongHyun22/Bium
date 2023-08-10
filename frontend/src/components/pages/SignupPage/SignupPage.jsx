@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export default function SignUpPage() {
   const navigate = useNavigate();
@@ -28,14 +29,14 @@ export default function SignUpPage() {
   const [checkEmailDuplicate, setCheckEmailDuplicate] = useState(false);
 
   // 검사 결과 통보용
-  const [rightEmail, setRightEmail] = useState('유효한 이메일 형식입니다.');
-  const [wrongEmail, setWrongEmail] = useState('형식에 맞지않는 이메일입니다.');
-  const [rightPassword, setRightPassword] = useState('유효한 비밀번호 형식입니다.');
-  const [wrongPassword, setWrongPassword] = useState('형식에 맞지않는 비밀번호입니다.');
-  const [rightPasswordConfirm, setRightPasswordConfirm] = useState('비밀번호와 일치합니다.');
-  const [wrongPasswordConfirm, setWrongPasswordConfirm] = useState('비밀번호와 일치하지 않습니다.');
-  const [rightName, setRightName] = useState('유효한 이름 형식입니다.');
-  const [wrongName, setWrongName] = useState('형식에 맞지않는 이름입니다.');
+  const [rightEmail, setRightEmail] = useState('유효한 이메일 형식입니다');
+  const [wrongEmail, setWrongEmail] = useState('형식에 맞지않는 이메일입니다');
+  const [rightPassword, setRightPassword] = useState('유효한 비밀번호 형식입니다');
+  const [wrongPassword, setWrongPassword] = useState('알파벳, 숫자, 특수문자의 순서대로 작성해 주십시오');
+  const [rightPasswordConfirm, setRightPasswordConfirm] = useState('비밀번호와 일치합니다');
+  const [wrongPasswordConfirm, setWrongPasswordConfirm] = useState('비밀번호와 일치하지 않습니다');
+  const [rightName, setRightName] = useState('유효한 이름 형식입니다');
+  const [wrongName, setWrongName] = useState('형식에 맞지않는 이름입니다');
 
   const validateEmail = (mail) => {
     // 이메일 정규식
@@ -97,7 +98,7 @@ export default function SignUpPage() {
         userName: name,
         userNickname: nickname
       };
-      const response = await axios.post('http://localhost:8080/api/signup', userRegisterInfomation);
+      const response = await axios.post(APPLICATION_SERVER_URL + '/api/signup', userRegisterInfomation);
       return console.log(response.data);
     } catch (error) {
       console.error(error);
@@ -107,7 +108,7 @@ export default function SignUpPage() {
   const checkMail = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get('http://localhost:8080/api/signup/check', {
+      const response = await axios.get(APPLICATION_SERVER_URL + '/api/signup/check', {
         params: {
           userEmail: userEmail
         }
@@ -160,45 +161,40 @@ export default function SignUpPage() {
   return (
     <div>
       <form onSubmit={checkMail}>
-        <p>아이디</p>
-        <input type="text" placeholder="ID" value={userEmail} onChange={handleChange} name="userEmail" required />
+        <label>
+          아이디:
+          <input type="text" placeholder="ID" value={userEmail} onChange={handleChange} name="userEmail" required />
+        </label>
         <button type="submit">중복 확인</button>
+        <br />
       </form>
       {userEmail && <div>{isEmailValid ? <p>{rightEmail}</p> : <p>{wrongEmail}</p>}</div>}
       <form onSubmit={handleSubmit}>
-        <p>비밀번호</p>
-        <input
-          type="password"
-          autoComplete="off"
-          placeholder="Password"
-          value={password}
-          onChange={handleChange}
-          name="password"
-          required
-        />
+        <label>
+          비밀번호:
+          <input type="password" autoComplete="off" placeholder="Password" value={password} onChange={handleChange} name="password" required />
+        </label>
         {password && <div>{isPasswordValid ? <p>{rightPassword}</p> : <p>{wrongPassword}</p>}</div>}
-
-        <p>비밀번호 확인</p>
-        <input
-          type="password"
-          autoComplete="off"
-          placeholder="Confirm password"
-          value={passwordConfirm}
-          onChange={handleChange}
-          name="passwordConfirm"
-          required
-        />
+        <br />
+        <label>
+          비밀번호 확인:
+          <input type="password" autoComplete="off" placeholder="Confirm password" value={passwordConfirm} onChange={handleChange} name="passwordConfirm" required />
+        </label>
+        <br />
         {passwordConfirm && <div>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>}
 
-        <br></br>
-        <p>이름</p>
-        <input type="text" placeholder="Name" value={name} onChange={handleChange} name="name" required />
+        <label>
+          이름:
+          <input type="text" placeholder="Name" value={name} onChange={handleChange} name="name" required />
+        </label>
         {name && <div>{isNameValid ? <p>{rightName}</p> : <p>{wrongName}</p>}</div>}
 
-        <br></br>
-        <p>닉네임</p>
-        <input type="text" placeholder="Nickname" value={nickname} onChange={handleChange} name="nickname" required />
-        <p>확인</p>
+        <br />
+        <label>
+          닉네임:
+          <input type="text" placeholder="Nickname" value={nickname} onChange={handleChange} name="nickname" required />
+        </label>
+        <br />
         <button type="submit">Sign up</button>
       </form>
     </div>

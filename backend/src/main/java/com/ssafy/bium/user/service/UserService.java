@@ -7,6 +7,7 @@ import com.ssafy.bium.user.request.FilePostReq;
 import com.ssafy.bium.user.request.UserLoginPostReq;
 import com.ssafy.bium.user.request.UserModifyPostReq;
 import com.ssafy.bium.user.request.UserRegisterPostReq;
+import com.ssafy.bium.user.response.MailGetRes;
 import com.ssafy.bium.user.response.UserModifyGetRes;
 import com.ssafy.bium.user.response.UserRankingGetRes;
 
@@ -19,6 +20,8 @@ public interface UserService {
     User getUserByUserEmail(String userEmail);
     int deleteUserByUserEmail(String userEmail);
     public User login(UserLoginPostReq userLoginPostReq);
+    void saveRefreshToken(String userEmail, String refreshToken);
+    Object getRefreshToken(String userEmail);
     UserModifyGetRes getModifyData(String userEmail);
     int modifyProfile(UserModifyPostReq userModifyPostReq);
     Image setImage(FilePostReq filePostReq);
@@ -26,4 +29,9 @@ public interface UserService {
     List<UserRankingGetRes> getUserListTop5ByTotalBium();
     UserRankingGetRes getUserByTotalBium(String userEmail);
 
+    // SMTP 관련
+    public MailGetRes createMailAndChangePassword(String userEmail) throws Exception;
+    public void updatePassword(String str, String userEmail) throws Exception;
+    public String getTempPassword() throws Exception;
+    public void sendMail(MailGetRes mailDto) throws Exception;
 }

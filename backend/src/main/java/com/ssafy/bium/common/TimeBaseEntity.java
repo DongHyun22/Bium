@@ -18,19 +18,19 @@ public class TimeBaseEntity {
 
     @CreatedDate
     @Column(nullable = false)
-    private LocalDateTime createDate;
+    private String createDate;
     @LastModifiedDate
     @Column(nullable = false)
-    private LocalDateTime modifiedDate;
+    private String modifiedDate;
 
     @PrePersist // 데이터 생성이 이루어질때 사전 작업
     public void prePersist() {
-        this.createDate = LocalDateTime.now();
+        this.createDate = LocalDateTime.now().toString();
         this.modifiedDate = this.createDate;
     }
 
     @PreUpdate // 데이터 수정이 이루어질때 사전 작업
     public void preUpdate() {
-        this.modifiedDate = LocalDateTime.now();
+        this.modifiedDate = LocalDateTime.now().toString();
     }
 }

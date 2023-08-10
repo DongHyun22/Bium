@@ -1,32 +1,30 @@
-import { OpenVidu } from 'openvidu-browser';
-
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { OpenVidu } from 'openvidu-browser';
+import axios from 'axios';
 
-import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
+import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
+import { setGameFallCount, setMySessionId, setStart } from '../../../slices/roomSlice/roomSlice';
 
-import Timer from '../../atoms/Timer/Timer';
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
-
+import Timer from '../../atoms/Timer/Timer';
 import styles from './GamRoomPage.module.css';
-import { setMySessionId } from '../../../slices/roomSlice/roomSlice';
+
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 function GameRoomPage() {
   const dispatch = useDispatch();
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const customSessionId = location.state;
-  console.log('uuuuuuu', customSessionId);
   const userEmail = useSelector((state) => state.user.userEmail);
 
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
   const roomPassword = useSelector((state) => state.room.roomPassword);
-
-  //customSessionId 필요하다
-  //추가하자
+  const host = useSelector((state) => state.room.host);
 
   const mySessionId = useSelector((state) => state.room.mySessionId);
   if (location.state) {
@@ -40,6 +38,11 @@ function GameRoomPage() {
   const session = useSelector((state) => state.video.session);
   const publisher = useSelector((state) => state.video.publisher);
   const subscribers = useSelector((state) => state.video.subscribers);
+  const gameRoomId = useSelector((state) => state.room.gameRoomId);
+  const gameId = useSelector((state) => state.room.gameId);
+  const gameFallCount = useSelector((state) => state.room.gameFallCount);
+  const biumSecond = useSelector((state) => state.room.biumSecond);
+  const start = useSelector((state) => state.room.start);
 
   const onbeforeunload = (e) => {
     dispatch(leaveSession());
@@ -66,15 +69,14 @@ function GameRoomPage() {
     return () => {
       window.removeEventListener('beforeunload', onbeforeunload);
     };
-  }, []);
+  }, [host]);
 
   // join 의존성
   useEffect(() => {
     if (join) {
       const OV = new OpenVidu();
       const session = OV.initSession();
-      console.log('OV:', OV);
-      console.log('session:', session);
+
       dispatch(initOVSession({ OV, session }));
     }
   }, [join]);
@@ -86,7 +88,6 @@ function GameRoomPage() {
 
       const handleStreamCreated = (event) => {
         const subscriber = session.subscribe(event.stream, undefined);
-        console.log('나갔니?');
         dispatch(enteredSubscriber(subscriber));
       };
       // On every Stream destroyed...
@@ -101,8 +102,7 @@ function GameRoomPage() {
       session.on('streamCreated', handleStreamCreated);
       session.on('streamDestroyed', handleStreamDestroyed);
       session.on('exception', handleException);
-      dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail }));
-
+      dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail, host, dispatch }));
       // Clean-up 함수 등록
       return () => {
         session.off('streamCreated', handleStreamCreated);
@@ -124,20 +124,114 @@ function GameRoomPage() {
 
   // --- 3) Specify the actions when events take place in the session ---
 
+  useEffect(() => {
+    if (publisher !== undefined) {
+      console.log('쿠키 세션에 이벤트 추가', publisher);
+      publisher.stream.session.on('signal:timer', (e) => {
+        console.log('여기는 데이터야...', e);
+        dispatch(setStart(true));
+      });
+    }
+  }, [publisher]);
+
+  const startSignal = (publisher) => {
+    const data = {
+      message: 'start'
+    };
+    publisher.stream.session.signal({
+      data: JSON.stringify(data),
+      type: 'timer'
+    });
+  };
+
+  const gameStart = async () => {
+    try {
+      console.log('gameroom ID니까 ', gameRoomId);
+      const response = await axios
+        .post(
+          APPLICATION_SERVER_URL + '/api/game/start',
+          { gameRoomId },
+          {
+            params: { gameRoomId },
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Methods': 'POST'
+            }
+          }
+        )
+        .then(() => {
+          return;
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const endGame = async () => {
+    try {
+      const response = await axios.post(
+        APPLICATION_SERVER_URL + '/api/game/stop',
+
+        {
+          params: {
+            gameRoomId: gameRoomId
+          },
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'POST'
+          }
+        }
+      );
+      return;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  //게임 탈락
+  const fallAxios = async () => {
+    console.log('비움시간', biumSecond);
+    try {
+      console.log('당신은 탈락했습니다');
+      const response = await axios.post(
+        APPLICATION_SERVER_URL + '/api/game/over',
+        { gameId: gameId, gameRecord: biumSecond },
+        {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'POST'
+          }
+        }
+      );
+      console.log(response.data);
+      dispatch(setStart(false));
+      dispatch(setGameFallCount(gameFallCount));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (gameFallCount > 2 && gameFallCount < 4) {
+      fallAxios();
+    }
+  }, [gameFallCount]);
   return (
     <div>
       {/* join 이후 화면 */}
       {session !== undefined ? (
         <div id="session">
           <div id="session-header">
-            <h1 id="session-title">{mySessionId}</h1>
+            <h1 id="session-title">{gameRoomTitle}</h1>
           </div>
           <div id="session-sidebar">
             <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={handleLeaveSession} value="Leave session" />
             <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
-          </div>
-          <div id="room-information">
-            <h1 id="room-name">{gameRoomTitle}</h1>
+            {host === true ? <button>수정</button> : null}
+
+            <h3>당신의 탈락 카운트{start ? <> {gameFallCount}</> : null}</h3>
           </div>
           <div className={styles.backimage}>
             <div id="video-container">
@@ -154,8 +248,19 @@ function GameRoomPage() {
                   <UserVideoComponent streamManager={sub} />
                 </div>
               ))}
-              <Timer></Timer>
             </div>
+            {host ? (
+              <button
+                onClick={() => {
+                  gameStart();
+                  startSignal(publisher);
+                }}
+              >
+                Start
+              </button>
+            ) : null}
+
+            {start ? <Timer></Timer> : null}
           </div>
         </div>
       ) : null}

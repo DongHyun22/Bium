@@ -14,7 +14,7 @@ export const CreateGameRoom = () => {
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
   const roomPassword = useSelector((state) => state.room.roomPassword);
   const mySessionId = useSelector((state) => state.room.mySessionId);
-  const myUserName = useSelector((state) => state.room.myUserName);
+  const myUserName = useSelector((state) => state.user.nickname);
   const maxPeople = useSelector((state) => state.room.maxPeople);
   const backgroundImage = useSelector((state) => state.room.backgroundImage);
 
