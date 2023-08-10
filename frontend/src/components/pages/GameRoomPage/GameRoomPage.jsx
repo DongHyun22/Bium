@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { OpenVidu } from 'openvidu-browser';
@@ -11,6 +11,7 @@ import { setGameFallCount, setMySessionId, setStart } from '../../../slices/room
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
 import styles from './GamRoomPage.module.css';
+import EndGameRank from '../../molecules/EndGameRank/EndGameRank';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
@@ -44,6 +45,9 @@ function GameRoomPage() {
   const biumSecond = useSelector((state) => state.room.biumSecond);
   const start = useSelector((state) => state.room.start);
 
+  const [rankModal, setRankModal] = useState(false);
+  const [gameRankList, setGameRankList] = useState([]);
+
   const onbeforeunload = (e) => {
     dispatch(leaveSession());
   };
@@ -55,6 +59,7 @@ function GameRoomPage() {
   const handleLeaveSession = () => {
     if (session) {
       session.disconnect();
+      gameOut();
       dispatch(leaveSession());
       setJoin(false);
       navigate('/gameroomlist');
@@ -144,25 +149,31 @@ function GameRoomPage() {
     });
   };
 
+  //게임방 나가기 시작여부 확인
+  const gameOut = async () => {
+    try {
+      const response = await axios.post(APPLICATION_SERVER_URL + '/api/game/out', {}, { params: { gameId } });
+      console.log(response);
+    } catch (err) {
+      return;
+    }
+  };
+
   const gameStart = async () => {
     try {
       console.log('gameroom ID니까 ', gameRoomId);
-      const response = await axios
-        .post(
-          APPLICATION_SERVER_URL + '/api/game/start',
-          { gameRoomId },
-          {
-            params: { gameRoomId },
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Methods': 'POST'
-            }
+      const response = await axios.post(
+        APPLICATION_SERVER_URL + '/api/game/start',
+        { gameRoomId },
+        {
+          params: { gameRoomId },
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'POST'
           }
-        )
-        .then(() => {
-          return;
-        });
+        }
+      );
     } catch (err) {
       console.log(err);
     }
@@ -189,6 +200,18 @@ function GameRoomPage() {
       console.log(err);
     }
   };
+
+  const modalSignal = (props) => {
+    console.log('여기는 데이터인데', props);
+
+    const data = {
+      gameRankList: props.ranking
+    };
+    props.publisher.stream.session.signal({
+      data: JSON.stringify(data),
+      type: 'gamerank'
+    });
+  };
   //게임 탈락
   const fallAxios = async () => {
     console.log('비움시간', biumSecond);
@@ -205,16 +228,30 @@ function GameRoomPage() {
           }
         }
       );
-      console.log(response.data);
       dispatch(setStart(false));
-      dispatch(setGameFallCount(gameFallCount));
+      // dispatch(setGameFallCount(gameFallCount));
+      if (typeof response.data === 'object') {
+        const ranking = response.data;
+        modalSignal({ publisher, ranking });
+      }
     } catch (err) {
       console.log(err);
     }
   };
+  useEffect(() => {
+    if (publisher !== undefined) {
+      console.log('쿠키 세션에 이벤트 추가', publisher);
+      publisher.stream.session.on('signal:gamerank', (e) => {
+        console.log('여기는 랭크리스트야...', JSON.parse(e.data).gameRankList);
+        setGameRankList(JSON.parse(e.data).gameRankList);
+        setRankModal(true);
+        console.log(rankModal);
+      });
+    }
+  }, [start]);
 
   useEffect(() => {
-    if (gameFallCount > 2 && gameFallCount < 4) {
+    if (gameFallCount > 1 && gameFallCount < 3) {
       fallAxios();
     }
   }, [gameFallCount]);
@@ -230,9 +267,21 @@ function GameRoomPage() {
             <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={handleLeaveSession} value="Leave session" />
             <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
             {host === true ? <button>수정</button> : null}
-
-            <h3>당신의 탈락 카운트{start ? <> {gameFallCount}</> : null}</h3>
           </div>
+          {gameRankList === null ? <h3>트루</h3> : <h3>팰스</h3>}
+
+          {rankModal && gameRankList !== [] ? (
+            <div>
+              {gameRankList.map((rank, id) => {
+                return <EndGameRank rank={rank}></EndGameRank>;
+              })}
+            </div>
+          ) : (
+            <>
+              <h6>하나루</h6>
+            </>
+          )}
+          <h3>당신의 탈락 카운트{start ? <> {gameFallCount}</> : null}</h3>
           <div className={styles.backimage}>
             <div id="video-container">
               {publisher !== undefined ? (
