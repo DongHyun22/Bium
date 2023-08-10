@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -13,6 +13,8 @@ export function ProfilePage() {
   const { userEmail } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const profileImageInput = useRef();
+  const disturbImageInput = useRef();
 
   // 기존 스토어의 유저 정보
   const savedEmail = useSelector((state) => state.user.userEmail);
@@ -180,7 +182,7 @@ export function ProfilePage() {
 
   // 프로필 이미지 삭제
   const deleteProfile = () => {
-    if (profileimage) {
+    if (savedProfileImage) {
       setProfileImage(null);
       dispatch(setImageId(null));
     }
@@ -188,7 +190,7 @@ export function ProfilePage() {
 
   // 방해 이미지 삭제
   const deleteDisturb = () => {
-    if (disturbImage) {
+    if (savedDisturbImage) {
       setDisturbImage(null);
       dispatch(setDisturb(null));
     }
@@ -240,7 +242,7 @@ export function ProfilePage() {
 
     if (checkPassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
-      return; 
+      return;
     }
 
     try {
@@ -262,7 +264,6 @@ export function ProfilePage() {
         }
       });
 
-
       console.log(response.data);
       if (response.status === 200) {
         dispatch(setNickname(name));
@@ -281,7 +282,7 @@ export function ProfilePage() {
 
     if (checkPassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
-      return; 
+      return;
     }
 
     try {
@@ -313,6 +314,16 @@ export function ProfilePage() {
     }
   };
 
+  // 프로필 이미지 업로드 버튼
+  const onClickProfileUpload = () => {
+    profileImageInput.current.click();
+  };
+
+  // 방해 이미지 업로드 버튼
+  const onClickDisturbUpload = () => {
+    disturbImageInput.current.click();
+  };
+
   // 회원 탈퇴 확인 모달을 열고 닫는 함수들
   const openDeleteConfirmModal = () => {
     setDeleteConfirmModalOpen(true);
@@ -333,47 +344,74 @@ export function ProfilePage() {
   return (
     <div className={styles.gridContainer}>
       <div className={styles.header}>
-        <div>
-        </div>
+        <div></div>
         <div>
           <h1>ProfilePage</h1>
         </div>
       </div>
       <div className={styles.sideLeft}>
-      {showProfile ? (
-        <div>
-          <p>프로필 이미지</p>
-          {savedProfileImage ? (
-            <img src={savedProfileImage} alt="미리보기" />
-          ) : (
-            <img src={emptyprofile} alt="미리보기" />
-          )}
+        {showProfile ? (
           <div>
-            <input name="file" type="file" accept="image/*" onChange={saveProfile}></input>
+            <h3>프로필 이미지</h3>
+            {/* {savedProfileImage ? (
+              <img src={savedProfileImage} alt="미리보기" />
+            ) : (
+              <img src={emptyprofile} alt="미리보기" />
+            )} */}
+            <div>
+              <input
+                name="file"
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                ref={profileImageInput}
+                onChange={saveProfile}
+              ></input>
+              <button onClick={onClickProfileUpload} className={styles.imageUpload}>
+                {savedProfileImage ? (
+                  <img src={savedProfileImage} alt="미리보기" />
+                ) : (
+                  <img src={emptyprofile} alt="미리보기" />
+                )}
+              </button>
+            </div>
+            <button onClick={sendToProfile}>이미지 저장</button>
+            <div>
+              <button onClick={deleteProfile}>삭제</button>
+            </div>
           </div>
-          <button onClick={sendToProfile}>이미지 서버 전송</button>
+        ) : (
           <div>
-            <button onClick={deleteProfile}>삭제</button>
+            <h3>방해 이미지</h3>
+            {/* {savedDisturbImage ? (
+              <img src={savedDisturbImage} alt="미리보기" />
+            ) : (
+              <img src={emptyprofile} alt="미리보기" />
+            )} */}
+            <div>
+              <input
+                name="file"
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                ref={disturbImageInput}
+                onChange={saveDisturb}
+              ></input>
+              <button onClick={onClickDisturbUpload} className={styles.imageUpload}>
+                {savedDisturbImage ? (
+                  <img src={savedDisturbImage} alt="미리보기" />
+                ) : (
+                  <img src={emptyprofile} alt="미리보기" />
+                )}
+              </button>
+            </div>
+            <button onClick={sendToDisturb}>이미지 저장</button>
+            <div>
+              <button onClick={deleteDisturb}>삭제</button>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div>
-          <p>방해 이미지</p>
-          {savedDisturbImage ? (
-            <img src={savedDisturbImage} alt="미리보기" />
-          ) : (
-            <img src={emptyprofile} alt="미리보기" />
-          )}
-          <div>
-            <input name="file" type="file" accept="image/*" onChange={saveDisturb}></input>
-          </div>
-          <button onClick={sendToDisturb}>이미지 서버 전송</button>
-          <div>
-            <button onClick={deleteDisturb}>삭제</button>
-          </div>
-        </div>
-      )}
-      <button onClick={() => setShowProfile(!showProfile)}>토글 이미지</button>
+        )}
+        <button onClick={() => setShowProfile(!showProfile)}>토글 이미지</button>
         <h3>닉네임</h3>
         <h3>{savedEmail}</h3>
         <h3>오늘 비움량</h3>
