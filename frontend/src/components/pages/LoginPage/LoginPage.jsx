@@ -122,13 +122,13 @@ function LoginPage() {
               />
             </label>
           </div>
+          <div className={styles.buttoncontainer}>
+            <button className={styles.cancelbutton} onClick={goToMainPage}>
+              취소
+            </button>
+            <button className={styles.loginbutton}>로그인</button>
+          </div>
         </form>
-        <div className={styles.buttoncontainer}>
-          <button className={styles.cancelbutton} onClick={goToMainPage}>
-            취소
-          </button>
-          <button className={styles.loginbutton}>로그인</button>
-        </div>
         <div>
           <button onClick={openModal} className={styles.findpasswordbutton}>
             비밀번호 찾기
