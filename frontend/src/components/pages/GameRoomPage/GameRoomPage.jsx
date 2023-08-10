@@ -6,17 +6,18 @@ import axios from 'axios';
 
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
 import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import { setMySessionId, setStart } from '../../../slices/roomSlice/roomSlice';
+import { setGameFallCount, setMySessionId, setStart } from '../../../slices/roomSlice/roomSlice';
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
 import styles from './GamRoomPage.module.css';
-import { FaceMatch } from 'face-api.js';
+
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 function GameRoomPage() {
   const dispatch = useDispatch();
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const customSessionId = location.state;
   const userEmail = useSelector((state) => state.user.userEmail);
@@ -24,9 +25,6 @@ function GameRoomPage() {
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
   const roomPassword = useSelector((state) => state.room.roomPassword);
   const host = useSelector((state) => state.room.host);
-
-  //customSessionId 필요하다
-  //추가하자
 
   const mySessionId = useSelector((state) => state.room.mySessionId);
   if (location.state) {
@@ -41,9 +39,10 @@ function GameRoomPage() {
   const publisher = useSelector((state) => state.video.publisher);
   const subscribers = useSelector((state) => state.video.subscribers);
   const gameRoomId = useSelector((state) => state.room.gameRoomId);
-
-  const gameFallCount = useSelector((state) => state.room.gameFallCount);
   const gameId = useSelector((state) => state.room.gameId);
+  const gameFallCount = useSelector((state) => state.room.gameFallCount);
+  const biumSecond = useSelector((state) => state.room.biumSecond);
+  const start = useSelector((state) => state.room.start);
 
   const onbeforeunload = (e) => {
     dispatch(leaveSession());
@@ -62,11 +61,6 @@ function GameRoomPage() {
     }
   };
 
-  useEffect(() => {
-    if (gameFallCount >= 2) {
-      // fallAxios();
-    }
-  }, [gameFallCount]);
   // 컴포넌트 마운트, 언마운트 시 session 값 초기화
   useEffect(() => {
     // componentDidMount
@@ -129,6 +123,17 @@ function GameRoomPage() {
   // };
 
   // --- 3) Specify the actions when events take place in the session ---
+
+  useEffect(() => {
+    if (publisher !== undefined) {
+      console.log('쿠키 세션에 이벤트 추가', publisher);
+      publisher.stream.session.on('signal:timer', (e) => {
+        console.log('여기는 데이터야...', e);
+        dispatch(setStart(true));
+      });
+    }
+  }, [publisher]);
+
   const startSignal = (publisher) => {
     const data = {
       message: 'start'
@@ -137,17 +142,6 @@ function GameRoomPage() {
       data: JSON.stringify(data),
       type: 'timer'
     });
-
-    if (publisher !== undefined) {
-      console.log('쿠키 세션에 이벤트 추가', publisher);
-      publisher.stream.session.on('signal:timer', (e) => {
-        const data = JSON.parse(e.data);
-
-        if (data.message === 'start') {
-          dispatch(setStart(true));
-        }
-      });
-    }
   };
 
   const gameStart = async () => {
@@ -155,7 +149,7 @@ function GameRoomPage() {
       console.log('gameroom ID니까 ', gameRoomId);
       const response = await axios
         .post(
-          `http://localhost:8080/api/game/start`,
+          APPLICATION_SERVER_URL + '/api/game/start',
           { gameRoomId },
           {
             params: { gameRoomId },
@@ -177,7 +171,7 @@ function GameRoomPage() {
   const endGame = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/game/stop`,
+        APPLICATION_SERVER_URL + '/api/game/stop',
 
         {
           params: {
@@ -197,34 +191,33 @@ function GameRoomPage() {
   };
   //게임 탈락
   const fallAxios = async () => {
+    console.log('비움시간', biumSecond);
     try {
-      console.log('p;ppppppp', subscribers);
-
-      console.log('탈락 통신 테스트 ', gameRoomId);
-      console.log('탈락 통신 테스트 ', gameId);
-      console.log('탈락 통신 이메일 ', userEmail);
-
-      const response = await axios
-        .post(
-          `http://localhost:8080/api/game/over`,
-          { gameId: gameId, gameRecord: 23 },
-          {
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Methods': 'POST'
-            }
+      console.log('당신은 탈락했습니다');
+      const response = await axios.post(
+        APPLICATION_SERVER_URL + '/api/game/over',
+        { gameId: gameId, gameRecord: biumSecond },
+        {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'POST'
           }
-        )
-        .then(() => {
-          if (subscribers === []) {
-            endGame();
-          }
-        });
+        }
+      );
+      console.log(response.data);
+      dispatch(setStart(false));
+      dispatch(setGameFallCount(gameFallCount));
     } catch (err) {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if (gameFallCount > 2 && gameFallCount < 4) {
+      fallAxios();
+    }
+  }, [gameFallCount]);
   return (
     <div>
       {/* join 이후 화면 */}
@@ -236,11 +229,9 @@ function GameRoomPage() {
           <div id="session-sidebar">
             <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={handleLeaveSession} value="Leave session" />
             <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
-            {host === true ? <button>이 버 튼</button> : null}
-            <button onClick={fallAxios}>탈락버튼</button>
+            {host === true ? <button>수정</button> : null}
 
-            <h3>당신의 탈락 카운트</h3>
-            <h1>{gameFallCount}</h1>
+            <h3>당신의 탈락 카운트{start ? <> {gameFallCount}</> : null}</h3>
           </div>
           <div className={styles.backimage}>
             <div id="video-container">
@@ -258,15 +249,18 @@ function GameRoomPage() {
                 </div>
               ))}
             </div>
-            <button
-              onClick={() => {
-                gameStart();
-                startSignal(publisher);
-              }}
-            >
-              Start
-            </button>
-            <Timer></Timer>
+            {host ? (
+              <button
+                onClick={() => {
+                  gameStart();
+                  startSignal(publisher);
+                }}
+              >
+                Start
+              </button>
+            ) : null}
+
+            {start ? <Timer></Timer> : null}
           </div>
         </div>
       ) : null}

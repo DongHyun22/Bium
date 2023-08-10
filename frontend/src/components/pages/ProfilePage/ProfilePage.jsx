@@ -8,6 +8,7 @@ import useGetBiumTime from '../../../hooks/TimeInquery';
 import axios from 'axios';
 import { persistor } from '../../../store/store';
 import emptyprofile from '../../../asset/backgroudimage/emptyprofile.png';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export function ProfilePage() {
   const { userEmail } = useParams();
@@ -78,7 +79,7 @@ export function ProfilePage() {
       }
       console.log(formData);
       try {
-        const profileResponse = await axios.post(`http://localhost:8080/api/profile/img/${savedEmail}`, formData, {
+        const profileResponse = await axios.post(APPLICATION_SERVER_URL + `/api/profile/img/${savedEmail}`, formData, {
           params: {
             imgType: 1
           },
@@ -104,10 +105,7 @@ export function ProfilePage() {
           const imgType = profileResponse.data.imgType;
           const originalFile = profileResponse.data.originalFile;
 
-          const getProfileResponse = await axios.get(
-            `http://localhost:8080/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
-            { responseType: 'blob' }
-          );
+          const getProfileResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
 
           const imgSrc = URL.createObjectURL(getProfileResponse.data);
           dispatch(setImageId(imgSrc));
@@ -135,7 +133,7 @@ export function ProfilePage() {
       }
       console.log(formData);
       try {
-        const disturbResponse = await axios.post(`http://localhost:8080/api/profile/img/${savedEmail}`, formData, {
+        const disturbResponse = await axios.post(APPLICATION_SERVER_URL + `/api/profile/img/${savedEmail}`, formData, {
           params: {
             imgType: 2
           },
@@ -159,10 +157,7 @@ export function ProfilePage() {
           const imgType = disturbResponse.data.imgType;
           const originalFile = disturbResponse.data.originalFile;
 
-          const getDisturbResponse = await axios.get(
-            `http://localhost:8080/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
-            { responseType: 'blob' }
-          );
+          const getDisturbResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
 
           const imgSrc = URL.createObjectURL(getDisturbResponse.data);
           dispatch(setDisturb(imgSrc));
@@ -213,7 +208,7 @@ export function ProfilePage() {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/profile/checkpw`,
+        APPLICATION_SERVER_URL + `/api/profile/checkpw`,
         {
           userEmail: savedEmail,
           userPw: existingPassword
@@ -240,7 +235,7 @@ export function ProfilePage() {
 
     if (checkPassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
-      return; 
+      return;
     }
 
     try {
@@ -253,7 +248,7 @@ export function ProfilePage() {
         userNickname: name,
         userPw: newPassword
       };
-      const response = await axios.post(`http://localhost:8080/api/profile/modify`, data, {
+      const response = await axios.post(APPLICATION_SERVER_URL + `/api/profile/modify`, data, {
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
@@ -261,7 +256,6 @@ export function ProfilePage() {
           // Authorization: `Bearer ${accessToken}`
         }
       });
-
 
       console.log(response.data);
       if (response.status === 200) {
@@ -281,13 +275,13 @@ export function ProfilePage() {
 
     if (checkPassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
-      return; 
+      return;
     }
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/profile/delete`,
-        `http://localhost:8080/api/profile/delete`,
+        APPLICATION_SERVER_URL + `/api/profile/delete`,
+        APPLICATION_SERVER_URL + `/api/profile/delete`,
         {},
         {
           params: {
@@ -333,47 +327,38 @@ export function ProfilePage() {
   return (
     <div className={styles.gridContainer}>
       <div className={styles.header}>
-        <div>
-        </div>
+        <div></div>
         <div>
           <h1>ProfilePage</h1>
         </div>
       </div>
       <div className={styles.sideLeft}>
-      {showProfile ? (
-        <div>
-          <p>프로필 이미지</p>
-          {savedProfileImage ? (
-            <img src={savedProfileImage} alt="미리보기" />
-          ) : (
-            <img src={emptyprofile} alt="미리보기" />
-          )}
+        {showProfile ? (
           <div>
-            <input name="file" type="file" accept="image/*" onChange={saveProfile}></input>
+            <p>프로필 이미지</p>
+            {savedProfileImage ? <img src={savedProfileImage} alt="미리보기" /> : <img src={emptyprofile} alt="미리보기" />}
+            <div>
+              <input name="file" type="file" accept="image/*" onChange={saveProfile}></input>
+            </div>
+            <button onClick={sendToProfile}>이미지 서버 전송</button>
+            <div>
+              <button onClick={deleteProfile}>삭제</button>
+            </div>
           </div>
-          <button onClick={sendToProfile}>이미지 서버 전송</button>
+        ) : (
           <div>
-            <button onClick={deleteProfile}>삭제</button>
+            <p>방해 이미지</p>
+            {savedDisturbImage ? <img src={savedDisturbImage} alt="미리보기" /> : <img src={emptyprofile} alt="미리보기" />}
+            <div>
+              <input name="file" type="file" accept="image/*" onChange={saveDisturb}></input>
+            </div>
+            <button onClick={sendToDisturb}>이미지 서버 전송</button>
+            <div>
+              <button onClick={deleteDisturb}>삭제</button>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div>
-          <p>방해 이미지</p>
-          {savedDisturbImage ? (
-            <img src={savedDisturbImage} alt="미리보기" />
-          ) : (
-            <img src={emptyprofile} alt="미리보기" />
-          )}
-          <div>
-            <input name="file" type="file" accept="image/*" onChange={saveDisturb}></input>
-          </div>
-          <button onClick={sendToDisturb}>이미지 서버 전송</button>
-          <div>
-            <button onClick={deleteDisturb}>삭제</button>
-          </div>
-        </div>
-      )}
-      <button onClick={() => setShowProfile(!showProfile)}>토글 이미지</button>
+        )}
+        <button onClick={() => setShowProfile(!showProfile)}>토글 이미지</button>
         <h3>닉네임</h3>
         <h3>{savedEmail}</h3>
         <h3>오늘 비움량</h3>
@@ -400,32 +385,17 @@ export function ProfilePage() {
               <br />
               <label>
                 기존비밀번호:
-                <input
-                  type="password"
-                  autoComplete="off"
-                  value={existingPassword}
-                  onChange={(e) => setExistingPassword(e.target.value)}
-                />
+                <input type="password" autoComplete="off" value={existingPassword} onChange={(e) => setExistingPassword(e.target.value)} />
               </label>
               <br />
               <label>
                 비밀번호:
-                <input
-                  type="password"
-                  autoComplete="off"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
+                <input type="password" autoComplete="off" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
               </label>
               <br />
               <label>
                 비밀번호확인:
-                <input
-                  type="password"
-                  autoComplete="off"
-                  value={newpasswordConfirm}
-                  onChange={(e) => setNewPasswordConfirm(e.target.value)}
-                />
+                <input type="password" autoComplete="off" value={newpasswordConfirm} onChange={(e) => setNewPasswordConfirm(e.target.value)} />
               </label>
             </form>
             <button onClick={modifyUserInfo}>수정하기</button>
