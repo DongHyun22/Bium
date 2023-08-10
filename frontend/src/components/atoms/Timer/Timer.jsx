@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './Timer.module.css';
+import { setBiumSecond, setGameFallCount, setStart } from '../../../slices/roomSlice/roomSlice';
 
 export default function GameTimer() {
+  const dispatch = useDispatch();
   const start = useSelector((state) => state.room.start);
-  // 시간을 담을 변수
-  const [totalCount, setTotalCount] = useState(0);
+  const totalCount = useSelector((state) => state.room.biumSecond);
   const [ovSecond, setOvSecond] = useState(0);
   const [ovMinute, setOvMinute] = useState(0);
   const [ovHour, setOvHour] = useState(0);
@@ -14,7 +15,7 @@ export default function GameTimer() {
     // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
     if (start === true) {
       const startTimer = setInterval(() => {
-        setTotalCount(totalCount + 1);
+        dispatch(setBiumSecond(1));
       }, 1000);
       const secToHour = Math.floor(totalCount / 3600);
       const secToMinute = Math.floor((totalCount - secToHour * 3600) / 60);
@@ -24,8 +25,6 @@ export default function GameTimer() {
       setOvSecond(secToSec);
       return () => {
         clearInterval(startTimer);
-        // setStart(false);
-        // setTotalCount(0);
       };
     }
     // 카운트 변수가 바뀔때마다 useEffecct 실행

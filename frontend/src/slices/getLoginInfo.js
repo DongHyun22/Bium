@@ -1,12 +1,13 @@
 import { setToken, setIsLogin, setIsLoginError, setIsValidToken, setUserEmail, setNickname, setTodayBium, setTotalBium } from './userSlice';
 
 import axios from 'axios';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 // 사용자 로그인 처리 함수
 export const userLogin = (user) => async (dispatch) => {
   try {
     const response = await axios
-      .post('http://localhost:8080/api/login', user)
+      .post(APPLICATION_SERVER_URL + '/api/login', user)
       .then((response) => {
         return response;
       })
@@ -36,7 +37,7 @@ export const userLogin = (user) => async (dispatch) => {
 // 사용자 정보를 가져오는 동작 처리 함수
 export const getUserInfo = (Email) => async (dispatch) => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/info/${Email}`);
+    const response = await axios.get(APPLICATION_SERVER_URL + `/api/info/${Email}`);
     // console.log('함수 확인');
     console.log(response.data.userInfo);
     dispatch(setUserEmail(response.data.userInfo.userEmail));

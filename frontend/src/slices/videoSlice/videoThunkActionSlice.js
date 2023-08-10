@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setGameId, setGameRoomId, setHost, setMySessionId } from '../roomSlice/roomSlice';
 
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export const joinSession = createAsyncThunk('videoAction/joinSession', async (props) => {
   const accessToken = sessionStorage.getItem('accessToken');
@@ -62,7 +62,7 @@ function createSession(props) {
       const userEmail = props.props.userEmail;
 
       const response = await axios.post(
-        `http://localhost:8080/api/game/create`,
+        APPLICATION_SERVER_URL + '/api/game/create',
         {
           gameRoomTitle: props.props.gameRoomTitle,
           gameRoomMovie: props.props.backgroundImage,
@@ -109,7 +109,7 @@ function createToken(props) {
 
       const accessToken = sessionStorage.getItem('accessToken');
       const response = await axios.post(
-        `http://localhost:8080/api/game/enter`,
+        APPLICATION_SERVER_URL + '/api/game/enter',
         {
           gameRoomId,
           gameRoomPw,
