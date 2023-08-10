@@ -217,6 +217,8 @@ public class GameRoomServiceImpl implements GameRoomService {
             return null;
         }
         findUser.get().saveBium(request.getGameRecord());
+        Long totalBium = findUser.get().getTotalBium();
+        findUser.get().chageRank(totalBium);
         userRepository.save(findUser.get());
         // 비움량 저장
         hash.put("game:" + gameId, "gameRecord", String.valueOf(request.getGameRecord()));
