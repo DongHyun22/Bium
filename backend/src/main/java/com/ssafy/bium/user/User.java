@@ -94,4 +94,28 @@ public class User extends TimeBaseEntity {
         }
     }
 
+    public void chageRank(Long totalBium){
+        if (totalBium < 2700){
+            this.userRank = 0;
+        }
+        else if (totalBium < 6300){
+            this.userRank = 1;
+        }
+        else if (totalBium < 12600){
+            this.userRank = 2;
+        }
+        else if (totalBium < 27000){
+            this.userRank = 3;
+        }
+        else if (totalBium < 54000){
+            this.userRank = 4;
+        }
+        else if (totalBium < 90000){
+            this.userRank = 5;
+        }
+        else {
+            this.userRank = 6;
+        }
+    }
+
 }
