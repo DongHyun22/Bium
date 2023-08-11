@@ -3,7 +3,7 @@
   display: grid;
   grid-template-columns: 2fr 3fr;
   gap: 16px;
-  grid-template-areas:
+  grid-template-areas: 
     'header header'
     'side-left side-right';
   position: relative; /* relative positioning for the parent div */
