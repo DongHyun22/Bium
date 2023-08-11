@@ -9,7 +9,7 @@
   display: grid;
   grid-template-columns: 2fr 3fr;
   gap: 16px;
-  grid-template-areas: 
+  grid-template-areas:
     'header header'
     'side-left side-right';
   position: relative; /* relative positioning for the parent div */
@@ -17,8 +17,8 @@
   background-size: cover;
 }
 .gridContainer::before {
-  content: ""; /* empty content to create a pseudo-element */
-  position: absolute; 
+  content: ''; /* empty content to create a pseudo-element */
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -29,17 +29,16 @@
   pointer-events: none; /* ensure the overlay doesn't interfere with user interactions */
 }
 
-
 .header {
   grid-area: header;
 }
 
 .sideLeft {
   grid-area: side-left;
-  background-color: transparent; 
-  display: grid; 
-  grid-template-rows: 8fr 1fr 10fr 1fr; 
-  justify-content: center; 
+  background-color: transparent;
+  display: grid;
+  grid-template-rows: 8fr 1fr 10fr 1fr;
+  justify-content: center;
   z-index: 5;
 }
 
@@ -53,12 +52,89 @@
 
 .modal {
   position: fixed;
+  display: grid;
+  grid-template-columns: 1fr;
   top: 50%;
   left: 50%;
+  width: 40%;
   transform: translate(-50%, -50%);
-  background-color: #eeeeee;
-  padding: 50px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 2em;
+  box-shadow: 0 0 4px black;
   z-index: 1000;
+}
+
+.signOutModal {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 2em;
+  box-shadow: 0 0 4px black;
+  z-index: 1000;
+}
+
+.modifyForm > label {
+  text-align: start;
+  margin: 0.5em 0em 0em;
+}
+
+.modifyForm > div:nth-child(1) {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-family: 'GangwonEdu_OTFBoldA';
+  font-size: 1.5em;
+}
+
+.signOutModal > label {
+  text-align: start;
+  margin: 1em 0em 1em;
+}
+
+.signOutModal > label > input {
+  font-size: 1.25em;
+  font-family: 'GangwonEdu_OTFBoldA';
+  border-radius: 10px;
+  width: 90%;
+  outline: none;
+  background-color: #ffffff;
+  text-align: start;
+  padding: 0.5em;
+}
+
+.signOutModal > div {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modifyForm > label > input[type='text'] {
+  font-size: 1.25em;
+  font-family: 'GangwonEdu_OTFBoldA';
+  border-radius: 10px;
+  width: 90%;
+  outline: none;
+  background-color: #ffffff;
+  text-align: start;
+  padding: 0.5em;
+}
+
+.modifyForm > label > input[type='password'] {
+  font-size: 1.25em;
+  font-family: 'GangwonEdu_OTFBoldA';
+  border-radius: 10px;
+  width: 90%;
+  outline: none;
+  background-color: #ffffff;
+  text-align: start;
+  padding: 0.5em;
 }
 
 .overlay {
@@ -87,12 +163,15 @@ img {
 }
 
 .modifyButton {
-  background-color: white; 
+  background-color: white;
   border: none;
   border-radius: 10px;
   padding: 10px 20px;
   cursor: pointer;
   transition: transform 0.3s ease; /* Transition effect for the press effect */
+  font-weight: 400;
+  font-family: 'GangwonEdu_OTFBoldA';
+  font-size: 1.5em;
 }
 
 button:active {
@@ -109,12 +188,30 @@ button:active {
 }
 
 .modifyButton {
-  background-color: white; 
+  background-color: white;
   border: none;
   border-radius: 10px;
   padding: 10px 20px;
   cursor: pointer;
   transition: transform 0.3s ease; /* Transition effect for the press effect */
+  box-shadow: 0 0 4px black;
+}
+
+.insertButton {
+  display: flex;
+  width: 95%;
+  justify-content: space-between;
+}
+
+.insertButton > button {
+  background-color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 20px 10px 15px;
+  cursor: pointer;
+  width: 25%;
+  transition: transform 0.3s ease; /* Transition effect for the press effect */
+  box-shadow: 0 0 4px black;
 }
 
 button:active {

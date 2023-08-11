@@ -32,7 +32,7 @@ export default function SignUpPage() {
   const [rightEmail, setRightEmail] = useState('유효한 이메일 형식입니다');
   const [wrongEmail, setWrongEmail] = useState('형식에 맞지않는 이메일입니다');
   const [rightPassword, setRightPassword] = useState('유효한 비밀번호 형식입니다');
-  const [wrongPassword, setWrongPassword] = useState('알파벳, 숫자, 특수문자의 순서대로 작성해 주십시오');
+  const [wrongPassword, setWrongPassword] = useState('알파벳, 숫자, 특수문자를 사용하여 8자 이상 30자 이하로 작성해 주십시오');
   const [rightPasswordConfirm, setRightPasswordConfirm] = useState('비밀번호와 일치합니다');
   const [wrongPasswordConfirm, setWrongPasswordConfirm] = useState('비밀번호와 일치하지 않습니다');
   const [rightName, setRightName] = useState('유효한 이름 형식입니다');

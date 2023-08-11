@@ -250,7 +250,6 @@ export function ProfilePage() {
     if (validatePassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
       return;
-      return;
     }
 
     try {
@@ -293,7 +292,6 @@ export function ProfilePage() {
     console.log(validatePassword);
     if (validatePassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
-      return;
       return;
     }
 
@@ -348,7 +346,9 @@ export function ProfilePage() {
   // 회원 탈퇴 확인 모달에서 '예, 탈퇴합니다' 버튼을 눌렀을 때의 동작
   const confirmSignOut = (e) => {
     signOutUser(e);
+    alert('회원탈퇴가 완료되었습니다.')
     closeDeleteConfirmModal();
+    navigate('/');
   };
 
   return (
@@ -360,7 +360,7 @@ export function ProfilePage() {
           <h1>ProfilePage</h1>
         </div>
       </div>
-    <div className={styles.sideLeft}>
+      <div className={styles.sideLeft}>
         {showProfile ? (
           <div>
             <h3>프로필 이미지</h3>
@@ -423,12 +423,17 @@ export function ProfilePage() {
         </div>
         {modalOpen && (
           <div className={styles.modal}>
-            <h2>회원정보 수정</h2>
-            <form>
-              <div>{savedProfileImage && <img src={savedProfileImage} alt="미리보기" />}</div>
-              <div>{savedNickname}</div>
+            <form className={styles.modifyForm}>
+              <div>
+                <div>
+                  <h2>회원정보 수정</h2>
+                  <p>아이디: {savedEmail}</p>
+                </div>
+                <div>{savedProfileImage && <img src={savedProfileImage} alt="미리보기" />}</div>
+              </div>
               <label>
                 닉네임:
+                <br />
                 <input
                   type="text"
                   value={name}
@@ -468,21 +473,33 @@ export function ProfilePage() {
                 />
               </label>
             </form>
-            <button onClick={modifyUserInfo}>수정하기</button>
-            <button onClick={openDeleteConfirmModal}>회원 탈퇴</button>
+            <div className={styles.insertButton}>
+              <button onClick={modifyUserInfo}>수정하기</button>
+              <button onClick={openDeleteConfirmModal}>회원 탈퇴</button>
+              <button className={styles.overlay} onClick={closeModal}>
+                닫기
+              </button>
+            </div>
 
-            <button className={styles.overlay} onClick={closeModal}>
-              닫기
-            </button>
           </div>
         )}
         {/* css 적용시 .modal이 아닌 다른 css 적용 필요 */}
         {deleteConfirmModalOpen && (
-          <div className={styles.modal}>
+          <div className={styles.signOutModal}>
             <h2>정말로 탈퇴하시겠어요?</h2>
-
-            <button onClick={confirmSignOut}>예</button>
-            <button onClick={closeDeleteConfirmModal}>아니요</button>
+            <label>
+              회원 탈퇴를 진행하시려면 비밀번호를 입력해주세요:
+              <input
+                type="password"
+                autoComplete="off"
+                value={existingPassword}
+                onChange={(e) => setExistingPassword(e.target.value)}
+              />
+            </label>
+            <div>
+              <button onClick={confirmSignOut}>예</button>
+              <button onClick={closeDeleteConfirmModal}>아니요</button>
+            </div>
           </div>
         )}
       </div>
