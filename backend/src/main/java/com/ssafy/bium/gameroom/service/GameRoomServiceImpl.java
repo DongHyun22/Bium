@@ -191,6 +191,10 @@ public class GameRoomServiceImpl implements GameRoomService {
             redisTemplate.opsForSet().remove("game", Integer.parseInt(gameId));
             int cur = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "curPeople"));
             redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "curPeople", String.valueOf(--cur));
+            if(cur == 0){
+                redisTemplate.delete("gameRoom:" + gameRoomId);
+                redisTemplate.opsForSet().remove("gameRoom", Integer.parseInt(gameRoomId));
+            }
         }
 //        RedisAtomicLong counterUGR = new RedisAtomicLong("ugri", redisTemplate.getConnectionFactory());
 //        counterUGR.decrementAndGet();
