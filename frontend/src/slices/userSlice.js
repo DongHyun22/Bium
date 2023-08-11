@@ -33,7 +33,6 @@ const userSlice = createSlice({
       state.userEmail = action.payload;
     },
     setNickname(state, action) {
-      console.log('닉네임 변경', action.payload);
       state.nickname = action.payload;
     },
     setTodayBium(state, action) {
@@ -63,19 +62,7 @@ const userSlice = createSlice({
   }
 });
 
-export const {
-  setToken,
-  setUserEmail,
-  setNickname,
-  setTodayBium,
-  setTotalBium,
-  setImageId,
-  setDisturb,
-  setIsLogin,
-  setIsLoginError,
-  setIsValidToken,
-  setUserInfo
-} = userSlice.actions;
+export const { setToken, setUserEmail, setNickname, setTodayBium, setTotalBium, setImageId, setDisturb, setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } = userSlice.actions;
 
 const persistedReducer = persistReducer(persistConfig, userSlice.reducer);
 export default persistedReducer;
