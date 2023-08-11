@@ -19,11 +19,13 @@
 }
 
 .containerTitle {
+    background: url('../../../asset/backgroudimage/gameRoomListItemTest.jpg');
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     padding: 5em 10em 5em 10em;
+    color: white;
 }
 
 .title {

@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import GameRoomListItem from './GameRoomListItemPage';
 import { useDispatch } from 'react-redux';
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+import { Link } from 'react-router-dom';
 import styles from './GameRoomList.module.css';
+
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export const GameRoomListPage = () => {
   const dispatch = useDispatch();
@@ -29,11 +31,13 @@ export const GameRoomListPage = () => {
       <div className={styles.containerTitle}>
         <div className={styles.title}>
           <h1>게임방 목록</h1>
+          <Link to="/createroom">
           <a className={styles.BtnGameCreate}>
             <svg width="20" height="20" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
               <path fill="currentColor" d="M228 128a12 12 0 0 1-12 12h-76v76a12 12 0 0 1-24 0v-76H40a12 12 0 0 1 0-24h76V40a12 12 0 0 1 24 0v76h76a12 12 0 0 1 12 12Z"/>
             </svg>
           </a>
+          </Link>
         </div>
         <div className={styles.search}>
           <input type="text" className={styles.search__input} placeholder="게임방 검색"></input>
