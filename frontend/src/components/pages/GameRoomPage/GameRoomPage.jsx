@@ -183,6 +183,7 @@ function GameRoomPage() {
 
   const endGame = async () => {
     try {
+      console.log('몇명만 해?');
       const response = await axios.post(
         APPLICATION_SERVER_URL + '/api/game/delete',
         {},
@@ -226,8 +227,10 @@ function GameRoomPage() {
         }
       );
       dispatch(setStart(false));
-      // dispatch(setGameFallCount(gameFallCount));
+      console.log(response.data);
+      console.log(typeof response.data);
       if (typeof response.data === 'object') {
+        console.log('누구누구 요청해?', typeof response.data === 'object');
         const ranking = response.data;
         modalSignal({ publisher, ranking });
         endGame();
