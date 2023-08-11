@@ -34,22 +34,23 @@ export const CreateGameRoom = () => {
   };
 
   const handleChangeRoomTitle = (e) => {
-    dispatch(setRoomTitle({ gameRoomTitle: e.target.value }));
+    dispatch(setRoomTitle(e.target.value));
   };
   const handleChangeRoomPassword = (e) => {
-    dispatch(setRoomPassword({ roomPassword: e.target.value }));
+    dispatch(setRoomPassword(e.target.value));
   };
   const handleChangeSessionId = (e) => {
-    dispatch(setMySessionId({ mySessionId: e.target.value }));
+    dispatch(setMySessionId(e.target.value));
   };
   const handleChangeUserName = (e) => {
-    dispatch(setMyUserName({ myUserName: e.target.value }));
+    dispatch(setMyUserName(e.target.value));
   };
   const handleChangeMaxPeople = (e) => {
-    dispatch(setMaxPeople({ maxPeople: e.target.value }));
+    dispatch(setMaxPeople(e.target.value));
   };
   const handleChangeBackground = (e) => {
-    dispatch(setBackgroundImage({ backgroundImage: e.target.value }));
+    console.log(e.target.value);
+    dispatch(setBackgroundImage(e.target.value));
   };
 
   return (
@@ -61,11 +62,11 @@ export const CreateGameRoom = () => {
           <form className="form-group" onSubmit={handleJoin}>
             <p>
               <label>GameRoomTitle: </label>
-              <input className="form-control" type="text" id="gameRoomTitle" value={gameRoomTitle} onChange={handleChangeRoomTitle} required />
+              <input className="form-control" type="text" id="gameRoomTitle" onChange={handleChangeRoomTitle} required />
             </p>
             <p>
               <label>MaxPeople: </label>
-              <select className="form-control" id="maxPeople" value={maxPeople} onChange={handleChangeMaxPeople}>
+              <select className="form-control" id="maxPeople" onChange={handleChangeMaxPeople}>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -78,7 +79,7 @@ export const CreateGameRoom = () => {
             </p>
             <p>
               <label>backImage: </label>
-              <select className="form-control" id="backgroundImage" value={backgroundImage} onChange={handleChangeBackground}>
+              <select className="form-control" id="backgroundImage" onChange={handleChangeBackground}>
                 <option value="1">불</option>
                 <option value="2">물</option>
                 <option value="3">숲</option>
