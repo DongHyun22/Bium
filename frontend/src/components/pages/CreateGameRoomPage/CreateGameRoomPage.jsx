@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
+import styles from './CreateGameRoomPage.module.css';
 import { setJoin } from '../../../slices/videoSlice/videoSlice';
 import { setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } from '../../../slices/roomSlice/roomSlice';
 
@@ -34,38 +34,39 @@ export const CreateGameRoom = () => {
   };
 
   const handleChangeRoomTitle = (e) => {
-    dispatch(setRoomTitle({ gameRoomTitle: e.target.value }));
+    dispatch(setRoomTitle(e.target.value));
   };
   const handleChangeRoomPassword = (e) => {
-    dispatch(setRoomPassword({ roomPassword: e.target.value }));
+    dispatch(setRoomPassword(e.target.value));
   };
   const handleChangeSessionId = (e) => {
-    dispatch(setMySessionId({ mySessionId: e.target.value }));
+    dispatch(setMySessionId(e.target.value));
   };
   const handleChangeUserName = (e) => {
-    dispatch(setMyUserName({ myUserName: e.target.value }));
+    dispatch(setMyUserName(e.target.value));
   };
   const handleChangeMaxPeople = (e) => {
-    dispatch(setMaxPeople({ maxPeople: e.target.value }));
+    dispatch(setMaxPeople(e.target.value));
   };
   const handleChangeBackground = (e) => {
-    dispatch(setBackgroundImage({ backgroundImage: e.target.value }));
+    console.log(e.target.value);
+    dispatch(setBackgroundImage(e.target.value));
   };
 
   return (
     <div>
-      <div id="join">
-        <div id="img-div">{/* <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" /> */}</div>
+      <div id="join" className={styles.container}>
+        <div id="img-div" className={styles.photo}>{/* <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" /> */}</div>
         <div id="join-dialog" className="jumbotron vertical-center">
           <h1> CreateGameRoom </h1>
           <form className="form-group" onSubmit={handleJoin}>
             <p>
               <label>GameRoomTitle: </label>
-              <input className="form-control" type="text" id="gameRoomTitle" value={gameRoomTitle} onChange={handleChangeRoomTitle} required />
+              <input className="form-control" type="text" id="gameRoomTitle" onChange={handleChangeRoomTitle} required />
             </p>
             <p>
               <label>MaxPeople: </label>
-              <select className="form-control" id="maxPeople" value={maxPeople} onChange={handleChangeMaxPeople}>
+              <select className="form-control" id="maxPeople" onChange={handleChangeMaxPeople}>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -78,7 +79,7 @@ export const CreateGameRoom = () => {
             </p>
             <p>
               <label>backImage: </label>
-              <select className="form-control" id="backgroundImage" value={backgroundImage} onChange={handleChangeBackground}>
+              <select className="form-control" id="backgroundImage" onChange={handleChangeBackground}>
                 <option value="1">불</option>
                 <option value="2">물</option>
                 <option value="3">숲</option>
