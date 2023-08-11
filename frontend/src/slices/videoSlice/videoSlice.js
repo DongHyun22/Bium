@@ -35,12 +35,10 @@ export const videoSlice = createSlice({
     videoMute: (state) => {
       state.publisher.publishVideo(!state.isVideoPublished);
       state.isVideoPublished = !state.isVideoPublished;
-      console.log('비디오', state.isVideoPublished);
     },
     audioMute: (state) => {
       state.publisher.publishAudio(!state.isAudioPublished);
       state.isAudioPublished = !state.isAudioPublished;
-      console.log('오디오', state.isAudioPublished);
     },
     leaveSession: (state) => {
       const mySession = state.session;

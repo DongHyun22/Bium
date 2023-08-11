@@ -84,7 +84,6 @@ function createSession(props) {
       );
       setTimeout(() => {
         // console.log('개발자 설정을 통한 강제 리턴');
-        console.log('여기는세션', response.data);
         return resolve(response.data);
       }, 1000);
       return response.data;
@@ -128,8 +127,6 @@ function createToken(props) {
           }
         }
       );
-      console.log('여기는토큰', response.data);
-
       return resolve(response.data);
     } catch (error) {}
   });
