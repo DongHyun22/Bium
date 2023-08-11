@@ -69,7 +69,7 @@ function GameRoomPage() {
       session.disconnect();
       gameOut();
       dispatch(leaveSession());
-      setJoin(false);
+      dispatch(setJoin(false));
       navigate('/gameroomlist');
     }
   };
@@ -89,7 +89,7 @@ function GameRoomPage() {
     if (join) {
       const OV = new OpenVidu();
       const session = OV.initSession();
-
+      console.log('여기가 문제인지 확인하고 싶어', session, OV);
       dispatch(initOVSession({ OV, session }));
     }
   }, [join]);
@@ -247,6 +247,7 @@ function GameRoomPage() {
   useEffect(() => {
     if (rankModal === true) {
       setTimeout(() => {
+        console.log('axions 요청중이니까 확인해줄래?');
         endGame();
         dispatch(setGameRankList(null));
         dispatch(setRankModal(false));

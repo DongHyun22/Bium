@@ -29,7 +29,7 @@ export const GameRoomListItem = (props) => {
           <div className={styles.listItemThumbnail}></div>
           <div className={styles.listItemContents}>
             <h2>{gameRoomTitle}</h2>
-            <h3>🔥  불멍</h3>
+            <h3>🔥 불멍</h3>
             <h3>👤 1 / {maxPeople}</h3>
           </div>
         </div>
