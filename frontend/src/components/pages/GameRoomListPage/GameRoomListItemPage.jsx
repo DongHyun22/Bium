@@ -13,16 +13,17 @@ export const GameRoomListItem = (props) => {
   const gameStart = props.allRoom.start;
 
   const enterRoom = (e) => {
+    console.log(e);
     dispatch(setJoin(true));
     // <Link to="/gameroom"></Link>;
-    navigator('/gameroom', { state: { customSessionId: `${e}` } });
+    navigator('/gameroom', { state: { customSessionId: e.customSessionId, gameRoomTitle: e.gameRoomTitle } });
   };
   return (
     <>
       {gameStart === 'false' ? (
         <div
           onClick={() => {
-            enterRoom(customSessionId);
+            enterRoom({ customSessionId, gameRoomTitle });
           }}
           className={styles.listItem}
         >

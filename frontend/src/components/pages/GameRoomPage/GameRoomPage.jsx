@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
 import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import { setGameFallCount, setGameRankList, setMySessionId, setRankModal, setStart } from '../../../slices/roomSlice/roomSlice';
+import { setGameFallCount, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
@@ -23,17 +23,19 @@ function GameRoomPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const customSessionId = location.state;
-  const userEmail = useSelector((state) => state.user.userEmail);
-
+  const mySessionId = useSelector((state) => state.room.mySessionId);
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
+  if (location.state) {
+    const customSessionId = location.state.customSessionId;
+    const gameTitle = location.state.gameRoomTitle;
+    dispatch(setMySessionId(customSessionId));
+    dispatch(setRoomTitle(gameTitle));
+  }
+
+  const userEmail = useSelector((state) => state.user.userEmail);
   const roomPassword = useSelector((state) => state.room.roomPassword);
   const host = useSelector((state) => state.room.host);
 
-  const mySessionId = useSelector((state) => state.room.mySessionId);
-  if (location.state) {
-    dispatch(setMySessionId(location.state.customSessionId));
-  }
   const myUserName = useSelector((state) => state.user.nickname);
   const maxPeople = useSelector((state) => state.room.maxPeople);
   const backgroundImage = useSelector((state) => state.room.backgroundImage);
