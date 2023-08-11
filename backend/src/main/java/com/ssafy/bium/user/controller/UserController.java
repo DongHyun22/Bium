@@ -153,7 +153,10 @@ public class UserController {
         logger.debug("MultipartFile.isEmpty : {}", file.isEmpty());
 
         if (!file.isEmpty()) {
+            System.out.println("파일이 잘 넘어옴");
             String saveFolder = uploadImgPath + File.separator + userEmail + File.separator + imgType;
+            System.out.println("경로를 저장함");
+            System.out.println("저장 폴더: " + saveFolder);
             logger.debug("저장 폴더: {}", saveFolder);
             File folder = new File(saveFolder);
             if (!folder.exists()) {
@@ -173,6 +176,7 @@ public class UserController {
 
                 logger.debug("원본 파일 이름 : {}, 실제 저장 파일 이름 : {}", file.getOriginalFilename(), saveFileName);
                 file.transferTo(new File(folder, saveFileName));
+                System.out.println("파일을 저장함");
 
                 userService.setImage(filePostReq);
 
