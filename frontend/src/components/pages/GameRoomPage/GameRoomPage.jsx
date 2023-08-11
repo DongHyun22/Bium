@@ -168,7 +168,7 @@ function GameRoomPage() {
     try {
       const response = await axios.post(
         APPLICATION_SERVER_URL + '/api/game/start',
-        { gameRoomId },
+        {},
         {
           params: { gameRoomId },
           headers: {
@@ -185,7 +185,7 @@ function GameRoomPage() {
     try {
       const response = await axios.post(
         APPLICATION_SERVER_URL + '/api/game/delete',
-
+        {},
         {
           params: {
             gameRoomId: gameRoomId
