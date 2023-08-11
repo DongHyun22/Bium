@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userLogin, getUserInfo } from '../../../slices/getLoginInfo';
 import styles from './LoginPage.module.css';
 import axios from 'axios';
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 // 로그인 컴포넌트
 function LoginPage() {
@@ -55,14 +56,6 @@ function LoginPage() {
   const handlePasswordChange = (e) => {
     setUserPw(e.target.value);
   };
-  
-  const goToSignUp = () => {
-    return navigate('/signup');
-  };
-
-  const goToMainPage = () => {
-    return navigate('/');
-  };
 
   const goToSignUp = () => {
     return navigate('/signup');
@@ -105,50 +98,54 @@ function LoginPage() {
 
       <div className={styles.rightbox}>
         <h1 className={styles.titlelogin}>로그인</h1>
-        <form onSubmit={handleSubmit}>
-          <div className={styles.loginid}>
-            <label htmlFor="userEmail">
-              이메일 <br></br>
-              <input
-                type="text"
-                id="userEmail"
-                placeholder="이메일을 입력해 주세요."
-                value={userEmail}
-                onChange={handleEmailChange}
-              />
-            </label>
-
-          </div>
-          <div className={styles.loginpassword}>
-            <label htmlFor="userPassword">
-              비밀번호 <br></br>
-              <input
-                type="password"
-                id="userPassword"
-                placeholder="비밀번호를 입력해 주세요."
-                value={userPw}
-                onChange={handlePasswordChange}
-              />
-            </label>
-          </div>
-          <div className={styles.buttoncontainer}>
-            <button className={styles.cancelbutton} onClick={goToMainPage}>
-              취소
-            </button>
-            <button className={styles.loginbutton}>로그인</button>
-          </div>
-        </form>
-        <div>
-          <button onClick={openModal} className={styles.findpasswordbutton}>
+        <form>
+          <label htmlFor="userEmail" className={styles.loginid}>
+            이메일 <br></br>
+            <input
+              type="text"
+              id="userEmail"
+              placeholder="이메일을 입력해 주세요."
+              value={userEmail}
+              className={styles.logininput}
+              onChange={handleEmailChange}
+            />
+          </label>
+          <label htmlFor="userPassword" className={styles.loginpassword}>
+            비밀번호 <br></br>
+            <input
+              type="password"
+              id="userPassword"
+              placeholder="비밀번호를 입력해 주세요."
+              value={userPw}
+              className={styles.logininput}
+              onChange={handlePasswordChange}
+            />
+          </label>
+          <p className={styles.findpassword} onClick={openModal}>
             비밀번호 찾기
+          </p>
+        </form>
+        <div className={styles.buttoncontainer}>
+          <button className={styles.loginbutton} onClick={handleSubmit}>
+            로그인
           </button>
+          <button className={styles.cancelbutton} onClick={goToMainPage}>
+            취소
+          </button>
+        </div>
+        <div>
           {passwordModal && (
             <div className={styles.modal}>
               <h2>비밀번호 찾기</h2>
               <form>
                 <label>
-                  이메일:
-                  <input type="text" value={passwordEmail} onChange={(e) => setPasswordEmail(e.target.value)}></input>
+                  이메일
+                  <input
+                    type="text"
+                    value={passwordEmail}
+                    className={styles.passwordinput}
+                    onChange={(e) => setPasswordEmail(e.target.value)}
+                  ></input>
                 </label>
               </form>
               <br></br>
