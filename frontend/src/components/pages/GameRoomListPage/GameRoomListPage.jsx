@@ -16,7 +16,7 @@ export const GameRoomListPage = () => {
       // axios response
       // 방제목, 인원
     } catch (err) {
-      console.log(err);
+      return;
     }
   };
   useEffect(() => {
