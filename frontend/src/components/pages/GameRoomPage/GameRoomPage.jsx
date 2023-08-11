@@ -230,6 +230,7 @@ function GameRoomPage() {
       if (typeof response.data === 'object') {
         const ranking = response.data;
         modalSignal({ publisher, ranking });
+        endGame();
       }
     } catch (err) {
       return;
@@ -248,7 +249,6 @@ function GameRoomPage() {
     if (rankModal === true) {
       setTimeout(() => {
         console.log('axions 요청중이니까 확인해줄래?');
-        endGame();
         dispatch(setGameRankList(null));
         dispatch(setRankModal(false));
         dispatch(setJoin(false));
