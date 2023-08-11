@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
 import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import { setErrorSolve, setGameFallCount, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
+import { leaveRoom, setErrorSolve, setGameFallCount, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
@@ -73,18 +73,20 @@ function GameRoomPage() {
       gameOut();
       dispatch(leaveSession());
       dispatch(setJoin(false));
-      navigate('/gameroomlist');
+      navigate('/gameroomlist', { replace: true });
     }
   };
 
-  useEffect(() => {
-    navigate('/');
-
-    return () => {
-      setErrorSolve(false);
+  const startSignal = (publisher) => {
+    const data = {
+      message: 'start'
     };
-  }, [errorSolve]);
-  // 컴포넌트 마운트, 언마운트 시 session 값 초기화
+    publisher.stream.session.signal({
+      data: JSON.stringify(data),
+      type: 'timer'
+    });
+  };
+
   useEffect(() => {
     // componentDidMount
     window.addEventListener('beforeunload', onbeforeunload);
@@ -92,7 +94,7 @@ function GameRoomPage() {
     return () => {
       window.removeEventListener('beforeunload', onbeforeunload);
     };
-  });
+  }, []);
 
   // join 의존성
   useEffect(() => {
@@ -134,6 +136,9 @@ function GameRoomPage() {
         session.off('streamCreated', handleStreamCreated);
         session.off('streamDestroyed', handleStreamDestroyed);
         session.off('exception', handleException);
+        dispatch(leaveRoom());
+        dispatch(leaveSession());
+
         const mySession = session;
         if (mySession) {
           mySession.disconnect(); // 예시에서는 disconnect()로 대체하였으나, 이는 OpenVidu에 따라 다르게 적용될 수 있음
@@ -141,14 +146,50 @@ function GameRoomPage() {
       };
     }
   }, [session]);
+  useEffect(() => {
+    if (publisher !== undefined) {
+      publisher.stream.session.on('signal:gamerank', (e) => {
+        dispatch(setGameRankList(JSON.parse(e.data).gameRankList));
+        dispatch(setRankModal(true));
+      });
+    }
+  }, [start]);
 
-  // const handleMainVideoStream = (stream) => {
-  //   if (mainStreamManager !== stream) {
-  //     dispatch(setMainStreamManager({ publisher: stream }));
-  //   }
-  // };
+  useEffect(() => {
+    if (rankModal === true) {
+      setTimeout(() => {
+        console.log('axions 요청중이니까 확인해줄래?');
+        dispatch(setGameRankList(null));
+        dispatch(setRankModal(false));
+        dispatch(setJoin(false));
+        dispatch(leaveRoom());
+        dispatch(leaveSession());
+        navigate('/gameroomlist', { replace: true });
+      }, 6000);
+    }
+  }, [gameRankList]);
 
-  // --- 3) Specify the actions when events take place in the session ---
+  useEffect(() => {
+    if (gameFallCount > 1 && gameFallCount < 3) {
+      fallAxios();
+    }
+  }, [gameFallCount]);
+
+  useEffect(() => {
+    if (errorSolve === true) {
+      dispatch(leaveRoom());
+      dispatch(leaveSession());
+      alert('이미 사라진 방입니다.');
+      window.location.href = '/gameroomlist';
+    }
+
+    return () => {
+      if (errorSolve === true) {
+        setErrorSolve(false);
+      }
+    };
+  }, [errorSolve]);
+  // 컴포넌트 마운트, 언마운트 시 session 값 초기화
 
   useEffect(() => {
     if (publisher !== undefined) {
@@ -156,17 +197,11 @@ function GameRoomPage() {
         dispatch(setStart(true));
       });
     }
+    // else if (publisher === undefined) {
+    //   console.log('여기 못찾아....');
+    //   navigate('/');
+    // }
   }, [publisher]);
-
-  const startSignal = (publisher) => {
-    const data = {
-      message: 'start'
-    };
-    publisher.stream.session.signal({
-      data: JSON.stringify(data),
-      type: 'timer'
-    });
-  };
 
   //게임방 나가기 시작여부 확인
   const gameOut = async () => {
@@ -252,39 +287,14 @@ function GameRoomPage() {
       return;
     }
   };
-  useEffect(() => {
-    if (publisher !== undefined) {
-      publisher.stream.session.on('signal:gamerank', (e) => {
-        dispatch(setGameRankList(JSON.parse(e.data).gameRankList));
-        dispatch(setRankModal(true));
-      });
-    }
-  }, [start]);
 
-  useEffect(() => {
-    if (rankModal === true) {
-      setTimeout(() => {
-        console.log('axions 요청중이니까 확인해줄래?');
-        dispatch(setGameRankList(null));
-        dispatch(setRankModal(false));
-        dispatch(setJoin(false));
-        dispatch(leaveSession());
-        navigate('/gameroomlist');
-      }, 6000);
-    }
-  }, [gameRankList]);
-  useEffect(() => {
-    if (gameFallCount > 1 && gameFallCount < 3) {
-      fallAxios();
-    }
-  }, [gameFallCount]);
   return (
     <>
       {rankModal && gameRankList !== null ? (
         <>
           <>{gameRankList !== null ? <h3>최종 순위표</h3> : null}</>
           {gameRankList.map((rank) => (
-            <EndGameRank key={rank.id} rank={rank} />
+            <EndGameRank key={rank.index} rank={rank} />
           ))}
         </>
       ) : (

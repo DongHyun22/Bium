@@ -1,10 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { joinSession } from './videoThunkActionSlice';
+import { setErrorSolve } from '../roomSlice/roomSlice';
+import { useDispatch } from 'react-redux';
 
 const initialState = {
   join: false,
   OV: null,
-  session: '',
+  session: undefined,
   token: undefined,
   publisher: undefined,
   subscribers: [],
@@ -66,7 +68,9 @@ export const videoSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(joinSession.fulfilled, (state, { payload }) => {
-      state.publisher = payload.publisher;
+      if (payload) {
+        state.publisher = payload.publisher;
+      }
     });
     builder.addCase(joinSession.rejected, (state, { payload }) => {
       console.log('slice 오류야', payload);

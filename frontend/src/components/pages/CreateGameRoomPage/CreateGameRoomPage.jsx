@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { redirect, useNavigate } from 'react-router-dom';
+import { redirect, useNavigate, useNavigation } from 'react-router-dom';
 import styles from './CreateGameRoomPage.module.css';
 import { setJoin } from '../../../slices/videoSlice/videoSlice';
 import { setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } from '../../../slices/roomSlice/roomSlice';
@@ -8,7 +8,6 @@ import { setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeo
 export const CreateGameRoom = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [isSecret, setIsSecret] = useState(false);
 
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
@@ -19,8 +18,8 @@ export const CreateGameRoom = () => {
   const backgroundImage = useSelector((state) => state.room.backgroundImage);
 
   useEffect(() => {
-    console.log();
-    redirect('/');
+    console.log('실행하나?');
+    redirect('');
   }, []);
   // 방 생성
   const handleJoin = async (event) => {

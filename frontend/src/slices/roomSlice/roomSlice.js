@@ -22,6 +22,19 @@ export const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {
+    leaveRoom: (state) => {
+      console.log('실행완료욤');
+      state.start = false;
+      state.mySessionId = '';
+      state.gameId = null;
+      state.token = undefined;
+      state.host = false;
+      state.gameFallCount = 0;
+      state.biumSecond = 0;
+      state.gameRankList = 0;
+      state.rankModal = false;
+      state.errorSolve = false;
+    },
     setErrorSolve: (state, action) => {
       state.errorSolve = action.payload;
     },
@@ -71,6 +84,7 @@ export const roomSlice = createSlice({
 });
 
 export const {
+  leaveRoom,
   setErrorSolve,
   setRankModal,
   setGameRankList,
