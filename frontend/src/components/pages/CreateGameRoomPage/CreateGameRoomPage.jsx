@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
+import styles from './CreateGameRoomPage.module.css';
 import { setJoin } from '../../../slices/videoSlice/videoSlice';
 import { setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } from '../../../slices/roomSlice/roomSlice';
 
@@ -55,8 +55,8 @@ export const CreateGameRoom = () => {
 
   return (
     <div>
-      <div id="join">
-        <div id="img-div">{/* <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" /> */}</div>
+      <div id="join" className={styles.container}>
+        <div id="img-div" className={styles.photo}>{/* <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" /> */}</div>
         <div id="join-dialog" className="jumbotron vertical-center">
           <h1> CreateGameRoom </h1>
           <form className="form-group" onSubmit={handleJoin}>
