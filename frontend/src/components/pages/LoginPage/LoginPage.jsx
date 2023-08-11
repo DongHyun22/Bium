@@ -55,6 +55,14 @@ function LoginPage() {
   const handlePasswordChange = (e) => {
     setUserPw(e.target.value);
   };
+  
+  const goToSignUp = () => {
+    return navigate('/signup');
+  };
+
+  const goToMainPage = () => {
+    return navigate('/');
+  };
 
   const findPassword = async (e) => {
     e.preventDefault();
@@ -94,7 +102,9 @@ function LoginPage() {
         </div>
       </form>
       <div>
-        <button onClick={openModal}>비밀번호 찾기</button>
+        <button onClick={openModal} className={styles.findpasswordbutton}>
+          비밀번호 찾기
+        </button>
         {passwordModal && (
           <div className={styles.modal}>
             <h2>비밀번호 찾기</h2>
