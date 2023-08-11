@@ -55,6 +55,14 @@ function LoginPage() {
   const handlePasswordChange = (e) => {
     setUserPw(e.target.value);
   };
+  
+  const goToSignUp = () => {
+    return navigate('/signup');
+  };
+
+  const goToMainPage = () => {
+    return navigate('/');
+  };
 
   const goToSignUp = () => {
     return navigate('/signup');
@@ -69,9 +77,8 @@ function LoginPage() {
     try {
       const response = await axios.get(APPLICATION_SERVER_URL + `/api/findpw/${passwordEmail}`);
       alert('임시 비밀번호가 이메일로 전송되었습니다.');
-      console.log('전송 성공', response);
     } catch (error) {
-      console.log('전송 실패', error);
+      return;
     }
   };
 
@@ -110,6 +117,7 @@ function LoginPage() {
                 onChange={handleEmailChange}
               />
             </label>
+
           </div>
           <div className={styles.loginpassword}>
             <label htmlFor="userPassword">
