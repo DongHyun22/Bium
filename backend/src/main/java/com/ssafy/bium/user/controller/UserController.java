@@ -110,25 +110,30 @@ public class UserController {
 
     // 토큰과 유저 정보 반환
     @GetMapping("/info/{userEmail}")
-    public ResponseEntity<Map<String, Object>> getInfo(
-            @PathVariable("userEmail") String userEmail) {
-        System.out.println("hello");
+    public ResponseEntity<Map<String, Object>> getInfo(@PathVariable("userEmail") String userEmail) {
 
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.UNAUTHORIZED;
 
         try {
-//				로그인 사용자 정보.
+            // 로그인 사용자 정보.
             User user = userService.getUserByUserEmail(userEmail);
+
+            // 프로필 이미지
+            Image image = userService.getImageData(userEmail, 1);
+            ImageDataGetRes imageDataGetRes = new ImageDataGetRes(image);
+
             resultMap.put("userInfo", user);
+            resultMap.put("imgInfo", imageDataGetRes);
             resultMap.put("message", "success");
+
             status = HttpStatus.ACCEPTED;
         } catch (Exception e) {
             resultMap.put("message", e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
 
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
     @GetMapping("/profile/modify/{userEmail}")
