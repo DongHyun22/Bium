@@ -14,13 +14,17 @@ const initialState = {
   gameFallCount: 0,
   biumSecond: 0,
   gameRankList: null,
-  rankModal: false
+  rankModal: false,
+  errorSolve: false
 };
 
 export const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {
+    setErrorSolve: (state, action) => {
+      state.errorSolve = action.payload;
+    },
     setRankModal: (state, action) => {
       state.rankModal = action.payload;
     },
@@ -67,6 +71,7 @@ export const roomSlice = createSlice({
 });
 
 export const {
+  setErrorSolve,
   setRankModal,
   setGameRankList,
   setBiumSecond,

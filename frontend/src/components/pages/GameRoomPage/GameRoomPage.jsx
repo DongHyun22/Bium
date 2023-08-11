@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
 import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import { setGameFallCount, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
+import { setErrorSolve, setGameFallCount, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
@@ -51,6 +51,7 @@ function GameRoomPage() {
   const start = useSelector((state) => state.room.start);
   const gameRankList = useSelector((state) => state.room.gameRankList);
   const rankModal = useSelector((state) => state.room.rankModal);
+  const errorSolve = useSelector((state) => state.room.errorSolve);
 
   if (backgroundImage === '1') {
     backImage = img2;
@@ -76,6 +77,13 @@ function GameRoomPage() {
     }
   };
 
+  useEffect(() => {
+    navigate('/');
+
+    return () => {
+      setErrorSolve(false);
+    };
+  }, [errorSolve]);
   // 컴포넌트 마운트, 언마운트 시 session 값 초기화
   useEffect(() => {
     // componentDidMount
@@ -117,9 +125,12 @@ function GameRoomPage() {
       session.on('streamCreated', handleStreamCreated);
       session.on('streamDestroyed', handleStreamDestroyed);
       session.on('exception', handleException);
+      console.log('디스 시작');
       dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail, host, dispatch }));
+
       // Clean-up 함수 등록
       return () => {
+        console.log('clear');
         session.off('streamCreated', handleStreamCreated);
         session.off('streamDestroyed', handleStreamDestroyed);
         session.off('exception', handleException);

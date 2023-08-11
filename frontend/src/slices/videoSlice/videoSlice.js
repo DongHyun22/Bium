@@ -68,7 +68,9 @@ export const videoSlice = createSlice({
     builder.addCase(joinSession.fulfilled, (state, { payload }) => {
       state.publisher = payload.publisher;
     });
-    builder.addCase(joinSession.rejected, (state, { payload }) => {});
+    builder.addCase(joinSession.rejected, (state, { payload }) => {
+      console.log('slice 오류야', payload);
+    });
   }
 });
 
