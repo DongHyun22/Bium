@@ -7,17 +7,16 @@
     'header header'
     'side-left side-right';
   position: relative; /* relative positioning for the parent div */
+  background: url('../../../asset/backgroudimage/firebase1.jpg');
+  background-size: cover;
 }
-
 .gridContainer::before {
   content: ""; /* empty content to create a pseudo-element */
-  position: absolute; /* absolute positioning */
+  position: absolute; 
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('../../../asset/backgroudimage/firebase1.jpg');
-  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   opacity: 0.5; /* adjust the transparency level */
@@ -29,16 +28,21 @@
   grid-area: header;
 }
 
-.side-left {
+.sideLeft {
   grid-area: side-left;
   background-color: transparent; 
-  display: flex; 
+  display: grid; 
+  grid-template-rows: 8fr 1fr 10fr 1fr; 
   justify-content: center; 
-  align-content: center; 
+  z-index: 5;
 }
 
 .side-right {
   grid-area: side-right;
+  z-index: 5;
+  width: 80%;
+  align-content: start;
+  justify-content: start;
 }
 
 .modal {
@@ -109,4 +113,16 @@ button:active {
 
 button:active {
   transform: scale(0.95); /* Press effect when the button is active */
+}
+
+.myBium {
+  display: grid;
+  color: aliceblue;
+  align-content: start;
+  justify-items: center;
+}
+
+.sideLeft > div > h3 {
+  color: aliceblue;
+  text-align: center;
 }

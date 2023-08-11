@@ -33,15 +33,17 @@ function GetRanking() {
 
   return (
     <div className={styles.rankingContainer}>
-      <div className={styles.rankingTitle}>
-        <p>Ranking</p>
-      </div>
-      <div>
+      <div >
+        <div className={styles.rankingTitle}>
+          <p>Ranking</p>
+        </div>
         <div className={styles.catalog}>
-          <span>순위</span>
-          <span>닉네임</span>
-          <span>티어</span>
-          <span>최고기록</span>
+          <div>
+            <p>순위</p>
+            <p>닉네임</p>
+            <p>티어</p>
+            <p>최고기록</p>
+          </div>
         </div>
         <div className={styles.rankingList}>
           {rank.map((item, index) => (

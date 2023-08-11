@@ -8,11 +8,8 @@ const RankingItem = ({ nickname, rank, topBium, ranking }) => (
 
   <div className={styles.rankingItem}>
     <div className={styles.position}>{ranking}</div>
-    &nbsp;&nbsp;&nbsp;
     <div className={styles.nickname}>{nickname}</div>
-    &nbsp;&nbsp;&nbsp;
     <div className={styles.rank}>{rank}</div>
-    &nbsp;&nbsp;&nbsp;
     <div className={styles.topBium}>{useGetBiumTime(topBium)}</div>
   </div>
 );

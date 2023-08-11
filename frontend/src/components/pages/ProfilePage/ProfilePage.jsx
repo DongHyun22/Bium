@@ -117,6 +117,8 @@ export function ProfilePage() {
 
           console.log('seTtidmfd', setImageId(imgSrc));
           console.log('조회 성공', imgSrc);
+          
+          await saveProfile;
         } else {
           console.log('서버 응답 오류');
         }
@@ -172,6 +174,8 @@ export function ProfilePage() {
 
           console.log('seTtidmfd', setDisturb(imgSrc));
           console.log('조회 성공', imgSrc);
+
+          await saveDisturb;
         } else {
           console.log('서버 응답 오류');
         }
@@ -356,7 +360,7 @@ export function ProfilePage() {
           <h1>ProfilePage</h1>
         </div>
       </div>
-      <div className={styles.sideLeft}>
+    <div className={styles.sideLeft}>
         {showProfile ? (
           <div>
             <h3>프로필 이미지</h3>
@@ -409,13 +413,14 @@ export function ProfilePage() {
           </div>
         )}
         <button onClick={() => setShowProfile(!showProfile)}>토글 이미지</button>
-        <h3>닉네임</h3>
-        <h3>{savedNickname}</h3>
-        <h3>오늘 비움량 : {todayBium}</h3>
-        <h3>총 비움량 {totalBium}</h3>
-        <button className={styles.modifyButton} onClick={openModal}>
-          회원 정보 수정
-        </button>
+        <div className={styles.myBium}>
+          <h3>{savedNickname}</h3>
+          <h3>오늘 비움량 : {todayBium}</h3>
+          <h3>총 비움량 : {totalBium}</h3> 
+          <button className={styles.modifyButton} onClick={openModal}>
+            회원 정보 수정
+          </button>
+        </div>
         {modalOpen && (
           <div className={styles.modal}>
             <h2>회원정보 수정</h2>
