@@ -13,6 +13,7 @@
   background-color: #eeeeee;
   padding: 50px;
   z-index: 1000;
+  border-radius: 5px;
 }
 
 .overlay {
@@ -23,6 +24,9 @@
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 1000;
   color: aliceblue;
+  padding: 5px;
+  margin: 2px;
+  border-radius: 5px;
 }
 
 .loginpagebg {
@@ -50,7 +54,7 @@
 
 .titlebium {
   margin-left: 10px;
-  font-size: 50px;
+  font-size: 40px;
   color: aliceblue;
   cursor: pointer;
 }
@@ -123,6 +127,7 @@ form {
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  font-size: 30px;
 }
 
 .titlelogin {
@@ -133,6 +138,7 @@ form {
   border-bottom: 2px solid #333;
   padding-bottom: 5px;
   width: 45%;
+  font-size: 40px;
 }
 
 label {
@@ -150,6 +156,7 @@ label {
   width: 80%;
   margin-top: 1%;
   /* max-width: 400px; */
+  font-size: 20px;
 }
 
 .buttoncontainer {
@@ -186,7 +193,7 @@ label {
 .findpassword {
   display: flex;
   justify-content: flex-end;
-  margin-right: 10%;
+  margin-right: 13%;
   /* margin-bottom: 5%; */
   cursor: pointer;
   /* margin-bottom: 10%; */
@@ -199,3 +206,4 @@ label {
   border-radius: 8px;
   width: 100%;
 }
+
