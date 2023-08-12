@@ -14,7 +14,6 @@ export default function SignUpPage() {
   useEffect(() => {
     if (isLogin || token !== null) {
       navigate('/');
-      console.log('isLogin', isLogin);
     }
   }, [isLogin, navigate, token]);
   // 회원가입 요소
@@ -102,9 +101,9 @@ export default function SignUpPage() {
         userNickname: nickname
       };
       const response = await axios.post(APPLICATION_SERVER_URL + '/api/signup', userRegisterInfomation);
-      return console.log(response.data);
+      return ;
     } catch (error) {
-      console.error(error);
+      return;
     }
   };
 
@@ -117,7 +116,6 @@ export default function SignUpPage() {
         }
       });
 
-      console.log(response.data);
       if (response.data === 0) {
         alert('사용가능한 이메일입니다.');
         return setCheckEmailDuplicate(true);
@@ -125,7 +123,6 @@ export default function SignUpPage() {
       alert('이미 가입이 된 이메일입니다.');
       return setCheckEmailDuplicate(false);
     } catch (error) {
-      console.error(error);
       return false;
     }
   };
@@ -145,12 +142,10 @@ export default function SignUpPage() {
 
     if (name) {
       setIsNameValid(validateName(name));
-      console.log(validateName(name));
     }
   }, [userEmail, password, passwordConfirm, name, isEmailValid, isPasswordValid, isPasswordConfirmValid]);
 
   const handleSubmit = async (e) => {
-    console.log(checkEmailDuplicate);
 
     if (checkEmailDuplicate && isEmailValid && isPasswordValid && isNameValid) {
       await goSignup(e);

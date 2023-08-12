@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -109,14 +109,16 @@ export function ProfilePage() {
           const imgType = profileResponse.data.imgType;
           const originalFile = profileResponse.data.originalFile;
 
-          const getProfileResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
+          const getProfileResponse = await axios.get(
+            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
+            { responseType: 'blob' }
+          );
 
           const imgSrc = URL.createObjectURL(getProfileResponse.data);
           dispatch(setImageId(imgSrc));
 
           console.log('seTtidmfd', setImageId(imgSrc));
           console.log('조회 성공', imgSrc);
-
         } else {
           console.log('서버 응답 오류');
         }
@@ -162,7 +164,10 @@ export function ProfilePage() {
           const imgType = disturbResponse.data.imgType;
           const originalFile = disturbResponse.data.originalFile;
 
-          const getDisturbResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
+          const getDisturbResponse = await axios.get(
+            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
+            { responseType: 'blob' }
+          );
 
           const imgSrc = URL.createObjectURL(getDisturbResponse.data);
           dispatch(setDisturb(imgSrc));
@@ -185,14 +190,14 @@ export function ProfilePage() {
     e.preventDefault();
     saveProfile(e);
     sendToProfile(e);
-  }
+  };
 
   // 방해 사진 전송과 저장
   const handleDisturbImage = (e) => {
     e.preventDefault();
     saveDisturb(e);
     sendToDisturb(e);
-  }
+  };
 
   // 프로필 이미지 삭제
   const deleteProfile = () => {
@@ -238,14 +243,11 @@ export function ProfilePage() {
           }
         }
       );
-      console.log('비밀번호 확인', response.status);
       if (response.status === 200) {
         return true;
       }
-      console.log(response.status);
       return false;
     } catch (error) {
-      console.log('너 오류난 거야', error);
       return false;
     }
   };
@@ -255,7 +257,6 @@ export function ProfilePage() {
 
     const validatePassword = await checkPassword();
 
-    console.log(validatePassword);
     if (validatePassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
       return;
@@ -276,20 +277,16 @@ export function ProfilePage() {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
           'Access-Control-Allow-Methods': 'POST'
-          // Authorization: `Bearer ${accessToken}`
         }
       });
 
-      console.log(response);
       if (response.status === 200) {
         dispatch(setNickname(name));
         // setName(updatedNickname);
         persistor.flush();
         closeModal();
       }
-    } catch (error) {
-      console.error('회원 정보 수정에 실패하였습니다.', error);
-    }
+    } catch (error) {}
   };
 
   // 회원 탈퇴 요청
@@ -298,7 +295,6 @@ export function ProfilePage() {
 
     const validatePassword = await checkPassword();
 
-    console.log(validatePassword);
     if (validatePassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
       return;
@@ -317,17 +313,11 @@ export function ProfilePage() {
           }
         }
       );
-      console.log(response.data);
       if (response.data === 0) {
         sessionStorage.removeItem('accessToken');
         navigate('/');
       }
     } catch (error) {
-      if (error.response) {
-        console.log(error.response.data);
-      } else {
-        console.log(error.message);
-      }
       return error;
     }
   };
@@ -390,7 +380,11 @@ export function ProfilePage() {
                 onChange={handleProfileImage}
               ></input>
               <button onClick={onClickProfileUpload} className={styles.imageUpload}>
-                {savedProfileImage ? <img src={savedProfileImage} alt="미리보기" /> : <img src={emptyprofile} alt="미리보기" />}
+                {savedProfileImage ? (
+                  <img src={savedProfileImage} alt="미리보기" />
+                ) : (
+                  <img src={emptyprofile} alt="미리보기" />
+                )}
               </button>
             </div>
             {/* <button onClick={sendToProfile}>이미지 저장</button>
@@ -411,7 +405,11 @@ export function ProfilePage() {
                 onChange={handleDisturbImage}
               ></input>
               <button onClick={onClickDisturbUpload} className={styles.imageUpload}>
-                {savedDisturbImage ? <img src={savedDisturbImage} alt="미리보기" /> : <img src={emptyprofile} alt="미리보기" />}
+                {savedDisturbImage ? (
+                  <img src={savedDisturbImage} alt="미리보기" />
+                ) : (
+                  <img src={emptyprofile} alt="미리보기" />
+                )}
               </button>
             </div>
             {/* <button onClick={sendToDisturb}>이미지 저장</button>
