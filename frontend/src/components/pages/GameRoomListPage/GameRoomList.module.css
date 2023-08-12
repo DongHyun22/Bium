@@ -24,7 +24,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 5em 10em 5em 10em;
+    padding: 3em 10em 3em 10em;
     color: white;
 }
 
@@ -34,15 +34,16 @@
 }
 
 .title h1 {
-    display: inline-block;
-    margin-right: 0.5em;
+    margin: 0.1em;
+    padding-left: 0.1em;
+    font-size: 40px;
 }
 
 .listItem {
     width: 20em;
     margin: 1.5em;
     background-color: white;
-    border-radius: 1em;
+    border-radius: 5px;
     box-shadow: 0 3px 6px rgba(0,0,0,0.08), 0 3px 6px rgba(0,0,0,0.16);
 }
 
@@ -50,7 +51,7 @@
     background: url('../../../asset/backgroudimage/gameRoomListItemTest.jpg');
     width: 20em;
     height: 7em;
-    border-radius: 1em 1em 0 0;
+    border-radius: 5px 5px 0 0;
     padding: 0;
 }
 
@@ -69,9 +70,9 @@
 
 .BtnGameCreate {
     align-items: center;
-    background-color: #f7f7f7;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
+    background-color: rgba(255, 255, 255, 0);
+    border: 3px solid rgba(255, 255, 255, 1);
+    border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
     box-sizing: border-box;
     color: rgba(0, 0, 0, 0.7);
@@ -82,7 +83,7 @@
     justify-content: center;
     line-height: 1.25;
     min-height: 3rem;
-    padding: calc(.875rem - 1px) calc(1rem - 1px);
+    padding: calc(.8rem - 1px) calc(.8rem - 1px);
     text-decoration: none;
     transition: all 250ms;
     user-select: none;
@@ -94,9 +95,11 @@
    
    .BtnGameCreate:hover,
    .BtnGameCreate:focus {
-    border-color: rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 1);
+    background-color: rgba(255, 255, 255, 0.5);
     box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
     color: rgba(0, 0, 0, 0.65);
+    cursor: pointer;
    }
    
    .BtnGameCreate:hover {
@@ -119,12 +122,12 @@
   
   .search__input {
     font-family: inherit;
-    font-size: inherit;
+    font-size: 20px;
     background-color: #f7f7f7;
     border: none;
     color: #646464;
     padding: 0.7rem 1rem;
-    border-radius: 1em;
+    border-radius: 5px;
     width: 12em;
     transition: all ease-in-out .5s;
     margin-right: -2rem;
@@ -150,7 +153,7 @@
   
   .search__button {
     border: none;
-    background-color: #f7f7f7;
+    /* background-color: rgba(0, 0, 0, 1); */
     margin-top: .1em;
   }
   
@@ -158,8 +161,3 @@
     cursor: pointer;
   }
   
-  .search__icon {
-    height: 2em;
-    width: 2em;
-    fill: #fff;
-  }
