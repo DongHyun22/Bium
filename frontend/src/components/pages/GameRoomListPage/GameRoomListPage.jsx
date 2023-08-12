@@ -32,15 +32,11 @@ export const GameRoomListPage = () => {
     <div>
       <div className={styles.containerTitle}>
         <div className={styles.title}>
-          <h1>게</h1>
-          <h1>임</h1>
-          <h1>방</h1>
-          <h1>목</h1>
-          <h1>록</h1>
+          <h1>게임방 목록</h1>
           <Link to="/createroom">
             <div className={styles.BtnGameCreate}>
               <svg width="20" height="20" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-                <path fill="#ffffff" d="M228 128a12 12 0 0 1-12 12h-76v76a12 12 0 0 1-24 0v-76H40a12 12 0 0 1 0-24h76V40a12 12 0 0 1 24 0v76h76a12 12 0 0 1 12 12Z" />
+                <path fill="#000" d="M228 128a12 12 0 0 1-12 12h-76v76a12 12 0 0 1-24 0v-76H40a12 12 0 0 1 0-24h76V40a12 12 0 0 1 24 0v76h76a12 12 0 0 1 12 12Z" />
               </svg>
             </div>
           </Link>
