@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { setNickname, setImageId, setDisturb } from '../../../slices/userSlice';
+import { setToken, setIsLogin, setNickname, setImageId, setDisturb } from '../../../slices/userSlice';
 import { GetRanking } from '../../organisms/RankingList';
 import useGetBiumTime from '../../../hooks/TimeInquery';
 import axios from 'axios';
 import { persistor } from '../../../store/store';
 import emptyprofile from '../../../asset/backgroudimage/emptyprofile.png';
+import { PURGE } from 'redux-persist';
+
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
@@ -107,18 +109,14 @@ export function ProfilePage() {
           const imgType = profileResponse.data.imgType;
           const originalFile = profileResponse.data.originalFile;
 
-          const getProfileResponse = await axios.get(
-            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
-            { responseType: 'blob' }
-          );
+          const getProfileResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
 
           const imgSrc = URL.createObjectURL(getProfileResponse.data);
           dispatch(setImageId(imgSrc));
 
           console.log('seTtidmfd', setImageId(imgSrc));
           console.log('조회 성공', imgSrc);
-          
-          await saveProfile;
+
         } else {
           console.log('서버 응답 오류');
         }
@@ -164,10 +162,7 @@ export function ProfilePage() {
           const imgType = disturbResponse.data.imgType;
           const originalFile = disturbResponse.data.originalFile;
 
-          const getDisturbResponse = await axios.get(
-            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
-            { responseType: 'blob' }
-          );
+          const getDisturbResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
 
           const imgSrc = URL.createObjectURL(getDisturbResponse.data);
           dispatch(setDisturb(imgSrc));
@@ -184,6 +179,20 @@ export function ProfilePage() {
       }
     }
   };
+
+  // 프로필 사진 전송과 저장
+  const handleProfileImage = (e) => {
+    e.preventDefault();
+    saveProfile(e);
+    sendToProfile(e);
+  }
+
+  // 방해 사진 전송과 저장
+  const handleDisturbImage = (e) => {
+    e.preventDefault();
+    saveDisturb(e);
+    sendToDisturb(e);
+  }
 
   // 프로필 이미지 삭제
   const deleteProfile = () => {
@@ -250,7 +259,6 @@ export function ProfilePage() {
     if (validatePassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
       return;
-      return;
     }
 
     try {
@@ -294,12 +302,10 @@ export function ProfilePage() {
     if (validatePassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
       return;
-      return;
     }
 
     try {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + `/api/profile/delete`,
         APPLICATION_SERVER_URL + `/api/profile/delete`,
         {},
         {
@@ -345,10 +351,20 @@ export function ProfilePage() {
     setDeleteConfirmModalOpen(false);
   };
 
+  // 토글 버튼 상태 변경 핸들러
+  const handleToggleChange = () => {
+    setShowProfile(!showProfile);
+  };
+
   // 회원 탈퇴 확인 모달에서 '예, 탈퇴합니다' 버튼을 눌렀을 때의 동작
   const confirmSignOut = (e) => {
+    dispatch({ type: PURGE, key: 'root', result: () => null });
     signOutUser(e);
+    alert('회원탈퇴가 완료되었습니다.');
+    dispatch(setToken(null));
+    dispatch(setIsLogin(false));
     closeDeleteConfirmModal();
+    navigate('/');
   };
 
   return (
@@ -360,7 +376,7 @@ export function ProfilePage() {
           <h1>ProfilePage</h1>
         </div>
       </div>
-    <div className={styles.sideLeft}>
+      <div className={styles.sideLeft}>
         {showProfile ? (
           <div>
             <h3>프로필 이미지</h3>
@@ -371,20 +387,16 @@ export function ProfilePage() {
                 accept="image/*"
                 className={styles.imageInput}
                 ref={profileImageInput}
-                onChange={saveProfile}
+                onChange={handleProfileImage}
               ></input>
               <button onClick={onClickProfileUpload} className={styles.imageUpload}>
-                {savedProfileImage ? (
-                  <img src={savedProfileImage} alt="미리보기" />
-                ) : (
-                  <img src={emptyprofile} alt="미리보기" />
-                )}
+                {savedProfileImage ? <img src={savedProfileImage} alt="미리보기" /> : <img src={emptyprofile} alt="미리보기" />}
               </button>
             </div>
-            <button onClick={sendToProfile}>이미지 저장</button>
+            {/* <button onClick={sendToProfile}>이미지 저장</button>
             <div>
               <button onClick={deleteProfile}>삭제</button>
-            </div>
+            </div> */}
           </div>
         ) : (
           <div>
@@ -396,39 +408,46 @@ export function ProfilePage() {
                 accept="image/*"
                 className={styles.imageInput}
                 ref={disturbImageInput}
-                onChange={saveDisturb}
+                onChange={handleDisturbImage}
               ></input>
               <button onClick={onClickDisturbUpload} className={styles.imageUpload}>
-                {savedDisturbImage ? (
-                  <img src={savedDisturbImage} alt="미리보기" />
-                ) : (
-                  <img src={emptyprofile} alt="미리보기" />
-                )}
+                {savedDisturbImage ? <img src={savedDisturbImage} alt="미리보기" /> : <img src={emptyprofile} alt="미리보기" />}
               </button>
             </div>
-            <button onClick={sendToDisturb}>이미지 저장</button>
+            {/* <button onClick={sendToDisturb}>이미지 저장</button>
             <div>
               <button onClick={deleteDisturb}>삭제</button>
-            </div>
+            </div> */}
           </div>
         )}
-        <button onClick={() => setShowProfile(!showProfile)}>토글 이미지</button>
+        <div className={styles.toggleWrapper}>
+          <label className={styles.switch}>
+            <input type="checkbox" checked={showProfile} onChange={handleToggleChange} />
+            <span className={styles.slider}></span>
+          </label>
+        </div>
         <div className={styles.myBium}>
           <h3>{savedNickname}</h3>
           <h3>오늘 비움량 : {todayBium}</h3>
-          <h3>총 비움량 : {totalBium}</h3> 
+          <h3>총 비움량 : {totalBium}</h3>
+          <h3>총 비움량 : {totalBium}</h3>
           <button className={styles.modifyButton} onClick={openModal}>
             회원 정보 수정
           </button>
         </div>
         {modalOpen && (
           <div className={styles.modal}>
-            <h2>회원정보 수정</h2>
-            <form>
-              <div>{savedProfileImage && <img src={savedProfileImage} alt="미리보기" />}</div>
-              <div>{savedNickname}</div>
+            <form className={styles.modifyForm}>
+              <div>
+                <div>
+                  <h2>회원정보 수정</h2>
+                  <p>{savedEmail}</p>
+                </div>
+                {/* <div>{savedProfileImage && <img src={savedProfileImage} alt="미리보기" />}</div> */}
+              </div>
               <label>
-                닉네임:
+                닉네임
+                <br />
                 <input
                   type="text"
                   value={name}
@@ -439,7 +458,7 @@ export function ProfilePage() {
               </label>
               <br />
               <label>
-                기존비밀번호:
+                기존비밀번호
                 <input
                   type="password"
                   autoComplete="off"
@@ -468,21 +487,34 @@ export function ProfilePage() {
                 />
               </label>
             </form>
-            <button onClick={modifyUserInfo}>수정하기</button>
-            <button onClick={openDeleteConfirmModal}>회원 탈퇴</button>
-
-            <button className={styles.overlay} onClick={closeModal}>
-              닫기
-            </button>
+            <div className={styles.insertButton}>
+              <button onClick={modifyUserInfo}>수정하기</button>
+              <button onClick={openDeleteConfirmModal}>회원 탈퇴</button>
+              <button className={styles.overlay} onClick={closeModal}>
+                닫기
+              </button>
+            </div>
           </div>
         )}
         {/* css 적용시 .modal이 아닌 다른 css 적용 필요 */}
         {deleteConfirmModalOpen && (
-          <div className={styles.modal}>
+          <div className={styles.signOutModal}>
             <h2>정말로 탈퇴하시겠어요?</h2>
-
-            <button onClick={confirmSignOut}>예</button>
-            <button onClick={closeDeleteConfirmModal}>아니요</button>
+            <label>
+              회원 탈퇴를 진행하시려면 비밀번호를 입력해주세요
+              <br />
+              &nbsp;
+              <input
+                type="password"
+                autoComplete="off"
+                value={existingPassword}
+                onChange={(e) => setExistingPassword(e.target.value)}
+              />
+            </label>
+            <div className={styles.signOutButton}>
+              <button onClick={confirmSignOut}>예</button>
+              <button onClick={closeDeleteConfirmModal}>아니요</button>
+            </div>
           </div>
         )}
       </div>

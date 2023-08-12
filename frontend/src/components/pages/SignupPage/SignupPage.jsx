@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+import styles from './SignupPage.module.css';
+
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export default function SignUpPage() {
   const navigate = useNavigate();
@@ -32,7 +35,7 @@ export default function SignUpPage() {
   const [rightEmail, setRightEmail] = useState('유효한 이메일 형식입니다');
   const [wrongEmail, setWrongEmail] = useState('형식에 맞지않는 이메일입니다');
   const [rightPassword, setRightPassword] = useState('유효한 비밀번호 형식입니다');
-  const [wrongPassword, setWrongPassword] = useState('알파벳, 숫자, 특수문자의 순서대로 작성해 주십시오');
+  const [wrongPassword, setWrongPassword] = useState('알파벳, 숫자, 특수문자를 사용하여 8자 이상 30자 이하로 작성해 주십시오');
   const [rightPasswordConfirm, setRightPasswordConfirm] = useState('비밀번호와 일치합니다');
   const [wrongPasswordConfirm, setWrongPasswordConfirm] = useState('비밀번호와 일치하지 않습니다');
   const [rightName, setRightName] = useState('유효한 이름 형식입니다');
@@ -158,45 +161,123 @@ export default function SignUpPage() {
     }
   };
 
+  const goToMainPage = () => {
+    navigate('/');
+  };
+
+  const goToLogin = () => {
+    navigate('/login');
+  };
+
   return (
-    <div>
-      <form onSubmit={checkMail}>
-        <label>
-          아이디:
-          <input type="text" placeholder="ID" value={userEmail} onChange={handleChange} name="userEmail" required />
-        </label>
-        <button type="submit">중복 확인</button>
-        <br />
-      </form>
-      {userEmail && <div>{isEmailValid ? <p>{rightEmail}</p> : <p>{wrongEmail}</p>}</div>}
-      <form onSubmit={handleSubmit}>
-        <label>
-          비밀번호:
-          <input type="password" autoComplete="off" placeholder="Password" value={password} onChange={handleChange} name="password" required />
-        </label>
-        {password && <div>{isPasswordValid ? <p>{rightPassword}</p> : <p>{wrongPassword}</p>}</div>}
-        <br />
-        <label>
-          비밀번호 확인:
-          <input type="password" autoComplete="off" placeholder="Confirm password" value={passwordConfirm} onChange={handleChange} name="passwordConfirm" required />
-        </label>
-        <br />
-        {passwordConfirm && <div>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>}
+    <div className={styles.signupbg}>
+      <div className={styles.photo}>
+        <h1 className={styles.titleBium} onClick={goToMainPage}>
+          비 움
+        </h1>
+        <div className={styles.circle}>
+          <div className={styles.circleLogo}></div>
+        </div>
+        <div className={styles.leftContent}>
+          <p>이미 비움의 회원이세요?</p>
+          <h3 onClick={goToLogin}>로그인</h3>
+        </div>
+      </div>
 
-        <label>
-          이름:
-          <input type="text" placeholder="Name" value={name} onChange={handleChange} name="name" required />
-        </label>
-        {name && <div>{isNameValid ? <p>{rightName}</p> : <p>{wrongName}</p>}</div>}
+      <div className={styles.rightBox}>
+        <h1 className={styles.titleSignup}>회원가입</h1>
+        <form>
+          <label htmlFor="userEmail">
+            이메일 <br></br>
+            <div className={styles.emailContainer}>
+              <input
+                type="text"
+                placeholder="이메일을 입력해주세요."
+                value={userEmail}
+                onChange={handleChange}
+                id="userEmail"
+                name="userEmail"
+                required
+              />
+              <button onClick={checkMail}>중복 확인</button>
+            </div>
+          </label>
+          {userEmail && (
+            <div className={styles.validContent}>{isEmailValid ? <p>{rightEmail}</p> : <p>{wrongEmail}</p>}</div>
+          )}
+          <label htmlFor="password">
+            비밀번호 <br></br>
+            <input
+              type="password"
+              autoComplete="off"
+              placeholder="비밀번호를 입력해주세요."
+              value={password}
+              onChange={handleChange}
+              id="password"
+              name="password"
+              required
+            />
+          </label>
+          {password && (
+            <div className={styles.validContent}>
+              {isPasswordValid ? <p>{rightPassword}</p> : <p>{wrongPassword}</p>}
+            </div>
+          )}
+          <label htmlFor="passwordConfirm">
+            비밀번호 확인 <br></br>
+            <input
+              type="password"
+              autoComplete="off"
+              placeholder="비밀번호를 다시 입력해 주세요."
+              value={passwordConfirm}
+              onChange={handleChange}
+              id="passwordConfirm"
+              name="passwordConfirm"
+              required
+            />
+          </label>
+          {passwordConfirm && (
+            <div className={styles.validContent}>
+              {isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}
+            </div>
+          )}
 
-        <br />
-        <label>
-          닉네임:
-          <input type="text" placeholder="Nickname" value={nickname} onChange={handleChange} name="nickname" required />
-        </label>
-        <br />
-        <button type="submit">Sign up</button>
-      </form>
+          <label htmlFor="name">
+            이름 <br></br>
+            <input
+              type="text"
+              placeholder="이름을 입력해 주세요."
+              value={name}
+              onChange={handleChange}
+              id="name"
+              name="name"
+              required
+            />
+          </label>
+          {name && <div className={styles.validContent}>{isNameValid ? <p>{rightName}</p> : <p>{wrongName}</p>}</div>}
+
+          <label htmlFor="nickname">
+            닉네임 <br></br>
+            <input
+              type="text"
+              placeholder="닉네임을 입력해 주세요."
+              value={nickname}
+              onChange={handleChange}
+              id="nickname"
+              name="nickname"
+              required
+            />
+          </label>
+        </form>
+        <div className={styles.buttonContainer}>
+          <button type="submit" onClick={handleSubmit} className={styles.signupButton}>
+            회원가입
+          </button>
+          <button className={styles.cancelButton} onClick={goToMainPage}>
+            취소
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

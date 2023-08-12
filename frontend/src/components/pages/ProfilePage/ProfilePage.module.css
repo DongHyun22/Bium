@@ -1,28 +1,41 @@
+@font-face {
+  font-family: 'GangwonEdu_OTFBoldA';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 
 .gridContainer {
   display: grid;
   grid-template-columns: 2fr 3fr;
+  width: 100%;
+  height: 100%;
   gap: 16px;
-  grid-template-areas: 
+  grid-template-areas:
     'header header'
     'side-left side-right';
   position: relative; /* relative positioning for the parent div */
   background: url('../../../asset/backgroudimage/firebase1.jpg');
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow-y: hidden;
 }
+
 .gridContainer::before {
-  content: ""; /* empty content to create a pseudo-element */
-  position: absolute; 
+  content: ''; /* empty content to create a pseudo-element */
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-position: center;
-  background-repeat: no-repeat;
   opacity: 0.5; /* adjust the transparency level */
   pointer-events: none; /* ensure the overlay doesn't interfere with user interactions */
 }
 
+.gridContainer::-webkit-scrollbar {
+  display: none;
+}
 
 .header {
   grid-area: header;
@@ -30,10 +43,10 @@
 
 .sideLeft {
   grid-area: side-left;
-  background-color: transparent; 
-  display: grid; 
-  grid-template-rows: 8fr 1fr 10fr 1fr; 
-  justify-content: center; 
+  background-color: transparent;
+  display: grid;
+  grid-template-rows: 4fr 1fr 5fr;
+  justify-content: center;
   z-index: 5;
 }
 
@@ -47,12 +60,94 @@
 
 .modal {
   position: fixed;
+  display: grid;
+  grid-template-columns: 1fr;
   top: 50%;
   left: 50%;
+  width: 25%;
   transform: translate(-50%, -50%);
-  background-color: #eeeeee;
-  padding: 50px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 2em;
+  box-shadow: 0 0 10px black;
   z-index: 1000;
+}
+
+.signOutModal {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  top: 50%;
+  left: 50%;
+  width: 21%;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 2em;
+  box-shadow: 0 0 4px black;
+  z-index: 1001;
+}
+
+.signOutModal > label > input[type='password'] {
+  width: 83%;
+}
+
+.modifyForm > label {
+  text-align: start;
+  margin: 0.5em 0em 0em;
+}
+
+.modifyForm > div:nth-child(1) {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-family: 'GangwonEdu_OTFBoldA';
+  font-size: 1.5em;
+}
+
+.signOutModal > label {
+  text-align: start;
+  margin: 1em 1em 1em 0em;
+}
+
+.signOutModal > label > input[type='password'] {
+  font-size: 1.25em;
+  font-family: 'GangwonEdu_OTFBoldA';
+  border-radius: 10px;
+  width: 100%;
+  outline: none;
+  background-color: #ffffff;
+  text-align: start;
+  padding: 0.5em;
+}
+
+.signOutModal > div {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modifyForm > label > input[type='text'] {
+  font-size: 1.25em;
+  font-family: 'GangwonEdu_OTFBoldA';
+  border-radius: 10px;
+  width: 90%;
+  outline: none;
+  background-color: #ffffff;
+  text-align: start;
+  padding: 0.5em;
+}
+
+.modifyForm > label > input[type='password'] {
+  font-size: 1.25em;
+  font-family: 'GangwonEdu_OTFBoldA';
+  border-radius: 10px;
+  width: 90%;
+  outline: none;
+  background-color: #ffffff;
+  text-align: start;
+  padding: 0.5em;
 }
 
 .overlay {
@@ -68,12 +163,16 @@ img {
   width: 200px;
   height: 200px;
   object-fit: cover;
+  border-radius: 100%;
+  padding: 0%;
 }
 
 .imageUpload {
+  width: 200px;
+  height: 200px;
   background-color: white;
-  /* border-radius: 20%; */
-  /* border: none; */
+  border-radius: 100%;
+  border: none;
 }
 
 .imageInput {
@@ -81,12 +180,15 @@ img {
 }
 
 .modifyButton {
-  background-color: white; 
+  background-color: white;
   border: none;
   border-radius: 10px;
   padding: 10px 20px;
   cursor: pointer;
   transition: transform 0.3s ease; /* Transition effect for the press effect */
+  font-weight: 400;
+  font-family: 'GangwonEdu_OTFBoldA';
+  font-size: 1.5em;
 }
 
 button:active {
@@ -103,16 +205,54 @@ button:active {
 }
 
 .modifyButton {
-  background-color: white; 
+  background-color: white;
   border: none;
   border-radius: 10px;
   padding: 10px 20px;
   cursor: pointer;
   transition: transform 0.3s ease; /* Transition effect for the press effect */
+  box-shadow: 0 0 4px black;
+}
+
+.insertButton {
+  display: flex;
+  width: 95%;
+  justify-content: space-between;
+}
+
+.insertButton > button {
+  background-color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 20px 10px 15px;
+  cursor: pointer;
+  width: 25%;
+  transition: transform 0.3s ease; /* Transition effect for the press effect */
+  box-shadow: 0 0 4px black;
+}
+
+.signOutButton {
+  display: flex;
+  justify-content: space-between;
+}
+
+.signOutButton > button {
+  background-color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 20px 10px 15px;
+  cursor: pointer;
+  width: 25%;
+  transition: transform 0.3s ease; /* Transition effect for the press effect */
+  box-shadow: 0 0 4px black;
 }
 
 button:active {
   transform: scale(0.95); /* Press effect when the button is active */
+}
+
+.sideLeft > div:nth-child(1) {
+  height: 300px;
 }
 
 .myBium {
@@ -126,3 +266,73 @@ button:active {
   color: aliceblue;
   text-align: center;
 }
+
+/* 토글 스위치 입니당~ */
+.toggleWrapper {
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.toggleWrapper > label {
+  margin: 0px 5px 0px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  display: flex;
+  justify-content: center;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 15px;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 15px;
+}
+
+input:checked + .slider {
+  background-color: #04254e;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+/* 토글 스위치 스타일 끝 */
