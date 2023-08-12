@@ -109,14 +109,16 @@ export function ProfilePage() {
           const imgType = profileResponse.data.imgType;
           const originalFile = profileResponse.data.originalFile;
 
-          const getProfileResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
+          const getProfileResponse = await axios.get(
+            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
+            { responseType: 'blob' }
+          );
 
           const imgSrc = URL.createObjectURL(getProfileResponse.data);
           dispatch(setImageId(imgSrc));
 
           console.log('seTtidmfd', setImageId(imgSrc));
           console.log('조회 성공', imgSrc);
-
         } else {
           console.log('서버 응답 오류');
         }
@@ -162,7 +164,10 @@ export function ProfilePage() {
           const imgType = disturbResponse.data.imgType;
           const originalFile = disturbResponse.data.originalFile;
 
-          const getDisturbResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
+          const getDisturbResponse = await axios.get(
+            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
+            { responseType: 'blob' }
+          );
 
           const imgSrc = URL.createObjectURL(getDisturbResponse.data);
           dispatch(setDisturb(imgSrc));
@@ -185,14 +190,14 @@ export function ProfilePage() {
     e.preventDefault();
     saveProfile(e);
     sendToProfile(e);
-  }
+  };
 
   // 방해 사진 전송과 저장
   const handleDisturbImage = (e) => {
     e.preventDefault();
     saveDisturb(e);
     sendToDisturb(e);
-  }
+  };
 
   // 프로필 이미지 삭제
   const deleteProfile = () => {
@@ -272,7 +277,6 @@ export function ProfilePage() {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
           'Access-Control-Allow-Methods': 'POST'
-          // Authorization: `Bearer ${accessToken}`
         }
       });
 
@@ -282,8 +286,7 @@ export function ProfilePage() {
         persistor.flush();
         closeModal();
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   // 회원 탈퇴 요청
@@ -315,7 +318,6 @@ export function ProfilePage() {
         navigate('/');
       }
     } catch (error) {
-      
       return error;
     }
   };
@@ -378,7 +380,11 @@ export function ProfilePage() {
                 onChange={handleProfileImage}
               ></input>
               <button onClick={onClickProfileUpload} className={styles.imageUpload}>
-                {savedProfileImage ? <img src={savedProfileImage} alt="미리보기" /> : <img src={emptyprofile} alt="미리보기" />}
+                {savedProfileImage ? (
+                  <img src={savedProfileImage} alt="미리보기" />
+                ) : (
+                  <img src={emptyprofile} alt="미리보기" />
+                )}
               </button>
             </div>
             {/* <button onClick={sendToProfile}>이미지 저장</button>
@@ -399,7 +405,11 @@ export function ProfilePage() {
                 onChange={handleDisturbImage}
               ></input>
               <button onClick={onClickDisturbUpload} className={styles.imageUpload}>
-                {savedDisturbImage ? <img src={savedDisturbImage} alt="미리보기" /> : <img src={emptyprofile} alt="미리보기" />}
+                {savedDisturbImage ? (
+                  <img src={savedDisturbImage} alt="미리보기" />
+                ) : (
+                  <img src={emptyprofile} alt="미리보기" />
+                )}
               </button>
             </div>
             {/* <button onClick={sendToDisturb}>이미지 저장</button>
