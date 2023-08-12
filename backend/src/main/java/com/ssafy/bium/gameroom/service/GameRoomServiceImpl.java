@@ -261,6 +261,10 @@ public class GameRoomServiceImpl implements GameRoomService {
                     return Long.compare(value2, value1);
                 }
             });
+            for(int i = 1; i <= userGameRecords.size(); i++){
+                userGameRecords.get(i-1).setIndex(i);
+            }
+
             return userGameRecords;
         }
         return null;
