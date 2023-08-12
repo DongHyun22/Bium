@@ -52,6 +52,7 @@ function GameRoomPage() {
   const gameRankList = useSelector((state) => state.room.gameRankList);
   const rankModal = useSelector((state) => state.room.rankModal);
   const errorSolve = useSelector((state) => state.room.errorSolve);
+  const [idx, setIdx] = useState(null);
 
   if (backgroundImage === '1') {
     backImage = img2;
@@ -65,6 +66,29 @@ function GameRoomPage() {
 
   const setAudioMute = () => {
     dispatch(audioMute());
+  };
+
+  const gameOut = async (props) => {
+    console.log('여기 프롮', props);
+    const kkk = props;
+    console.log('이건 idx', kkk);
+    try {
+      console.log('짜증나 또 다시해야해', idx);
+      const response = await axios.post(
+        APPLICATION_SERVER_URL + '/api/game/out',
+        {},
+        {
+          params: { gameId: kkk },
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'POST'
+          }
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleLeaveSession = () => {
@@ -87,130 +111,7 @@ function GameRoomPage() {
     });
   };
 
-  useEffect(() => {
-    // componentDidMount
-    window.addEventListener('beforeunload', onbeforeunload);
-    // componentWillUnmount
-    return () => {
-      window.removeEventListener('beforeunload', onbeforeunload);
-    };
-  }, []);
-
-  // join 의존성
-  useEffect(() => {
-    if (join) {
-      const OV = new OpenVidu();
-      const session = OV.initSession();
-      console.log('여기가 문제인지 확인하고 싶어', session, OV);
-      dispatch(initOVSession({ OV, session }));
-    }
-  }, [join]);
-
-  //세션이 있다면, 스트림을 넣어 될듯
-  useEffect(() => {
-    if (session) {
-      // On every new Stream received...
-
-      const handleStreamCreated = (event) => {
-        const subscriber = session.subscribe(event.stream, undefined);
-        dispatch(enteredSubscriber(subscriber));
-      };
-      // On every Stream destroyed...
-      const handleStreamDestroyed = (event) => {
-        dispatch(deleteSubscriber(event.stream.streamManager));
-      };
-      // On every asynchronous exception...
-      const handleException = (exception) => {
-        console.warn('exception', exception);
-      };
-
-      session.on('streamCreated', handleStreamCreated);
-      session.on('streamDestroyed', handleStreamDestroyed);
-      session.on('exception', handleException);
-      console.log('디스 시작');
-      dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail, host, dispatch }));
-
-      // Clean-up 함수 등록
-      return () => {
-        console.log('clear');
-        session.off('streamCreated', handleStreamCreated);
-        session.off('streamDestroyed', handleStreamDestroyed);
-        session.off('exception', handleException);
-        dispatch(leaveRoom());
-        dispatch(leaveSession());
-
-        const mySession = session;
-        if (mySession) {
-          mySession.disconnect(); // 예시에서는 disconnect()로 대체하였으나, 이는 OpenVidu에 따라 다르게 적용될 수 있음
-        }
-      };
-    }
-  }, [session]);
-  useEffect(() => {
-    if (publisher !== undefined) {
-      publisher.stream.session.on('signal:gamerank', (e) => {
-        dispatch(setGameRankList(JSON.parse(e.data).gameRankList));
-        dispatch(setRankModal(true));
-      });
-    }
-  }, [start]);
-
-  useEffect(() => {
-    if (rankModal === true) {
-      setTimeout(() => {
-        console.log('axions 요청중이니까 확인해줄래?');
-        dispatch(setGameRankList(null));
-        dispatch(setRankModal(false));
-        dispatch(setJoin(false));
-        dispatch(leaveRoom());
-        dispatch(leaveSession());
-        navigate('/gameroomlist', { replace: true });
-      }, 6000);
-    }
-  }, [gameRankList]);
-
-  useEffect(() => {
-    if (gameFallCount > 1 && gameFallCount < 3) {
-      fallAxios();
-    }
-  }, [gameFallCount]);
-
-  useEffect(() => {
-    if (errorSolve === true) {
-      dispatch(leaveRoom());
-      dispatch(leaveSession());
-      alert('이미 사라진 방입니다.');
-      window.location.href = '/gameroomlist';
-    }
-
-    return () => {
-      if (errorSolve === true) {
-        setErrorSolve(false);
-      }
-    };
-  }, [errorSolve]);
-  // 컴포넌트 마운트, 언마운트 시 session 값 초기화
-
-  useEffect(() => {
-    if (publisher !== undefined) {
-      publisher.stream.session.on('signal:timer', (e) => {
-        dispatch(setStart(true));
-      });
-    }
-    // else if (publisher === undefined) {
-    //   console.log('여기 못찾아....');
-    //   navigate('/');
-    // }
-  }, [publisher]);
-
   //게임방 나가기 시작여부 확인
-  const gameOut = async () => {
-    try {
-      const response = await axios.post(APPLICATION_SERVER_URL + '/api/game/out', {}, { params: { gameId } });
-    } catch (err) {
-      return;
-    }
-  };
 
   const gameStart = async () => {
     try {
@@ -287,7 +188,132 @@ function GameRoomPage() {
       return;
     }
   };
+  useEffect(() => {
+    // componentDidMount
+    window.addEventListener('beforeunload', onbeforeunload);
+    // componentWillUnmount
+    return () => {
+      window.removeEventListener('beforeunload', onbeforeunload);
+    };
+  }, []);
 
+  // join 의존성
+  useEffect(() => {
+    if (join) {
+      const OV = new OpenVidu();
+      const session = OV.initSession();
+      console.log('여기가 문제인지 확인하고 싶어', session, OV);
+      dispatch(initOVSession({ OV, session }));
+    }
+  }, [join]);
+
+  //세션이 있다면, 스트림을 넣어 될듯
+  useEffect(() => {
+    if (session) {
+      // On every new Stream received...
+
+      const handleStreamCreated = (event) => {
+        const subscriber = session.subscribe(event.stream, undefined);
+        dispatch(enteredSubscriber(subscriber));
+      };
+      // On every Stream destroyed...
+      const handleStreamDestroyed = (event) => {
+        dispatch(deleteSubscriber(event.stream.streamManager));
+      };
+      // On every asynchronous exception...
+      const handleException = (exception) => {
+        console.warn('exception', exception);
+      };
+
+      session.on('streamCreated', handleStreamCreated);
+      session.on('streamDestroyed', handleStreamDestroyed);
+      session.on('exception', handleException);
+      console.log('디스 시작');
+      dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail, host, dispatch }));
+
+      // Clean-up 함수 등록
+      return () => {
+        console.log('등록이 되는 순간이 언제일까?');
+        console.log('clear');
+        session.off('streamCreated', handleStreamCreated);
+        session.off('streamDestroyed', handleStreamDestroyed);
+        session.off('exception', handleException);
+        // dispatch(leaveRoom());
+        dispatch(leaveSession());
+
+        const mySession = session;
+        if (mySession) {
+          mySession.disconnect(); // 예시에서는 disconnect()로 대체하였으나, 이는 OpenVidu에 따라 다르게 적용될 수 있음
+        }
+      };
+    }
+  }, [session]);
+  useEffect(() => {
+    if (publisher !== undefined) {
+      publisher.stream.session.on('signal:gamerank', (e) => {
+        dispatch(setGameRankList(JSON.parse(e.data).gameRankList));
+        dispatch(setRankModal(true));
+      });
+    }
+  }, [start]);
+
+  useEffect(() => {
+    return () => {
+      gameOut(gameId);
+    };
+  }, [gameId]);
+
+  useEffect(() => {
+    if (rankModal === true) {
+      setTimeout(() => {
+        console.log('axions 요청중이니까 확인해줄래?');
+        dispatch(setGameRankList(null));
+        dispatch(setRankModal(false));
+        dispatch(setJoin(false));
+        // dispatch(leaveRoom());
+        dispatch(leaveSession());
+        window.location.href = '/gameroomlist';
+      }, 6000);
+    }
+  }, [gameRankList]);
+
+  useEffect(() => {
+    if (gameFallCount > 1 && gameFallCount < 3) {
+      fallAxios();
+    }
+  }, [gameFallCount]);
+
+  useEffect(() => {
+    if (errorSolve === true) {
+      // dispatch(leaveRoom());
+      dispatch(leaveSession());
+      alert('이미 사라진 방입니다.');
+      window.location.href = '/gameroomlist';
+    }
+
+    return () => {
+      if (errorSolve === true) {
+        setErrorSolve(false);
+      }
+    };
+  }, [errorSolve]);
+  // 컴포넌트 마운트, 언마운트 시 session 값 초기화
+
+  useEffect(() => {
+    if (publisher !== undefined) {
+      publisher.stream.session.on('signal:timer', (e) => {
+        dispatch(setStart(true));
+      });
+    }
+    // else if (publisher === undefined) {
+    //   console.log('여기 못찾아....');
+    //   navigate('/');
+    // }
+  }, [publisher]);
+
+  useEffect(() => {
+    console.log('gameId 바뀔때마다 출력해');
+  }, [gameId]);
   return (
     <>
       {rankModal && gameRankList !== null ? (

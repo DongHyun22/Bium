@@ -30,10 +30,8 @@ export const joinSession = createAsyncThunk('joinSession', async (props) => {
     } else if (myUserName && session && token !== null) {
       console.log('9');
       console.log('시작');
-      console.log(token);
 
       await session.connect(token, { clientData: myUserName });
-      console.log(token);
       console.log('중간');
 
       const publisher = await OV.initPublisherAsync(undefined, {
