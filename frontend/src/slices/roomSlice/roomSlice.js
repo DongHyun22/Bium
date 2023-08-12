@@ -51,9 +51,7 @@ export const roomSlice = createSlice({
       state.gameFallCount = state.gameFallCount + action.payload;
     },
     setGameId: (state, action) => {
-      console.log('gameId', action.payload);
       state.gameId = action.payload;
-      console.got('완료후', state.gameId);
     },
     setGameRoomId: (state, action) => {
       state.gameRoomId = action.payload;

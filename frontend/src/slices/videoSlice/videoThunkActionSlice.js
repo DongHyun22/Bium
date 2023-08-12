@@ -22,6 +22,7 @@ export const joinSession = createAsyncThunk('joinSession', async (props) => {
   try {
     console.log('1');
     const token = await getToken({ props, accessToken });
+    console.log('여기토큰', token);
     if (token === null) {
       console.log('토클 널이랑 실행되니?');
       dispatch(leaveRoom());

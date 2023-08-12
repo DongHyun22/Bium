@@ -52,7 +52,6 @@ function GameRoomPage() {
   const gameRankList = useSelector((state) => state.room.gameRankList);
   const rankModal = useSelector((state) => state.room.rankModal);
   const errorSolve = useSelector((state) => state.room.errorSolve);
-  const [idx, setIdx] = useState(null);
 
   if (backgroundImage === '1') {
     backImage = img2;
@@ -73,7 +72,6 @@ function GameRoomPage() {
     const kkk = props;
     console.log('이건 idx', kkk);
     try {
-      console.log('짜증나 또 다시해야해', idx);
       const response = await axios.post(
         APPLICATION_SERVER_URL + '/api/game/out',
         {},
