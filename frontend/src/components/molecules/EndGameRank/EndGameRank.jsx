@@ -1,7 +1,8 @@
 import React from 'react';
 
 const EndGameRank = (props) => {
-  const nickname = props.rank.nickname;
+  console.log(props);
+  const nickname = props.rank.userNickname;
   const biumTime = props.rank.gameRecord;
   return (
     <>

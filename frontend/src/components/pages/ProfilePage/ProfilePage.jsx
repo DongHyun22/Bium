@@ -8,8 +8,7 @@ import useGetBiumTime from '../../../hooks/TimeInquery';
 import axios from 'axios';
 import { persistor } from '../../../store/store';
 import emptyprofile from '../../../asset/backgroudimage/emptyprofile.png';
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export function ProfilePage() {
   const { userEmail } = useParams();
@@ -107,17 +106,14 @@ export function ProfilePage() {
           const imgType = profileResponse.data.imgType;
           const originalFile = profileResponse.data.originalFile;
 
-          const getProfileResponse = await axios.get(
-            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
-            { responseType: 'blob' }
-          );
+          const getProfileResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
 
           const imgSrc = URL.createObjectURL(getProfileResponse.data);
           dispatch(setImageId(imgSrc));
 
           console.log('seTtidmfd', setImageId(imgSrc));
           console.log('조회 성공', imgSrc);
-          
+
           await saveProfile;
         } else {
           console.log('서버 응답 오류');
@@ -164,10 +160,7 @@ export function ProfilePage() {
           const imgType = disturbResponse.data.imgType;
           const originalFile = disturbResponse.data.originalFile;
 
-          const getDisturbResponse = await axios.get(
-            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
-            { responseType: 'blob' }
-          );
+          const getDisturbResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
 
           const imgSrc = URL.createObjectURL(getDisturbResponse.data);
           dispatch(setDisturb(imgSrc));
@@ -360,25 +353,14 @@ export function ProfilePage() {
           <h1>ProfilePage</h1>
         </div>
       </div>
-    <div className={styles.sideLeft}>
+      <div className={styles.sideLeft}>
         {showProfile ? (
           <div>
             <h3>프로필 이미지</h3>
             <div>
-              <input
-                name="file"
-                type="file"
-                accept="image/*"
-                className={styles.imageInput}
-                ref={profileImageInput}
-                onChange={saveProfile}
-              ></input>
+              <input name="file" type="file" accept="image/*" className={styles.imageInput} ref={profileImageInput} onChange={saveProfile}></input>
               <button onClick={onClickProfileUpload} className={styles.imageUpload}>
-                {savedProfileImage ? (
-                  <img src={savedProfileImage} alt="미리보기" />
-                ) : (
-                  <img src={emptyprofile} alt="미리보기" />
-                )}
+                {savedProfileImage ? <img src={savedProfileImage} alt="미리보기" /> : <img src={emptyprofile} alt="미리보기" />}
               </button>
             </div>
             <button onClick={sendToProfile}>이미지 저장</button>
@@ -390,20 +372,9 @@ export function ProfilePage() {
           <div>
             <h3>방해 이미지</h3>
             <div>
-              <input
-                name="file"
-                type="file"
-                accept="image/*"
-                className={styles.imageInput}
-                ref={disturbImageInput}
-                onChange={saveDisturb}
-              ></input>
+              <input name="file" type="file" accept="image/*" className={styles.imageInput} ref={disturbImageInput} onChange={saveDisturb}></input>
               <button onClick={onClickDisturbUpload} className={styles.imageUpload}>
-                {savedDisturbImage ? (
-                  <img src={savedDisturbImage} alt="미리보기" />
-                ) : (
-                  <img src={emptyprofile} alt="미리보기" />
-                )}
+                {savedDisturbImage ? <img src={savedDisturbImage} alt="미리보기" /> : <img src={emptyprofile} alt="미리보기" />}
               </button>
             </div>
             <button onClick={sendToDisturb}>이미지 저장</button>
@@ -416,7 +387,7 @@ export function ProfilePage() {
         <div className={styles.myBium}>
           <h3>{savedNickname}</h3>
           <h3>오늘 비움량 : {todayBium}</h3>
-          <h3>총 비움량 : {totalBium}</h3> 
+          <h3>총 비움량 : {totalBium}</h3>
           <button className={styles.modifyButton} onClick={openModal}>
             회원 정보 수정
           </button>
@@ -440,32 +411,17 @@ export function ProfilePage() {
               <br />
               <label>
                 기존비밀번호:
-                <input
-                  type="password"
-                  autoComplete="off"
-                  value={existingPassword}
-                  onChange={(e) => setExistingPassword(e.target.value)}
-                />
+                <input type="password" autoComplete="off" value={existingPassword} onChange={(e) => setExistingPassword(e.target.value)} />
               </label>
               <br />
               <label>
                 비밀번호:
-                <input
-                  type="password"
-                  autoComplete="off"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
+                <input type="password" autoComplete="off" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
               </label>
               <br />
               <label>
                 비밀번호확인:
-                <input
-                  type="password"
-                  autoComplete="off"
-                  value={newpasswordConfirm}
-                  onChange={(e) => setNewPasswordConfirm(e.target.value)}
-                />
+                <input type="password" autoComplete="off" value={newpasswordConfirm} onChange={(e) => setNewPasswordConfirm(e.target.value)} />
               </label>
             </form>
             <button onClick={modifyUserInfo}>수정하기</button>
