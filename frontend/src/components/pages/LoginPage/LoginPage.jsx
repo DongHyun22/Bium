@@ -84,7 +84,9 @@ function LoginPage() {
   return (
     <div className={styles.loginpagebg}>
       <div className={styles.photo}>
-        <h1 className={styles.titlebium}>비 움</h1>
+        <h1 className={styles.titlebium} onClick={goToMainPage}>
+          비 움
+        </h1>
         <div className={styles.circle}>
           <div className={styles.circlelogo}></div>
         </div>
