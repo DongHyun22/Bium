@@ -377,7 +377,6 @@ export function ProfilePage() {
         </div>
       </div>
       <div className={styles.sideLeft}>
-      <div className={styles.sideLeft}>
         {showProfile ? (
           <div>
             <h3>프로필 이미지</h3>
