@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
 import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import { setGameFallCount, setGameRankList, setMySessionId, setRankModal, setStart } from '../../../slices/roomSlice/roomSlice';
+import { setGameFallCount, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
@@ -23,17 +23,19 @@ function GameRoomPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const customSessionId = location.state;
-  const userEmail = useSelector((state) => state.user.userEmail);
-
+  const mySessionId = useSelector((state) => state.room.mySessionId);
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
+  if (location.state) {
+    const customSessionId = location.state.customSessionId;
+    const gameTitle = location.state.gameRoomTitle;
+    dispatch(setMySessionId(customSessionId));
+    dispatch(setRoomTitle(gameTitle));
+  }
+
+  const userEmail = useSelector((state) => state.user.userEmail);
   const roomPassword = useSelector((state) => state.room.roomPassword);
   const host = useSelector((state) => state.room.host);
 
-  const mySessionId = useSelector((state) => state.room.mySessionId);
-  if (location.state) {
-    dispatch(setMySessionId(location.state.customSessionId));
-  }
   const myUserName = useSelector((state) => state.user.nickname);
   const maxPeople = useSelector((state) => state.room.maxPeople);
   const backgroundImage = useSelector((state) => state.room.backgroundImage);
@@ -69,7 +71,7 @@ function GameRoomPage() {
       session.disconnect();
       gameOut();
       dispatch(leaveSession());
-      setJoin(false);
+      dispatch(setJoin(false));
       navigate('/gameroomlist');
     }
   };
@@ -89,7 +91,7 @@ function GameRoomPage() {
     if (join) {
       const OV = new OpenVidu();
       const session = OV.initSession();
-
+      console.log('여기가 문제인지 확인하고 싶어', session, OV);
       dispatch(initOVSession({ OV, session }));
     }
   }, [join]);
@@ -183,6 +185,7 @@ function GameRoomPage() {
 
   const endGame = async () => {
     try {
+      console.log('몇명만 해?');
       const response = await axios.post(
         APPLICATION_SERVER_URL + '/api/game/delete',
         {},
@@ -226,10 +229,13 @@ function GameRoomPage() {
         }
       );
       dispatch(setStart(false));
-      // dispatch(setGameFallCount(gameFallCount));
+      console.log(response.data);
+      console.log(typeof response.data);
       if (typeof response.data === 'object') {
+        console.log('누구누구 요청해?', typeof response.data === 'object');
         const ranking = response.data;
         modalSignal({ publisher, ranking });
+        endGame();
       }
     } catch (err) {
       return;
@@ -247,7 +253,7 @@ function GameRoomPage() {
   useEffect(() => {
     if (rankModal === true) {
       setTimeout(() => {
-        endGame();
+        console.log('axions 요청중이니까 확인해줄래?');
         dispatch(setGameRankList(null));
         dispatch(setRankModal(false));
         dispatch(setJoin(false));

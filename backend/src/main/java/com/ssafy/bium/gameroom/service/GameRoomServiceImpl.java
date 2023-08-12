@@ -275,7 +275,7 @@ public class GameRoomServiceImpl implements GameRoomService {
             }
         }
         redisTemplate.delete("gameRoom:" + gameRoomId);
-        redisTemplate.opsForSet().remove("GameRoom", Integer.parseInt(gameRoomId));
+        redisTemplate.opsForSet().remove("gameRoom", Integer.parseInt(gameRoomId));
 //
 //        String hashKey = "customSessionId"; // 여기에 해당 키에 대한 해시 키 값을 지정하세요.
 //
