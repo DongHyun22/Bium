@@ -50,14 +50,15 @@
 
 .titlebium {
   margin-left: 10px;
-  font-size: 40px;
+  font-size: 50px;
   color: aliceblue;
+  cursor: pointer;
 }
 
 .circle {
   margin: auto;
-  width: 150px;
-  height: 150px;
+  width: 25%;
+  height: 25%;
   border-radius: 50%;
   background-color: black;
   display: flex;
@@ -66,9 +67,10 @@
 }
 
 .circlelogo {
-  width: 100px;
-  height: 100px;
-  /* background: url('비움 아이콘 넣기'); */
+  width: 60%;
+  height: 60%;
+  background: url('../../../asset/logoimage/biumlogo.png');
+  background-size: cover;
 }
 
 .rightbox {
