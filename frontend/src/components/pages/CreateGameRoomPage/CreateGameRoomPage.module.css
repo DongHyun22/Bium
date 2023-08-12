@@ -9,17 +9,110 @@
     font-family: GangwonEdu_OTFBoldA;
 }
 
-.container {
+.container { /* 이미지와 게임방 생성 전체 컨테이너 */
     display: grid;
     grid-template-columns: 1fr 2fr;
     width: 100%;
     height: 100vh;
-  
+    background-color: #f7f7f7;
 }
 
-.photo {
+.photo { /* 이미지 */
     background: url('../../../asset/backgroudimage/firebase4.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+.joinDialog { /* 게임방 생성 쪽 박스 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* 컨테이너 내부의 아이템을 가로 방향으로 정렬 */
+}
+
+.titleCreateRoom { /* 게임방 생성 글씨 */
+    font-size: 40px;
+    position: absolute;
+    top: 50px;
+    /* margin-left: 2%; */
+    margin-left: 25px;
+    transform: translateY(-60%);
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
+    width: 60%;
+}
+
+.form { /* 생성 폼 */
+    margin-bottom: 0;
+}
+
+.formGroup { /* label과 input 혹은 select 박스 */
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    grid-template-columns: 1fr;
+    /* 각 요소 사이에 간격 추가 */
+    margin-bottom: 10px;
+}
+
+.label {
+    font-size: 30px;
+    margin-top: 0;
+    margin-left: 0;
+}
+
+.password {
+    font-size: 20px;
+    margin: 0;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    /* 원하는 가로 크기로 변경 */
+    height: 20px;
+    /* 원하는 세로 크기로 변경 */
+    margin-left: 20px;
+}
+
+.formInput {
+    font-size: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    /* width: 80%; */
+    width: 700px;
+}
+
+.formSelect {
+    font-size: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    /* width: 90%; */
+    width: 742px;
+    height: 65px;
+    line-height: 25px;
+    overflow: visible;
+}
+
+.formSelect > option {
+    inline-size: 25px;
+}
+
+.formButton{ /* 버튼 감싸는 p 태그 */
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+}
+
+.joinButton { /* 게임방 생성 버튼 */
+    font-size: 20px;
+    padding: 15px 40px;
+    background-color: rgb(126, 124, 124);
+    color: aliceblue;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 40px;
+    /* margin-bottom: 20px; */
+    width: 30%;
 }
