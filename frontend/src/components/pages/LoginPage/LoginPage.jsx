@@ -40,9 +40,7 @@ function LoginPage() {
     dispatch(userLogin(user))
       .then(() => {
         dispatch(getUserInfo(userEmail));
-        // if (isLogin === true) {
-        //   navigate('/');
-        // }
+        navigate('/gameroomlist');
       })
       .catch((error) => {
         console.error('Login failed:', error);
