@@ -4,6 +4,7 @@ import GameRoomListItem from './GameRoomListItemPage';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from './GameRoomList.module.css';
+import { Fab, Action } from 'react-tiny-fab';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
@@ -60,6 +61,21 @@ export const GameRoomListPage = () => {
           </>
         )}
       </div>
+
+      
+      <Fab        
+        alwaysShowTitle={true}
+        icon="👤">
+
+        <Action
+          text="마이페이지">
+          🙂            
+        </Action>
+        <Action
+          text="로그아웃">
+          💨
+        </Action>
+      </Fab>
     </div>
   );
 };
