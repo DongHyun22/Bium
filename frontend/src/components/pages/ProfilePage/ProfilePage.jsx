@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -238,14 +238,11 @@ export function ProfilePage() {
           }
         }
       );
-      console.log('비밀번호 확인', response.status);
       if (response.status === 200) {
         return true;
       }
-      console.log(response.status);
       return false;
     } catch (error) {
-      console.log('너 오류난 거야', error);
       return false;
     }
   };
@@ -255,7 +252,6 @@ export function ProfilePage() {
 
     const validatePassword = await checkPassword();
 
-    console.log(validatePassword);
     if (validatePassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
       return;
@@ -280,7 +276,6 @@ export function ProfilePage() {
         }
       });
 
-      console.log(response);
       if (response.status === 200) {
         dispatch(setNickname(name));
         // setName(updatedNickname);
@@ -288,7 +283,6 @@ export function ProfilePage() {
         closeModal();
       }
     } catch (error) {
-      console.error('회원 정보 수정에 실패하였습니다.', error);
     }
   };
 
@@ -298,7 +292,6 @@ export function ProfilePage() {
 
     const validatePassword = await checkPassword();
 
-    console.log(validatePassword);
     if (validatePassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
       return;
@@ -317,17 +310,12 @@ export function ProfilePage() {
           }
         }
       );
-      console.log(response.data);
       if (response.data === 0) {
         sessionStorage.removeItem('accessToken');
         navigate('/');
       }
     } catch (error) {
-      if (error.response) {
-        console.log(error.response.data);
-      } else {
-        console.log(error.message);
-      }
+      
       return error;
     }
   };
