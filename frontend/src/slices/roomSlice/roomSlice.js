@@ -46,16 +46,16 @@ export const roomSlice = createSlice({
       state.start = action.payload;
     },
     setRoomTitle: (state, action) => {
-      state.roomTitle = action.payload.gameRoomTitle;
+      state.roomTitle = action.payload;
     },
     setRoomPassword: (state, action) => {
-      state.roomPassword = action.payload.roompassword;
+      state.roomPassword = action.payload;
     },
     setMySessionId: (state, action) => {
       state.mySessionId = action.payload;
     },
     setMyUserName: (state, action) => {
-      state.myUserName = action.payload.myUserName;
+      state.myUserName = action.payload;
     },
     setMaxPeople: (state, action) => {
       state.maxPeople = action.payload;

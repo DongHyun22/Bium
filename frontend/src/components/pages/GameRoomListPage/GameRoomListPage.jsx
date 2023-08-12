@@ -19,6 +19,8 @@ export const GameRoomListPage = () => {
       // axios response
       // 방제목, 인원
     } catch (err) {
+      console.log('오류 떴어 .....해결하렴....');
+      console.log(err);
       return;
     }
   };
@@ -32,22 +34,19 @@ export const GameRoomListPage = () => {
         <div className={styles.title}>
           <h1>게임방 목록</h1>
           <Link to="/createroom">
-          <a className={styles.BtnGameCreate}>
-            <svg width="20" height="20" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-              <path fill="currentColor" d="M228 128a12 12 0 0 1-12 12h-76v76a12 12 0 0 1-24 0v-76H40a12 12 0 0 1 0-24h76V40a12 12 0 0 1 24 0v76h76a12 12 0 0 1 12 12Z"/>
-            </svg>
-          </a>
+            <div className={styles.BtnGameCreate}>
+              <svg width="20" height="20" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M228 128a12 12 0 0 1-12 12h-76v76a12 12 0 0 1-24 0v-76H40a12 12 0 0 1 0-24h76V40a12 12 0 0 1 24 0v76h76a12 12 0 0 1 12 12Z" />
+              </svg>
+            </div>
           </Link>
         </div>
         <div className={styles.search}>
           <input type="text" className={styles.search__input} placeholder="게임방 검색"></input>
-          <button className={styles.search__button}>
-            🔍  
-          </button>
+          <button className={styles.search__button}>🔍</button>
         </div>
       </div>
       <div className={styles.containerItems}>
-
         {allRooms !== [] ? (
           <>
             {allRooms.map((allRoom, index) => {
