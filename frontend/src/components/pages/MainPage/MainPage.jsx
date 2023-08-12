@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import styles from './MainPage.module.css';
-import RouteLink from '../../../routes/Route';
 import NavBar from '../../../components/atoms/NavBar/NavBar';
 
 export const MainPage = () => {
@@ -20,7 +19,6 @@ export const MainPage = () => {
 
   return (
     <div>
-      {/* <h1>MainPage</h1> */}
       <div className={styles.mainpagebg}>
         <div className={styles.photo}>
           <button className={styles.biumlogobutton} onClick={goToHome}></button>
