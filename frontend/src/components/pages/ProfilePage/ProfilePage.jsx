@@ -109,10 +109,7 @@ export function ProfilePage() {
           const imgType = profileResponse.data.imgType;
           const originalFile = profileResponse.data.originalFile;
 
-          const getProfileResponse = await axios.get(
-            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
-            { responseType: 'blob' }
-          );
+          const getProfileResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
 
           const imgSrc = URL.createObjectURL(getProfileResponse.data);
           dispatch(setImageId(imgSrc));
@@ -165,10 +162,7 @@ export function ProfilePage() {
           const imgType = disturbResponse.data.imgType;
           const originalFile = disturbResponse.data.originalFile;
 
-          const getDisturbResponse = await axios.get(
-            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
-            { responseType: 'blob' }
-          );
+          const getDisturbResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
 
           const imgSrc = URL.createObjectURL(getDisturbResponse.data);
           dispatch(setDisturb(imgSrc));
@@ -383,6 +377,7 @@ export function ProfilePage() {
         </div>
       </div>
       <div className={styles.sideLeft}>
+      <div className={styles.sideLeft}>
         {showProfile ? (
           <div>
             <h3>프로필 이미지</h3>
@@ -396,11 +391,7 @@ export function ProfilePage() {
                 onChange={handleProfileImage}
               ></input>
               <button onClick={onClickProfileUpload} className={styles.imageUpload}>
-                {savedProfileImage ? (
-                  <img src={savedProfileImage} alt="미리보기" />
-                ) : (
-                  <img src={emptyprofile} alt="미리보기" />
-                )}
+                {savedProfileImage ? <img src={savedProfileImage} alt="미리보기" /> : <img src={emptyprofile} alt="미리보기" />}
               </button>
             </div>
             {/* <button onClick={sendToProfile}>이미지 저장</button>
@@ -421,11 +412,7 @@ export function ProfilePage() {
                 onChange={handleDisturbImage}
               ></input>
               <button onClick={onClickDisturbUpload} className={styles.imageUpload}>
-                {savedDisturbImage ? (
-                  <img src={savedDisturbImage} alt="미리보기" />
-                ) : (
-                  <img src={emptyprofile} alt="미리보기" />
-                )}
+                {savedDisturbImage ? <img src={savedDisturbImage} alt="미리보기" /> : <img src={emptyprofile} alt="미리보기" />}
               </button>
             </div>
             {/* <button onClick={sendToDisturb}>이미지 저장</button>
@@ -443,6 +430,7 @@ export function ProfilePage() {
         <div className={styles.myBium}>
           <h3>{savedNickname}</h3>
           <h3>오늘 비움량 : {todayBium}</h3>
+          <h3>총 비움량 : {totalBium}</h3>
           <h3>총 비움량 : {totalBium}</h3>
           <button className={styles.modifyButton} onClick={openModal}>
             회원 정보 수정
@@ -481,7 +469,7 @@ export function ProfilePage() {
               </label>
               <br />
               <label>
-                비밀번호
+                비밀번호:
                 <input
                   type="password"
                   autoComplete="off"
@@ -491,7 +479,7 @@ export function ProfilePage() {
               </label>
               <br />
               <label>
-                비밀번호확인
+                비밀번호확인:
                 <input
                   type="password"
                   autoComplete="off"
