@@ -13,12 +13,14 @@
 
 .rankingTitle > p {
   text-align: center;
-  font-size: 2em;
-  font-weight: 750;
+  font-size: 40px;
+  font-weight: 1000;
   z-index: 10;
-  background-color: #ffffff ;
+  color: #ffffff;
+  background-color: #04254E ;
   border-radius: 10px;
   font-family: 'GangwonEdu_OTFBoldA';  
+  padding: 10px 5px 10px;
 }
 
 .myRanking {

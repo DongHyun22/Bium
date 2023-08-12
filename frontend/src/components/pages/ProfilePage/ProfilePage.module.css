@@ -8,6 +8,8 @@
 .gridContainer {
   display: grid;
   grid-template-columns: 2fr 3fr;
+  width: 100%;
+  height: 100%;
   gap: 16px;
   grid-template-areas:
     'header header'
@@ -15,7 +17,11 @@
   position: relative; /* relative positioning for the parent div */
   background: url('../../../asset/backgroudimage/firebase1.jpg');
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow-y: hidden;
 }
+
 .gridContainer::before {
   content: ''; /* empty content to create a pseudo-element */
   position: absolute;
@@ -23,10 +29,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-position: center;
-  background-repeat: no-repeat;
   opacity: 0.5; /* adjust the transparency level */
   pointer-events: none; /* ensure the overlay doesn't interfere with user interactions */
+}
+
+.gridContainer::-webkit-scrollbar {
+  display: none;
 }
 
 .header {
@@ -37,7 +45,7 @@
   grid-area: side-left;
   background-color: transparent;
   display: grid;
-  grid-template-rows: 8fr 1fr 10fr 1fr;
+  grid-template-rows: 4fr 1fr 5fr;
   justify-content: center;
   z-index: 5;
 }
@@ -56,12 +64,12 @@
   grid-template-columns: 1fr;
   top: 50%;
   left: 50%;
-  width: 40%;
+  width: 25%;
   transform: translate(-50%, -50%);
   background-color: #ffffff;
   border-radius: 10px;
   padding: 2em;
-  box-shadow: 0 0 4px black;
+  box-shadow: 0 0 10px black;
   z-index: 1000;
 }
 
@@ -71,13 +79,18 @@
   flex-direction: column;
   top: 50%;
   left: 50%;
-  width: 40%;
+  width: 21%;
+  justify-content: center;
   transform: translate(-50%, -50%);
   background-color: #ffffff;
   border-radius: 10px;
   padding: 2em;
   box-shadow: 0 0 4px black;
-  z-index: 1000;
+  z-index: 1001;
+}
+
+.signOutModal > label > input[type='password'] {
+  width: 83%;
 }
 
 .modifyForm > label {
@@ -95,14 +108,14 @@
 
 .signOutModal > label {
   text-align: start;
-  margin: 1em 0em 1em;
+  margin: 1em 1em 1em 0em;
 }
 
-.signOutModal > label > input {
+.signOutModal > label > input[type='password'] {
   font-size: 1.25em;
   font-family: 'GangwonEdu_OTFBoldA';
   border-radius: 10px;
-  width: 90%;
+  width: 100%;
   outline: none;
   background-color: #ffffff;
   text-align: start;
@@ -110,7 +123,7 @@
 }
 
 .signOutModal > div {
-  width: 90%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
@@ -150,12 +163,15 @@ img {
   width: 200px;
   height: 200px;
   object-fit: cover;
+  border-radius: 100%;
 }
 
 .imageUpload {
+  width: 200px;
+  height: 200px;
   background-color: white;
-  /* border-radius: 20%; */
-  /* border: none; */
+  border-radius: 100%;
+  border: none;
 }
 
 .imageInput {
@@ -214,8 +230,28 @@ button:active {
   box-shadow: 0 0 4px black;
 }
 
+.signOutButton {
+  display: flex;
+  justify-content: space-between;
+}
+
+.signOutButton > button {
+  background-color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 20px 10px 15px;
+  cursor: pointer;
+  width: 25%;
+  transition: transform 0.3s ease; /* Transition effect for the press effect */
+  box-shadow: 0 0 4px black;
+}
+
 button:active {
   transform: scale(0.95); /* Press effect when the button is active */
+}
+
+.sideLeft > div:nth-child(1) {
+  height: 300px;
 }
 
 .myBium {
@@ -229,3 +265,73 @@ button:active {
   color: aliceblue;
   text-align: center;
 }
+
+/* 토글 스위치 입니당~ */
+.toggleWrapper {
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.toggleWrapper > label {
+  margin: 0px 5px 0px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  display: flex;
+  justify-content: center;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 15px;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 15px;
+}
+
+input:checked + .slider {
+  background-color: #04254e;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+/* 토글 스위치 스타일 끝 */
