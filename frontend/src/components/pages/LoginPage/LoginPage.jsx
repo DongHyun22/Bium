@@ -133,26 +133,30 @@ function LoginPage() {
         </div>
         <div>
           {passwordModal && (
-            <div className={styles.modal}>
-              <h2>비밀번호 찾기</h2>
+            <div className={styles.findPwModal}>
+              <h2 className={styles.titleFindPw}>비밀번호 찾기</h2>
+              <hr className={styles.hrFindPw}></hr>
               <form>
-                <label>
+                <label className={styles.noMargin}>
                   이메일
                   <input
                     type="text"
                     value={passwordEmail}
-                    className={styles.passwordinput}
+                    className={styles.inputFindPw}
+                    placeholder="회원가입한 이메일을 입력해주세요."
                     onChange={(e) => setPasswordEmail(e.target.value)}
                   ></input>
                 </label>
               </form>
               <br></br>
-              <button className={styles.overlay} onClick={findPassword}>
-                전송
-              </button>
-              <button className={styles.overlay} onClick={closeModal}>
-                닫기
-              </button>
+              <div className={styles.containerBtnFindPw}>
+                <button className={styles.btnSubmitFindPw} onClick={findPassword}>
+                  전송
+                </button>
+                <button className={styles.btnCloseFindPw} onClick={closeModal}>
+                  닫기
+                </button>
+              </div>             
             </div>
           )}
         </div>
