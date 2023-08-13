@@ -5,29 +5,73 @@
   font-style: normal;
 }
 
-.modal {
+.findPwModal {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #eeeeee;
+  display: flex;
+  flex-direction: column;  
+  background-color: #fff;
   padding: 50px;
   z-index: 1000;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 5px;
+  box-shadow: 7px 7px 7px rgba(0, 0, 0, 0.3);
 }
 
-.overlay {
-  top: 0;
-  left: 0;
+.titleFindPw {
+  font-size: 30px;
+  margin: 0px;
+}
+
+.hrFindPw {
   width: 100%;
+  border: 1px solid black;
+  margin-bottom: 40px;
+}
+
+
+
+.containerBtnFindPw {
+  display: flex;  
+  justify-content: space-evenly;
+  width: 600px;
+  margin-top: 40px; 
+}
+
+.btnSubmitFindPw {
+  width: 45%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
   z-index: 1000;
-  color: aliceblue;
-  padding: 5px;
+  padding: 15px;
   margin: 2px;
   border-radius: 5px;
+  font-size: 20px;
+  border: none;
+  background-color: rgb(126, 124, 124);
+  color: aliceblue;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
 }
+
+.btnCloseFindPw {
+  width: 45%;
+  height: 100%;
+  z-index: 1000;
+  padding: 15px;
+  margin: 2px;
+  border-radius: 5px;
+  font-size: 20px;
+  border: none;
+  background-color: #f0f0f0;
+  color: black;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+.btnSubmitFindPw:hover, .btnCloseFindPw:hover {
+  cursor: pointer;
+}
+
 
 .loginpagebg {
   height: 100vh;
@@ -176,6 +220,7 @@ input::placeholder {
   display: flex;
   justify-content: flex-end;
   margin-right: 13%;
+  margin-top: 50px;
   cursor: pointer;
   text-decoration: underline;
   font-size: 20px;
