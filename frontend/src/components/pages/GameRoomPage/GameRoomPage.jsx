@@ -10,10 +10,13 @@ import { leaveRoom, setErrorSolve, setGameFallCount, setGameRankList, setMySessi
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
-import styles from './GamRoomPage.module.css';
+import styles from './GameRoomPage.module.css';
 import EndGameRank from '../../molecules/EndGameRank/EndGameRank';
+
 import img1 from '../../../asset/backgroudimage/firebase1.jpg';
 import img2 from '../../../asset/backgroudimage/firebase2.gif';
+
+import { IoLogOutOutline } from 'react-icons/io5';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 let backImage = '';
@@ -190,9 +193,9 @@ function GameRoomPage() {
     // componentDidMount
     window.addEventListener('beforeunload', onbeforeunload);
     // componentWillUnmount
-    return () => {
-      window.removeEventListener('beforeunload', onbeforeunload);
-    };
+    // return () => {
+    //   window.removeEventListener('beforeunload', onbeforeunload);
+    // };
   }, []);
 
   // join 의존성
@@ -230,20 +233,20 @@ function GameRoomPage() {
       dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail, host, dispatch }));
 
       // Clean-up 함수 등록
-      return () => {
-        console.log('등록이 되는 순간이 언제일까?');
-        console.log('clear');
-        session.off('streamCreated', handleStreamCreated);
-        session.off('streamDestroyed', handleStreamDestroyed);
-        session.off('exception', handleException);
-        // dispatch(leaveRoom());
-        dispatch(leaveSession());
+      // return () => {
+      //   console.log('등록이 되는 순간이 언제일까?');
+      //   console.log('clear');
+      //   session.off('streamCreated', handleStreamCreated);
+      //   session.off('streamDestroyed', handleStreamDestroyed);
+      //   session.off('exception', handleException);
+      //   // dispatch(leaveRoom());
+      //   dispatch(leaveSession());
 
-        const mySession = session;
-        if (mySession) {
-          mySession.disconnect(); // 예시에서는 disconnect()로 대체하였으나, 이는 OpenVidu에 따라 다르게 적용될 수 있음
-        }
-      };
+      //   const mySession = session;
+      //   if (mySession) {
+      //     mySession.disconnect(); // 예시에서는 disconnect()로 대체하였으나, 이는 OpenVidu에 따라 다르게 적용될 수 있음
+      //   }
+      // };
     }
   }, [session]);
   useEffect(() => {
@@ -322,49 +325,54 @@ function GameRoomPage() {
           ))}
         </>
       ) : (
-        <div>
+        <div className="">
           {/* join 이후 화면 */}
           {session !== undefined ? (
-            <div id="session" style={{ backgroundImage: `url(${backImage})` }}>
+            // style={{ backgroundImage: `url(${backImage})` }}
+
+            <div className={styles.gameroom}>
+              {host && start === false ? (
+                <button
+                  className={styles.gameStartbutton}
+                  onClick={() => {
+                    gameStart();
+                    startSignal(publisher);
+                  }}
+                >
+                  Start
+                </button>
+              ) : null}
               <div id="session-header">
-                <h1 id="session-title">{gameRoomTitle}</h1>
+                <span className={styles.gameroomTitle} id="session-title">
+                  {gameRoomTitle}
+                </span>
               </div>
-              <div id="session-sidebar">
-                <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={handleLeaveSession} value="Leave session" />
-                <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
-                {host === true ? <button>수정</button> : null}
+              <div id="session-sidebar">{host === true ? <button>수정</button> : null}</div>
+
+              <div className={styles.backimage}> </div>
+              <div className={styles.playerVideosBox} id="video-container">
+                <h3>{start ? <> 탈락 카운트 :{gameFallCount}</> : null}</h3>
+                <button className={styles.gameoutButton} onClick={handleLeaveSession}>
+                  <IoLogOutOutline className={styles.gameoutIcon}></IoLogOutOutline>
+                  <p className={styles.gameoutText}>나가기</p>
+                </button>
+
+                {publisher !== undefined ? (
+                  <>
+                    <UserVideoComponent streamManager={publisher} />
+                  </>
+                ) : (
+                  <h1>같이할 동료들을 연결 중</h1>
+                )}
+                {subscribers.map((sub) => (
+                  <div key={sub.id} className="stream-container col-md-6 col-xs-6">
+                    <span>{sub.id}</span>
+                    <UserVideoComponent streamManager={sub} />
+                  </div>
+                ))}
               </div>
 
-              <h3>당신의 탈락 카운트{start ? <> {gameFallCount}</> : null}</h3>
-              <div className={styles.backimage}>
-                <div id="video-container">
-                  {publisher !== undefined ? (
-                    <div className="stream-container col-md-6 col-xs-6">
-                      <UserVideoComponent streamManager={publisher} />
-                    </div>
-                  ) : (
-                    <h1>같이할 동료들을 연결 중</h1>
-                  )}
-                  {subscribers.map((sub) => (
-                    <div key={sub.id} className="stream-container col-md-6 col-xs-6">
-                      <span>{sub.id}</span>
-                      <UserVideoComponent streamManager={sub} />
-                    </div>
-                  ))}
-                </div>
-                {host ? (
-                  <button
-                    onClick={() => {
-                      gameStart();
-                      startSignal(publisher);
-                    }}
-                  >
-                    Start
-                  </button>
-                ) : null}
-
-                {start ? <Timer></Timer> : null}
-              </div>
+              <Timer></Timer>
             </div>
           ) : null}
         </div>

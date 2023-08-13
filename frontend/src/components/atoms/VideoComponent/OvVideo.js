@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { setGameFallCount } from '../../../slices/roomSlice/roomSlice';
+import styles from './OvVideo.module.css';
 
 const OpenViduVideoComponent = (props) => {
   const dispatch = useDispatch();
@@ -10,6 +11,11 @@ const OpenViduVideoComponent = (props) => {
   const join = useSelector((state) => state.video.join);
   const publisher = useSelector((state) => state.video.publisher);
   const start = useSelector((state) => state.room.start);
+
+  const getNicknameTag = () => {
+    return JSON.parse(props.streamManager.stream.connection.data).clientData;
+  };
+
   //모델 불러오기
   const loadModels = () => {
     const MODEL_URL = process.env.PUBLIC_URL + '/models';
@@ -60,7 +66,12 @@ const OpenViduVideoComponent = (props) => {
 
   return (
     <>
-      <video id="localVideo" audio="false" autoPlay={true} ref={videoRef} />
+      <div className={styles.userVideo}>
+        <video className={styles.userVideoTag} id="localVideo" audio="false" autoPlay={true} ref={videoRef} />
+        <div className={styles.userNickname}>
+          <p>{getNicknameTag()}</p>
+        </div>
+      </div>
     </>
   );
 };
