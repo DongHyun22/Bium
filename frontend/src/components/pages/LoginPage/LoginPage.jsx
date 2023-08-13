@@ -137,12 +137,12 @@ function LoginPage() {
               <h2 className={styles.titleFindPw}>비밀번호 찾기</h2>
               <hr className={styles.hrFindPw}></hr>
               <form>
-                <label className={styles.noMargin}>
+                <label className={styles.labelFindPw}>
                   이메일
                   <input
                     type="text"
                     value={passwordEmail}
-                    className={styles.inputFindPw}
+                    className={styles.logininput}
                     placeholder="회원가입한 이메일을 입력해주세요."
                     onChange={(e) => setPasswordEmail(e.target.value)}
                   ></input>
