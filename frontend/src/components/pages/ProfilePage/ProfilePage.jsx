@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -35,7 +35,7 @@ export function ProfilePage() {
   const [newpasswordConfirm, setNewPasswordConfirm] = useState('');
   const todayBium = useGetBiumTime(savedTodayBium);
   const totalBium = useGetBiumTime(savedTotalBium);
-  const [profileimage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
   const [disturbImage, setDisturbImage] = useState(null);
 
   // 프로필 이미지와 방해이미지가 바뀌는 상태를 관리하는 state
@@ -51,37 +51,32 @@ export function ProfilePage() {
   const saveProfile = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
-    console.log('file', file);
     if (file) {
       dispatch(setImageId(URL.createObjectURL(file)));
       setProfileImage(file);
-      console.log('프로필 이미지', file);
+      return true;
     }
+    return false;
   };
 
   // 방해 이미지 저장
   const saveDisturb = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
-    console.log('file', file);
     if (file) {
       dispatch(setDisturb(URL.createObjectURL(file)));
       setDisturbImage(file);
-      console.log('방해 이미지', file);
     }
   };
 
   // 프로필 이미지 전송
-  const sendToProfile = async (e) => {
-    e.preventDefault();
-    if (profileimage) {
-      console.log('프로필 이미지', profileimage);
+  const sendToProfile = async () => {
+    if (profileImage) {
       const formData = new FormData();
-      formData.append('file', profileimage);
-      for (let pair of formData.entries()) {
-        console.log('프로필 이미지 formData', pair[0] + ', ' + pair[1]);
-      }
-      console.log(formData);
+      formData.append('file', profileImage);
+      // for (let pair of formData.entries()) {
+      //   console.log('프로필 이미지 formData', pair[0] + ', ' + pair[1]);
+      // }
       try {
         const profileResponse = await axios.post(APPLICATION_SERVER_URL + `/api/profile/img/${savedEmail}`, formData, {
           params: {
@@ -96,12 +91,9 @@ export function ProfilePage() {
             }
           ]
         });
-        console.log(profileResponse.data);
         if (profileResponse.status === 200) {
           dispatch(setImageId(profileResponse.data.saveFile));
-
-          console.log(dispatch(setImageId(profileResponse.data.saveFile)));
-          console.log('서버 전송 성공', profileResponse.data.saveFile);
+          // console.log('서버 전송 성공', profileResponse.data.saveFile);
 
           // 프로필 이미지 조회
           const saveFile = profileResponse.data.saveFile;
@@ -117,28 +109,21 @@ export function ProfilePage() {
           const imgSrc = URL.createObjectURL(getProfileResponse.data);
           dispatch(setImageId(imgSrc));
 
-          console.log('seTtidmfd', setImageId(imgSrc));
-          console.log('조회 성공', imgSrc);
         } else {
-          console.log('서버 응답 오류');
         }
       } catch (error) {
-        console.log('전송 실패', error);
       }
     }
   };
 
   // 방해 이미지 전송
-  const sendToDisturb = async (e) => {
-    e.preventDefault();
+  const sendToDisturb = async () => {
     if (disturbImage) {
-      console.log('방해이미지', disturbImage);
       const formData = new FormData();
       formData.append('file', disturbImage);
-      for (let pair of formData.entries()) {
-        console.log('방해이미지 formData', pair[0] + ', ' + pair[1]);
-      }
-      console.log(formData);
+      // for (let pair of formData.entries()) {
+      //   console.log('방해이미지 formData', pair[0] + ', ' + pair[1]);
+      // }
       try {
         const disturbResponse = await axios.post(APPLICATION_SERVER_URL + `/api/profile/img/${savedEmail}`, formData, {
           params: {
@@ -153,10 +138,9 @@ export function ProfilePage() {
             }
           ]
         });
-        console.log(disturbResponse.data);
         if (disturbResponse.status === 200) {
           dispatch(setDisturb(disturbResponse.data.saveFile));
-          console.log('서버 전송 성공', disturbResponse);
+          // console.log('서버 전송 성공', disturbResponse);
 
           // 방해 이미지 조회
           const saveFile = disturbResponse.data.saveFile;
@@ -171,49 +155,43 @@ export function ProfilePage() {
 
           const imgSrc = URL.createObjectURL(getDisturbResponse.data);
           dispatch(setDisturb(imgSrc));
-
-          console.log('seTtidmfd', setDisturb(imgSrc));
-          console.log('조회 성공', imgSrc);
-
           await saveDisturb;
         } else {
-          console.log('서버 응답 오류');
         }
       } catch (error) {
-        console.log('전송 실패', error);
       }
     }
   };
 
   // 프로필 사진 전송과 저장
-  const handleProfileImage = (e) => {
-    e.preventDefault();
-    saveProfile(e);
-    sendToProfile(e);
-  };
+  useEffect(() => {
+    if (profileImage) {
+      sendToProfile();
+    }
+  }, [profileImage]);
 
   // 방해 사진 전송과 저장
-  const handleDisturbImage = (e) => {
-    e.preventDefault();
-    saveDisturb(e);
-    sendToDisturb(e);
-  };
+  useEffect(() => {
+    if (disturbImage) {
+      sendToDisturb();
+    }
+  }, [disturbImage]);
 
   // 프로필 이미지 삭제
-  const deleteProfile = () => {
-    if (savedProfileImage) {
-      setProfileImage(null);
-      dispatch(setImageId(null));
-    }
-  };
+  // const deleteProfile = () => {
+  //   if (savedProfileImage) {
+  //     setProfileImage(null);
+  //     dispatch(setImageId(null));
+  //   }
+  // };
 
   // 방해 이미지 삭제
-  const deleteDisturb = () => {
-    if (savedDisturbImage) {
-      setDisturbImage(null);
-      dispatch(setDisturb(null));
-    }
-  };
+  // const deleteDisturb = () => {
+  //   if (savedDisturbImage) {
+  //     setDisturbImage(null);
+  //     dispatch(setDisturb(null));
+  //   }
+  // };
 
   function openModal() {
     setModalOpen(true);
@@ -282,7 +260,6 @@ export function ProfilePage() {
 
       if (response.status === 200) {
         dispatch(setNickname(name));
-        // setName(updatedNickname);
         persistor.flush();
         closeModal();
       }
@@ -377,7 +354,7 @@ export function ProfilePage() {
                 accept="image/*"
                 className={styles.imageInput}
                 ref={profileImageInput}
-                onChange={handleProfileImage}
+                onChange={saveProfile}
               ></input>
               <button onClick={onClickProfileUpload} className={styles.imageUpload}>
                 {savedProfileImage ? (
@@ -402,7 +379,7 @@ export function ProfilePage() {
                 accept="image/*"
                 className={styles.imageInput}
                 ref={disturbImageInput}
-                onChange={handleDisturbImage}
+                onChange={saveDisturb}
               ></input>
               <button onClick={onClickDisturbUpload} className={styles.imageUpload}>
                 {savedDisturbImage ? (
