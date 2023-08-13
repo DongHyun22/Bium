@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import GameRoomListItem from './GameRoomListItemPage';
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './GameRoomList.module.css';
 import { Fab, Action } from 'react-tiny-fab';
+import { setIsLogin, setToken, setUserEmail } from '../../../slices/userSlice';
+import { PURGE } from 'redux-persist';
 
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export const GameRoomListPage = () => {
   const dispatch = useDispatch();
   const [allRooms, setAllRooms] = useState([]);
+  const navigate = useNavigate();
+  const userEmail = useSelector((state) => state.user.userEmail);
 
   const gemeRoomapi = async () => {
     try {
@@ -29,6 +34,20 @@ export const GameRoomListPage = () => {
     gemeRoomapi();
   }, []);
 
+  const goToMyPage = () => {
+    navigate(`/profile/${userEmail}`);
+  };
+
+  const logout = (e) => {
+    e.stopPropagation();
+    sessionStorage.removeItem('accessToken');
+    dispatch(setToken(null));
+    dispatch(setUserEmail(''));
+    dispatch(setIsLogin(false));
+    dispatch({ type: PURGE, key: 'root', result: () => null });
+    // navigate('/');
+  };
+
   return (
     <div>
       <div className={styles.containerTitle}>
@@ -37,7 +56,10 @@ export const GameRoomListPage = () => {
           <Link to="/createroom">
             <div className={styles.BtnGameCreate}>
               <svg width="20" height="20" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-                <path fill="#000" d="M228 128a12 12 0 0 1-12 12h-76v76a12 12 0 0 1-24 0v-76H40a12 12 0 0 1 0-24h76V40a12 12 0 0 1 24 0v76h76a12 12 0 0 1 12 12Z" />
+                <path
+                  fill="#000"
+                  d="M228 128a12 12 0 0 1-12 12h-76v76a12 12 0 0 1-24 0v-76H40a12 12 0 0 1 0-24h76V40a12 12 0 0 1 24 0v76h76a12 12 0 0 1 12 12Z"
+                />
               </svg>
             </div>
           </Link>
@@ -62,17 +84,11 @@ export const GameRoomListPage = () => {
         )}
       </div>
 
-      
-      <Fab        
-        alwaysShowTitle={true}
-        icon="👤">
-
-        <Action
-          text="마이페이지">
-          🙂            
+      <Fab alwaysShowTitle={true} icon="👤">
+        <Action text="마이페이지" onClick={goToMyPage}>
+          🙂
         </Action>
-        <Action
-          text="로그아웃">
+        <Action text="로그아웃" onClick={logout}>
           💨
         </Action>
       </Fab>
