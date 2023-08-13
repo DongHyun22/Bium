@@ -14,7 +14,7 @@
     grid-template-columns: 1fr 2fr;
     width: 100%;
     height: 100vh;
-    background-color: #f7f7f7;
+    /* background-color: #f7f7f7; */
 }
 
 .createRoomPhoto { /* 이미지 */
@@ -45,33 +45,40 @@
 
 .createRoomform { /* 생성 폼 */
     margin-bottom: 0;
+    justify-content: center;
 }
 
 .formGroup { /* label과 input 혹은 select 박스 */
     display: flex;
     flex-direction: column; /* 세로로 정렬 */
     margin-bottom: 10px;
+    margin-left: 26%;
 }
+
 
 .formGroup input[type=checkbox] {
     width: 30px;
     /* 원하는 가로 크기로 변경 */
     height: 30px;
     /* 원하는 세로 크기로 변경 */
-    margin-left: 20px;
+    /* margin-left: 20px; */
 }
 
+.formGroupPW {
+    display: flex;
+    flex-direction: column;
+}
 
 .createRoomLabel {
     font-size: 30px;
-    margin-top: 0;
-    margin-left: 0;
-    margin-bottom: 0;
+    margin: 0;
+    height: 35px;
 }
 
 .createRoomPassword {
     font-size: 20px;
     margin: 0;
+    height: 25px;
 }
 
 .formInput {

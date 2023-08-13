@@ -66,7 +66,7 @@ export const CreateGameRoom = () => {
           <h1 className={styles.titleCreateRoom}> 게임방 생성 </h1>
           <form className={styles.createRoomform} onSubmit={handleJoin}>
             <p className={styles.formGroup}>
-              <label className={styles.createRoomLabel} for="gameRoomTitle">
+              <label className={styles.createRoomLabel} htmlFor="gameRoomTitle">
                 방 제목
               </label>
               <input
@@ -78,7 +78,7 @@ export const CreateGameRoom = () => {
               />
             </p>
             <p className={styles.formGroup}>
-              <label className={styles.createRoomLabel} for="maxPeople">
+              <label className={styles.createRoomLabel} htmlFor="maxPeople">
                 최대 인원
               </label>
               <select
@@ -97,7 +97,7 @@ export const CreateGameRoom = () => {
               </select>
             </p>
             <p className={styles.formGroup}>
-              <label className={styles.createRoomLabel} for="backgroundImage">
+              <label className={styles.createRoomLabel} htmlFor="backgroundImage">
                 배경 이미지
               </label>
               <select
@@ -119,7 +119,7 @@ export const CreateGameRoom = () => {
               <input className="form-control" type="text" id="sessionId" value={mySessionId} onChange={handleChangeSessionId} />
             </p> */}
             <p className={styles.formGroup}>
-              <label className={styles.createRoomLabel} for="secretRoom">
+              <label className={styles.createRoomLabel} htmlFor="secretRoom">
                 비밀방 여부
               </label>
               <input
@@ -130,8 +130,8 @@ export const CreateGameRoom = () => {
                 onChange={handleChangeisSecret}
               />
               {isSecret && (
-                <div>
-                  <label className={styles.createRoomPassword} for="roomPassword">
+                <div className={styles.formGroupPW}>
+                  <label className={styles.createRoomPassword} htmlFor="roomPassword">
                     Password
                   </label>
                   <input
