@@ -81,34 +81,41 @@ export const CreateGameRoom = () => {
               <label className={styles.createRoomLabel} htmlFor="maxPeople">
                 최대 인원
               </label>
-              <select
-                className={styles.formSelect}
-                id="maxPeople"
-                onChange={handleChangeMaxPeople}
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-              </select>
+              <div className={styles.formSelectArrow}> 
+                <select
+                  className={styles.formSelect}
+                  id="maxPeople"
+                  onChange={handleChangeMaxPeople}
+                >
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                </select>
+                <div className={styles.selectArrow}></div>
+              </div>
             </p>
             <p className={styles.formGroup}>
               <label className={styles.createRoomLabel} htmlFor="backgroundImage">
                 배경 이미지
               </label>
-              <select
-                className={styles.formSelect}
-                id="backgroundImage"
-                onChange={handleChangeBackground}
-              >
-                <option value="1">불</option>
-                <option value="2">물</option>
-                <option value="3">숲</option>
-              </select>
+              <div className={styles.formSelectArrow}> 
+                <select
+                  className={styles.formSelect}
+                  id="backgroundImage"
+                  onChange={handleChangeBackground}
+                >
+                  <option value="1">불</option>
+                  <option value="2">물</option>
+                  <option value="3">숲</option>
+                </select>
+                <div className={styles.selectArrow}></div>
+              </div>
+              
             </p>
             {/* <p>
               <label>Participant: </label>
