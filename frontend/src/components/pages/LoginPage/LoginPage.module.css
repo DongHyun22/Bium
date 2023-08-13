@@ -31,13 +31,11 @@
   margin-bottom: 40px;
 }
 
-
-
 .containerBtnFindPw {
   display: flex;  
   justify-content: space-evenly;
   width: 600px;
-  margin-top: 40px; 
+  margin-top: 20px; 
 }
 
 .btnSubmitFindPw {
@@ -153,7 +151,8 @@ form {
 }
 
 .loginid,
-.loginpassword {
+.loginpassword,
+.labelFindPw {
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
