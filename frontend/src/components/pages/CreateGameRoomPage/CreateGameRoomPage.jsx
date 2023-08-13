@@ -58,37 +58,57 @@ export const CreateGameRoom = () => {
 
   return (
     <div>
-      <div id="join" className={styles.container}>
-      <div id="img-div" className={styles.photo}>{/* <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" /> */}</div>
+      <div id="join" className={styles.createRoomContainer}>
+        <div id="img-div" className={styles.createRoomPhoto}>
+          {/* <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" /> */}
+        </div>
         <div id="join-dialog" className={styles.joinDialog}>
           <h1 className={styles.titleCreateRoom}> 게임방 생성 </h1>
-          <form className={styles.form} onSubmit={handleJoin}>
+          <form className={styles.createRoomform} onSubmit={handleJoin}>
             <p className={styles.formGroup}>
-              <label className={styles.label}>방 제목  </label><br></br>
-                <input className={styles.formInput} type="text" id="gameRoomTitle" onChange={handleChangeRoomTitle} required />
+              <label className={styles.createRoomLabel} htmlFor="gameRoomTitle">
+                방 제목
+              </label>
+              <input
+                className={styles.formInput}
+                type="text"
+                id="gameRoomTitle"
+                onChange={handleChangeRoomTitle}
+                required
+              />
             </p>
             <p className={styles.formGroup}>
-              <label className={styles.label}>최대 인원  <br></br>
-                <select className={styles.formSelect} id="maxPeople" onChange={handleChangeMaxPeople}>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
-                </select>
+              <label className={styles.createRoomLabel} htmlFor="maxPeople">
+                최대 인원
               </label>
+              <select
+                className={styles.formSelect}
+                id="maxPeople"
+                onChange={handleChangeMaxPeople}
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+              </select>
             </p>
             <p className={styles.formGroup}>
-              <label className={styles.label}>배경 이미지 <br></br>
-                <select className={styles.formSelect} id="backgroundImage" onChange={handleChangeBackground}>
-                  <option value="1">불</option>
-                  <option value="2">물</option>
-                  <option value="3">숲</option>
-                </select>
+              <label className={styles.createRoomLabel} htmlFor="backgroundImage">
+                배경 이미지
               </label>
+              <select
+                className={styles.formSelect}
+                id="backgroundImage"
+                onChange={handleChangeBackground}
+              >
+                <option value="1">불</option>
+                <option value="2">물</option>
+                <option value="3">숲</option>
+              </select>
             </p>
             {/* <p>
               <label>Participant: </label>
@@ -99,19 +119,39 @@ export const CreateGameRoom = () => {
               <input className="form-control" type="text" id="sessionId" value={mySessionId} onChange={handleChangeSessionId} />
             </p> */}
             <p className={styles.formGroup}>
-              <label className={styles.label}> 비밀방 여부 
-              <input className={styles.formInput} type="checkbox" id="secretRoom" value={isSecret} onChange={handleChangeisSecret} />
+              <label className={styles.createRoomLabel} htmlFor="secretRoom">
+                비밀방 여부
+              </label>
+              <input
+                className={styles.formInput}
+                type="checkbox"
+                id="secretRoom"
+                value={isSecret}
+                onChange={handleChangeisSecret}
+              />
               {isSecret && (
-                <div>
-                  <label className={styles.password}> Password <br></br>
-                    <input className={styles.formInput} type="text" id="roomPassword" value={roomPassword} onChange={handleChangeRoomPassword} required />
+                <div className={styles.formGroupPW}>
+                  <label className={styles.createRoomPassword} htmlFor="roomPassword">
+                    Password
                   </label>
+                  <input
+                    className={styles.formInput}
+                    type="text"
+                    id="roomPassword"
+                    value={roomPassword}
+                    onChange={handleChangeRoomPassword}
+                    required
+                  />
                 </div>
               )}
-              </label>
             </p>
             <p className={styles.formButton}>
-              <input className={styles.joinButton} name="commit" type="submit" value="같이 하기" />
+              <input
+                className={styles.joinButton}
+                name="commit"
+                type="submit"
+                value="같이 하기"
+              />
             </p>
           </form>
         </div>
