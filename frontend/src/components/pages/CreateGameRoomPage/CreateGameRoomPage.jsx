@@ -119,16 +119,18 @@ export const CreateGameRoom = () => {
               <input className="form-control" type="text" id="sessionId" value={mySessionId} onChange={handleChangeSessionId} />
             </p> */}
             <p className={styles.formGroup}>
-              <label className={styles.createRoomLabel} htmlFor="secretRoom">
-                비밀방 여부
-              </label>
-              <input
-                className={styles.formInput}
-                type="checkbox"
-                id="secretRoom"
-                value={isSecret}
-                onChange={handleChangeisSecret}
-              />
+              <div>
+                <label className={styles.createRoomLabel} htmlFor="secretRoom">
+                  비밀방 여부
+                </label>
+                <input
+                  className={styles.formInput}
+                  type="checkbox"
+                  id="secretRoom"
+                  value={isSecret}
+                  onChange={handleChangeisSecret}
+                />
+              </div>              
               {isSecret && (
                 <div className={styles.formGroupPW}>
                   <label className={styles.createRoomPassword} htmlFor="roomPassword">
