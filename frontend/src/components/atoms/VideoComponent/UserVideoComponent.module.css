@@ -1,9 +1,9 @@
 .videoBox {
   border-radius: 8px;
   box-shadow: 10px 10px 20px;
-  margin: 20px 0px 20px;
+  margin: 10px 0px 20px;
   position: relative;
-  top: 40px;
+  top: 0;
 }
 .userVideos {
   display: flex;

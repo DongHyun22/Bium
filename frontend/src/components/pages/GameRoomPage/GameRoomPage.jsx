@@ -274,7 +274,7 @@ function GameRoomPage() {
         // dispatch(leaveRoom());
         dispatch(leaveSession());
         window.location.href = '/gameroomlist';
-      }, 6000);
+      }, 200000);
     }
   }, [gameRankList]);
 
@@ -306,30 +306,32 @@ function GameRoomPage() {
         dispatch(setStart(true));
       });
     }
-    // else if (publisher === undefined) {
-    //   console.log('여기 못찾아....');
-    //   navigate('/');
-    // }
   }, [publisher]);
 
   useEffect(() => {
     console.log('gameId 바뀔때마다 출력해');
   }, [gameId]);
   return (
-    <>
+    <div className={styles.backimage} style={{ backgroundImage: `url(${backImage})` }}>
       {rankModal && gameRankList !== null ? (
-        <>
-          <>{gameRankList !== null ? <h3>최종 순위표</h3> : null}</>
-          {gameRankList.map((rank) => (
-            <EndGameRank key={rank.index} rank={rank} />
-          ))}
-        </>
+        <div className={styles.endGame}>
+          <div className={styles.endGameText}>
+            <p>안녕하세요 {myUserName} 님!</p>
+            <p>오늘 당신의 비움은 잘하셨나요?</p>
+          </div>
+          <div className={styles.endgameTitleBox}>
+            <>{gameRankList !== null ? <p>비움표</p> : null}</>
+            {gameRankList.map((rank) => (
+              <>
+                <EndGameRank key={rank.index} rank={rank} />
+              </>
+            ))}
+          </div>
+        </div>
       ) : (
         <div className="">
           {/* join 이후 화면 */}
           {session !== undefined ? (
-            // style={{ backgroundImage: `url(${backImage})` }}
-
             <div className={styles.gameroom}>
               {host && start === false ? (
                 <button
@@ -339,30 +341,37 @@ function GameRoomPage() {
                     startSignal(publisher);
                   }}
                 >
-                  Start
+                  <p>게임 시작</p>
                 </button>
               ) : null}
-              <div id="session-header">
-                <span className={styles.gameroomTitle} id="session-title">
+              {/* 게임방 제목 */}
+              <div className={styles.gameTitleBox}>
+                <p className={styles.gameroomTitle} id="session-title">
                   {gameRoomTitle}
-                </span>
+                </p>
+                {host === true ? (
+                  <button className={styles.updateButton}>
+                    <p>수정</p>
+                  </button>
+                ) : null}
               </div>
-              <div id="session-sidebar">{host === true ? <button>수정</button> : null}</div>
 
-              <div className={styles.backimage}> </div>
               <div className={styles.playerVideosBox} id="video-container">
-                <h3>{start ? <> 탈락 카운트 :{gameFallCount}</> : null}</h3>
-                <button className={styles.gameoutButton} onClick={handleLeaveSession}>
-                  <IoLogOutOutline className={styles.gameoutIcon}></IoLogOutOutline>
-                  <p className={styles.gameoutText}>나가기</p>
-                </button>
-
+                <div className={styles.countBox}>
+                  <p className={styles.countText}>{start ? <> 탈락 카운트 :{gameFallCount}</> : <>탈락 카운트 </>}</p>
+                  <button className={styles.gameoutButton} onClick={handleLeaveSession}>
+                    <IoLogOutOutline className={styles.gameoutIcon}></IoLogOutOutline>
+                    <p className={styles.gameoutText}>나가기</p>
+                  </button>
+                </div>
                 {publisher !== undefined ? (
                   <>
                     <UserVideoComponent streamManager={publisher} />
                   </>
                 ) : (
-                  <h1>같이할 동료들을 연결 중</h1>
+                  <div className={styles.bg}>
+                    <div className={styles.camloader}></div>
+                  </div>
                 )}
                 {subscribers.map((sub) => (
                   <div key={sub.id} className="stream-container col-md-6 col-xs-6">
@@ -377,7 +386,7 @@ function GameRoomPage() {
           ) : null}
         </div>
       )}
-    </>
+    </div>
   );
 }
 export default GameRoomPage;
