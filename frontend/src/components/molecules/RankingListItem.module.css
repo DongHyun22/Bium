@@ -10,41 +10,46 @@
   flex-direction: row;
   width: 100%;
   justify-content: space-between;
-  font-size: 1em;
   font-weight: 800;
   font-family: 'GangwonEdu_OTFBoldA';
+  font-size: 20px;
 }
 
 .position {
   width: 18%;
+  height: 40px;
   text-align: center;
-  margin-top: 1em;
-  margin-bottom: 1em;
+  margin-top: 10px;
+  margin-bottom: 10px;
   font-family: 'GangwonEdu_OTFBoldA';
 }
 
 .nickname {
   width: 24%;
+  height: 40px;
   text-align: center;
-  margin-top: 1em;
-  margin-bottom: 1em;
+  margin-top: 10px;
+  margin-bottom: 10px;
   font-weight: 800;
   font-family: 'GangwonEdu_OTFBoldA';
 }
 
-.rank {
-  width: 12% ;
+.rank  {
+  width: 12%;
+  height: 40px;
   text-align: center;
   font-weight: 700;
-  margin-top: 1em;
-  margin-bottom: 1em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  
   font-family: 'GangwonEdu_OTFBoldA';
 }
 
 .topBium {
   width: 36%;
+  height: 40px;
   text-align: center;
-  margin-top: 1em;
-  margin-bottom: 1em;
+  margin-top: 10px;
+  margin-bottom: 10px;
   font-family: 'GangwonEdu_OTFBoldA';
 }

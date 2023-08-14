@@ -9,6 +9,7 @@ import axios from 'axios';
 import { persistor } from '../../../store/store';
 import emptyprofile from '../../../asset/backgroudimage/emptyprofile.png';
 import { PURGE } from 'redux-persist';
+import { Fab, Action } from 'react-tiny-fab';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
@@ -37,6 +38,9 @@ export function ProfilePage() {
   const totalBium = useGetBiumTime(savedTotalBium);
   const [profileImage, setProfileImage] = useState(null);
   const [disturbImage, setDisturbImage] = useState(null);
+
+  // RankingList에서 전달하는 랭크 이모지
+  const [emoji, setEmoji] = useState('');
 
   // 프로필 이미지와 방해이미지가 바뀌는 상태를 관리하는 state
   const [showProfile, setShowProfile] = useState(true);
@@ -108,11 +112,9 @@ export function ProfilePage() {
 
           const imgSrc = URL.createObjectURL(getProfileResponse.data);
           dispatch(setImageId(imgSrc));
-
         } else {
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
 
@@ -158,8 +160,7 @@ export function ProfilePage() {
           await saveDisturb;
         } else {
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
 
@@ -323,6 +324,22 @@ export function ProfilePage() {
     setShowProfile(!showProfile);
   };
 
+  const goToMainPage = () => {
+    return navigate('/');
+  };
+
+  const goToGameList = () => {
+    navigate(`/gameroomlist`);
+  };
+
+  const logout = (e) => {
+    e.stopPropagation();
+    sessionStorage.removeItem('accessToken');
+    dispatch({ type: PURGE, key: 'root', result: () => null });
+    dispatch(setToken(null));
+    dispatch(setIsLogin(false));
+  };
+
   // 회원 탈퇴 확인 모달에서 '예, 탈퇴합니다' 버튼을 눌렀을 때의 동작
   const confirmSignOut = (e) => {
     dispatch({ type: PURGE, key: 'root', result: () => null });
@@ -337,26 +354,22 @@ export function ProfilePage() {
   return (
     <div className={styles.gridContainer}>
       <div className={styles.header}>
-        <div></div>
-        <div></div>
-        <div>
-          <h1>ProfilePage</h1>
-        </div>
+        <div className={styles.homelogo} onClick={goToMainPage}></div>
       </div>
       <div className={styles.sideLeft}>
         {showProfile ? (
           <div>
             <h3>프로필 이미지</h3>
             <div>
-              <input
-                name="file"
-                type="file"
-                accept="image/*"
-                className={styles.imageInput}
-                ref={profileImageInput}
-                onChange={saveProfile}
-              ></input>
               <button onClick={onClickProfileUpload} className={styles.imageUpload}>
+                <input
+                  name="file"
+                  type="file"
+                  accept="image/*"
+                  className={styles.imageInput}
+                  ref={profileImageInput}
+                  onChange={saveProfile}
+                ></input>
                 {savedProfileImage ? (
                   <img src={savedProfileImage} alt="미리보기" />
                 ) : (
@@ -402,12 +415,11 @@ export function ProfilePage() {
           </label>
         </div>
         <div className={styles.myBium}>
-          <h3>{savedNickname}</h3>
+          <h3>{emoji} {savedNickname}</h3>
           <h3>오늘 비움량 : {todayBium}</h3>
           <h3>총 비움량 : {totalBium}</h3>
-          <h3>총 비움량 : {totalBium}</h3>
           <button className={styles.modifyButton} onClick={openModal}>
-            회원 정보 수정
+            수정✏️
           </button>
         </div>
         {modalOpen && (
@@ -494,7 +506,15 @@ export function ProfilePage() {
         )}
       </div>
       <div className={styles.sideRight}>
-        <GetRanking />
+        <GetRanking setEmoji={setEmoji} />
+        <Fab alwaysShowTitle={true} icon="👤">
+          <Action text="비우러 가기" onClick={goToGameList}>
+            🧘🏻‍♂
+          </Action>
+          <Action text="로그아웃" onClick={logout}>
+            💨
+          </Action>
+        </Fab>
       </div>
     </div>
   );
