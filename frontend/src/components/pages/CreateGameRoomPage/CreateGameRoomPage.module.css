@@ -28,15 +28,14 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     /* 컨테이너 내부의 아이템을 가로 방향으로 정렬 */
 }
 
 .titleCreateRoom { /* 게임방 생성 글씨 */
     font-size: 40px;
     position: absolute;
-    top: 50px;
-    /* margin-left: 2%; */
-    margin-left: 25px;
+    top: 20px;
     transform: translateY(-60%);
     border-bottom: 2px solid #333;
     padding-bottom: 5px;
@@ -51,8 +50,8 @@
 .formGroup { /* label과 input 혹은 select 박스 */
     display: flex;
     flex-direction: column; /* 세로로 정렬 */
-    margin-bottom: 10px;
-    margin-left: 26%;
+    margin-bottom: 5px;
+    justify-content: center; /* 수직 가운데 정렬 */
 }
 
 
@@ -61,7 +60,7 @@
     /* 원하는 가로 크기로 변경 */
     height: 30px;
     /* 원하는 세로 크기로 변경 */
-    /* margin-left: 20px; */
+    margin-left: 20px;
 }
 
 .formGroupPW {
@@ -72,6 +71,7 @@
 .createRoomLabel {
     font-size: 30px;
     margin: 0;
+    margin-left: 265px; /* 해상도 120 */
     height: 35px;
 }
 
@@ -79,6 +79,7 @@
     font-size: 20px;
     margin: 0;
     height: 25px;
+    margin-left: 265px; /* 해상도 120 */
 }
 
 .formInput {
@@ -86,8 +87,17 @@
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    /* width: 80%; */
     width: 700px;
+    /* width: 600px; */ /* 해상도 100 */
+    align-self: center; /* input 요소를 수평으로 가운데 정렬 */
+}
+
+.formSelectArrow {
+    position: relative;
+    display: inline-block;
+    width: 742px;
+    /* width: 642px; */ /* 해상도 100 */
+    align-self: center; /* input 요소를 수평으로 가운데 정렬 */
 }
 
 .formSelect {
@@ -96,8 +106,7 @@
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    /* width: 90%; */
-    width: 742px;
+    width: 100%;
     height: 65px;
     line-height: 25px;
     overflow: visible;
@@ -105,6 +114,17 @@
 
 .formSelect > option {
     inline-size: 25px;
+}
+
+.selectArrow {
+    position: absolute;
+    top: 45%;
+    /* right: 18%; */
+    right: 3%;
+    pointer-events: none;
+    border-style :solid;
+    border-width: 8px 5px 0 5px;
+    border-color: #999 transparent transparent transparent;
 }
 
 .formButton{ /* 버튼 감싸는 p 태그 */
@@ -120,7 +140,6 @@
     border: none;
     cursor: pointer;
     border-radius: 5px;
-    margin-top: 40px;
-    /* margin-bottom: 20px; */
+    margin-top: 20px;
     width: 30%;
 }
