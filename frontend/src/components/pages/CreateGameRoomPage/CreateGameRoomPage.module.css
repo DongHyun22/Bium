@@ -9,15 +9,15 @@
     font-family: GangwonEdu_OTFBoldA;
 }
 
-.container { /* 이미지와 게임방 생성 전체 컨테이너 */
+.createRoomContainer { /* 이미지와 게임방 생성 전체 컨테이너 */
     display: grid;
     grid-template-columns: 1fr 2fr;
     width: 100%;
     height: 100vh;
-    background-color: #f7f7f7;
+    /* background-color: #f7f7f7; */
 }
 
-.photo { /* 이미지 */
+.createRoomPhoto { /* 이미지 */
     background: url('../../../asset/backgroudimage/firebase4.png');
     background-size: cover;
     background-repeat: no-repeat;
@@ -43,35 +43,42 @@
     width: 60%;
 }
 
-.form { /* 생성 폼 */
+.createRoomform { /* 생성 폼 */
     margin-bottom: 0;
+    justify-content: center;
 }
 
 .formGroup { /* label과 input 혹은 select 박스 */
     display: flex;
-    justify-content: center; /* 수평 중앙 정렬 */
-    grid-template-columns: 1fr;
-    /* 각 요소 사이에 간격 추가 */
+    flex-direction: column; /* 세로로 정렬 */
     margin-bottom: 10px;
+    margin-left: 26%;
 }
 
-.label {
+
+.formGroup input[type=checkbox] {
+    width: 30px;
+    /* 원하는 가로 크기로 변경 */
+    height: 30px;
+    /* 원하는 세로 크기로 변경 */
+    /* margin-left: 20px; */
+}
+
+.formGroupPW {
+    display: flex;
+    flex-direction: column;
+}
+
+.createRoomLabel {
     font-size: 30px;
-    margin-top: 0;
-    margin-left: 0;
+    margin: 0;
+    height: 35px;
 }
 
-.password {
+.createRoomPassword {
     font-size: 20px;
     margin: 0;
-}
-
-input[type="checkbox"] {
-    width: 20px;
-    /* 원하는 가로 크기로 변경 */
-    height: 20px;
-    /* 원하는 세로 크기로 변경 */
-    margin-left: 20px;
+    height: 25px;
 }
 
 .formInput {
@@ -84,6 +91,7 @@ input[type="checkbox"] {
 }
 
 .formSelect {
+    appearance: none; /* select box에서 이름이 잘리는 것이 보임 */
     font-size: 20px;
     padding: 20px;
     border: 1px solid #ccc;
