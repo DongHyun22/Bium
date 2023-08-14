@@ -31,13 +31,13 @@ export default function GameTimer() {
   }, [totalCount, start]);
 
   return (
-    <div>
-      <div className={styles}>
-        <p>당신의 비움 시간</p>
-        <p>{ovHour} 시간</p>
-        <p>{ovMinute} 분</p>
-        <p>{ovSecond} 초</p>
+    <>
+      <div className={styles.biumTimer}>
+        <p>비움 시간</p>
+        <p>
+          {ovHour} 시간 {ovMinute} 분 {ovSecond} 초
+        </p>
       </div>
-    </div>
+    </>
   );
 }

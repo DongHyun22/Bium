@@ -10,10 +10,13 @@ import { leaveRoom, setErrorSolve, setGameFallCount, setGameRankList, setMySessi
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
-import styles from './GamRoomPage.module.css';
+import styles from './GameRoomPage.module.css';
 import EndGameRank from '../../molecules/EndGameRank/EndGameRank';
+
 import img1 from '../../../asset/backgroudimage/firebase1.jpg';
 import img2 from '../../../asset/backgroudimage/firebase2.gif';
+
+import { IoLogOutOutline } from 'react-icons/io5';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 let backImage = '';
@@ -190,9 +193,9 @@ function GameRoomPage() {
     // componentDidMount
     window.addEventListener('beforeunload', onbeforeunload);
     // componentWillUnmount
-    return () => {
-      window.removeEventListener('beforeunload', onbeforeunload);
-    };
+    // return () => {
+    //   window.removeEventListener('beforeunload', onbeforeunload);
+    // };
   }, []);
 
   // join 의존성
@@ -230,20 +233,20 @@ function GameRoomPage() {
       dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail, host, dispatch }));
 
       // Clean-up 함수 등록
-      return () => {
-        console.log('등록이 되는 순간이 언제일까?');
-        console.log('clear');
-        session.off('streamCreated', handleStreamCreated);
-        session.off('streamDestroyed', handleStreamDestroyed);
-        session.off('exception', handleException);
-        // dispatch(leaveRoom());
-        dispatch(leaveSession());
+      // return () => {
+      //   console.log('등록이 되는 순간이 언제일까?');
+      //   console.log('clear');
+      //   session.off('streamCreated', handleStreamCreated);
+      //   session.off('streamDestroyed', handleStreamDestroyed);
+      //   session.off('exception', handleException);
+      //   // dispatch(leaveRoom());
+      //   dispatch(leaveSession());
 
-        const mySession = session;
-        if (mySession) {
-          mySession.disconnect(); // 예시에서는 disconnect()로 대체하였으나, 이는 OpenVidu에 따라 다르게 적용될 수 있음
-        }
-      };
+      //   const mySession = session;
+      //   if (mySession) {
+      //     mySession.disconnect(); // 예시에서는 disconnect()로 대체하였으나, 이는 OpenVidu에 따라 다르게 적용될 수 있음
+      //   }
+      // };
     }
   }, [session]);
   useEffect(() => {
@@ -271,7 +274,7 @@ function GameRoomPage() {
         // dispatch(leaveRoom());
         dispatch(leaveSession());
         window.location.href = '/gameroomlist';
-      }, 6000);
+      }, 200000);
     }
   }, [gameRankList]);
 
@@ -303,73 +306,87 @@ function GameRoomPage() {
         dispatch(setStart(true));
       });
     }
-    // else if (publisher === undefined) {
-    //   console.log('여기 못찾아....');
-    //   navigate('/');
-    // }
   }, [publisher]);
 
   useEffect(() => {
     console.log('gameId 바뀔때마다 출력해');
   }, [gameId]);
   return (
-    <>
+    <div className={styles.backimage} style={{ backgroundImage: `url(${backImage})` }}>
       {rankModal && gameRankList !== null ? (
-        <>
-          <>{gameRankList !== null ? <h3>최종 순위표</h3> : null}</>
-          {gameRankList.map((rank) => (
-            <EndGameRank key={rank.index} rank={rank} />
-          ))}
-        </>
+        <div className={styles.endGame}>
+          <div className={styles.endGameText}>
+            <p>안녕하세요 {myUserName} 님!</p>
+            <p>오늘 당신의 비움은 잘하셨나요?</p>
+          </div>
+          <div className={styles.endgameTitleBox}>
+            <>{gameRankList !== null ? <p>비움표</p> : null}</>
+            {gameRankList.map((rank) => (
+              <>
+                <EndGameRank key={rank.index} rank={rank} />
+              </>
+            ))}
+          </div>
+        </div>
       ) : (
-        <div>
+        <div className="">
           {/* join 이후 화면 */}
           {session !== undefined ? (
-            <div id="session" style={{ backgroundImage: `url(${backImage})` }}>
-              <div id="session-header">
-                <h1 id="session-title">{gameRoomTitle}</h1>
-              </div>
-              <div id="session-sidebar">
-                <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={handleLeaveSession} value="Leave session" />
-                <input className="btn btn-large btn-success" type="button" id="buttonSwitchCamera" onClick={setAudioMute} value="Mute Audio" />
-                {host === true ? <button>수정</button> : null}
-              </div>
-
-              <h3>당신의 탈락 카운트{start ? <> {gameFallCount}</> : null}</h3>
-              <div className={styles.backimage}>
-                <div id="video-container">
-                  {publisher !== undefined ? (
-                    <div className="stream-container col-md-6 col-xs-6">
-                      <UserVideoComponent streamManager={publisher} />
-                    </div>
-                  ) : (
-                    <h1>같이할 동료들을 연결 중</h1>
-                  )}
-                  {subscribers.map((sub) => (
-                    <div key={sub.id} className="stream-container col-md-6 col-xs-6">
-                      <span>{sub.id}</span>
-                      <UserVideoComponent streamManager={sub} />
-                    </div>
-                  ))}
-                </div>
-                {host ? (
-                  <button
-                    onClick={() => {
-                      gameStart();
-                      startSignal(publisher);
-                    }}
-                  >
-                    Start
+            <div className={styles.gameroom}>
+              {host && start === false ? (
+                <button
+                  className={styles.gameStartbutton}
+                  onClick={() => {
+                    gameStart();
+                    startSignal(publisher);
+                  }}
+                >
+                  <p>게임 시작</p>
+                </button>
+              ) : null}
+              {/* 게임방 제목 */}
+              <div className={styles.gameTitleBox}>
+                <p className={styles.gameroomTitle} id="session-title">
+                  {gameRoomTitle}
+                </p>
+                {host === true ? (
+                  <button className={styles.updateButton}>
+                    <p>수정</p>
                   </button>
                 ) : null}
-
-                {start ? <Timer></Timer> : null}
               </div>
+
+              <div className={styles.playerVideosBox} id="video-container">
+                <div className={styles.countBox}>
+                  <p className={styles.countText}>{start ? <> 탈락 카운트 :{gameFallCount}</> : <>탈락 카운트 </>}</p>
+                  <button className={styles.gameoutButton} onClick={handleLeaveSession}>
+                    <IoLogOutOutline className={styles.gameoutIcon}></IoLogOutOutline>
+                    <p className={styles.gameoutText}>나가기</p>
+                  </button>
+                </div>
+                {publisher !== undefined ? (
+                  <>
+                    <UserVideoComponent streamManager={publisher} />
+                  </>
+                ) : (
+                  <div className={styles.bg}>
+                    <div className={styles.camloader}></div>
+                  </div>
+                )}
+                {subscribers.map((sub) => (
+                  <div key={sub.id} className="stream-container col-md-6 col-xs-6">
+                    <span>{sub.id}</span>
+                    <UserVideoComponent streamManager={sub} />
+                  </div>
+                ))}
+              </div>
+
+              <Timer></Timer>
             </div>
           ) : null}
         </div>
       )}
-    </>
+    </div>
   );
 }
 export default GameRoomPage;

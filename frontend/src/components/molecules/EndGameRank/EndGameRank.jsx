@@ -1,14 +1,17 @@
 import React from 'react';
-
+import styles from './EndGameRank.module.css';
 const EndGameRank = (props) => {
   console.log(props);
   const nickname = props.rank.userNickname;
   const biumTime = props.rank.gameRecord;
+  const rank = props.rank.index;
   return (
     <>
-      <span>
-        순위, {nickname}, {biumTime}
-      </span>
+      <p className={styles.rankitem}>
+        <p>{rank}등</p>
+        <p>"{nickname}"</p>
+        <p>{biumTime} 초</p>
+      </p>
     </>
   );
 };
