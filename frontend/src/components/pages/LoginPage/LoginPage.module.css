@@ -5,25 +5,71 @@
   font-style: normal;
 }
 
-.modal {
+.findPwModal {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #eeeeee;
+  display: flex;
+  flex-direction: column;  
+  background-color: #fff;
   padding: 50px;
   z-index: 1000;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  box-shadow: 7px 7px 7px rgba(0, 0, 0, 0.3);
 }
 
-.overlay {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 1000;
-  color: aliceblue;
+.titleFindPw {
+  font-size: 30px;
+  margin: 0px;
 }
+
+.hrFindPw {
+  width: 100%;
+  border: 1px solid black;
+  margin-bottom: 40px;
+}
+
+.containerBtnFindPw {
+  display: flex;  
+  justify-content: space-evenly;
+  width: 600px;
+  margin-top: 20px; 
+}
+
+.btnSubmitFindPw {
+  width: 45%;
+  height: 100%;
+  z-index: 1000;
+  padding: 15px;
+  margin: 2px;
+  border-radius: 5px;
+  font-size: 20px;
+  border: none;
+  background-color: rgb(126, 124, 124);
+  color: aliceblue;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+.btnCloseFindPw {
+  width: 45%;
+  height: 100%;
+  z-index: 1000;
+  padding: 15px;
+  margin: 2px;
+  border-radius: 5px;
+  font-size: 20px;
+  border: none;
+  background-color: #f0f0f0;
+  color: black;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+.btnSubmitFindPw:hover, .btnCloseFindPw:hover {
+  cursor: pointer;
+}
+
 
 .loginpagebg {
   height: 100vh;
@@ -41,7 +87,7 @@
   background-position: center;
   width: 100%;
   height: 100%;
-  filter: contrast(50%);
+  filter: contrast(70%);
   display: flex;
   flex-direction: column;
   align-content: center;
@@ -50,15 +96,15 @@
 
 .titlebium {
   margin-left: 10px;
-  font-size: 50px;
+  font-size: 40px;
   color: aliceblue;
   cursor: pointer;
 }
 
 .circle {
   margin: auto;
-  width: 25%;
-  height: 25%;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   background-color: black;
   display: flex;
@@ -67,14 +113,13 @@
 }
 
 .circlelogo {
-  width: 60%;
-  height: 60%;
+  width: 130px;
+  height: 130px;
   background: url('../../../asset/logoimage/biumlogo.png');
   background-size: cover;
 }
 
 .rightbox {
-  /* position: relative; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -82,28 +127,15 @@
 
 form {
   width: 100%;
-  /* max-width: 400px; */
-  /* margin-top: 10%; */
-  /* position: absolute; */
-  /* margin-left: 60%; */
   flex-direction: column;
   display: flex;
   margin-bottom: 8%;
-  /* margin-left: 5%; */
-  /* justify-content: center; */
-  /* align-items: center; */
 }
 
 .leftcontent {
-  /* position: absolute; */
-  /* top: 60%;
-  left: 35%; */
   color: white;
   text-align: center;
-  margin-bottom: 20%;
-  /* bottom: 10%; */
-  /* align-items: center; */
-  /* font-size: 20px; */
+  margin-bottom: 200px;
 }
 
 .leftcontent h3 {
@@ -119,26 +151,26 @@ form {
 }
 
 .loginid,
-.loginpassword {
+.loginpassword,
+.labelFindPw {
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  font-size: 30px;
 }
 
 .titlelogin {
   position: absolute;
-  top: 3%;
-  margin-left: 2%;
+  top: 20px;
+  margin-left: 30px;
   transform: translateY(-60%);
   border-bottom: 2px solid #333;
   padding-bottom: 5px;
   width: 45%;
+  font-size: 40px;
 }
 
 label {
-  font-weight: bold;
-  /* justify-content: center; */
-  /* padding: 10px; */
   margin-top: 5%;
   margin-left: 13%;
 }
@@ -148,15 +180,17 @@ label {
   border: 1px solid #ccc;
   border-radius: 8px;
   width: 80%;
-  margin-top: 1%;
-  /* max-width: 400px; */
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+input::placeholder {
+  font-size: 20px;
 }
 
 .buttoncontainer {
   display: flex;
   justify-content: space-evenly;
-  margin-left: 2%;
-  /* margin: 0 13%; */
 }
 
 .loginbutton {
@@ -166,10 +200,9 @@ label {
   color: aliceblue;
   border: none;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 5px;
   margin-bottom: 20px;
   width: 30%;
-  /* margin-left: 20px; */
 }
 
 .cancelbutton {
@@ -177,25 +210,24 @@ label {
   padding: 15px 40px;
   border: none;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 5px;
   margin-bottom: 20px;
   width: 30%;
-  /* margin-left: 10px; */
 }
 
 .findpassword {
   display: flex;
   justify-content: flex-end;
-  margin-right: 10%;
-  /* margin-bottom: 5%; */
+  margin-right: 13%;
+  margin-top: 50px;
   cursor: pointer;
-  /* margin-bottom: 10%; */
   text-decoration: underline;
+  font-size: 20px;
 }
 
 .passwordinput {
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 5px;
   width: 100%;
 }

@@ -1,14 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { setNickname, setImageId, setDisturb } from '../../../slices/userSlice';
+import { setToken, setIsLogin, setNickname, setImageId, setDisturb } from '../../../slices/userSlice';
 import { GetRanking } from '../../organisms/RankingList';
 import useGetBiumTime from '../../../hooks/TimeInquery';
 import axios from 'axios';
 import { persistor } from '../../../store/store';
 import emptyprofile from '../../../asset/backgroudimage/emptyprofile.png';
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+import { PURGE } from 'redux-persist';
+
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export function ProfilePage() {
   const { userEmail } = useParams();
@@ -32,7 +35,7 @@ export function ProfilePage() {
   const [newpasswordConfirm, setNewPasswordConfirm] = useState('');
   const todayBium = useGetBiumTime(savedTodayBium);
   const totalBium = useGetBiumTime(savedTotalBium);
-  const [profileimage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
   const [disturbImage, setDisturbImage] = useState(null);
 
   // 프로필 이미지와 방해이미지가 바뀌는 상태를 관리하는 state
@@ -48,37 +51,32 @@ export function ProfilePage() {
   const saveProfile = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
-    console.log('file', file);
     if (file) {
       dispatch(setImageId(URL.createObjectURL(file)));
       setProfileImage(file);
-      console.log('프로필 이미지', file);
+      return true;
     }
+    return false;
   };
 
   // 방해 이미지 저장
   const saveDisturb = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
-    console.log('file', file);
     if (file) {
       dispatch(setDisturb(URL.createObjectURL(file)));
       setDisturbImage(file);
-      console.log('방해 이미지', file);
     }
   };
 
   // 프로필 이미지 전송
-  const sendToProfile = async (e) => {
-    e.preventDefault();
-    if (profileimage) {
-      console.log('프로필 이미지', profileimage);
+  const sendToProfile = async () => {
+    if (profileImage) {
       const formData = new FormData();
-      formData.append('file', profileimage);
-      for (let pair of formData.entries()) {
-        console.log('프로필 이미지 formData', pair[0] + ', ' + pair[1]);
-      }
-      console.log(formData);
+      formData.append('file', profileImage);
+      // for (let pair of formData.entries()) {
+      //   console.log('프로필 이미지 formData', pair[0] + ', ' + pair[1]);
+      // }
       try {
         const profileResponse = await axios.post(APPLICATION_SERVER_URL + `/api/profile/img/${savedEmail}`, formData, {
           params: {
@@ -93,12 +91,9 @@ export function ProfilePage() {
             }
           ]
         });
-        console.log(profileResponse.data);
         if (profileResponse.status === 200) {
           dispatch(setImageId(profileResponse.data.saveFile));
-
-          console.log(dispatch(setImageId(profileResponse.data.saveFile)));
-          console.log('서버 전송 성공', profileResponse.data.saveFile);
+          // console.log('서버 전송 성공', profileResponse.data.saveFile);
 
           // 프로필 이미지 조회
           const saveFile = profileResponse.data.saveFile;
@@ -106,35 +101,29 @@ export function ProfilePage() {
           const imgType = profileResponse.data.imgType;
           const originalFile = profileResponse.data.originalFile;
 
-          const getProfileResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
+          const getProfileResponse = await axios.get(
+            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
+            { responseType: 'blob' }
+          );
 
           const imgSrc = URL.createObjectURL(getProfileResponse.data);
           dispatch(setImageId(imgSrc));
 
-          console.log('seTtidmfd', setImageId(imgSrc));
-          console.log('조회 성공', imgSrc);
-
-          await saveProfile;
         } else {
-          console.log('서버 응답 오류');
         }
       } catch (error) {
-        console.log('전송 실패', error);
       }
     }
   };
 
   // 방해 이미지 전송
-  const sendToDisturb = async (e) => {
-    e.preventDefault();
+  const sendToDisturb = async () => {
     if (disturbImage) {
-      console.log('방해이미지', disturbImage);
       const formData = new FormData();
       formData.append('file', disturbImage);
-      for (let pair of formData.entries()) {
-        console.log('방해이미지 formData', pair[0] + ', ' + pair[1]);
-      }
-      console.log(formData);
+      // for (let pair of formData.entries()) {
+      //   console.log('방해이미지 formData', pair[0] + ', ' + pair[1]);
+      // }
       try {
         const disturbResponse = await axios.post(APPLICATION_SERVER_URL + `/api/profile/img/${savedEmail}`, formData, {
           params: {
@@ -149,10 +138,9 @@ export function ProfilePage() {
             }
           ]
         });
-        console.log(disturbResponse.data);
         if (disturbResponse.status === 200) {
           dispatch(setDisturb(disturbResponse.data.saveFile));
-          console.log('서버 전송 성공', disturbResponse);
+          // console.log('서버 전송 성공', disturbResponse);
 
           // 방해 이미지 조회
           const saveFile = disturbResponse.data.saveFile;
@@ -160,39 +148,50 @@ export function ProfilePage() {
           const imgType = disturbResponse.data.imgType;
           const originalFile = disturbResponse.data.originalFile;
 
-          const getDisturbResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
+          const getDisturbResponse = await axios.get(
+            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
+            { responseType: 'blob' }
+          );
 
           const imgSrc = URL.createObjectURL(getDisturbResponse.data);
           dispatch(setDisturb(imgSrc));
-
-          console.log('seTtidmfd', setDisturb(imgSrc));
-          console.log('조회 성공', imgSrc);
-
           await saveDisturb;
         } else {
-          console.log('서버 응답 오류');
         }
       } catch (error) {
-        console.log('전송 실패', error);
       }
     }
   };
 
-  // 프로필 이미지 삭제
-  const deleteProfile = () => {
-    if (savedProfileImage) {
-      setProfileImage(null);
-      dispatch(setImageId(null));
+  // 프로필 사진 전송과 저장
+  useEffect(() => {
+    if (profileImage) {
+      sendToProfile();
     }
-  };
+  }, [profileImage]);
+
+  // 방해 사진 전송과 저장
+  useEffect(() => {
+    if (disturbImage) {
+      sendToDisturb();
+    }
+  }, [disturbImage]);
+
+  // 프로필 이미지 삭제
+  // const deleteProfile = () => {
+  //   if (savedProfileImage) {
+  //     setProfileImage(null);
+  //     dispatch(setImageId(null));
+  //   }
+  // };
 
   // 방해 이미지 삭제
-  const deleteDisturb = () => {
-    if (savedDisturbImage) {
-      setDisturbImage(null);
-      dispatch(setDisturb(null));
-    }
-  };
+  // const deleteDisturb = () => {
+  //   if (savedDisturbImage) {
+  //     setDisturbImage(null);
+  //     dispatch(setDisturb(null));
+  //   }
+  // };
 
   function openModal() {
     setModalOpen(true);
@@ -222,14 +221,11 @@ export function ProfilePage() {
           }
         }
       );
-      console.log('비밀번호 확인', response.status);
       if (response.status === 200) {
         return true;
       }
-      console.log(response.status);
       return false;
     } catch (error) {
-      console.log('너 오류난 거야', error);
       return false;
     }
   };
@@ -239,10 +235,8 @@ export function ProfilePage() {
 
     const validatePassword = await checkPassword();
 
-    console.log(validatePassword);
     if (validatePassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
-      return;
       return;
     }
 
@@ -261,20 +255,15 @@ export function ProfilePage() {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
           'Access-Control-Allow-Methods': 'POST'
-          // Authorization: `Bearer ${accessToken}`
         }
       });
 
-      console.log(response);
       if (response.status === 200) {
         dispatch(setNickname(name));
-        // setName(updatedNickname);
         persistor.flush();
         closeModal();
       }
-    } catch (error) {
-      console.error('회원 정보 수정에 실패하였습니다.', error);
-    }
+    } catch (error) {}
   };
 
   // 회원 탈퇴 요청
@@ -283,16 +272,13 @@ export function ProfilePage() {
 
     const validatePassword = await checkPassword();
 
-    console.log(validatePassword);
     if (validatePassword === false) {
       alert('잘못된 비밀번호를 입력하셨습니다.');
-      return;
       return;
     }
 
     try {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + `/api/profile/delete`,
         APPLICATION_SERVER_URL + `/api/profile/delete`,
         {},
         {
@@ -304,17 +290,11 @@ export function ProfilePage() {
           }
         }
       );
-      console.log(response.data);
       if (response.data === 0) {
         sessionStorage.removeItem('accessToken');
         navigate('/');
       }
     } catch (error) {
-      if (error.response) {
-        console.log(error.response.data);
-      } else {
-        console.log(error.message);
-      }
       return error;
     }
   };
@@ -338,10 +318,20 @@ export function ProfilePage() {
     setDeleteConfirmModalOpen(false);
   };
 
+  // 토글 버튼 상태 변경 핸들러
+  const handleToggleChange = () => {
+    setShowProfile(!showProfile);
+  };
+
   // 회원 탈퇴 확인 모달에서 '예, 탈퇴합니다' 버튼을 눌렀을 때의 동작
   const confirmSignOut = (e) => {
+    dispatch({ type: PURGE, key: 'root', result: () => null });
     signOutUser(e);
+    alert('회원탈퇴가 완료되었습니다.');
+    dispatch(setToken(null));
+    dispatch(setIsLogin(false));
     closeDeleteConfirmModal();
+    navigate('/');
   };
 
   return (
@@ -358,35 +348,63 @@ export function ProfilePage() {
           <div>
             <h3>프로필 이미지</h3>
             <div>
-              <input name="file" type="file" accept="image/*" className={styles.imageInput} ref={profileImageInput} onChange={saveProfile}></input>
+              <input
+                name="file"
+                type="file"
+                accept="image/*"
+                className={styles.imageInput}
+                ref={profileImageInput}
+                onChange={saveProfile}
+              ></input>
               <button onClick={onClickProfileUpload} className={styles.imageUpload}>
-                {savedProfileImage ? <img src={savedProfileImage} alt="미리보기" /> : <img src={emptyprofile} alt="미리보기" />}
+                {savedProfileImage ? (
+                  <img src={savedProfileImage} alt="미리보기" />
+                ) : (
+                  <img src={emptyprofile} alt="미리보기" />
+                )}
               </button>
             </div>
-            <button onClick={sendToProfile}>이미지 저장</button>
+            {/* <button onClick={sendToProfile}>이미지 저장</button>
             <div>
               <button onClick={deleteProfile}>삭제</button>
-            </div>
+            </div> */}
           </div>
         ) : (
           <div>
             <h3>방해 이미지</h3>
             <div>
-              <input name="file" type="file" accept="image/*" className={styles.imageInput} ref={disturbImageInput} onChange={saveDisturb}></input>
+              <input
+                name="file"
+                type="file"
+                accept="image/*"
+                className={styles.imageInput}
+                ref={disturbImageInput}
+                onChange={saveDisturb}
+              ></input>
               <button onClick={onClickDisturbUpload} className={styles.imageUpload}>
-                {savedDisturbImage ? <img src={savedDisturbImage} alt="미리보기" /> : <img src={emptyprofile} alt="미리보기" />}
+                {savedDisturbImage ? (
+                  <img src={savedDisturbImage} alt="미리보기" />
+                ) : (
+                  <img src={emptyprofile} alt="미리보기" />
+                )}
               </button>
             </div>
-            <button onClick={sendToDisturb}>이미지 저장</button>
+            {/* <button onClick={sendToDisturb}>이미지 저장</button>
             <div>
               <button onClick={deleteDisturb}>삭제</button>
-            </div>
+            </div> */}
           </div>
         )}
-        <button onClick={() => setShowProfile(!showProfile)}>토글 이미지</button>
+        <div className={styles.toggleWrapper}>
+          <label className={styles.switch}>
+            <input type="checkbox" checked={showProfile} onChange={handleToggleChange} />
+            <span className={styles.slider}></span>
+          </label>
+        </div>
         <div className={styles.myBium}>
           <h3>{savedNickname}</h3>
           <h3>오늘 비움량 : {todayBium}</h3>
+          <h3>총 비움량 : {totalBium}</h3>
           <h3>총 비움량 : {totalBium}</h3>
           <button className={styles.modifyButton} onClick={openModal}>
             회원 정보 수정
@@ -394,12 +412,17 @@ export function ProfilePage() {
         </div>
         {modalOpen && (
           <div className={styles.modal}>
-            <h2>회원정보 수정</h2>
-            <form>
-              <div>{savedProfileImage && <img src={savedProfileImage} alt="미리보기" />}</div>
-              <div>{savedNickname}</div>
+            <form className={styles.modifyForm}>
+              <div>
+                <div>
+                  <h2>회원정보 수정</h2>
+                  <p>{savedEmail}</p>
+                </div>
+                {/* <div>{savedProfileImage && <img src={savedProfileImage} alt="미리보기" />}</div> */}
+              </div>
               <label>
-                닉네임:
+                닉네임
+                <br />
                 <input
                   type="text"
                   value={name}
@@ -410,35 +433,63 @@ export function ProfilePage() {
               </label>
               <br />
               <label>
-                기존비밀번호:
-                <input type="password" autoComplete="off" value={existingPassword} onChange={(e) => setExistingPassword(e.target.value)} />
+                기존비밀번호
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={existingPassword}
+                  onChange={(e) => setExistingPassword(e.target.value)}
+                />
               </label>
               <br />
               <label>
                 비밀번호:
-                <input type="password" autoComplete="off" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
               </label>
               <br />
               <label>
                 비밀번호확인:
-                <input type="password" autoComplete="off" value={newpasswordConfirm} onChange={(e) => setNewPasswordConfirm(e.target.value)} />
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={newpasswordConfirm}
+                  onChange={(e) => setNewPasswordConfirm(e.target.value)}
+                />
               </label>
             </form>
-            <button onClick={modifyUserInfo}>수정하기</button>
-            <button onClick={openDeleteConfirmModal}>회원 탈퇴</button>
-
-            <button className={styles.overlay} onClick={closeModal}>
-              닫기
-            </button>
+            <div className={styles.insertButton}>
+              <button onClick={modifyUserInfo}>수정하기</button>
+              <button onClick={openDeleteConfirmModal}>회원 탈퇴</button>
+              <button className={styles.overlay} onClick={closeModal}>
+                닫기
+              </button>
+            </div>
           </div>
         )}
         {/* css 적용시 .modal이 아닌 다른 css 적용 필요 */}
         {deleteConfirmModalOpen && (
-          <div className={styles.modal}>
+          <div className={styles.signOutModal}>
             <h2>정말로 탈퇴하시겠어요?</h2>
-
-            <button onClick={confirmSignOut}>예</button>
-            <button onClick={closeDeleteConfirmModal}>아니요</button>
+            <label>
+              회원 탈퇴를 진행하시려면 비밀번호를 입력해주세요
+              <br />
+              &nbsp;
+              <input
+                type="password"
+                autoComplete="off"
+                value={existingPassword}
+                onChange={(e) => setExistingPassword(e.target.value)}
+              />
+            </label>
+            <div className={styles.signOutButton}>
+              <button onClick={confirmSignOut}>예</button>
+              <button onClick={closeDeleteConfirmModal}>아니요</button>
+            </div>
           </div>
         )}
       </div>

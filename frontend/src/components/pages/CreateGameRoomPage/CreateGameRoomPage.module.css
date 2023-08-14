@@ -9,17 +9,137 @@
     font-family: GangwonEdu_OTFBoldA;
 }
 
-.container {
+.createRoomContainer { /* 이미지와 게임방 생성 전체 컨테이너 */
     display: grid;
     grid-template-columns: 1fr 2fr;
     width: 100%;
     height: 100vh;
-  
+    /* background-color: #f7f7f7; */
 }
 
-.photo {
+.createRoomPhoto { /* 이미지 */
     background: url('../../../asset/backgroudimage/firebase4.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+.joinDialog { /* 게임방 생성 쪽 박스 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* 컨테이너 내부의 아이템을 가로 방향으로 정렬 */
+}
+
+.titleCreateRoom { /* 게임방 생성 글씨 */
+    font-size: 40px;
+    position: absolute;
+    top: 20px;
+    transform: translateY(-60%);
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
+    width: 60%;
+}
+
+.createRoomform { /* 생성 폼 */
+    margin-bottom: 0;
+    justify-content: center;
+}
+
+.formGroup { /* label과 input 혹은 select 박스 */
+    display: flex;
+    flex-direction: column; /* 세로로 정렬 */
+    margin-bottom: 5px;
+    justify-content: center; /* 수직 가운데 정렬 */
+}
+
+
+.formGroup input[type=checkbox] {
+    width: 30px;
+    /* 원하는 가로 크기로 변경 */
+    height: 30px;
+    /* 원하는 세로 크기로 변경 */
+    margin-left: 20px;
+}
+
+.formGroupPW {
+    display: flex;
+    flex-direction: column;
+}
+
+.createRoomLabel {
+    font-size: 30px;
+    margin: 0;
+    margin-left: 265px; /* 해상도 120 */
+    height: 35px;
+}
+
+.createRoomPassword {
+    font-size: 20px;
+    margin: 0;
+    height: 25px;
+    margin-left: 265px; /* 해상도 120 */
+}
+
+.formInput {
+    font-size: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 700px;
+    /* width: 600px; */ /* 해상도 100 */
+    align-self: center; /* input 요소를 수평으로 가운데 정렬 */
+}
+
+.formSelectArrow {
+    position: relative;
+    display: inline-block;
+    width: 742px;
+    /* width: 642px; */ /* 해상도 100 */
+    align-self: center; /* input 요소를 수평으로 가운데 정렬 */
+}
+
+.formSelect {
+    appearance: none; /* select box에서 이름이 잘리는 것이 보임 */
+    font-size: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    height: 65px;
+    line-height: 25px;
+    overflow: visible;
+}
+
+.formSelect > option {
+    inline-size: 25px;
+}
+
+.selectArrow {
+    position: absolute;
+    top: 45%;
+    /* right: 18%; */
+    right: 3%;
+    pointer-events: none;
+    border-style :solid;
+    border-width: 8px 5px 0 5px;
+    border-color: #999 transparent transparent transparent;
+}
+
+.formButton{ /* 버튼 감싸는 p 태그 */
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+}
+
+.joinButton { /* 게임방 생성 버튼 */
+    font-size: 20px;
+    padding: 15px 40px;
+    background-color: rgb(126, 124, 124);
+    color: aliceblue;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+    width: 30%;
 }
