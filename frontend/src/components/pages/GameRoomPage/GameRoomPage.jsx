@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { OpenVidu } from 'openvidu-browser';
+import { OpenVidu, SignalEvent } from 'openvidu-browser';
 import axios from 'axios';
 
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
 import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import { leaveRoom, setErrorSolve, setGameFallCount, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
+import { leaveRoom, setDisturb, setErrorSolve, setGameFallCount, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
@@ -17,6 +17,8 @@ import img1 from '../../../asset/backgroudimage/firebase1.jpg';
 import img2 from '../../../asset/backgroudimage/firebase2.gif';
 
 import { IoLogOutOutline } from 'react-icons/io5';
+
+import Confetti from '../../atoms/Confeti/Confeti';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 let backImage = '';
@@ -55,6 +57,7 @@ function GameRoomPage() {
   const gameRankList = useSelector((state) => state.room.gameRankList);
   const rankModal = useSelector((state) => state.room.rankModal);
   const errorSolve = useSelector((state) => state.room.errorSolve);
+  const disturb = useSelector((state) => state.room.disturb);
 
   if (backgroundImage === '1') {
     backImage = img2;
@@ -233,20 +236,20 @@ function GameRoomPage() {
       dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail, host, dispatch }));
 
       // Clean-up 함수 등록
-      // return () => {
-      //   console.log('등록이 되는 순간이 언제일까?');
-      //   console.log('clear');
-      //   session.off('streamCreated', handleStreamCreated);
-      //   session.off('streamDestroyed', handleStreamDestroyed);
-      //   session.off('exception', handleException);
-      //   // dispatch(leaveRoom());
-      //   dispatch(leaveSession());
+      return () => {
+        console.log('등록이 되는 순간이 언제일까?');
+        console.log('clear');
+        session.off('streamCreated', handleStreamCreated);
+        session.off('streamDestroyed', handleStreamDestroyed);
+        session.off('exception', handleException);
+        // dispatch(leaveRoom());
+        dispatch(leaveSession());
 
-      //   const mySession = session;
-      //   if (mySession) {
-      //     mySession.disconnect(); // 예시에서는 disconnect()로 대체하였으나, 이는 OpenVidu에 따라 다르게 적용될 수 있음
-      //   }
-      // };
+        const mySession = session;
+        if (mySession) {
+          mySession.disconnect(); // 예시에서는 disconnect()로 대체하였으나, 이는 OpenVidu에 따라 다르게 적용될 수 있음
+        }
+      };
     }
   }, [session]);
   useEffect(() => {
@@ -257,6 +260,16 @@ function GameRoomPage() {
       });
     }
   }, [start]);
+  useEffect(() => {
+    if (publisher !== undefined) {
+      publisher.stream.session.on('signal:disturb', (e) => {
+        dispatch(setDisturb(true));
+        setTimeout(() => {
+          dispatch(setDisturb(false));
+        }, 30);
+      });
+    }
+  }, [publisher]);
 
   useEffect(() => {
     return () => {
@@ -274,7 +287,7 @@ function GameRoomPage() {
         // dispatch(leaveRoom());
         dispatch(leaveSession());
         window.location.href = '/gameroomlist';
-      }, 200000);
+      }, 8000);
     }
   }, [gameRankList]);
 
@@ -311,6 +324,8 @@ function GameRoomPage() {
   useEffect(() => {
     console.log('gameId 바뀔때마다 출력해');
   }, [gameId]);
+  useEffect(() => {}, [disturb]);
+
   return (
     <div className={styles.backimage} style={{ backgroundImage: `url(${backImage})` }}>
       {rankModal && gameRankList !== null ? (
@@ -380,6 +395,8 @@ function GameRoomPage() {
                   </div>
                 ))}
               </div>
+              {/* 빵빠레 */}
+              {disturb ? <Confetti></Confetti> : null}
 
               <Timer></Timer>
             </div>

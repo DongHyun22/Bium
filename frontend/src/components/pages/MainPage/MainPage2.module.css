@@ -1,0 +1,73 @@
+.main2box {
+  width: 100vw;
+  height: 100vh;
+  /* background-color: rgb(28, 30, 29, 0.95); */
+  /* background-color: rgb(230, 230, 230, 0.2); */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  font-size: 40px;
+}
+.main2boxbackimg {
+  width: 100vw;
+  height: 100vh;
+  background-image: url('../../../asset/mainImage/main2noel.jpg');
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  /* z-index: 1; */
+  opacity: 0.5;
+}
+.main2boxback {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  background-color: rgb(0, 0, 0, 0.7);
+}
+.main2text {
+  position: absolute;
+  top: 200px;
+}
+.easyIn12 {
+  margin-left: 300px;
+  color: white;
+  animation: disappear 1s ease-in-out forwards;
+}
+
+.easyIn1 {
+  margin-left: 300px;
+  color: white;
+  animation: slide 0.8s ease-in-out forwards;
+}
+.easyIn2 {
+  color: white;
+  margin-left: 300px;
+  animation: slide 1.6s ease-in-out forwards;
+}
+.easyIn3 {
+  color: white;
+  margin-left: 300px;
+  animation: slide 2.4s ease-in-out forwards;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes disappear {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 0;
+  }
+}

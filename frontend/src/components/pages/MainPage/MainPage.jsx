@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import styles from './MainPage.module.css';
 import NavBar from '../../../components/atoms/NavBar/NavBar';
+import MainPage1 from './MainPage1';
+import MainPage2 from './MainPage2';
+import MainPage3 from './MainPage3';
+import MainPage4 from './MainPage4';
+import MainPage5 from './MainPage5';
 
 export const MainPage = () => {
   const isLogin = useSelector((state) => state.user.isLogin);
@@ -18,27 +23,13 @@ export const MainPage = () => {
   };
 
   return (
-    <div>
-      <div className={styles.mainpagebg}>
-        <div className={styles.photo}>
-          <button className={styles.biumlogobutton} onClick={goToHome}></button>
-          <div className={styles.leftContent}>
-            <p>바쁘게 살아가는 현대인에게</p>
-            <p>잠깐의 여유를 함께하기 위해</p>
-            <p>생각 비우기</p>
-          </div>
-        </div>
-        <div className={styles.rightBox}>
-          <NavBar></NavBar>
-          <div className={styles.rightContent}>
-            <h3 className={styles.titleBium}>비 움</h3>
-            <span className={styles.titleContent}>멍하니 있고 싶을 때</span>
-          </div>
-          <button className={styles.startButton} onClick={goToGameRooom}>
-            시작하기
-          </button>
-        </div>
-      </div>
+    <div className={styles.mainscroll}>
+      <MainPage1></MainPage1>
+      <MainPage2></MainPage2>
+      <MainPage3></MainPage3>
+      <MainPage5></MainPage5>
+      <MainPage4></MainPage4>
+      <button className={styles.biumlogobutton} onClick={goToHome}></button>
     </div>
   );
 };
