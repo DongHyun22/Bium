@@ -9,20 +9,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 body::-webkit-scrollbar {
-  width: 5px; /* 스크롤바의 너비 */
-  height: 5px;
+  width: 3px; /* 스크롤바의 너비 */
+  height: 0px;
 }
 
 body::-webkit-scrollbar-thumb {
-  height: 10%; /* 스크롤바의 길이 */
-  width: 10%;
+  height: 20%; /* 스크롤바의 길이 */
+
   background: rgba(0, 0, 0); /* 스크롤바의 색상 */
 
   border-radius: 30px;
 }
 
 body::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.6); /*스크롤바 뒷 배경 색상*/
-}
-body::-webkit-resizer {
+  background: rgba(0, 0, 0, 0.5); /*스크롤바 뒷 배경 색상*/
 }
