@@ -8,11 +8,10 @@ import getEmoji from '../atoms/Emoji/Emoji';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
-function GetRanking({ setEmoji }) {
+function GetRanking() {
   // 헤더 인증용 토큰
   const [rank, setRank] = useState([]);
   const [myRank, setMyRank] = useState([]);
-  const [rankEmoji, setRankEmoji] = useState([]);
   const userEmail = useSelector((state) => state.user.userEmail);
 
   const myRecord = useGetBiumTime(myRank.topBium);
@@ -28,17 +27,11 @@ function GetRanking({ setEmoji }) {
         setRank(response.data.ranking);
         setMyRank(response.data.myRanking);
 
-        const rankResult = getEmoji(myRank.userRank);
-        setRankEmoji(rankResult);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, [myRank]);
-
-  useEffect(() => {
-    setEmoji(rankEmoji)
-  }, [rankEmoji]);
+  }, []);
 
   return (
     <div className={styles.rankingContainer}>

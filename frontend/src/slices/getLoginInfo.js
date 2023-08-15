@@ -6,7 +6,10 @@ import {
   setUserEmail,
   setNickname,
   setTodayBium,
-  setTotalBium
+  setTotalBium,
+  setProfileImage,
+  setRank,
+  setImageId
 } from './userSlice';
 
 import axios from 'axios';
@@ -40,13 +43,38 @@ export const userLogin = (user) => async (dispatch) => {
 };
 
 // 사용자 정보를 가져오는 동작 처리 함수
+export const profileImageInfo = async (saveFolder, imageType, originalFile, saveFile, dispatch) => {
+  try {
+    const response = await axios.get(
+      APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imageType}/${originalFile}/${saveFile}`,
+      { responseType: 'blob' }
+    );
+    console.log(response.data);
+    const imageSource = URL.createObjectURL(response.data);
+    dispatch(setImageId(imageSource));
+  } catch (error) {
+    console.error('프로필 이미지 정보를 가져오는 중 오류 발생:', error);
+  }
+};
+
 export const getUserInfo = (Email) => async (dispatch) => {
   try {
     const response = await axios.get(APPLICATION_SERVER_URL + `/api/info/${Email}`);
+    console.log(response);
     dispatch(setUserEmail(response.data.userInfo.userEmail));
     dispatch(setNickname(response.data.userInfo.userNickname));
     dispatch(setTodayBium(response.data.userInfo.todayBium));
     dispatch(setTotalBium(response.data.userInfo.totalBium));
+    dispatch(setRank(response.data.userInfo.userRank));
+    dispatch(setProfileImage(response.data.imgInfo));
+
+    const saveFolder = response.data.imgInfo.saveFolder;
+    const imageType = response.data.imgInfo.imgType;
+    const originalFile = response.data.imgInfo.originalFile;
+    const saveFile = response.data.imgInfo.saveFile;
+
+    await profileImageInfo(saveFolder, imageType, originalFile, saveFile);
+
     return response.data;
   } catch (error) {
     dispatch(setIsValidToken(false));

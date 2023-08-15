@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { setToken, setIsLogin, setNickname, setImageId, setDisturb } from '../../../slices/userSlice';
+import { setToken, setIsLogin, setNickname, setImageId, setDisturb,logoutUser } from '../../../slices/userSlice';
 import { GetRanking } from '../../organisms/RankingList';
 import useGetBiumTime from '../../../hooks/TimeInquery';
 import axios from 'axios';
@@ -10,6 +10,7 @@ import { persistor } from '../../../store/store';
 import emptyprofile from '../../../asset/backgroudimage/emptyprofile.png';
 import { PURGE } from 'redux-persist';
 import { Fab, Action } from 'react-tiny-fab';
+import getEmoji from '../../atoms/Emoji/Emoji';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
@@ -28,6 +29,8 @@ export function ProfilePage() {
   const savedTotalBium = useSelector((state) => state.user.totalBium);
   const savedProfileImage = useSelector((state) => state.user.imageId);
   const savedDisturbImage = useSelector((state) => state.user.disturb);
+  const savedRank = useSelector((state) => state.user.rank);
+  
 
   // 회원 정보 수정의 기본값은 store 기본값에 한정
   const [name, setName] = useState(savedNickname);
@@ -38,9 +41,6 @@ export function ProfilePage() {
   const totalBium = useGetBiumTime(savedTotalBium);
   const [profileImage, setProfileImage] = useState(null);
   const [disturbImage, setDisturbImage] = useState(null);
-
-  // RankingList에서 전달하는 랭크 이모지
-  const [emoji, setEmoji] = useState('');
 
   // 프로필 이미지와 방해이미지가 바뀌는 상태를 관리하는 state
   const [showProfile, setShowProfile] = useState(true);
@@ -335,6 +335,7 @@ export function ProfilePage() {
   const logout = (e) => {
     e.stopPropagation();
     sessionStorage.removeItem('accessToken');
+    dispatch(logoutUser());
     dispatch({ type: PURGE, key: 'root', result: () => null });
     dispatch(setToken(null));
     dispatch(setIsLogin(false));
@@ -361,15 +362,15 @@ export function ProfilePage() {
           <div>
             <h3>프로필 이미지</h3>
             <div>
+              <input
+                name="file"
+                type="file"
+                accept="image/*"
+                className={styles.imageInput}
+                ref={profileImageInput}
+                onChange={saveProfile}
+              ></input>
               <button onClick={onClickProfileUpload} className={styles.imageUpload}>
-                <input
-                  name="file"
-                  type="file"
-                  accept="image/*"
-                  className={styles.imageInput}
-                  ref={profileImageInput}
-                  onChange={saveProfile}
-                ></input>
                 {savedProfileImage ? (
                   <img src={savedProfileImage} alt="미리보기" />
                 ) : (
@@ -415,7 +416,7 @@ export function ProfilePage() {
           </label>
         </div>
         <div className={styles.myBium}>
-          <h3>{emoji} {savedNickname}</h3>
+          <h3>{getEmoji(savedRank)} {savedNickname}</h3>
           <h3>오늘 비움량 : {todayBium}</h3>
           <h3>총 비움량 : {totalBium}</h3>
           <button className={styles.modifyButton} onClick={openModal}>
@@ -506,7 +507,7 @@ export function ProfilePage() {
         )}
       </div>
       <div className={styles.sideRight}>
-        <GetRanking setEmoji={setEmoji} />
+        <GetRanking />
         <Fab alwaysShowTitle={true} icon="👤">
           <Action text="비우러 가기" onClick={goToGameList}>
             🧘🏻‍♂
