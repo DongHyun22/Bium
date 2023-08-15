@@ -17,9 +17,9 @@ public interface GameRoomService {
     EnterUserDto enterGameRoom(EnterGameRoomDto enterGameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException;
     DetailGameRoomDto searchGameRoom(String gameRoomId);
     String modifyGameRoom(ModifyGameRoomDto request);
-    String outGameRoom(String gameId);
+    List<UserGameRecordDto> outGameRoom(String gameId);
     String startGameRoom(String gameRoomId);
-    List<UserGameRecordDto> overGame(OverGameDto request);
+    List<UserGameRecordDto> overGame(OverGameDto request) throws Exception;
     String deleteGameRoom(String gameRoomId);
     List<UserGameRecordDto> StopGameRoom(String gameRoomId);
 }

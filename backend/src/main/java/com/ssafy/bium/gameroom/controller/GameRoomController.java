@@ -72,7 +72,7 @@ public class GameRoomController {
     }
 
     @PostMapping("/out")
-    public String out(
+    public List<UserGameRecordDto> out(
             @RequestParam String gameId
     ) {
         return gameRoomService.outGameRoom(gameId);
@@ -88,7 +88,7 @@ public class GameRoomController {
     @PostMapping("/over")
     public List<UserGameRecordDto> over(
             @RequestBody OverGameDto request
-    ){
+    ) throws Exception {
         return gameRoomService.overGame(request);
     }
 

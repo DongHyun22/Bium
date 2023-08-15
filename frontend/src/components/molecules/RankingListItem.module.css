@@ -1,10 +1,18 @@
+@font-face {
+  font-family: 'GangwonEdu_OTFBoldA';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .rankingItem {
   display: flex;
   flex-direction: row;
   width: 100%;
   justify-content: space-between;
   font-size: 1em;
-  font-weight: 700;
+  font-weight: 800;
+  font-family: 'GangwonEdu_OTFBoldA';
 }
 
 .position {
@@ -12,6 +20,7 @@
   text-align: center;
   margin-top: 1em;
   margin-bottom: 1em;
+  font-family: 'GangwonEdu_OTFBoldA';
 }
 
 .nickname {
@@ -19,6 +28,8 @@
   text-align: center;
   margin-top: 1em;
   margin-bottom: 1em;
+  font-weight: 800;
+  font-family: 'GangwonEdu_OTFBoldA';
 }
 
 .rank {
@@ -27,6 +38,7 @@
   font-weight: 700;
   margin-top: 1em;
   margin-bottom: 1em;
+  font-family: 'GangwonEdu_OTFBoldA';
 }
 
 .topBium {
@@ -34,4 +46,5 @@
   text-align: center;
   margin-top: 1em;
   margin-bottom: 1em;
+  font-family: 'GangwonEdu_OTFBoldA';
 }

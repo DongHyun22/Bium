@@ -14,13 +14,30 @@ const initialState = {
   gameFallCount: 0,
   biumSecond: 0,
   gameRankList: null,
-  rankModal: false
+  rankModal: false,
+  errorSolve: false
 };
 
 export const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {
+    leaveRoom: (state) => {
+      console.log('실행완료욤');
+      state.start = false;
+      state.mySessionId = '';
+      state.gameId = null;
+      state.token = undefined;
+      state.host = false;
+      state.gameFallCount = 0;
+      state.biumSecond = 0;
+      state.gameRankList = 0;
+      state.rankModal = false;
+      state.errorSolve = false;
+    },
+    setErrorSolve: (state, action) => {
+      state.errorSolve = action.payload;
+    },
     setRankModal: (state, action) => {
       state.rankModal = action.payload;
     },
@@ -46,16 +63,16 @@ export const roomSlice = createSlice({
       state.start = action.payload;
     },
     setRoomTitle: (state, action) => {
-      state.roomTitle = action.payload.gameRoomTitle;
+      state.roomTitle = action.payload;
     },
     setRoomPassword: (state, action) => {
-      state.roomPassword = action.payload.roompassword;
+      state.roomPassword = action.payload;
     },
     setMySessionId: (state, action) => {
       state.mySessionId = action.payload;
     },
     setMyUserName: (state, action) => {
-      state.myUserName = action.payload.myUserName;
+      state.myUserName = action.payload;
     },
     setMaxPeople: (state, action) => {
       state.maxPeople = action.payload;
@@ -67,6 +84,8 @@ export const roomSlice = createSlice({
 });
 
 export const {
+  leaveRoom,
+  setErrorSolve,
   setRankModal,
   setGameRankList,
   setBiumSecond,

@@ -81,9 +81,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserRegisterPostReq registerInfo) {
 
-        System.out.println("userController" + registerInfo.getUserEmail());
         User user = userService.setUser(registerInfo);
-        System.out.println(user);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -158,10 +156,8 @@ public class UserController {
         logger.debug("MultipartFile.isEmpty : {}", file.isEmpty());
 
         if (!file.isEmpty()) {
-            System.out.println("파일이 잘 넘어옴");
             String saveFolder = uploadImgPath + File.separator + userEmail + File.separator + imgType;
-            System.out.println("경로를 저장함");
-            System.out.println("저장 폴더: " + saveFolder);
+
             logger.debug("저장 폴더: {}", saveFolder);
             File folder = new File(saveFolder);
             if (!folder.exists()) {
@@ -181,7 +177,6 @@ public class UserController {
 
                 logger.debug("원본 파일 이름 : {}, 실제 저장 파일 이름 : {}", file.getOriginalFilename(), saveFileName);
                 file.transferTo(new File(folder, saveFileName));
-                System.out.println("파일을 저장함");
 
                 userService.setImage(filePostReq);
 
@@ -274,12 +269,10 @@ public class UserController {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
         try {
-
             MailGetRes mailGetRes = userService.createMailAndChangePassword(userEmail);
             userService.sendMail(mailGetRes);
             resultMap.put("message", "success");
             status = HttpStatus.ACCEPTED;
-
         } catch (Exception e) {
             logger.error("임시 비밀번호 발급 실패 : {}", e);
             resultMap.put("message", e.getMessage());

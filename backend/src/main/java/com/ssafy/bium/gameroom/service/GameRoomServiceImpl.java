@@ -28,6 +28,7 @@ import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.ssafy.bium.common.exception.ExceptionMessage.NOT_EXIST_USER;
 import static com.ssafy.bium.common.exception.ExceptionMessage.NOT_MATCHING_PASSWORD;
 
 @Service
@@ -114,10 +115,10 @@ public class GameRoomServiceImpl implements GameRoomService {
     public EnterUserDto enterGameRoom(EnterGameRoomDto enterGameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException {
         String gameRoomId = enterGameRoomDto.getGameRoomId();
         String gameRoomPw = enterGameRoomDto.getGameRoomPw();
-        String roomPw = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "gameRoomPw");
-        if(!gameRoomPw.equals(roomPw)){
-            throw new PasswordException(NOT_MATCHING_PASSWORD);
-        }
+//        String roomPw = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "gameRoomPw");
+//        if(!gameRoomPw.equals(roomPw)){
+//            throw new PasswordException(NOT_MATCHING_PASSWORD);
+//        }
 
         // 유저게임방에 참가자 생성
         RedisAtomicLong counterUGR = new RedisAtomicLong("gameIndex", redisTemplate.getConnectionFactory());
@@ -183,18 +184,62 @@ public class GameRoomServiceImpl implements GameRoomService {
     }
 
     @Override
-    public String outGameRoom(String gameId) {
+    public List<UserGameRecordDto> outGameRoom(String gameId) {
+        HashOperations<String, String, String> hash = redisTemplate.opsForHash();
+        SetOperations<String, String> set = gameRoomNum.opsForSet();
+
         String gameRoomId = (String) redisTemplate.opsForHash().get("game:" + gameId, "gameRoomId");
         String start = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "start");
         if (start.equals("false")) {
+            // 게임방이 대기중일 때 멤버가 나가면 redis내의 데이터 삭제
+
             redisTemplate.delete("game:" + gameId);
             redisTemplate.opsForSet().remove("game", Integer.parseInt(gameId));
+            // gameIndex 및 game 삭제
+
             int cur = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "curPeople"));
             redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "curPeople", String.valueOf(--cur));
+            // 현재 인원 정보는 한명 줄이기
+
+            if(cur == 0){
+                // 게임방에 아무도 없을 시 게임방 또한 삭제
+                redisTemplate.delete("gameRoom:" + gameRoomId);
+                redisTemplate.opsForSet().remove("gameRoom", Integer.parseInt(gameRoomId));
+            }
         }
-//        RedisAtomicLong counterUGR = new RedisAtomicLong("ugri", redisTemplate.getConnectionFactory());
-//        counterUGR.decrementAndGet();
-        return gameRoomId;
+        else {
+            int survivor = Integer.parseInt((String) hash.get("gameRoom:" + gameRoomId, "startPeople"));
+            hash.put("gameRoom:" + gameRoomId, "startPeople", String.valueOf(--survivor));
+            if(survivor == 0){
+                Set<String> gameNum = set.members("game"); // 참가중인 게임 멤버 리스트 가져오기?
+                List<UserGameRecordDto> userGameRecords = new ArrayList<>();
+                for(String s : gameNum){
+                    if(Objects.equals(hash.get("game:" + s, "gameRoomId"), gameRoomId)){
+                        String findUserEmail = hash.get("game:" + s, "userEmail");
+                        String userNickname = userRepository.findByUserEmail(findUserEmail).get().getUserNickname();
+                        UserGameRecordDto userGameRecordDto = UserGameRecordDto.builder()
+                                .userNickname(userNickname)
+                                .gameRecord(hash.get("game:" + s, "gameRecord"))
+                                .build();
+                        userGameRecords.add(userGameRecordDto);
+                    }
+                }
+                Collections.sort(userGameRecords, new Comparator<>() {
+                    @Override
+                    public int compare(UserGameRecordDto o1, UserGameRecordDto o2) {
+                        long value1 = Long.parseLong(o1.getGameRecord());
+                        long value2 = Long.parseLong(o2.getGameRecord());
+                        return Long.compare(value2, value1);
+                    }
+                });
+                for(int i = 1; i <= userGameRecords.size(); i++){
+                    userGameRecords.get(i-1).setIndex(i);
+                }
+
+                return userGameRecords;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -211,17 +256,17 @@ public class GameRoomServiceImpl implements GameRoomService {
     }
 
     @Override
-    public List<UserGameRecordDto> overGame(OverGameDto request) {
+    public List<UserGameRecordDto> overGame(OverGameDto request) throws Exception {
         HashOperations<String, String, String> hash = redisTemplate.opsForHash();
         SetOperations<String, String> set = gameRoomNum.opsForSet();
 
         String gameId = request.getGameId();
-        String gameRoomId = (String) hash.get("game:" + gameId, "gameRoomId");
-        String userEmail = (String) hash.get("game:" + gameId, "userEmail");
+        String gameRoomId = hash.get("game:" + gameId, "gameRoomId");
+        String userEmail = hash.get("game:" + gameId, "userEmail");
         Optional<User> findUser = userRepository.findByUserEmail(userEmail);
         if(findUser.isEmpty()){
             log.debug("{} - 해당 유저는 존재하지 않습니다.", userEmail);
-            return null;
+            throw new Exception(NOT_EXIST_USER);
         }
         findUser.get().saveBium(request.getGameRecord());
         Long totalBium = findUser.get().getTotalBium();
@@ -257,6 +302,10 @@ public class GameRoomServiceImpl implements GameRoomService {
                     return Long.compare(value2, value1);
                 }
             });
+            for(int i = 1; i <= userGameRecords.size(); i++){
+                userGameRecords.get(i-1).setIndex(i);
+            }
+
             return userGameRecords;
         }
         return null;
@@ -275,7 +324,7 @@ public class GameRoomServiceImpl implements GameRoomService {
             }
         }
         redisTemplate.delete("gameRoom:" + gameRoomId);
-        redisTemplate.opsForSet().remove("GameRoom", Integer.parseInt(gameRoomId));
+        redisTemplate.opsForSet().remove("gameRoom", Integer.parseInt(gameRoomId));
 //
 //        String hashKey = "customSessionId"; // 여기에 해당 키에 대한 해시 키 값을 지정하세요.
 //
