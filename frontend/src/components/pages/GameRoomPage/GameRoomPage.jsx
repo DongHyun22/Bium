@@ -273,7 +273,7 @@ function GameRoomPage() {
         dispatch(setDisturb(true));
         setTimeout(() => {
           dispatch(setDisturb(false));
-        }, 30);
+        }, 3000);
       });
     }
   }, [publisher]);
