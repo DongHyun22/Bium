@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './Timer.module.css';
-import { setBiumSecond, setGameFallCount, setStart } from '../../../slices/roomSlice/roomSlice';
+import { setBiumSecond } from '../../../slices/roomSlice/roomSlice';
 
 export default function GameTimer() {
   const dispatch = useDispatch();
