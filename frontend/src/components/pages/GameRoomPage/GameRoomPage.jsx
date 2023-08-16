@@ -358,15 +358,17 @@ function GameRoomPage() {
           {session !== undefined ? (
             <div className={styles.gameroom}>
               {host && start === false ? (
-                <button
-                  className={styles.gameStartbutton}
-                  onClick={() => {
-                    gameStart();
-                    startSignal(publisher);
-                  }}
-                >
-                  <p>비움 시작</p>
-                </button>
+                <div className={styles.startbuttonBox}>
+                  <button
+                    className={styles.gameStartbutton}
+                    onClick={() => {
+                      gameStart();
+                      startSignal(publisher);
+                    }}
+                  >
+                    <p>비움 시작</p>
+                  </button>
+                </div>
               ) : null}
               {/* 게임방 제목 */}
               <div className={styles.gameTitleBox}>
