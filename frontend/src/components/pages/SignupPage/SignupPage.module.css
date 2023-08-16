@@ -152,9 +152,8 @@
   color: white;
   cursor: pointer;
   border-radius: 5px;
-
-  width: 8vw;
-  height: 5vh;
+  width: 20%;
+  height: 150%;
   font-size: 50%;
   right: 16%;
   top: 50%;
@@ -189,7 +188,7 @@
 }
 
 .signupform {
-  margin-top: 7%;
+  margin-top: 8%;
 }
 
 .redfont {
