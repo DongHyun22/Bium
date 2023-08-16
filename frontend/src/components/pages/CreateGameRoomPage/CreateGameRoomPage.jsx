@@ -65,13 +65,13 @@ export const CreateGameRoom = () => {
         <div id="join-dialog" className={styles.joinDialog}>
           <h1 className={styles.titleCreateRoom}> 비움방 생성 </h1>
           <form className={styles.createRoomform} onSubmit={handleJoin}>
-            <p className={styles.formGroup}>
+            <div className={styles.formGroup}>
               <label className={styles.createRoomLabel} htmlFor="gameRoomTitle">
                 방 제목
               </label>
               <input className={styles.formInput} type="text" id="gameRoomTitle" onChange={handleChangeRoomTitle} required />
-            </p>
-            <p className={styles.formGroup}>
+            </div>
+            <div className={styles.formGroup}>
               <label className={styles.createRoomLabel} htmlFor="maxPeople">
                 최대 인원
               </label>
@@ -84,8 +84,8 @@ export const CreateGameRoom = () => {
                 </select>
                 <div className={styles.selectArrow}></div>
               </div>
-            </p>
-            <p className={styles.formGroup}>
+            </div>
+            <div className={styles.formGroup}>
               <label className={styles.createRoomLabel} htmlFor="backgroundImage">
                 배경 이미지
               </label>
@@ -96,7 +96,7 @@ export const CreateGameRoom = () => {
                 </select>
                 <div className={styles.selectArrow}></div>
               </div>
-            </p>
+            </div>
             {/* <p>
               <label>Participant: </label>
               <input className="form-control" type="text" id="userName" value={myUserName} onChange={handleChangeUserName} required />
@@ -105,7 +105,7 @@ export const CreateGameRoom = () => {
               <label> Session: </label>
               <input className="form-control" type="text" id="sessionId" value={mySessionId} onChange={handleChangeSessionId} />
             </p> */}
-            <p className={styles.formGroup}>
+            <div className={styles.formGroup}>
               <div className={styles.createinputbottom}>
                 <label className={styles.createRoomLabel} htmlFor="secretRoom">
                   비밀방 여부
@@ -117,9 +117,9 @@ export const CreateGameRoom = () => {
                   </div>
                 )}
               </div>
-            </p>
+            </div>
             <div className={styles.formButton}>
-              <input className={styles.joinButton} name="commit" type="button" value="같이 하기" />
+              <input className={styles.joinButton} onClick={handleJoin} name="commit" type="button" value="같이 하기" />
               <input
                 className={styles.outButton}
                 onClick={() => {

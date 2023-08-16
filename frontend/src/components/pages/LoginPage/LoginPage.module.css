@@ -209,9 +209,11 @@ form {
   flex-direction: row-reverse;
   margin-right: 120px;
   margin-top: 30px;
-  cursor: pointer;
   text-decoration: underline;
   font-size: 20px;
+}
+.findpassword > p {
+  cursor: pointer;
 }
 
 .passwordinput {

@@ -49,7 +49,7 @@ export const GameRoomListPage = () => {
 
   return (
     <>
-      <div className={styles.containerTitle} >
+      <div className={styles.containerTitle}>
         <div className={styles.title}>
           <h1>비움방 목록</h1>
           <Link to="/createroom">
