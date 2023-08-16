@@ -159,13 +159,13 @@
   z-index: 1000;
 }
 
-img {
+/* img {
   width: 200px;
   height: 200px;
   object-fit: cover;
   border-radius: 100%;
   padding: 0%;
-}
+} */
 
 .imageUpload {
   width: 200px;

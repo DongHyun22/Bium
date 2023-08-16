@@ -1,0 +1,83 @@
+@font-face {
+  font-family: 'S-CoreDream-3Light';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Variables */
+:root {
+  --bg: #ffffff;
+  --text-color: #000000;
+  --caret-color: rgb(0, 0, 0);
+  --text-length: 13;
+  --animation-time: 4s;
+  box-sizing: border-box;
+}
+
+/* Center content */
+.main1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 100vh;
+  background: var(--bg);
+}
+
+.mainstarttext {
+  color: #ffffff;
+  text-align: center;
+  font-weight: 500;
+  font-size: 64px;
+  font-family: 'S-CoreDream-3Light';
+}
+
+.mainstarttext > span {
+  font-size: 80px;
+  font-family: 'S-CoreDream-3Light';
+}
+
+.mainstarttext::after {
+  content: '|';
+  right: 0;
+  animation: caret 0.8s infinite;
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+.main1 {
+  z-index: -1;
+  background-image: url('../../../asset/mainImage/mainmoon.avif');
+  background-size: 100vw;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* background-attachment: fixed; */
+  opacity: 0.95;
+  margin: 0;
+  padding: 0;
+}
+
+.mainstartbutton {
+  margin: 12px;
+  padding: 30px;
+  border-radius: 10px;
+  background: #333;
+  justify-content: center;
+  align-items: center;
+  box-shadow: -5px -5px 15px #828282, 5px 5px 15px #222, inset 5px 5px 10px #444, inset -5px -5px 10px #222;
+  border: none;
+  font-size: 25px;
+  color: rgb(161, 161, 161);
+  transition: 500ms;
+}
+
+.mainstartbutton:hover {
+  box-shadow: -5px -5px 15px #444, 5px 5px 15px #222, inset 5px 5px 10px #222, inset -5px -5px 10px #444;
+  color: #d6d6d6;
+  transition: 500ms;
+}
