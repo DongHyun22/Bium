@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { OpenVidu, SignalEvent } from 'openvidu-browser';
 import axios from 'axios';
+import { useInView }  from 'react-intersection-observer'
 
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
 import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
@@ -333,8 +334,14 @@ function GameRoomPage() {
   }, [gameId]);
   useEffect(() => {}, [disturb]);
 
+  // useInView 훅 사용
+  const [ref, inView] = useInView({
+    triggerOnce: true,  // 이미지가 한 번 로드되면 다시 로드하지 않음
+    threshold: 0.1      // 이미지의 10%가 화면에 보일 때 로딩을 시작
+  });
+
   return (
-    <div className={styles.backimage} style={{ backgroundImage: `url(${backImage})` }}>
+    <div ref={ref} className={styles.backimage} style={{ backgroundImage: inView ? `url(${backImage})` : 'none' }} >
       {rankModal && gameRankList !== null ? (
         <div className={styles.endGame}>
           <div className={styles.endGameText}>
