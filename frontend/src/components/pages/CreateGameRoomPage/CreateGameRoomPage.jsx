@@ -69,32 +69,18 @@ export const CreateGameRoom = () => {
               <label className={styles.createRoomLabel} htmlFor="gameRoomTitle">
                 방 제목
               </label>
-              <input
-                className={styles.formInput}
-                type="text"
-                id="gameRoomTitle"
-                onChange={handleChangeRoomTitle}
-                required
-              />
+              <input className={styles.formInput} type="text" id="gameRoomTitle" onChange={handleChangeRoomTitle} required />
             </p>
             <p className={styles.formGroup}>
               <label className={styles.createRoomLabel} htmlFor="maxPeople">
                 최대 인원
               </label>
-              <div className={styles.formSelectArrow}> 
-                <select
-                  className={styles.formSelect}
-                  id="maxPeople"
-                  onChange={handleChangeMaxPeople}
-                >
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
+              <div className={styles.formSelectArrow}>
+                <select className={styles.formSelect} id="maxPeople" onChange={handleChangeMaxPeople}>
                   <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
+                  <option value="3">3</option>
+                  <option value="2">2</option>
+                  <option value="1">1</option>
                 </select>
                 <div className={styles.selectArrow}></div>
               </div>
@@ -103,19 +89,14 @@ export const CreateGameRoom = () => {
               <label className={styles.createRoomLabel} htmlFor="backgroundImage">
                 배경 이미지
               </label>
-              <div className={styles.formSelectArrow}> 
-                <select
-                  className={styles.formSelect}
-                  id="backgroundImage"
-                  onChange={handleChangeBackground}
-                >
+              <div className={styles.formSelectArrow}>
+                <select className={styles.formSelect} id="backgroundImage" onChange={handleChangeBackground}>
                   <option value="1">불</option>
                   <option value="2">물</option>
                   <option value="3">숲</option>
                 </select>
                 <div className={styles.selectArrow}></div>
               </div>
-              
             </p>
             {/* <p>
               <label>Participant: </label>
@@ -130,37 +111,19 @@ export const CreateGameRoom = () => {
                 <label className={styles.createRoomLabel} htmlFor="secretRoom">
                   비밀방 여부
                 </label>
-                <input
-                  className={styles.formInput}
-                  type="checkbox"
-                  id="secretRoom"
-                  value={isSecret}
-                  onChange={handleChangeisSecret}
-                />
-              </div>              
+                <input className={styles.formInput} type="checkbox" id="secretRoom" value={isSecret} onChange={handleChangeisSecret} />
+              </div>
               {isSecret && (
                 <div className={styles.formGroupPW}>
                   <label className={styles.createRoomPassword} htmlFor="roomPassword">
                     Password
                   </label>
-                  <input
-                    className={styles.formInput}
-                    type="text"
-                    id="roomPassword"
-                    value={roomPassword}
-                    onChange={handleChangeRoomPassword}
-                    required
-                  />
+                  <input className={styles.formInput} type="text" id="roomPassword" value={roomPassword} onChange={handleChangeRoomPassword} required />
                 </div>
               )}
             </p>
             <p className={styles.formButton}>
-              <input
-                className={styles.joinButton}
-                name="commit"
-                type="submit"
-                value="같이 하기"
-              />
+              <input className={styles.joinButton} name="commit" type="submit" value="같이 하기" />
             </p>
           </form>
         </div>

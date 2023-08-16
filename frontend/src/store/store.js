@@ -5,19 +5,16 @@ import userReducer from '../slices/userSlice';
 import videoReducer from '../slices/videoSlice/videoSlice';
 import roomReducer from '../slices/roomSlice/roomSlice';
 
-export const store = configureStore(
-  {
-    reducer: {
-      user: userReducer,
-      video: videoReducer,
-      room: roomReducer
-    },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: false
-      })
+export const store = configureStore({
+  reducer: {
+    user: userReducer,
+    video: videoReducer,
+    room: roomReducer
   },
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false
+    })
+});
 
 export const persistor = persistStore(store);

@@ -5,7 +5,7 @@ const initialState = {
   roomPassword: '',
   mySessionId: '',
   myUserName: '',
-  maxPeople: '8',
+  maxPeople: '4',
   backgroundImage: '1',
   start: false,
   host: false,
@@ -15,7 +15,8 @@ const initialState = {
   biumSecond: 0,
   gameRankList: null,
   rankModal: false,
-  errorSolve: false
+  errorSolve: false,
+  disturb: false
 };
 
 export const roomSlice = createSlice({
@@ -34,6 +35,10 @@ export const roomSlice = createSlice({
       state.gameRankList = 0;
       state.rankModal = false;
       state.errorSolve = false;
+      state.disturb = false;
+    },
+    setDisturb: (state, action) => {
+      state.disturb = action.payload;
     },
     setErrorSolve: (state, action) => {
       state.errorSolve = action.payload;
@@ -78,28 +83,12 @@ export const roomSlice = createSlice({
       state.maxPeople = action.payload;
     },
     setBackgroundImage: (state, action) => {
+      console.log('백이미지 당장당장 확인', action.payload);
       state.backgroundImage = action.payload;
     }
   }
 });
 
-export const {
-  leaveRoom,
-  setErrorSolve,
-  setRankModal,
-  setGameRankList,
-  setBiumSecond,
-  setGameFallCount,
-  setGameId,
-  setGameRoomId,
-  setHost,
-  setStart,
-  setRoomTitle,
-  setRoomPassword,
-  setMySessionId,
-  setMyUserName,
-  setMaxPeople,
-  setBackgroundImage
-} = roomSlice.actions;
+export const { setDisturb, leaveRoom, setErrorSolve, setRankModal, setGameRankList, setBiumSecond, setGameFallCount, setGameId, setGameRoomId, setHost, setStart, setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } = roomSlice.actions;
 
 export default roomSlice.reducer;

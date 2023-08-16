@@ -11,7 +11,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
-  flex-direction: column;  
+  flex-direction: column;
   background-color: #fff;
   padding: 50px;
   z-index: 1000;
@@ -32,10 +32,10 @@
 }
 
 .containerBtnFindPw {
-  display: flex;  
+  display: flex;
   justify-content: space-evenly;
   width: 600px;
-  margin-top: 20px; 
+  margin-top: 20px;
 }
 
 .btnSubmitFindPw {
@@ -66,10 +66,10 @@
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
 }
 
-.btnSubmitFindPw:hover, .btnCloseFindPw:hover {
+.btnSubmitFindPw:hover,
+.btnCloseFindPw:hover {
   cursor: pointer;
 }
-
 
 .loginpagebg {
   height: 100vh;
@@ -142,12 +142,12 @@ form {
   cursor: pointer;
   font-size: 35px;
   text-decoration: underline;
-  font-family: 'GangwonEdu_OTFBoldA';
+  font-family: 'S-CoreDream-3Light';
 }
 
 .leftcontent p {
   font-size: 25px;
-  font-family: 'GangwonEdu_OTFBoldA';
+  font-family: 'S-CoreDream-3Light';
 }
 
 .loginid,
