@@ -4,8 +4,10 @@ import axios from 'axios';
 import RankingItem from '../molecules/RankingListItem';
 import styles from './RankingList.module.css';
 import useGetBiumTime from '../../hooks/TimeInquery';
+import getEmoji from '../atoms/Emoji/Emoji';
 
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 function GetRanking() {
   // 헤더 인증용 토큰
@@ -29,13 +31,13 @@ function GetRanking() {
       .catch((error) => {
         console.error(error);
       });
-  }, [userEmail]);
+  }, []);
 
   return (
     <div className={styles.rankingContainer}>
-      <div >
+      <div>
         <div className={styles.rankingTitle}>
-          <p>Ranking</p>
+          <p>비움 순위</p>
         </div>
         <div className={styles.catalog}>
           <div>
@@ -47,14 +49,22 @@ function GetRanking() {
         </div>
         <div className={styles.rankingList}>
           {rank.map((item, index) => (
-            <RankingItem key={index} nickname={item.userNickname} rank={item.userRank} topBium={item.topBium} ranking={item.ranking} />
+            <RankingItem
+              key={index}
+              nickname={item.userNickname}
+              rank={item.userRank}
+              topBium={item.topBium}
+              ranking={item.ranking}
+            />
           ))}
-          <p>...</p>
+          <p>&#183;</p>
+          <p>&#183;</p>
+          <p>&#183;</p>
           {!myRankExistsInRank && (
             <div className={styles.myRanking}>
               <div>{myRank.ranking}</div>
               <div>{myRank.userNickname}</div>
-              <div>{myRank.userRank}</div>
+              <div>{getEmoji(myRank.userRank)}</div>
               <div>{myRecord}</div>
             </div>
           )}
