@@ -7,10 +7,9 @@ import MainPage3 from './MainPage3';
 import MainPage4 from './MainPage4';
 import MainPage5 from './MainPage5';
 import { BsArrowBarDown } from 'react-icons/bs';
+import MainFooter from './MainFooter';
 
 export const MainPage = () => {
-  const navigate = useNavigate();
-
   const [downScroll, setDownScroll] = useState(true);
   const [upScroll, setUpScroll] = useState(false);
 
@@ -18,7 +17,7 @@ export const MainPage = () => {
     if (window.scrollY === 0) {
       setUpScroll(false);
       setDownScroll(true);
-    } else if (window.scrollY >= 2500) {
+    } else if (window.scrollY >= 2800) {
       setUpScroll(true);
       setDownScroll(false);
     } else {
@@ -58,6 +57,7 @@ export const MainPage = () => {
       <MainPage3></MainPage3>
       <MainPage5></MainPage5>
       <MainPage4></MainPage4>
+      <MainFooter></MainFooter>
     </div>
   );
 };
