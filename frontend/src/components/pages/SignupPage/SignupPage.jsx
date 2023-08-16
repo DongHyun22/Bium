@@ -190,7 +190,7 @@ export default function SignUpPage() {
             이메일 <br></br>
             <div className={styles.emailContainer}>
               <input type="text" placeholder="이메일을 입력해주세요." value={userEmail} onChange={handleChange} className={styles.signupInput} id="userEmail" name="userEmail" required />
-              <button onClick={checkMail}>중복 확인</button>
+              { checkEmailDuplicate ? <button className={styles.emailContainerChecked}>사용 가능</button> : <button className={styles.emailContainerCheck} onClick={checkMail}>중복 확인</button>}
             </div>
           </label>
           <div className={styles.inputbottom}>{userEmail && <div className={styles.validContent}>{isEmailValid ? <p className={styles.bluefont}>{rightEmail}</p> : <p className={styles.redfont}>{wrongEmail}</p>}</div>}</div>

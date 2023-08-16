@@ -40,12 +40,9 @@ export const GameRoomListPage = () => {
   const logout = (e) => {
     e.stopPropagation();
     sessionStorage.removeItem('accessToken');
-    console.log('')
-    sessionStorage.removeItem('persist:user');
-    // dispatch(logoutUser());
-    // dispatch({ type: PURGE, key: 'root', result: () => null });
+    dispatch(logoutUser());
+    dispatch({ type: PURGE, key: 'root', result: () => null });
     dispatch(setToken(null));
-    // dispatch(setUserEmail(''));
     dispatch(setIsLogin(false));
     // navigate('/');
   };
