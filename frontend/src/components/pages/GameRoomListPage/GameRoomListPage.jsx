@@ -40,17 +40,16 @@ export const GameRoomListPage = () => {
   const logout = (e) => {
     e.stopPropagation();
     sessionStorage.removeItem('accessToken');
-    dispatch(setToken(null));
-    dispatch(setUserEmail(''));
-    dispatch(setIsLogin(false));
     dispatch(logoutUser());
     dispatch({ type: PURGE, key: 'root', result: () => null });
+    dispatch(setToken(null));
+    dispatch(setIsLogin(false));
     // navigate('/');
   };
 
   return (
     <>
-      <div className={styles.containerTitle}>
+      <div className={styles.containerTitle} >
         <div className={styles.title}>
           <h1>비움방 목록</h1>
           <Link to="/createroom">

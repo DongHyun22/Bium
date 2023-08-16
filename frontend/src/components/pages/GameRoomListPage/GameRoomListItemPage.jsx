@@ -30,7 +30,7 @@ export const GameRoomListItem = (props) => {
           }}
           className={styles.listItem}
         >
-          <div className={styles.listItemThumbnail}></div>
+          <div className={styles.listItemThumbnail} loading="lazy"></div>
           <div className={styles.listItemContents}>
             <h2>{gameRoomTitle}</h2>
             {gameRoomMovie === 1 ? <h3>🔥 불멍</h3> : <h3>🌊 물멍</h3>}
