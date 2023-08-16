@@ -106,24 +106,21 @@ export const CreateGameRoom = () => {
               <input className="form-control" type="text" id="sessionId" value={mySessionId} onChange={handleChangeSessionId} />
             </p> */}
             <p className={styles.formGroup}>
-              <div>
+              <div className={styles.inputbottom}>
                 <label className={styles.createRoomLabel} htmlFor="secretRoom">
                   비밀방 여부
                 </label>
                 <input className={styles.formInput} type="checkbox" id="secretRoom" value={isSecret} onChange={handleChangeisSecret} />
+                {isSecret && (
+                  <div className={styles.formGroupPW}>
+                    <input className={styles.formInput} type="text" id="roomPassword" value={roomPassword} onChange={handleChangeRoomPassword} required />
+                  </div>
+                )}
               </div>
-              {isSecret && (
-                <div className={styles.formGroupPW}>
-                  <label className={styles.createRoomPassword} htmlFor="roomPassword">
-                    Password
-                  </label>
-                  <input className={styles.formInput} type="text" id="roomPassword" value={roomPassword} onChange={handleChangeRoomPassword} required />
-                </div>
-              )}
             </p>
-            <p className={styles.formButton}>
+            <div className={styles.formButton}>
               <input className={styles.joinButton} name="commit" type="submit" value="같이 하기" />
-            </p>
+            </div>
           </form>
         </div>
       </div>

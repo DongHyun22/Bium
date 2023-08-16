@@ -5,19 +5,18 @@
   flex-wrap: wrap;
   padding: 5em 12em 5em 12em;
   background-color: #f7f7f7;
+  height: 100vh;
 }
 
 .containerTitle {
   background: url('../../../asset/backgroudimage/gameRoomListItemTest2.jpg');
   background-size: 100vw;
-  background-position: 0px -340px;
+  background-position: 0px -390px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 7em 10em 7em 10em;
-
-  color: white;
+  padding: 5em 8em 5em 8em;
 }
 
 .title {
@@ -29,11 +28,13 @@
   display: inline-block;
   margin: 0.1em;
   margin-right: 0.5em;
-  font-size: 40px;
+  font-size: 70px;
+  font-weight: 700;
 }
 
 .listItem {
-  width: 20em;
+  width: 21em;
+  height: 17em;
   margin: 1.5em;
   background-color: white;
   border-radius: 5px;
@@ -43,7 +44,7 @@
 .listItemThumbnail {
   background: url('../../../asset/backgroudimage/gameRoomListItemTest.jpg');
   background-size: cover;
-  width: 20em;
+  width: 21em;
   height: 7em;
   border-radius: 5px 5px 0 0;
   padding: 0;
