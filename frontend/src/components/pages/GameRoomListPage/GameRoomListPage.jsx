@@ -48,7 +48,7 @@ export const GameRoomListPage = () => {
   };
 
   return (
-    <div>
+    <>
       <div className={styles.containerTitle}>
         <div className={styles.title}>
           <h1>게임방 목록</h1>
@@ -88,7 +88,7 @@ export const GameRoomListPage = () => {
           💨
         </Action>
       </Fab>
-    </div>
+    </>
   );
 };
 export default GameRoomListPage;

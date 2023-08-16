@@ -1,17 +1,7 @@
-@font-face {
-  font-family: 'GangwonEdu_OTFBoldA';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-* {
-  font-family: GangwonEdu_OTFBoldA;
-}
-
 .containerItems {
   display: flex;
   flex-direction: row;
+  justify-content: first baseline;
   flex-wrap: wrap;
   padding: 5em 12em 5em 12em;
   background-color: #f7f7f7;
@@ -85,7 +75,7 @@
   cursor: pointer;
   display: inline-flex;
   font-size: 16px;
-  font-weight: 600;
+
   justify-content: center;
   line-height: 1.25;
   min-height: 3rem;
@@ -125,7 +115,6 @@
 }
 
 .search__input {
-  font-family: inherit;
   font-size: 20px;
   background-color: #f7f7f7;
   border: none;
@@ -148,7 +137,6 @@
 }
 
 .search__input::-webkit-input-placeholder {
-  font-weight: 100;
   color: rgba(0, 0, 0, 0.3);
 }
 
