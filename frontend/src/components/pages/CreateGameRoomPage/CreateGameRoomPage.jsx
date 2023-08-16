@@ -63,7 +63,7 @@ export const CreateGameRoom = () => {
           {/* <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" /> */}
         </div>
         <div id="join-dialog" className={styles.joinDialog}>
-          <h1 className={styles.titleCreateRoom}> 게임방 생성 </h1>
+          <h1 className={styles.titleCreateRoom}> 비움방 생성 </h1>
           <form className={styles.createRoomform} onSubmit={handleJoin}>
             <p className={styles.formGroup}>
               <label className={styles.createRoomLabel} htmlFor="gameRoomTitle">
@@ -93,7 +93,6 @@ export const CreateGameRoom = () => {
                 <select className={styles.formSelect} id="backgroundImage" onChange={handleChangeBackground}>
                   <option value="1">불</option>
                   <option value="2">물</option>
-                  <option value="3">숲</option>
                 </select>
                 <div className={styles.selectArrow}></div>
               </div>
@@ -107,24 +106,21 @@ export const CreateGameRoom = () => {
               <input className="form-control" type="text" id="sessionId" value={mySessionId} onChange={handleChangeSessionId} />
             </p> */}
             <p className={styles.formGroup}>
-              <div>
+              <div className={styles.createinputbottom}>
                 <label className={styles.createRoomLabel} htmlFor="secretRoom">
                   비밀방 여부
                 </label>
                 <input className={styles.formInput} type="checkbox" id="secretRoom" value={isSecret} onChange={handleChangeisSecret} />
+                {isSecret && (
+                  <div className={styles.formGroupPW}>
+                    <input className={styles.formInput} type="text" id="roomPassword" value={roomPassword} onChange={handleChangeRoomPassword} required />
+                  </div>
+                )}
               </div>
-              {isSecret && (
-                <div className={styles.formGroupPW}>
-                  <label className={styles.createRoomPassword} htmlFor="roomPassword">
-                    Password
-                  </label>
-                  <input className={styles.formInput} type="text" id="roomPassword" value={roomPassword} onChange={handleChangeRoomPassword} required />
-                </div>
-              )}
             </p>
-            <p className={styles.formButton}>
+            <div className={styles.formButton}>
               <input className={styles.joinButton} name="commit" type="submit" value="같이 하기" />
-            </p>
+            </div>
           </form>
         </div>
       </div>

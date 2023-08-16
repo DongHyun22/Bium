@@ -71,7 +71,9 @@
 .titleSignup {
   position: absolute;
   top: 20px;
+
   margin-left: 30px;
+  margin-bottom: 0;
   transform: translateY(-60%);
   border-bottom: 2px solid #333;
   padding-bottom: 5px;
@@ -84,7 +86,6 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 80%;
-  margin-top: 5px;
   font-size: 20px;
 }
 
@@ -98,7 +99,7 @@
   /* margin-top: 30px; */
   margin: 0;
   margin-left: 13%;
-  position: relative;
+  /* position: relative; */
 }
 
 .confirmEmail {
@@ -150,7 +151,7 @@
   color: white;
   cursor: pointer;
   border-radius: 5px;
-  /* padding: 15px; */
+
   width: 8vw;
   height: 5vh;
   font-size: 50%;
@@ -163,9 +164,8 @@
   height: 5px;
   margin-left: 13%;
   font-size: 15px;
-
 }
-.validContent p{
+.validContent p {
   margin-top: 0;
 }
 .inputbottom {
@@ -173,6 +173,13 @@
 }
 
 .signupform {
-  margin-top: 30px ;
+  margin-top: 10px;
+}
 
-};
+.redfont {
+  color: red;
+}
+
+.bluefont {
+  color: blue;
+}

@@ -18,7 +18,6 @@ const MainPage5 = () => {
         <div className={styles.main5card}>
           <div className={styles.main5cardbg}>
             <img className={styles.checkimage} src={checkimage} alt="" />
-
             <p>표정을 인식하고, 변화를 감지해 비움을 하는지 알 수 있어요!</p>
           </div>
           {/* <div className={styles.main5cardblob}></div> */}

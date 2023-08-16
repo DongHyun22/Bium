@@ -1,7 +1,7 @@
 .main3box {
   position: absolute;
   width: 100vw;
-  height: 400px;
+  height: 500px;
   background-color: rgb(38, 38, 38);
   /* background: linear-gradient(to top, white, rgb(28, 30, 29, 0.95)); */
   z-index: -1;
@@ -14,7 +14,7 @@
   color: white;
   /* background-color: rgb(28, 30, 29, 0.95); */
   width: 100vw;
-  height: 75vh;
+  height: 90vh;
   justify-content: center;
 }
 
@@ -29,8 +29,8 @@
 }
 
 .firstcard {
-  width: 240px;
-  height: 300px;
+  width: 300px;
+  height: 400px;
   background: rgb(45, 45, 45);
   transition: all 0.4s;
   border-radius: 10px;

@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 
 const MainPage1 = () => {
   const txt = '그대여, 아무 걱정하지 말아요';
-  const navigate = useNavigate();
   const [Text, setText] = useState('');
   const [Count, setCount] = useState(0);
+  const navigate = useNavigate();
   const isLogin = useSelector((state) => state.user.isLogin);
   const token = useSelector((state) => state.user.token);
 

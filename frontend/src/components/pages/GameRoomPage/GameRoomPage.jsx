@@ -363,7 +363,7 @@ function GameRoomPage() {
                     startSignal(publisher);
                   }}
                 >
-                  <p>게임 시작</p>
+                  <p>비움 시작</p>
                 </button>
               ) : null}
               {/* 게임방 제목 */}

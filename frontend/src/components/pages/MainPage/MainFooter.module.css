@@ -1,0 +1,31 @@
+.footerhead {
+  width: 100vw;
+  height: 50px;
+  background-color: rgb(38, 38, 38, 0.6);
+  color: white;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.footertitle > h2 {
+  margin: 0;
+  padding: 0;
+}
+.footercontact {
+  display: flex;
+  align-items: center;
+}
+.footercontact > h5 {
+  margin: 0;
+  margin-right: 20px;
+}
+.footercontact > p {
+  margin: 0;
+}
+
+.footerbottom > p {
+  margin: 0;
+}

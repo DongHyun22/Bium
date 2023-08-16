@@ -38,11 +38,18 @@
 }
 
 .homelogo {
-  width: 40px;
-  height: 40px;
-  background: url('../../../asset/logoimage/biumlogo.png');
+  background: url('../../../asset/logoimage/projectLogoWhite.png');
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  height: 60px;
+  width: 60px;
+  filter: brightness(70%);
+  background-repeat: no-repeat;
+  background-size: contain;
   background-size: cover;
-  margin: 20px;
+  top: 15px;
+  left: 10px;
 }
 
 .sideLeft {

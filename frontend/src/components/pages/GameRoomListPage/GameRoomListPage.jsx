@@ -54,7 +54,7 @@ export const GameRoomListPage = () => {
     <>
       <div className={styles.containerTitle} >
         <div className={styles.title}>
-          <h1>게임방 목록</h1>
+          <h1>비움방 목록</h1>
           <Link to="/createroom">
             <div className={styles.BtnGameCreate}>
               <svg width="20" height="20" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
@@ -64,7 +64,7 @@ export const GameRoomListPage = () => {
           </Link>
         </div>
         <div className={styles.search}>
-          <input type="text" className={styles.search__input} placeholder="게임방 검색"></input>
+          <input type="text" className={styles.search__input} placeholder="비움방 검색"></input>
           <button className={styles.search__button}>🔍</button>
         </div>
       </div>
@@ -77,8 +77,8 @@ export const GameRoomListPage = () => {
           </>
         ) : (
           <>
-            <h2>생성된 게임방이 없습니다.</h2>
-            <h2>+ 버튼을 통해 게임방을 만들어요!</h2>
+            <h2>생성된 비움방이 없습니다.</h2>
+            <h2>+ 버튼을 통해 비움방을 만들어요!</h2>
           </>
         )}
       </div>

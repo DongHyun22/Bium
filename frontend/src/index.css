@@ -4,22 +4,29 @@
   font-weight: normal;
   font-style: normal;
 }
-
-:root {
+* {
   font-family: 'S-CoreDream-3Light';
 }
 body {
   box-sizing: 0;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'S-CoreDream-3Light';
+  font-family: -apple-system, 'S-CoreDream-3Light';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100vw;
 }
-
+/* body div {
+  font-family: 'S-CoreDream-3Light';
+}
+body button {
+  font-family: 'S-CoreDream-3Light';
+}
+body input {
+  font-family: 'S-CoreDream-3Light';
+} */
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: 'S-CoreDream-3Light';
 }
 body::-webkit-scrollbar {
   width: 3px; /* 스크롤바의 너비 */
