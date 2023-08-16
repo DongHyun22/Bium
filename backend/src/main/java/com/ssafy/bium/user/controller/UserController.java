@@ -114,15 +114,21 @@ public class UserController {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
 
         try {
+            System.out.println("???");
             // 로그인 사용자 정보.
             User user = userService.getUserByUserEmail(userEmail);
 
             // 프로필 이미지
             Image image = userService.getImageData(userEmail, 1);
-            ImageDataGetRes imageDataGetRes = new ImageDataGetRes(image);
+            if (image == null) {
+                resultMap.put("imgInfo", "none");
+            } else {
+                ImageDataGetRes imageDataGetRes = new ImageDataGetRes(image);
+                resultMap.put("imgInfo", imageDataGetRes);
+            }
 
             resultMap.put("userInfo", user);
-            resultMap.put("imgInfo", imageDataGetRes);
+
             resultMap.put("message", "success");
 
             status = HttpStatus.ACCEPTED;
