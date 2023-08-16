@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './GameRoomList.module.css';
 import { Fab, Action } from 'react-tiny-fab';
-import { setIsLogin, setToken, setUserEmail } from '../../../slices/userSlice';
+import { setIsLogin, setToken, setUserEmail, logoutUser } from '../../../slices/userSlice';
 import { PURGE } from 'redux-persist';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
@@ -43,6 +43,7 @@ export const GameRoomListPage = () => {
     dispatch(setToken(null));
     dispatch(setUserEmail(''));
     dispatch(setIsLogin(false));
+    dispatch(logoutUser());
     dispatch({ type: PURGE, key: 'root', result: () => null });
     // navigate('/');
   };

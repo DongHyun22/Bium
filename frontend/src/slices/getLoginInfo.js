@@ -34,6 +34,7 @@ export const userLogin = (user) => async (dispatch) => {
       dispatch(setIsLogin(true));
       dispatch(setIsLoginError(false));
       dispatch(setIsValidToken(true));
+      dispatch(setUserEmail(user.userEmail));
     } else {
       dispatch(setIsLogin(false));
       dispatch(setIsLoginError(true));
@@ -52,29 +53,29 @@ export const profileImageInfo = async (saveFolder, imageType, originalFile, save
     const imageSource = URL.createObjectURL(response.data);
     dispatch(setImageId(imageSource));
   } catch (error) {
-    console.error('프로필 이미지 정보를 가져오는 중 오류 발생:', error);
+    return ;
   }
 };
 
 export const getUserInfo = (Email) => async (dispatch) => {
   try {
     const response = await axios.get(APPLICATION_SERVER_URL + `/api/info/${Email}`);
-    console.log(response);
-    dispatch(setUserEmail(response.data.userInfo.userEmail));
     dispatch(setNickname(response.data.userInfo.userNickname));
     dispatch(setTodayBium(response.data.userInfo.todayBium));
     dispatch(setTotalBium(response.data.userInfo.totalBium));
     dispatch(setRank(response.data.userInfo.userRank));
-    dispatch(setProfileImage(response.data.imgInfo));
 
-    const saveFolder = response.data.imgInfo.saveFolder;
-    const imageType = response.data.imgInfo.imgType;
-    const originalFile = response.data.imgInfo.originalFile;
-    const saveFile = response.data.imgInfo.saveFile;
+    if (response.data.imgInfo !== "none") {
+      dispatch(setProfileImage(response.data.imgInfo));
 
-    await profileImageInfo(saveFolder, imageType, originalFile, saveFile, dispatch);
+      const saveFolder = response.data.imgInfo.saveFolder;
+      const imageType = response.data.imgInfo.imgType;
+      const originalFile = response.data.imgInfo.originalFile;
+      const saveFile = response.data.imgInfo.saveFile;
 
-    return response.data;
+      await profileImageInfo(saveFolder, imageType, originalFile, saveFile, dispatch);
+    }
+    return ;
   } catch (error) {
     dispatch(setIsValidToken(false));
     return error;
