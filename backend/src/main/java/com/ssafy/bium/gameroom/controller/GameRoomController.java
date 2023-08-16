@@ -34,9 +34,10 @@ public class GameRoomController {
 
     @GetMapping("")
     public List<GameRoomListDto> list(
+            @RequestParam String keyword
             // sort, keyword 변수 넣어서 정렬 및 검색 기능 구현
     ) {
-        return gameRoomService.searchGameRooms();
+        return gameRoomService.searchGameRooms(keyword);
     }
 
 
