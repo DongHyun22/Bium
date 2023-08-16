@@ -106,7 +106,7 @@ export const CreateGameRoom = () => {
               <input className="form-control" type="text" id="sessionId" value={mySessionId} onChange={handleChangeSessionId} />
             </p> */}
             <p className={styles.formGroup}>
-              <div className={styles.inputbottom}>
+              <div className={styles.createinputbottom}>
                 <label className={styles.createRoomLabel} htmlFor="secretRoom">
                   비밀방 여부
                 </label>
