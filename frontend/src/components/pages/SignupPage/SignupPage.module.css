@@ -144,9 +144,24 @@
   border-radius: 5px;
 }
 
-.emailContainer button {
+.emailContainerCheck {
   position: absolute;
   background-color: rgb(126, 124, 124);
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+
+  width: 8vw;
+  height: 5vh;
+  font-size: 50%;
+  right: 16%;
+  top: 50%;
+}
+
+.emailContainerChecked {
+  position: absolute;
+  background-color: rgb(185, 185, 185);
   border: none;
   color: white;
   cursor: pointer;
