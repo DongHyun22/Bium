@@ -345,7 +345,7 @@ export function ProfilePage() {
   };
 
   return (
-    <div className={styles.gridContainer}>
+    <div className={styles.gridContainer} loading="lazy">
       <div className={styles.header}>
         <div className={styles.homelogo} onClick={goToMainPage}></div>
       </div>
