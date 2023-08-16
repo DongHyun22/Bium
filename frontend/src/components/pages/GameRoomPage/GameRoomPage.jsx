@@ -235,7 +235,6 @@ function GameRoomPage() {
       const handleException = (exception) => {
         console.warn('exception', exception);
       };
-
       session.on('streamCreated', handleStreamCreated);
       session.on('streamDestroyed', handleStreamDestroyed);
       session.on('exception', handleException);

@@ -119,7 +119,15 @@ export const CreateGameRoom = () => {
               </div>
             </p>
             <div className={styles.formButton}>
-              <input className={styles.joinButton} name="commit" type="submit" value="같이 하기" />
+              <input className={styles.joinButton} name="commit" type="button" value="같이 하기" />
+              <input
+                className={styles.outButton}
+                onClick={() => {
+                  navigate('/gameroomlist');
+                }}
+                type="button"
+                value="취소 하기"
+              />
             </div>
           </form>
         </div>
