@@ -94,7 +94,11 @@
 
 .signupLable {
   font-size: 30px;
-  height: 73px;
+  height: 110px;
+  /* margin-top: 30px; */
+  margin: 0;
+  margin-left: 13%;
+  position: relative;
 }
 
 .confirmEmail {
@@ -141,22 +145,34 @@
 
 .emailContainer button {
   position: absolute;
-  right: 15%;
-  /* right: 123px; */
-  top: 6px;
   background-color: rgb(126, 124, 124);
   border: none;
   color: white;
   cursor: pointer;
   border-radius: 5px;
-  padding: 20px;
-  font-size: 20px;
+  /* padding: 15px; */
+  width: 8vw;
+  height: 5vh;
+  font-size: 50%;
+  right: 16%;
+  top: 50%;
 }
 
 .validContent {
   display: flex;
-  justify-content: center;
   height: 5px;
-  margin-top: 15px;
-  font-size: 20px;
+  margin-left: 13%;
+  font-size: 15px;
+
 }
+.validContent p{
+  margin-top: 0;
+}
+.inputbottom {
+  height: 25px;
+}
+
+.signupform {
+  margin-top: 30px ;
+
+};
