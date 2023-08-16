@@ -116,15 +116,22 @@ public class UserController {
         try {
             // 로그인 사용자 정보.
             User user = userService.getUserByUserEmail(userEmail);
+
+            // 프로필 이미지
+            Image image = userService.getImageData(userEmail, 1);
+            ImageDataGetRes imageDataGetRes = new ImageDataGetRes(image);
+
             resultMap.put("userInfo", user);
+            resultMap.put("imgInfo", imageDataGetRes);
             resultMap.put("message", "success");
+
             status = HttpStatus.ACCEPTED;
         } catch (Exception e) {
             resultMap.put("message", e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
 
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
     @GetMapping("/profile/modify/{userEmail}")

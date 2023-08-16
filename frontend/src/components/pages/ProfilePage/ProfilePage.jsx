@@ -2,13 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import styles from './ProfilePage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { setToken, setIsLogin, setNickname, setImageId, setDisturb } from '../../../slices/userSlice';
+import { setToken, setIsLogin, setNickname, setImageId, setDisturb,logoutUser } from '../../../slices/userSlice';
 import { GetRanking } from '../../organisms/RankingList';
 import useGetBiumTime from '../../../hooks/TimeInquery';
 import axios from 'axios';
 import { persistor } from '../../../store/store';
 import emptyprofile from '../../../asset/backgroudimage/emptyprofile.png';
 import { PURGE } from 'redux-persist';
+import { Fab, Action } from 'react-tiny-fab';
+import getEmoji from '../../atoms/Emoji/Emoji';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
@@ -27,6 +29,8 @@ export function ProfilePage() {
   const savedTotalBium = useSelector((state) => state.user.totalBium);
   const savedProfileImage = useSelector((state) => state.user.imageId);
   const savedDisturbImage = useSelector((state) => state.user.disturb);
+  const savedRank = useSelector((state) => state.user.rank);
+  
 
   // 회원 정보 수정의 기본값은 store 기본값에 한정
   const [name, setName] = useState(savedNickname);
@@ -108,11 +112,9 @@ export function ProfilePage() {
 
           const imgSrc = URL.createObjectURL(getProfileResponse.data);
           dispatch(setImageId(imgSrc));
-
         } else {
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
 
@@ -158,8 +160,7 @@ export function ProfilePage() {
           await saveDisturb;
         } else {
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
 
@@ -323,6 +324,23 @@ export function ProfilePage() {
     setShowProfile(!showProfile);
   };
 
+  const goToMainPage = () => {
+    return navigate('/');
+  };
+
+  const goToGameList = () => {
+    navigate(`/gameroomlist`);
+  };
+
+  const logout = (e) => {
+    e.stopPropagation();
+    sessionStorage.removeItem('accessToken');
+    dispatch(logoutUser());
+    dispatch({ type: PURGE, key: 'root', result: () => null });
+    dispatch(setToken(null));
+    dispatch(setIsLogin(false));
+  };
+
   // 회원 탈퇴 확인 모달에서 '예, 탈퇴합니다' 버튼을 눌렀을 때의 동작
   const confirmSignOut = (e) => {
     dispatch({ type: PURGE, key: 'root', result: () => null });
@@ -337,11 +355,7 @@ export function ProfilePage() {
   return (
     <div className={styles.gridContainer}>
       <div className={styles.header}>
-        <div></div>
-        <div></div>
-        <div>
-          <h1>ProfilePage</h1>
-        </div>
+        <div className={styles.homelogo} onClick={goToMainPage}></div>
       </div>
       <div className={styles.sideLeft}>
         {showProfile ? (
@@ -402,12 +416,11 @@ export function ProfilePage() {
           </label>
         </div>
         <div className={styles.myBium}>
-          <h3>{savedNickname}</h3>
-          <h3>오늘 비움량 : {todayBium}</h3>
-          <h3>총 비움량 : {totalBium}</h3>
-          <h3>총 비움량 : {totalBium}</h3>
+          <h3>{getEmoji(savedRank)} {savedNickname}</h3>
+          <h3>오늘 비움량 {todayBium}</h3>
+          <h3>총 비움량 {totalBium}</h3>
           <button className={styles.modifyButton} onClick={openModal}>
-            회원 정보 수정
+            수정✏️
           </button>
         </div>
         {modalOpen && (
@@ -495,6 +508,14 @@ export function ProfilePage() {
       </div>
       <div className={styles.sideRight}>
         <GetRanking />
+        <Fab alwaysShowTitle={true} icon="👤">
+          <Action text="비우러 가기" onClick={goToGameList}>
+            🧘🏻‍♂
+          </Action>
+          <Action text="로그아웃" onClick={logout}>
+            💨
+          </Action>
+        </Fab>
       </div>
     </div>
   );

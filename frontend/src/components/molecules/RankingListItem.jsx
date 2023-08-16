@@ -1,5 +1,6 @@
 import React from 'react';
 import useGetBiumTime from '../../hooks/TimeInquery';
+import getEmoji from '../atoms/Emoji/Emoji';
 import styles from './RankingListItem.module.css';
 
 const RankingItem = ({ nickname, rank, topBium, ranking }) => (
@@ -9,7 +10,7 @@ const RankingItem = ({ nickname, rank, topBium, ranking }) => (
   <div className={styles.rankingItem}>
     <div className={styles.position}>{ranking}</div>
     <div className={styles.nickname}>{nickname}</div>
-    <div className={styles.rank}>{rank}</div>
+    <div className={styles.rank}>{getEmoji(rank)}</div>
     <div className={styles.topBium}>{useGetBiumTime(topBium)}</div>
   </div>
 );

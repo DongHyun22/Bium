@@ -13,13 +13,26 @@ const initialState = {
   isLogin: false,
   isLoginError: false,
   userInfo: null,
-  isValidToken: false
+  isValidToken: false,
+  profileImage: null,
+  rank: 0
 };
 
 const persistConfig = {
   key: 'user',
   storage: storageSession,
-  whitelist: ['token', 'userEmail', 'nickname', 'todayBium', 'totalBium', 'imageId', 'disturb', 'isLogin']
+  whitelist: [
+    'token',
+    'userEmail',
+    'nickname',
+    'todayBium',
+    'totalBium',
+    'imageId',
+    'disturb',
+    'isLogin',
+    'profileImage',
+    'rank'
+  ]
 };
 
 const userSlice = createSlice({
@@ -58,11 +71,35 @@ const userSlice = createSlice({
     },
     setUserInfo(state, action) {
       state.userInfo = action.payload;
+    },
+    setProfileImage: (state, action) => {
+      state.profileImage = action.payload;
+    },
+    setRank: (state, action) => {
+      state.rank = action.payload;
+    },
+    logoutUser(state) {
+      return initialState;
     }
   }
 });
 
-export const { setToken, setUserEmail, setNickname, setTodayBium, setTotalBium, setImageId, setDisturb, setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } = userSlice.actions;
+export const {
+  setToken,
+  setUserEmail,
+  setNickname,
+  setTodayBium,
+  setTotalBium,
+  setImageId,
+  setDisturb,
+  setIsLogin,
+  setIsLoginError,
+  setIsValidToken,
+  setUserInfo,
+  setProfileImage,
+  setRank,
+  logoutUser
+} = userSlice.actions;
 
 const persistedReducer = persistReducer(persistConfig, userSlice.reducer);
 export default persistedReducer;

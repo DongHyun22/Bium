@@ -111,6 +111,12 @@ export default function SignUpPage() {
 
   const checkMail = async (e) => {
     e.preventDefault();
+
+    if (!isEmailValid) {
+      alert('유효하지 않은 이메일입니다.');
+      return;
+    }
+
     try {
       const response = await axios.get(APPLICATION_SERVER_URL + '/api/signup/check', {
         params: {
