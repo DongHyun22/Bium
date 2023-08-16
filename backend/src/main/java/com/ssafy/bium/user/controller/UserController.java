@@ -114,7 +114,6 @@ public class UserController {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
 
         try {
-            System.out.println("???");
             // 로그인 사용자 정보.
             User user = userService.getUserByUserEmail(userEmail);
 
