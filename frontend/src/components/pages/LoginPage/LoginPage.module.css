@@ -148,6 +148,8 @@ form {
   flex-direction: column;
   margin-bottom: 10px;
   font-size: 30px;
+  margin-top: 40px;
+  margin-left: 120px;
 }
 
 .titlelogin {
@@ -161,11 +163,6 @@ form {
   font-size: 40px;
 }
 
-label {
-  margin-top: 5%;
-  margin-left: 13%;
-}
-
 .logininput {
   padding: 20px;
   border: 1px solid #ccc;
@@ -175,7 +172,7 @@ label {
   font-size: 20px;
 }
 
-input::placeholder {
+.logininput::placeholder {
   font-size: 20px;
 }
 
@@ -208,9 +205,9 @@ input::placeholder {
 
 .findpassword {
   display: flex;
-  justify-content: flex-end;
-  margin-right: 13%;
-  margin-top: 50px;
+  flex-direction: row-reverse;
+  margin-right: 120px;
+  margin-top: 30px;
   cursor: pointer;
   text-decoration: underline;
   font-size: 20px;
