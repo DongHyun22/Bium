@@ -120,6 +120,14 @@ public class GameRoomServiceImpl implements GameRoomService {
 //            throw new PasswordException(NOT_MATCHING_PASSWORD);
 //        }
 
+        int cur = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "curPeople"));
+        int max = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "maxPeople"));
+        if(cur == max){
+            EnterUserDto enterUserDto = EnterUserDto.builder()
+                    .sessionId("가득참")
+                    .build();
+            return enterUserDto;
+        }
         // 유저게임방에 참가자 생성
         RedisAtomicLong counterUGR = new RedisAtomicLong("gameIndex", redisTemplate.getConnectionFactory());
         Long gameIndex = counterUGR.incrementAndGet();
@@ -128,7 +136,7 @@ public class GameRoomServiceImpl implements GameRoomService {
         params.put("customSessionId", enterGameRoomDto.getCustomSessionId());
         String sessionId = openviduService.createConnection(enterGameRoomDto.getCustomSessionId(), params);
 
-        int cur = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "curPeople"));
+
         redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "curPeople", String.valueOf(++cur));
 
         Game game = Game.builder()
