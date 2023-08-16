@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface GameRoomService {
     String test(String sessionId) throws OpenViduJavaClientException, OpenViduHttpException;
-    List<GameRoomListDto> searchGameRooms();
+    List<GameRoomListDto> searchGameRooms(String keyword);
     EnterGameRoomDto createGameRoom(GameRoomDto gameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException;
     EnterUserDto enterGameRoom(EnterGameRoomDto enterGameRoomDto, String userEmail) throws OpenViduJavaClientException, OpenViduHttpException;
     DetailGameRoomDto searchGameRoom(String gameRoomId);
