@@ -49,7 +49,6 @@ export const profileImageInfo = async (saveFolder, imageType, originalFile, save
       APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imageType}/${originalFile}/${saveFile}`,
       { responseType: 'blob' }
     );
-    console.log(response.data);
     const imageSource = URL.createObjectURL(response.data);
     dispatch(setImageId(imageSource));
   } catch (error) {
@@ -73,7 +72,7 @@ export const getUserInfo = (Email) => async (dispatch) => {
     const originalFile = response.data.imgInfo.originalFile;
     const saveFile = response.data.imgInfo.saveFile;
 
-    await profileImageInfo(saveFolder, imageType, originalFile, saveFile);
+    await profileImageInfo(saveFolder, imageType, originalFile, saveFile, dispatch);
 
     return response.data;
   } catch (error) {

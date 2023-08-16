@@ -417,8 +417,8 @@ export function ProfilePage() {
         </div>
         <div className={styles.myBium}>
           <h3>{getEmoji(savedRank)} {savedNickname}</h3>
-          <h3>오늘 비움량 : {todayBium}</h3>
-          <h3>총 비움량 : {totalBium}</h3>
+          <h3>오늘 비움량 {todayBium}</h3>
+          <h3>총 비움량 {totalBium}</h3>
           <button className={styles.modifyButton} onClick={openModal}>
             수정✏️
           </button>
