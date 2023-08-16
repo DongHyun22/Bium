@@ -69,6 +69,7 @@ public class GameRoomServiceImpl implements GameRoomService {
                         .gameRoomMovie(gameRoom.getGameRoomMovie())
                         .curPeople(gameRoom.getCurPeople())
                         .maxPeople(gameRoom.getMaxPeople())
+                        .gameRoomPw(gameRoom.getGameRoomPw())
                         .build());
             }
         }
