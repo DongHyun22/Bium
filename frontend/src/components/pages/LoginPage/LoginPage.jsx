@@ -119,9 +119,9 @@ function LoginPage() {
               onChange={handlePasswordChange}
             />
           </label>
-          <p className={styles.findpassword} onClick={openModal}>
-            비밀번호 찾기
-          </p>
+          <div className={styles.findpassword}>
+            <p onClick={openModal}>비밀번호 찾기</p>
+          </div>
         </form>
         <div className={styles.buttoncontainer}>
           <button className={styles.loginbutton} onClick={handleSubmit}>
@@ -156,7 +156,7 @@ function LoginPage() {
                 <button className={styles.btnCloseFindPw} onClick={closeModal}>
                   닫기
                 </button>
-              </div>             
+              </div>
             </div>
           )}
         </div>
