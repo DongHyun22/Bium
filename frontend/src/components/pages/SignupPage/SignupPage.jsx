@@ -193,23 +193,23 @@ export default function SignUpPage() {
               <button onClick={checkMail}>중복 확인</button>
             </div>
           </label>
-          <div className={styles.inputbottom}>{userEmail && <div className={styles.validContent}>{isEmailValid ? <p>{rightEmail}</p> : <p>{wrongEmail}</p>}</div>}</div>
+          <div className={styles.inputbottom}>{userEmail && <div className={styles.validContent}>{isEmailValid ? <p className={styles.bluefont}>{rightEmail}</p> : <p className={styles.redfont}>{wrongEmail}</p>}</div>}</div>
           <label htmlFor="password" className={styles.signupLable}>
             비밀번호 <br></br>
             <input type="password" autoComplete="off" placeholder="비밀번호를 입력해주세요." value={password} onChange={handleChange} className={styles.signupInput} id="password" name="password" required />
           </label>
-          <div className={styles.inputbottom}>{password && <div className={styles.validContent}>{isPasswordValid ? <p>{rightPassword}</p> : <p>{wrongPassword}</p>}</div>}</div>
+          <div className={styles.inputbottom}>{password && <div className={styles.validContent}>{isPasswordValid ? <p className={styles.bluefont}>{rightPassword}</p> : <p className={styles.redfont}>{wrongPassword}</p>}</div>}</div>
           <label htmlFor="passwordConfirm" className={styles.signupLable}>
             비밀번호 확인 <br></br>
             <input type="password" autoComplete="off" placeholder="비밀번호를 다시 입력해 주세요." value={passwordConfirm} onChange={handleChange} className={styles.signupInput} id="passwordConfirm" name="passwordConfirm" required />
           </label>
-          <div className={styles.inputbottom}>{passwordConfirm && <div className={styles.validContent}>{isPasswordConfirmValid ? <p>{rightPasswordConfirm}</p> : <p>{wrongPasswordConfirm}</p>}</div>}</div>
+          <div className={styles.inputbottom}>{passwordConfirm && <div className={styles.validContent}>{isPasswordConfirmValid ? <p className={styles.bluefont}>{rightPasswordConfirm}</p> : <p className={styles.redfont}>{wrongPasswordConfirm}</p>}</div>}</div>
 
           <label htmlFor="name" className={styles.signupLable}>
             이름 <br></br>
             <input type="text" placeholder="이름을 입력해 주세요." value={name} onChange={handleChange} className={styles.signupInput} id="name" name="name" required />
           </label>
-          <div className={styles.inputbottom}>{name && <div className={styles.validContent}>{isNameValid ? <p>{rightName}</p> : <p>{wrongName}</p>}</div>}</div>
+          <div className={styles.inputbottom}>{name && <div className={styles.validContent}>{isNameValid ? <p className={styles.bluefont}>{rightName}</p> : <p className={styles.redfont}>{wrongName}</p>}</div>}</div>
 
           <label htmlFor="nickname" className={styles.signupLable}>
             닉네임 <br></br>
