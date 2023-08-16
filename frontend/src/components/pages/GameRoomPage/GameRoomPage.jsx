@@ -61,6 +61,7 @@ function GameRoomPage() {
   const rankModal = useSelector((state) => state.room.rankModal);
   const errorSolve = useSelector((state) => state.room.errorSolve);
   const disturb = useSelector((state) => state.room.disturb);
+  const [audioPlay, setAudioPlay] = useState(false);
 
   useEffect(() => {
     if (backgroundImage === '1') {
@@ -72,7 +73,6 @@ function GameRoomPage() {
       console.log('백이미지버놓2222', backgroundImage);
       backImage = img2;
       backaudio = new Audio('/audios/rainaudio3.mp3');
-
       backaudio.loop = true;
     }
   }, [backgroundImage]);
@@ -329,13 +329,12 @@ function GameRoomPage() {
   }, [publisher]);
 
   useEffect(() => {
-    console.log('gameId 바뀔때마다 출력해');
-  }, [gameId]);
-  useEffect(() => {}, [disturb]);
-  const audiostart = () => {
-    backaudio.play();
-  };
-
+    if (audioPlay) {
+      backaudio.play();
+    } else {
+      backaudio.pause();
+    }
+  }, [audioPlay]);
   return (
     <div className={styles.backimage} style={{ backgroundImage: `url(${backImage})` }}>
       {rankModal && gameRankList !== null ? (
@@ -371,7 +370,13 @@ function GameRoomPage() {
               ) : null}
               {/* 게임방 제목 */}
               <div className={styles.gameTitleBox}>
-                <button onClick={audiostart}>play</button>
+                <button
+                  onClick={() => {
+                    setAudioPlay(!audioPlay);
+                  }}
+                >
+                  {audioPlay ? 'stop' : 'play'}
+                </button>
                 <p className={styles.gameroomTitle} id="session-title">
                   {gameRoomTitle}
                 </p>
