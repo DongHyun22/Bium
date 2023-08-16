@@ -6,15 +6,15 @@ import axios from 'axios';
 
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
 import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import { leaveRoom, setErrorSolve, setGameFallCount, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
+import { leaveRoom, setBackgroundImage, setErrorSolve, setGameFallCount, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
 import styles from './GameRoomPage.module.css';
 import EndGameRank from '../../molecules/EndGameRank/EndGameRank';
 
-import img1 from '../../../asset/backgroudimage/firebase1.jpg';
-import img2 from '../../../asset/backgroudimage/firebase2.gif';
+import img1 from '../../../asset/backgroudimage/firebase2.gif';
+import img2 from '../../../asset/backgroudimage/rainbase1.gif';
 
 import { IoLogOutOutline } from 'react-icons/io5';
 
@@ -28,11 +28,15 @@ function GameRoomPage() {
 
   const mySessionId = useSelector((state) => state.room.mySessionId);
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
+  const backgroundImage = useSelector((state) => state.room.backgroundImage);
   if (location.state) {
     const customSessionId = location.state.customSessionId;
     const gameTitle = location.state.gameRoomTitle;
+    const backenterimage = location.state.gameRoomMovie;
+    console.log(backenterimage);
     dispatch(setMySessionId(customSessionId));
     dispatch(setRoomTitle(gameTitle));
+    dispatch(setBackgroundImage(`${backenterimage}`));
   }
 
   const userEmail = useSelector((state) => state.user.userEmail);
@@ -41,7 +45,6 @@ function GameRoomPage() {
 
   const myUserName = useSelector((state) => state.user.nickname);
   const maxPeople = useSelector((state) => state.room.maxPeople);
-  const backgroundImage = useSelector((state) => state.room.backgroundImage);
   const join = useSelector((state) => state.video.join);
   const OV = useSelector((state) => state.video.OV);
   const session = useSelector((state) => state.video.session);
@@ -56,11 +59,15 @@ function GameRoomPage() {
   const rankModal = useSelector((state) => state.room.rankModal);
   const errorSolve = useSelector((state) => state.room.errorSolve);
 
-  if (backgroundImage === '1') {
-    backImage = img2;
-  } else if (backgroundImage === '2') {
-    backImage = img1;
-  }
+  useEffect(() => {
+    if (backgroundImage === '1') {
+      console.log('백이미지버놓11111', backgroundImage);
+      backImage = img1;
+    } else if (backgroundImage === '2') {
+      console.log('백이미지버놓2222', backgroundImage);
+      backImage = img2;
+    }
+  }, [backgroundImage]);
 
   const onbeforeunload = (e) => {
     dispatch(leaveSession());
@@ -193,9 +200,9 @@ function GameRoomPage() {
     // componentDidMount
     window.addEventListener('beforeunload', onbeforeunload);
     // componentWillUnmount
-    // return () => {
-    //   window.removeEventListener('beforeunload', onbeforeunload);
-    // };
+    return () => {
+      window.removeEventListener('beforeunload', onbeforeunload);
+    };
   }, []);
 
   // join 의존성
@@ -233,20 +240,20 @@ function GameRoomPage() {
       dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail, host, dispatch }));
 
       // Clean-up 함수 등록
-      // return () => {
-      //   console.log('등록이 되는 순간이 언제일까?');
-      //   console.log('clear');
-      //   session.off('streamCreated', handleStreamCreated);
-      //   session.off('streamDestroyed', handleStreamDestroyed);
-      //   session.off('exception', handleException);
-      //   // dispatch(leaveRoom());
-      //   dispatch(leaveSession());
+      return () => {
+        console.log('등록이 되는 순간이 언제일까?');
+        console.log('clear');
+        session.off('streamCreated', handleStreamCreated);
+        session.off('streamDestroyed', handleStreamDestroyed);
+        session.off('exception', handleException);
+        // dispatch(leaveRoom());
+        dispatch(leaveSession());
 
-      //   const mySession = session;
-      //   if (mySession) {
-      //     mySession.disconnect(); // 예시에서는 disconnect()로 대체하였으나, 이는 OpenVidu에 따라 다르게 적용될 수 있음
-      //   }
-      // };
+        const mySession = session;
+        if (mySession) {
+          mySession.disconnect(); // 예시에서는 disconnect()로 대체하였으나, 이는 OpenVidu에 따라 다르게 적용될 수 있음
+        }
+      };
     }
   }, [session]);
   useEffect(() => {
@@ -274,7 +281,7 @@ function GameRoomPage() {
         // dispatch(leaveRoom());
         dispatch(leaveSession());
         window.location.href = '/gameroomlist';
-      }, 200000);
+      }, 6000);
     }
   }, [gameRankList]);
 

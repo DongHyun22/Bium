@@ -8,8 +8,7 @@ import { Fab, Action } from 'react-tiny-fab';
 import { setIsLogin, setToken, setUserEmail } from '../../../slices/userSlice';
 import { PURGE } from 'redux-persist';
 
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 export const GameRoomListPage = () => {
   const dispatch = useDispatch();
@@ -56,10 +55,7 @@ export const GameRoomListPage = () => {
           <Link to="/createroom">
             <div className={styles.BtnGameCreate}>
               <svg width="20" height="20" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  fill="#000"
-                  d="M228 128a12 12 0 0 1-12 12h-76v76a12 12 0 0 1-24 0v-76H40a12 12 0 0 1 0-24h76V40a12 12 0 0 1 24 0v76h76a12 12 0 0 1 12 12Z"
-                />
+                <path fill="#000" d="M228 128a12 12 0 0 1-12 12h-76v76a12 12 0 0 1-24 0v-76H40a12 12 0 0 1 0-24h76V40a12 12 0 0 1 24 0v76h76a12 12 0 0 1 12 12Z" />
               </svg>
             </div>
           </Link>

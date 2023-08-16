@@ -11,27 +11,32 @@ export const GameRoomListItem = (props) => {
   const maxPeople = props.allRoom.maxPeople;
   const customSessionId = props.allRoom.customSessionId;
   const gameStart = props.allRoom.start;
+  const gameRoomMovie = props.allRoom.gameRoomMovie;
+  const curPeople = props.allRoom.curPeople;
+  console.log(props);
 
   const enterRoom = (e) => {
     console.log(e);
     dispatch(setJoin(true));
     // <Link to="/gameroom"></Link>;
-    navigator('/gameroom', { state: { customSessionId: e.customSessionId, gameRoomTitle: e.gameRoomTitle } });
+    navigator('/gameroom', { state: { customSessionId: e.customSessionId, gameRoomTitle: e.gameRoomTitle, gameRoomMovie: e.gameRoomMovie } });
   };
   return (
     <>
       {gameStart === 'false' ? (
         <div
           onClick={() => {
-            enterRoom({ customSessionId, gameRoomTitle });
+            enterRoom({ customSessionId, gameRoomTitle, gameRoomMovie });
           }}
           className={styles.listItem}
         >
           <div className={styles.listItemThumbnail}></div>
           <div className={styles.listItemContents}>
             <h2>{gameRoomTitle}</h2>
-            <h3>🔥 불멍 / 🌊 물멍</h3>
-            <h3>👤 1 / {maxPeople}</h3>
+            {gameRoomMovie === 1 ? <h3>🔥 불멍</h3> : <h3>🌊 물멍</h3>}
+            <h3>
+              👤 {curPeople} / {maxPeople}
+            </h3>
           </div>
         </div>
       ) : null}
