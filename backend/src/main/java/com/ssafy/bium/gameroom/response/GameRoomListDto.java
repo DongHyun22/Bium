@@ -13,14 +13,16 @@ public class GameRoomListDto {
     private int gameRoomMovie;
     private int curPeople;
     private int maxPeople;
+    private String gameRoomPw;
 
     @Builder
-    public GameRoomListDto(String customSessionId, String gameRoomTitle, String start, int gameRoomMovie, int curPeople, int maxPeople) {
+    public GameRoomListDto(String customSessionId, String gameRoomTitle, String start, int gameRoomMovie, int curPeople, int maxPeople, String gameRoomPw) {
         this.customSessionId = customSessionId;
         this.gameRoomTitle = gameRoomTitle;
         this.start = start;
         this.gameRoomMovie = gameRoomMovie;
         this.curPeople = curPeople;
         this.maxPeople = maxPeople;
+        this.gameRoomPw = gameRoomPw;
     }
 }
