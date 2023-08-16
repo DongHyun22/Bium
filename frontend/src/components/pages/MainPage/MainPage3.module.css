@@ -2,7 +2,7 @@
   position: absolute;
   width: 100vw;
   height: 400px;
-  background-color: rgb(28, 30, 29, 0.95);
+  background-color: rgb(38, 38, 38);
   /* background: linear-gradient(to top, white, rgb(28, 30, 29, 0.95)); */
   z-index: -1;
 }
