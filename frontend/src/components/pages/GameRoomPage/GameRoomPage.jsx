@@ -22,6 +22,7 @@ import Confetti from '../../atoms/Confeti/Confeti';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 let backImage = '';
+let backaudio = null;
 
 function GameRoomPage() {
   const dispatch = useDispatch();
@@ -65,9 +66,14 @@ function GameRoomPage() {
     if (backgroundImage === '1') {
       console.log('백이미지버놓11111', backgroundImage);
       backImage = img1;
+      backaudio = new Audio('/audios/fireaudio.mp3');
+      backaudio.loop = true;
     } else if (backgroundImage === '2') {
       console.log('백이미지버놓2222', backgroundImage);
       backImage = img2;
+      backaudio = new Audio('/audios/rainaudio3.mp3');
+
+      backaudio.loop = true;
     }
   }, [backgroundImage]);
 
@@ -326,6 +332,9 @@ function GameRoomPage() {
     console.log('gameId 바뀔때마다 출력해');
   }, [gameId]);
   useEffect(() => {}, [disturb]);
+  const audiostart = () => {
+    backaudio.play();
+  };
 
   return (
     <div className={styles.backimage} style={{ backgroundImage: `url(${backImage})` }}>
@@ -362,6 +371,7 @@ function GameRoomPage() {
               ) : null}
               {/* 게임방 제목 */}
               <div className={styles.gameTitleBox}>
+                <button onClick={audiostart}>play</button>
                 <p className={styles.gameroomTitle} id="session-title">
                   {gameRoomTitle}
                 </p>
