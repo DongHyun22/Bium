@@ -12,7 +12,7 @@
 .disturbButton {
   display: flex;
   position: absolute;
-  width: 70px;
+  width: 75px;
   height: 30px;
   left: 10px;
   bottom: 10px;
@@ -38,11 +38,8 @@
   height: 13px;
 }
 .disturbButton .spanTag {
-  margin-top: 3px;
 }
 .disturbButton .iTag {
-  margin-top: 3px;
-
   margin-right: 3px;
   transform: rotate(-20deg);
   transition: 0.5s cubic-bezier(0.76, 0, 0.24, 1);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { OpenVidu, SignalEvent } from 'openvidu-browser';
@@ -27,7 +27,6 @@ function GameRoomPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-
   const mySessionId = useSelector((state) => state.room.mySessionId);
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
   const backgroundImage = useSelector((state) => state.room.backgroundImage);
@@ -74,10 +73,6 @@ function GameRoomPage() {
 
   const onbeforeunload = (e) => {
     dispatch(leaveSession());
-  };
-
-  const setAudioMute = () => {
-    dispatch(audioMute());
   };
 
   const gameOut = async (props) => {
@@ -350,7 +345,7 @@ function GameRoomPage() {
           </div>
         </div>
       ) : (
-        <div className="">
+        <>
           {/* join 이후 화면 */}
           {session !== undefined ? (
             <div className={styles.gameroom}>
@@ -372,7 +367,7 @@ function GameRoomPage() {
                 </p>
                 {host === true ? (
                   <button className={styles.updateButton}>
-                    <p>수정</p>
+                    <p>✏️수정</p>
                   </button>
                 ) : null}
               </div>
@@ -405,7 +400,7 @@ function GameRoomPage() {
               <Timer></Timer>{' '}
             </div>
           ) : null}
-        </div>
+        </>
       )}
     </div>
   );
