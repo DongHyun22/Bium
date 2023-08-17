@@ -177,7 +177,6 @@ function createToken(props) {
       return resolve(response.data);
     } catch (error) {
       console.log('여기서 오류 해결해야해');
-      alert('이미 사라진 방입니다.');
 
       dispatch(setErrorSolve(true));
     }

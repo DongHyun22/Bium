@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styles from './MainPage.module.css';
 import MainPage1 from './MainPage1';
 import MainPage2 from './MainPage2';

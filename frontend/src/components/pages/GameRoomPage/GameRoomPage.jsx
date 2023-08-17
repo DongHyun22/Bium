@@ -1,13 +1,11 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { OpenVidu, SignalEvent } from 'openvidu-browser';
-import axios from 'axios';
-import { useInView }  from 'react-intersection-observer'
-
+import { OpenVidu } from 'openvidu-browser';
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
-import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import { leaveRoom, setBackgroundImage, setDisturb, setErrorSolve, setGameFallCount, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
+import { setJoin, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
+import { setBackgroundImage, setDisturb, setErrorSolve, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
@@ -23,12 +21,12 @@ import Confetti from '../../atoms/Confeti/Confeti';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 let backImage = '';
+let backaudio = null;
 
 function GameRoomPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-
   const mySessionId = useSelector((state) => state.room.mySessionId);
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
   const backgroundImage = useSelector((state) => state.room.backgroundImage);
@@ -62,23 +60,24 @@ function GameRoomPage() {
   const rankModal = useSelector((state) => state.room.rankModal);
   const errorSolve = useSelector((state) => state.room.errorSolve);
   const disturb = useSelector((state) => state.room.disturb);
+  const [audioPlay, setAudioPlay] = useState(false);
 
   useEffect(() => {
     if (backgroundImage === '1') {
       console.log('백이미지버놓11111', backgroundImage);
       backImage = img1;
+      backaudio = new Audio('/audios/fireaudio.mp3');
+      backaudio.loop = true;
     } else if (backgroundImage === '2') {
       console.log('백이미지버놓2222', backgroundImage);
       backImage = img2;
+      backaudio = new Audio('/audios/rainaudio3.mp3');
+      backaudio.loop = true;
     }
   }, [backgroundImage]);
 
   const onbeforeunload = (e) => {
     dispatch(leaveSession());
-  };
-
-  const setAudioMute = () => {
-    dispatch(audioMute());
   };
 
   const gameOut = async (props) => {
@@ -236,7 +235,6 @@ function GameRoomPage() {
       const handleException = (exception) => {
         console.warn('exception', exception);
       };
-
       session.on('streamCreated', handleStreamCreated);
       session.on('streamDestroyed', handleStreamDestroyed);
       session.on('exception', handleException);
@@ -330,18 +328,14 @@ function GameRoomPage() {
   }, [publisher]);
 
   useEffect(() => {
-    console.log('gameId 바뀔때마다 출력해');
-  }, [gameId]);
-  useEffect(() => {}, [disturb]);
-
-  // useInView 훅 사용
-  const [ref, inView] = useInView({
-    triggerOnce: true,  // 이미지가 한 번 로드되면 다시 로드하지 않음
-    threshold: 0.2      // 이미지의 20%가 화면에 보일 때 로딩을 시작
-  });
-
+    if (audioPlay) {
+      backaudio.play();
+    } else {
+      backaudio.pause();
+    }
+  }, [audioPlay]);
   return (
-    <div ref={ref} className={styles.backimage} style={{ backgroundImage: inView ? `url(${backImage})` : 'none' }} >
+    <div className={styles.backimage} style={{ backgroundImage: `url(${backImage})` }} >
       {rankModal && gameRankList !== null ? (
         <div className={styles.endGame}>
           <div className={styles.endGameText}>
@@ -358,7 +352,7 @@ function GameRoomPage() {
           </div>
         </div>
       ) : (
-        <div className="">
+        <>
           {/* join 이후 화면 */}
           {session !== undefined ? (
             <div className={styles.gameroom}>
@@ -375,12 +369,19 @@ function GameRoomPage() {
               ) : null}
               {/* 게임방 제목 */}
               <div className={styles.gameTitleBox}>
+                <button
+                  onClick={() => {
+                    setAudioPlay(!audioPlay);
+                  }}
+                >
+                  {audioPlay ? 'stop' : 'play'}
+                </button>
                 <p className={styles.gameroomTitle} id="session-title">
                   {gameRoomTitle}
                 </p>
                 {host === true ? (
                   <button className={styles.updateButton}>
-                    <p>수정</p>
+                    <p>✏️수정</p>
                   </button>
                 ) : null}
               </div>
@@ -413,7 +414,7 @@ function GameRoomPage() {
               <Timer></Timer>{' '}
             </div>
           ) : null}
-        </div>
+        </>
       )}
     </div>
   );

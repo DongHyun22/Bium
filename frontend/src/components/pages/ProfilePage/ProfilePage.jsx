@@ -13,8 +13,8 @@ import { Fab, Action } from 'react-tiny-fab';
 import getEmoji from '../../atoms/Emoji/Emoji';
 import { getUserInfo } from '../../../slices/getLoginInfo';
 
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+const mainButtonStyles = { backgroundColor: 'white' };
 
 export function ProfilePage() {
   const { userEmail } = useParams();
@@ -366,23 +366,12 @@ export function ProfilePage() {
         {showProfile ? (
           <div>
             <h3>프로필 이미지</h3>
-            <div>
-              <input
-                name="file"
-                type="file"
-                accept="image/*"
-                className={styles.imageInput}
-                ref={profileImageInput}
-                onChange={saveProfile}
-              ></input>
-              <button onClick={onClickProfileUpload} className={styles.imageUpload}>
-                {savedProfileImage ? (
-                  <img className={styles.profileimg} src={savedProfileImage} alt="미리보기" />
-                ) : (
-                  <img className={styles.profileimg} src={emptyprofile} alt="미리보기" />
-                )}
-              </button>
-            </div>
+
+            <input name="file" type="file" accept="image/*" className={styles.imageInput} ref={profileImageInput} onChange={saveProfile}></input>
+            <button onClick={onClickProfileUpload} className={styles.imageUpload}>
+              {savedProfileImage ? <img className={styles.profileimg} src={savedProfileImage} alt="미리보기" /> : <img className={styles.profileimg} src={emptyprofile} alt="미리보기" />}
+            </button>
+
             {/* <button onClick={sendToProfile}>이미지 저장</button>
             <div>
               <button onClick={deleteProfile}>삭제</button>
@@ -391,23 +380,12 @@ export function ProfilePage() {
         ) : (
           <div>
             <h3>방해 이미지</h3>
-            <div>
-              <input
-                name="file"
-                type="file"
-                accept="image/*"
-                className={styles.imageInput}
-                ref={disturbImageInput}
-                onChange={saveDisturb}
-              ></input>
-              <button onClick={onClickDisturbUpload} className={styles.imageUpload}>
-                {savedDisturbImage ? (
-                  <img className={styles.profileimg} src={savedDisturbImage} alt="미리보기" />
-                ) : (
-                  <img className={styles.profileimg} src={emptyprofile} alt="미리보기" />
-                )}
-              </button>
-            </div>
+
+            <input name="file" type="file" accept="image/*" className={styles.imageInput} ref={disturbImageInput} onChange={saveDisturb}></input>
+            <button onClick={onClickDisturbUpload} className={styles.imageUpload}>
+              {savedDisturbImage ? <img className={styles.profileimg} src={savedDisturbImage} alt="미리보기" /> : <img className={styles.profileimg} src={emptyprofile} alt="미리보기" />}
+            </button>
+
             {/* <button onClick={sendToDisturb}>이미지 저장</button>
             <div>
               <button onClick={deleteDisturb}>삭제</button>
@@ -515,7 +493,7 @@ export function ProfilePage() {
       </div>
       <div className={styles.sideRight}>
         <GetRanking />
-        <Fab alwaysShowTitle={true} icon="👤">
+        <Fab mainButtonStyles={mainButtonStyles} alwaysShowTitle={true} icon="👤">
           <Action text="비우러 가기" onClick={goToGameList}>
             🧘🏻‍♂
           </Action>

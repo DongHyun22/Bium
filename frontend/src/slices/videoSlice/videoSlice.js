@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { joinSession } from './videoThunkActionSlice';
-import { setErrorSolve } from '../roomSlice/roomSlice';
-import { useDispatch } from 'react-redux';
 
 const initialState = {
   join: false,

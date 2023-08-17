@@ -1,7 +1,7 @@
 .rankingItem {
   display: flex;
-  flex-direction: row;
   width: 100%;
+  align-items: center;
   justify-content: space-between;
   font-size: 20px;
 }
@@ -10,6 +10,7 @@
   width: 18%;
   height: 40px;
   text-align: center;
+  padding: auto;
   margin-top: 10px;
   margin-bottom: 10px;
 }
