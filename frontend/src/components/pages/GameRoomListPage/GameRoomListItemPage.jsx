@@ -13,7 +13,6 @@ export const GameRoomListItem = (props) => {
   const gameStart = props.allRoom.start;
   const gameRoomMovie = props.allRoom.gameRoomMovie;
   const curPeople = props.allRoom.curPeople;
-  console.log(props);
 
   const enterRoom = (e) => {
     console.log(e);

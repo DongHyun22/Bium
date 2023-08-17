@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './GameRoomList.module.css';
 import { Fab, Action } from 'react-tiny-fab';
+
 import { setIsLogin, setToken, setUserEmail, logoutUser } from '../../../slices/userSlice';
 import { PURGE } from 'redux-persist';
 
@@ -15,6 +16,7 @@ export const GameRoomListPage = () => {
   const [allRooms, setAllRooms] = useState([]);
   const navigate = useNavigate();
   const userEmail = useSelector((state) => state.user.userEmail);
+  const [keyword, setKeyword] = useState('');
 
   const gemeRoomapi = async () => {
     try {
@@ -46,7 +48,22 @@ export const GameRoomListPage = () => {
     dispatch(setIsLogin(false));
     // navigate('/');
   };
+  const handlekeyword = (e) => {
+    setKeyword(e.target.value);
+  };
 
+  const searchKeyword = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(APPLICATION_SERVER_URL + '/api/game').then((response) => {
+        console.log(response.data);
+      });
+    } catch (err) {
+      return;
+    }
+  };
+
+  const kkk = { backgroundColor: 'white' };
   return (
     <>
       <div className={styles.containerTitle}>
@@ -61,8 +78,10 @@ export const GameRoomListPage = () => {
           </Link>
         </div>
         <div className={styles.search}>
-          <input type="text" className={styles.search__input} placeholder="비움방 검색"></input>
-          <button className={styles.search__button}>🔍</button>
+          <form className={styles.formBox} onSubmit={searchKeyword}>
+            <input type="text" className={styles.search__input} placeholder="비움방 검색" value={keyword} onChange={handlekeyword}></input>
+            <button className={styles.search__button}>🔍</button>
+          </form>
         </div>
       </div>
       <div className={styles.containerItems}>
@@ -80,7 +99,7 @@ export const GameRoomListPage = () => {
         )}
       </div>
 
-      <Fab alwaysShowTitle={true} icon="👤">
+      <Fab mainButtonStyles={kkk} alwaysShowTitle={true} icon="👤">
         <Action text="마이페이지" onClick={goToMyPage}>
           🙂
         </Action>
