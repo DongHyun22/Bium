@@ -13,6 +13,7 @@ import { Fab, Action } from 'react-tiny-fab';
 import getEmoji from '../../atoms/Emoji/Emoji';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+const mainButtonStyles = { backgroundColor: 'white' };
 
 export function ProfilePage() {
   const { userEmail } = useParams();
@@ -460,7 +461,7 @@ export function ProfilePage() {
       </div>
       <div className={styles.sideRight}>
         <GetRanking />
-        <Fab alwaysShowTitle={true} icon="👤">
+        <Fab mainButtonStyles={mainButtonStyles} alwaysShowTitle={true} icon="👤">
           <Action text="비우러 가기" onClick={goToGameList}>
             🧘🏻‍♂
           </Action>

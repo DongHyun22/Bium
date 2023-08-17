@@ -7,7 +7,7 @@ const MainPage2 = () => {
   const [scroll, setScroll] = useState(false);
 
   const handleScroll = (e) => {
-    if (window.scrollY >= 500 && window.scrollY < 1200) {
+    if (window.scrollY >= 500 && window.scrollY < 1300) {
       setScroll(true);
     } else {
       // 스크롤이 50px 미만일경우 false를 넣어줌
@@ -29,10 +29,9 @@ const MainPage2 = () => {
       <div className={styles.main2text}>
         <p className={scroll ? styles.easyIn1 : styles.easyIn12}>당신의 오늘은 어땠나요?</p>
         <p className={scroll ? styles.easyIn2 : styles.easyIn12}>바쁜 하루에 지쳐가고 있을까요...</p>
-        <p className={scroll ? styles.easyIn3 : styles.easyIn12}>
-          자신을 위해 <br></br>
-          <br></br>비움을 해 보는 건 어떨까요?
-        </p>
+        <br />
+        <br />
+        <p className={scroll ? styles.easyIn3 : styles.easyIn12}>잠시 쉬어가는게 어때요?</p>
       </div>
     </div>
   );

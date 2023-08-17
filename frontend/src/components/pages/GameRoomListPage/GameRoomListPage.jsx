@@ -9,6 +9,7 @@ import { setIsLogin, setToken, setUserEmail, logoutUser } from '../../../slices/
 import { PURGE } from 'redux-persist';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+const mainButtonStyles = { backgroundColor: 'white' };
 
 export const GameRoomListPage = () => {
   const dispatch = useDispatch();
@@ -121,7 +122,7 @@ export const GameRoomListPage = () => {
         )}
       </div>
 
-      <Fab alwaysShowTitle={true} icon="👤">
+      <Fab mainButtonStyles={mainButtonStyles} alwaysShowTitle={true} icon="👤">
         <Action text="마이페이지" onClick={goToMyPage}>
           🙂
         </Action>

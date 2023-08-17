@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './MainPage3.module.css';
-import brain from '../../../asset/mainImage/brain.png';
-import concentrate from '../../../asset/mainImage/concentrate.png';
-import laydown from '../../../asset/mainImage/laydown.png';
+import brain from '../../../asset/mainImage/brain1.png';
+import concentrate from '../../../asset/mainImage/idea_2.png';
+import laydown from '../../../asset/mainImage/self-love_2.png';
 
 const MainPage3 = () => {
   return (
@@ -16,7 +16,9 @@ const MainPage3 = () => {
             <p>DMN</p>
           </div>
           <div className={styles.firstcardsecond}>
-            <span>DMN이란?</span>
+            <span className={styles.cardcontent}>
+              뇌가 멈추었을 때 작동하는데 <br></br>불안과 우울 같은 감정을 <br></br>조절해주는 역할
+            </span>
           </div>
         </div>
         <div className={styles.firstcard}>
@@ -25,7 +27,9 @@ const MainPage3 = () => {
             <p>Rest</p>
           </div>
           <div className={styles.firstcardsecond}>
-            <span>Second</span>
+            <span className={styles.cardcontent}>
+              신체와 정신의 휴식,<br></br>여유로운 마음
+            </span>
           </div>
         </div>
         <div className={styles.firstcard}>
@@ -34,7 +38,10 @@ const MainPage3 = () => {
             <p>Refresh</p>
           </div>
           <div className={styles.firstcardsecond}>
-            <span>Second</span>
+            <span className={styles.cardcontent}>
+              기존 관점에서 벗어나 <br />
+              새로운 관점에서 <br /> 생각할 수 있게 됩니다.
+            </span>
           </div>
         </div>
       </div>
