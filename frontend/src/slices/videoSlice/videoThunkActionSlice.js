@@ -20,20 +20,13 @@ export const joinSession = createAsyncThunk('joinSession', async (props) => {
   const dispatch = props.dispatch;
 
   try {
-    console.log('1');
     const token = await getToken({ props, accessToken });
-    console.log('여기토큰', token);
     if (token === null) {
-      console.log('토클 널이랑 실행되니?');
       dispatch(leaveRoom());
       dispatch(leaveSession());
       dispatch(setErrorSolve(true));
     } else if (myUserName && session && token !== null) {
-      console.log('9');
-      console.log('시작');
-
       await session.connect(token, { clientData: myUserName });
-      console.log('중간');
 
       const publisher = await OV.initPublisherAsync(undefined, {
         audioSource: undefined, // The source of audio. If undefined default microphone
@@ -46,21 +39,14 @@ export const joinSession = createAsyncThunk('joinSession', async (props) => {
         mirror: false // Whether to mirror your local video or not
       });
 
-      console.log('10');
-
       await session.publish(publisher);
 
-      console.log('포블퍼블', publisher);
       if (publisher === undefined) {
-        console.log('일로오니...?');
         dispatch(setErrorSolve(true));
       } else {
-        console.log('아니면 여기니?');
         const response = {
           publisher: publisher
         };
-        console.log('11');
-        console.log('resolution', response);
 
         return response;
       }
@@ -73,29 +59,23 @@ export const joinSession = createAsyncThunk('joinSession', async (props) => {
 
 async function getToken(props) {
   try {
-    console.log('2');
     const dispatch = props.props.dispatch;
     const newSessionId = await createSession(props);
-    console.log('5');
 
     dispatch(setMySessionId(newSessionId.customSessionId));
     dispatch(setGameRoomId(newSessionId.gameRoomId));
     const token = await createToken({ props, newSessionId });
 
-    console.log('8');
     dispatch(setGameId(token.gameId));
     dispatch(setHost(token.host));
-    console.log('8.5');
+
     return token.sessionId;
-  } catch (err) {
-    console.log('오류남./.... 해결해줜');
-  }
+  } catch (err) {}
 }
 
 function createSession(props) {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log('3');
       const accessToken = sessionStorage.getItem('accessToken');
       const userEmail = props.props.userEmail;
 
@@ -124,14 +104,12 @@ function createSession(props) {
         // console.log('개발자 설정을 통한 강제 리턴');
         return resolve(response.data);
       }, 1000);
-      console.log('4');
 
       return response.data;
     } catch (response) {
       let error = Object.assign({}, response);
       // 세션이 있으면 409 에러를 주는데 그때는 세션이 벌써 있다는 것이다.
       if (error?.response?.status === 409) {
-        console.log('여기 2번 오류');
         return resolve(props.mySessionId);
       }
     }
@@ -142,8 +120,6 @@ function createToken(props) {
   const dispatch = props.props.props.dispatch;
   return new Promise(async (resolve, reject) => {
     try {
-      console.log('6');
-      console.log(props);
       const userEmail = props.props.props.userEmail;
       const gameRoomId = props.newSessionId.gameRoomId;
       const gameRoomPw = props.newSessionId.gameRoomPw;
@@ -172,7 +148,6 @@ function createToken(props) {
         }
       );
 
-      console.log('7', response.data);
       if (response.data.sessionId === '가득참') {
         alert('게임 방이 가득찼습니다.');
         window.location.href = '/gameroomlist';
@@ -180,8 +155,6 @@ function createToken(props) {
         return resolve(response.data);
       }
     } catch (error) {
-      console.log('여기서 오류 해결해야해');
-
       dispatch(setErrorSolve(true));
     }
   });

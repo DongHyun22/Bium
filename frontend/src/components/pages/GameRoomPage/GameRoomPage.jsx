@@ -200,9 +200,8 @@ function GameRoomPage() {
     }
   };
   useEffect(() => {
-    // componentDidMount
     window.addEventListener('beforeunload', onbeforeunload);
-    // componentWillUnmount
+
     return () => {
       window.removeEventListener('beforeunload', onbeforeunload);
     };
@@ -240,6 +239,7 @@ function GameRoomPage() {
       session.on('exception', handleException);
       console.log('디스 시작');
       dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail, host, dispatch }));
+      backaudio.play();
 
       // Clean-up 함수 등록
       return () => {
@@ -248,6 +248,8 @@ function GameRoomPage() {
         session.off('streamCreated', handleStreamCreated);
         session.off('streamDestroyed', handleStreamDestroyed);
         session.off('exception', handleException);
+        backaudio.pause();
+
         dispatch(leaveRoom());
         dispatch(leaveSession());
 
@@ -258,6 +260,7 @@ function GameRoomPage() {
       };
     }
   }, [session]);
+
   useEffect(() => {
     if (publisher !== undefined) {
       publisher.stream.session.on('signal:gamerank', (e) => {
@@ -325,13 +328,6 @@ function GameRoomPage() {
     }
   }, [publisher]);
 
-  useEffect(() => {
-    if (audioPlay) {
-      backaudio.play();
-    } else {
-      backaudio.pause();
-    }
-  }, [audioPlay]);
   return (
     <div className={styles.backimage} style={{ backgroundImage: `url(${backImage})` }}>
       {rankModal && gameRankList !== null ? (
@@ -355,27 +351,18 @@ function GameRoomPage() {
           {session !== undefined ? (
             <div className={styles.gameroom}>
               {host && start === false && gameFallCount === 0 ? (
-                <div className={styles.startbuttonBox}>
-                  <button
-                    className={styles.gameStartbutton}
-                    onClick={() => {
-                      gameStart();
-                      startSignal(publisher);
-                    }}
-                  >
-                    <p>비움 시작</p>
-                  </button>
-                </div>
+                <button
+                  className={styles.gameStartbutton}
+                  onClick={() => {
+                    gameStart();
+                    startSignal(publisher);
+                  }}
+                >
+                  <p>비움 시작</p>
+                </button>
               ) : null}
               {/* 게임방 제목 */}
               <div className={styles.gameTitleBox}>
-                <button
-                  onClick={() => {
-                    setAudioPlay(!audioPlay);
-                  }}
-                >
-                  {audioPlay ? 'stop' : 'play'}
-                </button>
                 <p className={styles.gameroomTitle} id="session-title">
                   {gameRoomTitle}
                 </p>
