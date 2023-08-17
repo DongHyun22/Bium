@@ -282,7 +282,9 @@ function GameRoomPage() {
 
   useEffect(() => {
     return () => {
-      gameOut(gameId);
+      if (gameId !== null) {
+        gameOut(gameId);
+      }
     };
   }, [gameId]);
 
@@ -390,7 +392,7 @@ function GameRoomPage() {
                   </div>
                 )}
                 {subscribers.map((sub) => (
-                  <div key={sub.id} className="stream-container col-md-6 col-xs-6">
+                  <div key={sub.stream.connection.connectionId}>
                     <span>{sub.id}</span>
                     <UserVideoComponent streamManager={sub} />
                   </div>
