@@ -22,7 +22,6 @@ const OpenViduVideoComponent = (props) => {
 
     Promise.all([
       // THIS FOR FACE DETECT AND LOAD FROM YOU PUBLIC/MODELS DIRECTORY
-      faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
       faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
       faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
       faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
@@ -53,6 +52,7 @@ const OpenViduVideoComponent = (props) => {
             console.log('undefined');
             dispatch(setGameFallCount(1));
           } else if (detections && detections.expressions.neutral < 0.6) {
+            console.log(detections);
             console.log(detections.expressions);
             dispatch(setGameFallCount(1));
           }
