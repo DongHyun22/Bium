@@ -4,8 +4,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { OpenVidu } from 'openvidu-browser';
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
-import { setJoin, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import { leaveRoom, setBackgroundImage, setDisturb, setErrorSolve, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
+import {
+  setJoin,
+  deleteSubscriber,
+  enteredSubscriber,
+  initOVSession,
+  leaveSession
+} from '../../../slices/videoSlice/videoSlice';
+import {
+  leaveRoom,
+  setBackgroundImage,
+  setDisturb,
+  setErrorSolve,
+  setGameRankList,
+  setMySessionId,
+  setRankModal,
+  setRoomTitle,
+  setStart
+} from '../../../slices/roomSlice/roomSlice';
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
@@ -19,7 +35,8 @@ import { IoLogOutOutline } from 'react-icons/io5';
 
 import Confetti from '../../atoms/Confeti/Confeti';
 
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 let backImage = '';
 let backaudio = null;
 
@@ -227,7 +244,21 @@ function GameRoomPage() {
       session.on('streamCreated', handleStreamCreated);
       session.on('streamDestroyed', handleStreamDestroyed);
       session.on('exception', handleException);
-      dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail, host, dispatch }));
+      dispatch(
+        joinSession({
+          OV,
+          session,
+          mySessionId,
+          myUserName,
+          gameRoomTitle,
+          backgroundImage,
+          maxPeople,
+          roomPassword,
+          userEmail,
+          host,
+          dispatch
+        })
+      );
       backaudio.play();
 
       // Clean-up 함수 등록
@@ -287,7 +318,7 @@ function GameRoomPage() {
   }, [gameRankList]);
 
   useEffect(() => {
-    if (gameFallCount > 10) {
+    if (gameFallCount > 10 && gameFallCount < 12) {
       fallAxios();
     }
   }, [gameFallCount]);

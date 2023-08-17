@@ -47,7 +47,10 @@ const OpenViduVideoComponent = (props) => {
       setInterval(async () => {
         // DRAW YOU FACE IN WEBCAM
         if (videoRef.current !== null && props.streamManager === publisher) {
-          const detections = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+          const detections = await faceapi
+            .detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
+            .withFaceLandmarks()
+            .withFaceExpressions();
           if (detections === undefined) {
             console.log('undefined');
             dispatch(setGameFallCount(1));
