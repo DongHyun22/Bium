@@ -219,7 +219,7 @@ public class GameRoomServiceImpl implements GameRoomService {
             redisTemplate.opsForHash().put("gameRoom:" + gameRoomId, "curPeople", String.valueOf(--cur));
             // 현재 인원 정보는 한명 줄이기
 
-            if (cur == 0) {
+            if (cur <= 0) {
                 // 게임방에 아무도 없을 시 게임방 또한 삭제
                 redisTemplate.delete("gameRoom:" + gameRoomId);
                 redisTemplate.opsForSet().remove("gameRoom", Integer.parseInt(gameRoomId));

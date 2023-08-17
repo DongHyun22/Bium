@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { OpenVidu } from 'openvidu-browser';
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
 import { setJoin, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import { setBackgroundImage, setDisturb, setErrorSolve, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
+import { leaveRoom, setBackgroundImage, setDisturb, setErrorSolve, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
@@ -30,14 +30,15 @@ function GameRoomPage() {
   const mySessionId = useSelector((state) => state.room.mySessionId);
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
   const backgroundImage = useSelector((state) => state.room.backgroundImage);
+
   if (location.state) {
     const customSessionId = location.state.customSessionId;
     const gameTitle = location.state.gameRoomTitle;
     const backenterimage = location.state.gameRoomMovie;
-    console.log(backenterimage);
     dispatch(setMySessionId(customSessionId));
     dispatch(setRoomTitle(gameTitle));
     dispatch(setBackgroundImage(`${backenterimage}`));
+  } else {
   }
 
   const userEmail = useSelector((state) => state.user.userEmail);
@@ -60,30 +61,26 @@ function GameRoomPage() {
   const rankModal = useSelector((state) => state.room.rankModal);
   const errorSolve = useSelector((state) => state.room.errorSolve);
   const disturb = useSelector((state) => state.room.disturb);
-  const [audioPlay, setAudioPlay] = useState(false);
 
   useEffect(() => {
     if (backgroundImage === '1') {
-      console.log('백이미지버놓11111', backgroundImage);
       backImage = img1;
       backaudio = new Audio('/audios/fireaudio.mp3');
       backaudio.loop = true;
     } else if (backgroundImage === '2') {
-      console.log('백이미지버놓2222', backgroundImage);
       backImage = img2;
       backaudio = new Audio('/audios/rainaudio3.mp3');
       backaudio.loop = true;
     }
-  }, [backgroundImage]);
+  });
 
   const onbeforeunload = (e) => {
     dispatch(leaveSession());
   };
 
   const gameOut = async (props) => {
-    console.log('여기 프롮', props);
     const kkk = props;
-    console.log('이건 idx', kkk);
+
     try {
       const response = await axios.post(
         APPLICATION_SERVER_URL + '/api/game/out',
@@ -97,9 +94,7 @@ function GameRoomPage() {
           }
         }
       );
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   const handleLeaveSession = () => {
@@ -108,7 +103,7 @@ function GameRoomPage() {
       gameOut();
       dispatch(leaveSession());
       dispatch(setJoin(false));
-      navigate('/gameroomlist', { replace: true });
+      window.location.href = '/gameroomlist';
     }
   };
 
@@ -143,7 +138,6 @@ function GameRoomPage() {
 
   const endGame = async () => {
     try {
-      console.log('몇명만 해?');
       const response = await axios.post(
         APPLICATION_SERVER_URL + '/api/game/delete',
         {},
@@ -187,10 +181,7 @@ function GameRoomPage() {
         }
       );
       dispatch(setStart(false));
-      console.log(response.data);
-      console.log(typeof response.data);
       if (typeof response.data === 'object') {
-        console.log('누구누구 요청해?', typeof response.data === 'object');
         const ranking = response.data;
         modalSignal({ publisher, ranking });
         endGame();
@@ -200,9 +191,8 @@ function GameRoomPage() {
     }
   };
   useEffect(() => {
-    // componentDidMount
     window.addEventListener('beforeunload', onbeforeunload);
-    // componentWillUnmount
+
     return () => {
       window.removeEventListener('beforeunload', onbeforeunload);
     };
@@ -213,7 +203,6 @@ function GameRoomPage() {
     if (join) {
       const OV = new OpenVidu();
       const session = OV.initSession();
-      console.log('여기가 문제인지 확인하고 싶어', session, OV);
       dispatch(initOVSession({ OV, session }));
     }
   }, [join]);
@@ -238,17 +227,17 @@ function GameRoomPage() {
       session.on('streamCreated', handleStreamCreated);
       session.on('streamDestroyed', handleStreamDestroyed);
       session.on('exception', handleException);
-      console.log('디스 시작');
       dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail, host, dispatch }));
+      backaudio.play();
 
       // Clean-up 함수 등록
       return () => {
-        console.log('등록이 되는 순간이 언제일까?');
-        console.log('clear');
         session.off('streamCreated', handleStreamCreated);
         session.off('streamDestroyed', handleStreamDestroyed);
         session.off('exception', handleException);
-        // dispatch(leaveRoom());
+        backaudio.pause();
+
+        dispatch(leaveRoom());
         dispatch(leaveSession());
 
         const mySession = session;
@@ -258,6 +247,7 @@ function GameRoomPage() {
       };
     }
   }, [session]);
+
   useEffect(() => {
     if (publisher !== undefined) {
       publisher.stream.session.on('signal:gamerank', (e) => {
@@ -279,18 +269,17 @@ function GameRoomPage() {
 
   useEffect(() => {
     return () => {
-      gameOut(gameId);
+      if (gameId !== null) {
+        gameOut(gameId);
+      }
     };
   }, [gameId]);
 
   useEffect(() => {
     if (rankModal === true) {
       setTimeout(() => {
-        console.log('axions 요청중이니까 확인해줄래?');
         dispatch(setGameRankList(null));
-        dispatch(setRankModal(false));
-        dispatch(setJoin(false));
-        // dispatch(leaveRoom());
+        dispatch(leaveRoom());
         dispatch(leaveSession());
         window.location.href = '/gameroomlist';
       }, 6000);
@@ -298,14 +287,14 @@ function GameRoomPage() {
   }, [gameRankList]);
 
   useEffect(() => {
-    if (gameFallCount > 1 && gameFallCount < 3) {
+    if (gameFallCount > 10) {
       fallAxios();
     }
   }, [gameFallCount]);
 
   useEffect(() => {
     if (errorSolve === true) {
-      // dispatch(leaveRoom());
+      dispatch(leaveRoom());
       dispatch(leaveSession());
       alert('이미 사라진 방입니다.');
       window.location.href = '/gameroomlist';
@@ -327,13 +316,6 @@ function GameRoomPage() {
     }
   }, [publisher]);
 
-  useEffect(() => {
-    if (audioPlay) {
-      backaudio.play();
-    } else {
-      backaudio.pause();
-    }
-  }, [audioPlay]);
   return (
     <div className={styles.backimage} style={{ backgroundImage: `url(${backImage})` }} >
       {rankModal && gameRankList !== null ? (
@@ -356,7 +338,7 @@ function GameRoomPage() {
           {/* join 이후 화면 */}
           {session !== undefined ? (
             <div className={styles.gameroom}>
-              {host && start === false ? (
+              {host && start === false && gameFallCount === 0 ? (
                 <button
                   className={styles.gameStartbutton}
                   onClick={() => {
@@ -369,13 +351,6 @@ function GameRoomPage() {
               ) : null}
               {/* 게임방 제목 */}
               <div className={styles.gameTitleBox}>
-                <button
-                  onClick={() => {
-                    setAudioPlay(!audioPlay);
-                  }}
-                >
-                  {audioPlay ? 'stop' : 'play'}
-                </button>
                 <p className={styles.gameroomTitle} id="session-title">
                   {gameRoomTitle}
                 </p>
@@ -403,7 +378,7 @@ function GameRoomPage() {
                   </div>
                 )}
                 {subscribers.map((sub) => (
-                  <div key={sub.id} className="stream-container col-md-6 col-xs-6">
+                  <div key={sub.stream.connection.connectionId}>
                     <span>{sub.id}</span>
                     <UserVideoComponent streamManager={sub} />
                   </div>

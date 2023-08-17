@@ -115,8 +115,15 @@
 
 .search {
   flex: 1;
+
   align-items: end;
   text-align: center;
+}
+.formBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .search__input {
@@ -126,9 +133,8 @@
   color: #646464;
   padding: 0.7rem 1rem;
   border-radius: 5px;
-  width: 12em;
+  width: 14em;
   transition: all ease-in-out 0.5s;
-  margin-right: -3rem;
 }
 
 .search__input:hover,
@@ -153,7 +159,6 @@
   font-size: 20px;
   border: none;
   background-color: rgba(255, 255, 255, 0);
-  margin-top: 0.1em;
 }
 
 .search__button:hover {

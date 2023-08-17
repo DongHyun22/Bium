@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './GameRoomList.module.css';
 import { Fab, Action } from 'react-tiny-fab';
+
 import { setIsLogin, setToken, setUserEmail, logoutUser } from '../../../slices/userSlice';
 import { PURGE } from 'redux-persist';
 
@@ -20,7 +21,6 @@ export const GameRoomListPage = () => {
 
   const gemeRoomapi = async () => {
     try {
-      console.log('여기 키워드', keyword);
       const response = await axios
         .get(APPLICATION_SERVER_URL + '/api/game', {
           params: { keyword: keyword },
@@ -36,8 +36,6 @@ export const GameRoomListPage = () => {
       // axios response
       // 방제목, 인원
     } catch (err) {
-      console.log('오류 떴어 .....해결하렴....');
-      console.log(err);
       return;
     }
   };
@@ -70,6 +68,7 @@ export const GameRoomListPage = () => {
     }
   };
 
+  const kkk = { backgroundColor: 'white' };
   return (
     <>
       <div className={styles.containerTitle}>
@@ -87,12 +86,9 @@ export const GameRoomListPage = () => {
           <input
             onKeyUp={(e) => {
               if (e.key === 'Backspace' && keyword === '') {
-                console.log('백스', e.key);
                 gemeRoomapi();
               }
               if (e.key === 'Enter') {
-                console.log('엔터', e.key);
-
                 setsetroom();
               }
             }}
