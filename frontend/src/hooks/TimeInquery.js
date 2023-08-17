@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 // 서버에서 데이터를 받아와서 시간을 변환하는 함수
 function useGetBiumTime(event) {

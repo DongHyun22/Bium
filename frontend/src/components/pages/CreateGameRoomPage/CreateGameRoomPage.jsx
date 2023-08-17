@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { redirect, useNavigate, useNavigation } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import styles from './CreateGameRoomPage.module.css';
 import { setJoin } from '../../../slices/videoSlice/videoSlice';
 import { setRoomTitle, setRoomPassword, setMySessionId, setMyUserName, setMaxPeople, setBackgroundImage } from '../../../slices/roomSlice/roomSlice';
