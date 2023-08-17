@@ -1,7 +1,9 @@
 package com.ssafy.bium.gameroom.controller;
 
-import com.ssafy.bium.gameroom.Game;
-import com.ssafy.bium.gameroom.request.*;
+import com.ssafy.bium.gameroom.request.EnterGameRoomDto;
+import com.ssafy.bium.gameroom.request.GameRoomDto;
+import com.ssafy.bium.gameroom.request.ModifyGameRoomDto;
+import com.ssafy.bium.gameroom.request.OverGameDto;
 import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
 import com.ssafy.bium.gameroom.response.EnterUserDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
@@ -10,12 +12,9 @@ import com.ssafy.bium.gameroom.service.GameRoomService;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
