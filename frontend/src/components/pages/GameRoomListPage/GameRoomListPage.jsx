@@ -19,20 +19,16 @@ export const GameRoomListPage = () => {
 
   const gemeRoomapi = async () => {
     try {
-      console.log(keyword);
+      console.log('여기 키워드', keyword);
       const response = await axios
-        .get(
-          APPLICATION_SERVER_URL + '/api/game',
-          {},
-          {
-            params: { keyword: keyword },
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Methods': 'GET'
-            }
+        .get(APPLICATION_SERVER_URL + '/api/game', {
+          params: { keyword: keyword },
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'GET'
           }
-        )
+        })
         .then((response) => {
           setAllRooms(response.data);
         });
@@ -64,6 +60,14 @@ export const GameRoomListPage = () => {
   const handlekeyword = (e) => {
     setKeyword(e.target.value);
   };
+  const setsetroom = () => {
+    if (keyword === '') {
+      return;
+    } else {
+      const roomList = allRooms.filter((room) => room.gameRoomTitle.includes(keyword));
+      setAllRooms([...roomList]);
+    }
+  };
 
   return (
     <>
@@ -79,8 +83,27 @@ export const GameRoomListPage = () => {
           </Link>
         </div>
         <div className={styles.search}>
-          <input type="text" className={styles.search__input} placeholder="비움방 검색" value={keyword} onChange={handlekeyword}></input>
-          <button className={styles.search__button}>🔍</button>
+          <input
+            onKeyUp={(e) => {
+              if (e.key === 'Backspace' && keyword === '') {
+                console.log('백스', e.key);
+                gemeRoomapi();
+              }
+              if (e.key === 'Enter') {
+                console.log('엔터', e.key);
+
+                setsetroom();
+              }
+            }}
+            type="text"
+            className={styles.search__input}
+            placeholder="비움방 검색"
+            value={keyword}
+            onChange={handlekeyword}
+          ></input>
+          <button onClick={setsetroom} className={styles.search__button}>
+            🔍
+          </button>
         </div>
       </div>
       <div className={styles.containerItems}>
