@@ -1,12 +1,13 @@
 package com.ssafy.bium.gameroom.service;
 
-import com.ssafy.bium.common.exception.ExceptionMessage;
-import com.ssafy.bium.common.exception.PasswordException;
-import com.ssafy.bium.gameroom.GameRoom;
 import com.ssafy.bium.gameroom.Game;
-import com.ssafy.bium.gameroom.repository.GameRoomRepository;
+import com.ssafy.bium.gameroom.GameRoom;
 import com.ssafy.bium.gameroom.repository.GameRepository;
-import com.ssafy.bium.gameroom.request.*;
+import com.ssafy.bium.gameroom.repository.GameRoomRepository;
+import com.ssafy.bium.gameroom.request.EnterGameRoomDto;
+import com.ssafy.bium.gameroom.request.GameRoomDto;
+import com.ssafy.bium.gameroom.request.ModifyGameRoomDto;
+import com.ssafy.bium.gameroom.request.OverGameDto;
 import com.ssafy.bium.gameroom.response.DetailGameRoomDto;
 import com.ssafy.bium.gameroom.response.EnterUserDto;
 import com.ssafy.bium.gameroom.response.GameRoomListDto;
@@ -16,7 +17,6 @@ import com.ssafy.bium.user.User;
 import com.ssafy.bium.user.repository.UserRepository;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -26,12 +26,9 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.ssafy.bium.common.exception.ExceptionMessage.NOT_EXIST_USER;
-import static com.ssafy.bium.common.exception.ExceptionMessage.NOT_MATCHING_PASSWORD;
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +56,7 @@ public class GameRoomServiceImpl implements GameRoomService {
 //        List<GameRoom> gameRooms = gameRoomRepository.findAll();
         Sort sort = Sort.by(Sort.Direction.DESC, "gameRoomId");
         Iterable<GameRoom> gameRooms = gameRoomRepository.findAll(sort);
+
         List<GameRoomListDto> gameRoomListDtos = new ArrayList<>();
         for (GameRoom gameRoom : gameRooms) {
             if (gameRoom.getGameRoomTitle().contains(keyword)) {
@@ -128,7 +126,7 @@ public class GameRoomServiceImpl implements GameRoomService {
 //        String roomPw = (String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "gameRoomPw");
 //        if(!gameRoomPw.equals(roomPw)){
 //            throw new PasswordException(NOT_MATCHING_PASSWORD);
-//        }
+//        } 비밀번호방 구현
 
         int cur = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "curPeople"));
         int max = Integer.parseInt((String) redisTemplate.opsForHash().get("gameRoom:" + gameRoomId, "maxPeople"));
@@ -296,7 +294,6 @@ public class GameRoomServiceImpl implements GameRoomService {
         hash.put("gameRoom:" + gameRoomId, "startPeople", String.valueOf(--survivor));
         if (survivor == 0) {
             Set<String> gameNum = set.members("game"); // 참가중인 게임 멤버 리스트 가져오기?
-            // TODO: 2023-08-10 게임방에 참가하고 있는 멤버(게임키)를 저장하는 리스트를 도메인에 저장 
             List<UserGameRecordDto> userGameRecords = new ArrayList<>();
             for (String s : gameNum) {
                 // TODO: 2023-08-10 해당 게임방에 참가한 유저이메일 찾기 -> scan 같은 빠른 메서드 찾기
