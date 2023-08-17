@@ -10,21 +10,21 @@ const MainPage5 = () => {
       <div className={styles.main5cards}>
         <div className={styles.main5card}>
           <div className={styles.main5cardbg}>
-            <img className={styles.checkimage} src={checkimage} alt="" loading="lazy"/>
+            <img className={styles.checkimage} src={checkimage} alt="" loading="lazy" />
             <p>혼자만 멍때리는 것이 불안한 사람들에게 같이 멍때리는 플랫폼을 제공합니다.</p>
           </div>
           {/* <div className={styles.main5cardblob}></div> */}
         </div>
         <div className={styles.main5card}>
           <div className={styles.main5cardbg}>
-            <img className={styles.checkimage} src={checkimage} alt="" loading="lazy"/>
+            <img className={styles.checkimage} src={checkimage} alt="" loading="lazy" />
             <p>표정을 인식하고, 변화를 감지해 비움을 하는지 알 수 있어요!</p>
           </div>
           {/* <div className={styles.main5cardblob}></div> */}
         </div>
         <div className={styles.main5card}>
           <div className={styles.main5cardbg}>
-            <img className={styles.checkimage} src={checkimage} alt="" loading="lazy"/>
+            <img className={styles.checkimage} src={checkimage} alt="" loading="lazy" />
 
             <p>멍때리기 대회를 연습하기에 좋아요!</p>
           </div>

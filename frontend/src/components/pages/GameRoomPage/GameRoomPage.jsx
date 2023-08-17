@@ -1,12 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { OpenVidu, SignalEvent } from 'openvidu-browser';
-import axios from 'axios';
-
+import { OpenVidu } from 'openvidu-browser';
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
-import { setJoin, audioMute, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import { leaveRoom, setBackgroundImage, setDisturb, setErrorSolve, setGameFallCount, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
+import { setJoin, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
+import { setBackgroundImage, setDisturb, setErrorSolve, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';

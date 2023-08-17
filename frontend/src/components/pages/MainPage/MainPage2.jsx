@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './MainPage2.module.css';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { useRef } from 'react';
 
 const MainPage2 = () => {
   const [scroll, setScroll] = useState(false);

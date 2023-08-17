@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import OpenViduVideoComponent from './OvVideo';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import styles from './UserVideoComponent.module.css';
 import { IoRocket } from 'react-icons/io5';
-import { setDisturb } from '../../../slices/roomSlice/roomSlice';
 
 const UserVideoComponent = (props) => {
-  const dispatch = useDispatch();
   const OV = useSelector((state) => state.video.OV);
   const session = useSelector((state) => state.video.session);
   const subscribers = useSelector((state) => state.video.subscribers);
