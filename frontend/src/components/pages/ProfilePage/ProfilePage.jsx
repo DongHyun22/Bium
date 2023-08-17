@@ -11,6 +11,7 @@ import emptyprofile from '../../../asset/backgroudimage/emptyprofile.png';
 import { PURGE } from 'redux-persist';
 import { Fab, Action } from 'react-tiny-fab';
 import getEmoji from '../../atoms/Emoji/Emoji';
+import { getUserInfo } from '../../../slices/getLoginInfo';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 const mainButtonStyles = { backgroundColor: 'white' };
@@ -49,6 +50,11 @@ export function ProfilePage() {
 
   // 회원 정보 수정 모달 오픈 여부
   const [modalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    dispatch(getUserInfo(savedEmail));
+  }, [dispatch]);
+
 
   // 프로필 이미지 저장
   const saveProfile = (e) => {
@@ -104,7 +110,10 @@ export function ProfilePage() {
           const imgType = profileResponse.data.imgType;
           const originalFile = profileResponse.data.originalFile;
 
-          const getProfileResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
+          const getProfileResponse = await axios.get(
+            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
+            { responseType: 'blob' }
+          );
 
           const imgSrc = URL.createObjectURL(getProfileResponse.data);
           dispatch(setImageId(imgSrc));
@@ -146,7 +155,10 @@ export function ProfilePage() {
           const imgType = disturbResponse.data.imgType;
           const originalFile = disturbResponse.data.originalFile;
 
-          const getDisturbResponse = await axios.get(APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`, { responseType: 'blob' });
+          const getDisturbResponse = await axios.get(
+            APPLICATION_SERVER_URL + `/api/file/${saveFolder}/${imgType}/${originalFile}/${saveFile}`,
+            { responseType: 'blob' }
+          );
 
           const imgSrc = URL.createObjectURL(getDisturbResponse.data);
           dispatch(setDisturb(imgSrc));
@@ -420,17 +432,32 @@ export function ProfilePage() {
               <br />
               <label>
                 기존비밀번호
-                <input type="password" autoComplete="off" value={existingPassword} onChange={(e) => setExistingPassword(e.target.value)} />
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={existingPassword}
+                  onChange={(e) => setExistingPassword(e.target.value)}
+                />
               </label>
               <br />
               <label>
                 비밀번호:
-                <input type="password" autoComplete="off" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
               </label>
               <br />
               <label>
                 비밀번호확인:
-                <input type="password" autoComplete="off" value={newpasswordConfirm} onChange={(e) => setNewPasswordConfirm(e.target.value)} />
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={newpasswordConfirm}
+                  onChange={(e) => setNewPasswordConfirm(e.target.value)}
+                />
               </label>
             </form>
             <div className={styles.insertButton}>
@@ -450,7 +477,12 @@ export function ProfilePage() {
               회원 탈퇴를 진행하시려면 비밀번호를 입력해주세요
               <br />
               &nbsp;
-              <input type="password" autoComplete="off" value={existingPassword} onChange={(e) => setExistingPassword(e.target.value)} />
+              <input
+                type="password"
+                autoComplete="off"
+                value={existingPassword}
+                onChange={(e) => setExistingPassword(e.target.value)}
+              />
             </label>
             <div className={styles.signOutButton}>
               <button onClick={confirmSignOut}>예</button>

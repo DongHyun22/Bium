@@ -335,7 +335,7 @@ function GameRoomPage() {
     }
   }, [audioPlay]);
   return (
-    <div className={styles.backimage} style={{ backgroundImage: `url(${backImage})` }}>
+    <div className={styles.backimage} style={{ backgroundImage: `url(${backImage})` }} >
       {rankModal && gameRankList !== null ? (
         <div className={styles.endGame}>
           <div className={styles.endGameText}>
