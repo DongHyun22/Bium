@@ -353,12 +353,12 @@ export function ProfilePage() {
         {showProfile ? (
           <div>
             <h3>프로필 이미지</h3>
-            <div>
-              <input name="file" type="file" accept="image/*" className={styles.imageInput} ref={profileImageInput} onChange={saveProfile}></input>
-              <button onClick={onClickProfileUpload} className={styles.imageUpload}>
-                {savedProfileImage ? <img className={styles.profileimg} src={savedProfileImage} alt="미리보기" /> : <img className={styles.profileimg} src={emptyprofile} alt="미리보기" />}
-              </button>
-            </div>
+
+            <input name="file" type="file" accept="image/*" className={styles.imageInput} ref={profileImageInput} onChange={saveProfile}></input>
+            <button onClick={onClickProfileUpload} className={styles.imageUpload}>
+              {savedProfileImage ? <img className={styles.profileimg} src={savedProfileImage} alt="미리보기" /> : <img className={styles.profileimg} src={emptyprofile} alt="미리보기" />}
+            </button>
+
             {/* <button onClick={sendToProfile}>이미지 저장</button>
             <div>
               <button onClick={deleteProfile}>삭제</button>
@@ -367,12 +367,12 @@ export function ProfilePage() {
         ) : (
           <div>
             <h3>방해 이미지</h3>
-            <div>
-              <input name="file" type="file" accept="image/*" className={styles.imageInput} ref={disturbImageInput} onChange={saveDisturb}></input>
-              <button onClick={onClickDisturbUpload} className={styles.imageUpload}>
-                {savedDisturbImage ? <img className={styles.profileimg} src={savedDisturbImage} alt="미리보기" /> : <img className={styles.profileimg} src={emptyprofile} alt="미리보기" />}
-              </button>
-            </div>
+
+            <input name="file" type="file" accept="image/*" className={styles.imageInput} ref={disturbImageInput} onChange={saveDisturb}></input>
+            <button onClick={onClickDisturbUpload} className={styles.imageUpload}>
+              {savedDisturbImage ? <img className={styles.profileimg} src={savedDisturbImage} alt="미리보기" /> : <img className={styles.profileimg} src={emptyprofile} alt="미리보기" />}
+            </button>
+
             {/* <button onClick={sendToDisturb}>이미지 저장</button>
             <div>
               <button onClick={deleteDisturb}>삭제</button>

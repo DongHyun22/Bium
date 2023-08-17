@@ -9,14 +9,18 @@
 }
 
 .containerTitle {
+  position: relative;
   background: url('../../../asset/backgroudimage/gameRoomListItemTest2.jpg');
-  background-size: 100vw;
-  background-position: 0px -390px;
+  background-repeat: no-repeat;
+  background-size: 120vw;
+  background-position-y: center;
+  background-attachment: local;
+
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 5em 8em 5em 8em;
+  height: 300px;
 }
 
 .title {
@@ -26,16 +30,16 @@
 
 .title h1 {
   display: inline-block;
-  margin: 0.1em;
+  margin: 10%;
   margin-right: 0.5em;
-  font-size: 70px;
+  font-size: 50px;
   font-weight: 700;
 }
 
 .listItem {
   width: 21em;
   height: 17em;
-  margin: 1.5em;
+  margin: 1.2em;
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08), 0 3px 6px rgba(0, 0, 0, 0.16);

@@ -22,7 +22,8 @@
 }
 
 .titleBium {
-  margin-left: 10px;
+  margin-top: 10px;
+  margin-left: 15px;
   font-size: 40px;
   color: aliceblue;
   cursor: pointer;
@@ -151,9 +152,8 @@
   color: white;
   cursor: pointer;
   border-radius: 5px;
-
-  width: 8vw;
-  height: 5vh;
+  width: 20%;
+  height: 150%;
   font-size: 50%;
   right: 16%;
   top: 50%;
@@ -188,7 +188,7 @@
 }
 
 .signupform {
-  margin-top: 10px;
+  margin-top: 8%;
 }
 
 .redfont {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { OpenVidu, SignalEvent } from 'openvidu-browser';
@@ -22,12 +22,12 @@ import Confetti from '../../atoms/Confeti/Confeti';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 let backImage = '';
+let backaudio = null;
 
 function GameRoomPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-
   const mySessionId = useSelector((state) => state.room.mySessionId);
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
   const backgroundImage = useSelector((state) => state.room.backgroundImage);
@@ -61,23 +61,24 @@ function GameRoomPage() {
   const rankModal = useSelector((state) => state.room.rankModal);
   const errorSolve = useSelector((state) => state.room.errorSolve);
   const disturb = useSelector((state) => state.room.disturb);
+  const [audioPlay, setAudioPlay] = useState(false);
 
   useEffect(() => {
     if (backgroundImage === '1') {
       console.log('백이미지버놓11111', backgroundImage);
       backImage = img1;
+      backaudio = new Audio('/audios/fireaudio.mp3');
+      backaudio.loop = true;
     } else if (backgroundImage === '2') {
       console.log('백이미지버놓2222', backgroundImage);
       backImage = img2;
+      backaudio = new Audio('/audios/rainaudio3.mp3');
+      backaudio.loop = true;
     }
   }, [backgroundImage]);
 
   const onbeforeunload = (e) => {
     dispatch(leaveSession());
-  };
-
-  const setAudioMute = () => {
-    dispatch(audioMute());
   };
 
   const gameOut = async (props) => {
@@ -235,7 +236,6 @@ function GameRoomPage() {
       const handleException = (exception) => {
         console.warn('exception', exception);
       };
-
       session.on('streamCreated', handleStreamCreated);
       session.on('streamDestroyed', handleStreamDestroyed);
       session.on('exception', handleException);
@@ -329,10 +329,12 @@ function GameRoomPage() {
   }, [publisher]);
 
   useEffect(() => {
-    console.log('gameId 바뀔때마다 출력해');
-  }, [gameId]);
-  useEffect(() => {}, [disturb]);
-
+    if (audioPlay) {
+      backaudio.play();
+    } else {
+      backaudio.pause();
+    }
+  }, [audioPlay]);
   return (
     <div className={styles.backimage} style={{ backgroundImage: `url(${backImage})` }}>
       {rankModal && gameRankList !== null ? (
@@ -351,7 +353,7 @@ function GameRoomPage() {
           </div>
         </div>
       ) : (
-        <div className="">
+        <>
           {/* join 이후 화면 */}
           {session !== undefined ? (
             <div className={styles.gameroom}>
@@ -368,12 +370,19 @@ function GameRoomPage() {
               ) : null}
               {/* 게임방 제목 */}
               <div className={styles.gameTitleBox}>
+                <button
+                  onClick={() => {
+                    setAudioPlay(!audioPlay);
+                  }}
+                >
+                  {audioPlay ? 'stop' : 'play'}
+                </button>
                 <p className={styles.gameroomTitle} id="session-title">
                   {gameRoomTitle}
                 </p>
                 {host === true ? (
                   <button className={styles.updateButton}>
-                    <p>수정</p>
+                    <p>✏️수정</p>
                   </button>
                 ) : null}
               </div>
@@ -406,7 +415,7 @@ function GameRoomPage() {
               <Timer></Timer>{' '}
             </div>
           ) : null}
-        </div>
+        </>
       )}
     </div>
   );

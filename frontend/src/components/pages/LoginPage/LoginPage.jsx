@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userLogin, getUserInfo } from '../../../slices/getLoginInfo';
 import styles from './LoginPage.module.css';
 import axios from 'axios';
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
 
 // 로그인 컴포넌트
 function LoginPage() {
@@ -99,18 +98,16 @@ function LoginPage() {
         <form>
           <label htmlFor="userEmail" className={styles.loginid}>
             이메일 <br></br>
-            <input
-              type="text"
-              id="userEmail"
-              placeholder="이메일을 입력해 주세요."
-              value={userEmail}
-              className={styles.logininput}
-              onChange={handleEmailChange}
-            />
+            <input type="text" id="userEmail" placeholder="이메일을 입력해 주세요." value={userEmail} className={styles.logininput} onChange={handleEmailChange} />
           </label>
           <label htmlFor="userPassword" className={styles.loginpassword}>
             비밀번호 <br></br>
             <input
+              onKeyUp={(e) => {
+                if (e.key === 'Enter') {
+                  handleSubmit(e);
+                }
+              }}
               type="password"
               id="userPassword"
               placeholder="비밀번호를 입력해 주세요."
@@ -139,13 +136,7 @@ function LoginPage() {
               <form>
                 <label className={styles.labelFindPw}>
                   이메일
-                  <input
-                    type="text"
-                    value={passwordEmail}
-                    className={styles.logininput}
-                    placeholder="회원가입한 이메일을 입력해주세요."
-                    onChange={(e) => setPasswordEmail(e.target.value)}
-                  ></input>
+                  <input type="text" value={passwordEmail} className={styles.logininput} placeholder="회원가입한 이메일을 입력해주세요." onChange={(e) => setPasswordEmail(e.target.value)}></input>
                 </label>
               </form>
               <br></br>
