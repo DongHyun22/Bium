@@ -47,7 +47,7 @@
 .easyIn3 {
   color: white;
   margin-left: 300px;
-  animation: slide 2.4s ease-in-out forwards;
+  animation: slide 3s ease-in-out forwards;
 }
 
 @keyframes slide {

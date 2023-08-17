@@ -10,6 +10,7 @@ import { setIsLogin, setToken, setUserEmail, logoutUser } from '../../../slices/
 import { PURGE } from 'redux-persist';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://i9c205.p.ssafy.io' : 'http://localhost:8080';
+const mainButtonStyles = { backgroundColor: 'white' };
 
 export const GameRoomListPage = () => {
   const dispatch = useDispatch();
@@ -20,9 +21,19 @@ export const GameRoomListPage = () => {
 
   const gemeRoomapi = async () => {
     try {
-      const response = await axios.get(APPLICATION_SERVER_URL + '/api/game').then((response) => {
-        setAllRooms(response.data);
-      });
+      console.log('여기 키워드', keyword);
+      const response = await axios
+        .get(APPLICATION_SERVER_URL + '/api/game', {
+          params: { keyword: keyword },
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'GET'
+          }
+        })
+        .then((response) => {
+          setAllRooms(response.data);
+        });
       // axios response
       // 방제목, 인원
     } catch (err) {
@@ -51,15 +62,12 @@ export const GameRoomListPage = () => {
   const handlekeyword = (e) => {
     setKeyword(e.target.value);
   };
-
-  const searchKeyword = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.get(APPLICATION_SERVER_URL + '/api/game').then((response) => {
-        console.log(response.data);
-      });
-    } catch (err) {
+  const setsetroom = () => {
+    if (keyword === '') {
       return;
+    } else {
+      const roomList = allRooms.filter((room) => room.gameRoomTitle.includes(keyword));
+      setAllRooms([...roomList]);
     }
   };
 
@@ -78,10 +86,27 @@ export const GameRoomListPage = () => {
           </Link>
         </div>
         <div className={styles.search}>
-          <form className={styles.formBox} onSubmit={searchKeyword}>
-            <input type="text" className={styles.search__input} placeholder="비움방 검색" value={keyword} onChange={handlekeyword}></input>
-            <button className={styles.search__button}>🔍</button>
-          </form>
+          <input
+            onKeyUp={(e) => {
+              if (e.key === 'Backspace' && keyword === '') {
+                console.log('백스', e.key);
+                gemeRoomapi();
+              }
+              if (e.key === 'Enter') {
+                console.log('엔터', e.key);
+
+                setsetroom();
+              }
+            }}
+            type="text"
+            className={styles.search__input}
+            placeholder="비움방 검색"
+            value={keyword}
+            onChange={handlekeyword}
+          ></input>
+          <button onClick={setsetroom} className={styles.search__button}>
+            🔍
+          </button>
         </div>
       </div>
       <div className={styles.containerItems}>
@@ -99,7 +124,7 @@ export const GameRoomListPage = () => {
         )}
       </div>
 
-      <Fab mainButtonStyles={kkk} alwaysShowTitle={true} icon="👤">
+      <Fab mainButtonStyles={mainButtonStyles} alwaysShowTitle={true} icon="👤">
         <Action text="마이페이지" onClick={goToMyPage}>
           🙂
         </Action>

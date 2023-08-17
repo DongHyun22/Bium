@@ -15,7 +15,6 @@ export const GameRoomListItem = (props) => {
   const curPeople = props.allRoom.curPeople;
 
   const enterRoom = (e) => {
-    console.log(e);
     dispatch(setJoin(true));
     // <Link to="/gameroom"></Link>;
     navigator('/gameroom', { state: { customSessionId: e.customSessionId, gameRoomTitle: e.gameRoomTitle, gameRoomMovie: e.gameRoomMovie } });

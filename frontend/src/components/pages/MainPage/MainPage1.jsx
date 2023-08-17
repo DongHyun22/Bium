@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 const MainPage1 = () => {
-  const txt = '그대여, 아무 걱정하지 말아요';
+  const txt = '앞으로의 채움을 위한, 지금의 비움';
   const [Text, setText] = useState('');
   const [Count, setCount] = useState(0);
   const navigate = useNavigate();
