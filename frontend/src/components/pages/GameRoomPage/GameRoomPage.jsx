@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { OpenVidu } from 'openvidu-browser';
 import { joinSession } from '../../../slices/videoSlice/videoThunkActionSlice';
 import { setJoin, deleteSubscriber, enteredSubscriber, initOVSession, leaveSession } from '../../../slices/videoSlice/videoSlice';
-import { setBackgroundImage, setDisturb, setErrorSolve, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
+import { leaveRoom, setBackgroundImage, setDisturb, setErrorSolve, setGameRankList, setMySessionId, setRankModal, setRoomTitle, setStart } from '../../../slices/roomSlice/roomSlice';
 
 import UserVideoComponent from '../../atoms/VideoComponent/UserVideoComponent';
 import Timer from '../../atoms/Timer/Timer';
@@ -108,7 +108,7 @@ function GameRoomPage() {
       gameOut();
       dispatch(leaveSession());
       dispatch(setJoin(false));
-      navigate('/gameroomlist', { replace: true });
+      window.location.href = '/gameroomlist';
     }
   };
 
@@ -248,7 +248,7 @@ function GameRoomPage() {
         session.off('streamCreated', handleStreamCreated);
         session.off('streamDestroyed', handleStreamDestroyed);
         session.off('exception', handleException);
-        // dispatch(leaveRoom());
+        dispatch(leaveRoom());
         dispatch(leaveSession());
 
         const mySession = session;
@@ -288,9 +288,7 @@ function GameRoomPage() {
       setTimeout(() => {
         console.log('axions 요청중이니까 확인해줄래?');
         dispatch(setGameRankList(null));
-        dispatch(setRankModal(false));
-        dispatch(setJoin(false));
-        // dispatch(leaveRoom());
+        dispatch(leaveRoom());
         dispatch(leaveSession());
         window.location.href = '/gameroomlist';
       }, 6000);
@@ -305,7 +303,7 @@ function GameRoomPage() {
 
   useEffect(() => {
     if (errorSolve === true) {
-      // dispatch(leaveRoom());
+      dispatch(leaveRoom());
       dispatch(leaveSession());
       alert('이미 사라진 방입니다.');
       window.location.href = '/gameroomlist';
@@ -356,7 +354,7 @@ function GameRoomPage() {
           {/* join 이후 화면 */}
           {session !== undefined ? (
             <div className={styles.gameroom}>
-              {host && start === false ? (
+              {host && start === false && gameFallCount === 0 ? (
                 <div className={styles.startbuttonBox}>
                   <button
                     className={styles.gameStartbutton}

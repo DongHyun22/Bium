@@ -172,9 +172,13 @@ function createToken(props) {
         }
       );
 
-      console.log('7');
-
-      return resolve(response.data);
+      console.log('7', response.data);
+      if (response.data.sessionId === '가득참') {
+        alert('게임 방이 가득찼습니다.');
+        window.location.href = '/gameroomlist';
+      } else {
+        return resolve(response.data);
+      }
     } catch (error) {
       console.log('여기서 오류 해결해야해');
 
