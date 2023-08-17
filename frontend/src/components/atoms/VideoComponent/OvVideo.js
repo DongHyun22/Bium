@@ -49,7 +49,10 @@ const OpenViduVideoComponent = (props) => {
         // DRAW YOU FACE IN WEBCAM
         if (videoRef.current !== null && props.streamManager === publisher) {
           const detections = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
-          if (detections && detections.expressions.neutral < 0.6) {
+          if (detections === undefined) {
+            console.log('undefined');
+            dispatch(setGameFallCount(1));
+          } else if (detections && detections.expressions.neutral < 0.6) {
             console.log(detections.expressions);
             dispatch(setGameFallCount(1));
           }

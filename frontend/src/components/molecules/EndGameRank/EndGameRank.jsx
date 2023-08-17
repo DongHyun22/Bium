@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './EndGameRank.module.css';
 const EndGameRank = (props) => {
-  console.log(props);
   const nickname = props.rank.userNickname;
   const biumTime = props.rank.gameRecord;
   const rank = props.rank.index;

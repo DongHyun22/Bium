@@ -30,14 +30,15 @@ function GameRoomPage() {
   const mySessionId = useSelector((state) => state.room.mySessionId);
   const gameRoomTitle = useSelector((state) => state.room.roomTitle);
   const backgroundImage = useSelector((state) => state.room.backgroundImage);
+
   if (location.state) {
     const customSessionId = location.state.customSessionId;
     const gameTitle = location.state.gameRoomTitle;
     const backenterimage = location.state.gameRoomMovie;
-    console.log(backenterimage);
     dispatch(setMySessionId(customSessionId));
     dispatch(setRoomTitle(gameTitle));
     dispatch(setBackgroundImage(`${backenterimage}`));
+  } else {
   }
 
   const userEmail = useSelector((state) => state.user.userEmail);
@@ -60,30 +61,26 @@ function GameRoomPage() {
   const rankModal = useSelector((state) => state.room.rankModal);
   const errorSolve = useSelector((state) => state.room.errorSolve);
   const disturb = useSelector((state) => state.room.disturb);
-  const [audioPlay, setAudioPlay] = useState(false);
 
   useEffect(() => {
     if (backgroundImage === '1') {
-      console.log('백이미지버놓11111', backgroundImage);
       backImage = img1;
       backaudio = new Audio('/audios/fireaudio.mp3');
       backaudio.loop = true;
     } else if (backgroundImage === '2') {
-      console.log('백이미지버놓2222', backgroundImage);
       backImage = img2;
       backaudio = new Audio('/audios/rainaudio3.mp3');
       backaudio.loop = true;
     }
-  }, [backgroundImage]);
+  });
 
   const onbeforeunload = (e) => {
     dispatch(leaveSession());
   };
 
   const gameOut = async (props) => {
-    console.log('여기 프롮', props);
     const kkk = props;
-    console.log('이건 idx', kkk);
+
     try {
       const response = await axios.post(
         APPLICATION_SERVER_URL + '/api/game/out',
@@ -97,9 +94,7 @@ function GameRoomPage() {
           }
         }
       );
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   const handleLeaveSession = () => {
@@ -143,7 +138,6 @@ function GameRoomPage() {
 
   const endGame = async () => {
     try {
-      console.log('몇명만 해?');
       const response = await axios.post(
         APPLICATION_SERVER_URL + '/api/game/delete',
         {},
@@ -187,10 +181,7 @@ function GameRoomPage() {
         }
       );
       dispatch(setStart(false));
-      console.log(response.data);
-      console.log(typeof response.data);
       if (typeof response.data === 'object') {
-        console.log('누구누구 요청해?', typeof response.data === 'object');
         const ranking = response.data;
         modalSignal({ publisher, ranking });
         endGame();
@@ -212,7 +203,6 @@ function GameRoomPage() {
     if (join) {
       const OV = new OpenVidu();
       const session = OV.initSession();
-      console.log('여기가 문제인지 확인하고 싶어', session, OV);
       dispatch(initOVSession({ OV, session }));
     }
   }, [join]);
@@ -237,14 +227,11 @@ function GameRoomPage() {
       session.on('streamCreated', handleStreamCreated);
       session.on('streamDestroyed', handleStreamDestroyed);
       session.on('exception', handleException);
-      console.log('디스 시작');
       dispatch(joinSession({ OV, session, mySessionId, myUserName, gameRoomTitle, backgroundImage, maxPeople, roomPassword, userEmail, host, dispatch }));
       backaudio.play();
 
       // Clean-up 함수 등록
       return () => {
-        console.log('등록이 되는 순간이 언제일까?');
-        console.log('clear');
         session.off('streamCreated', handleStreamCreated);
         session.off('streamDestroyed', handleStreamDestroyed);
         session.off('exception', handleException);
@@ -291,7 +278,6 @@ function GameRoomPage() {
   useEffect(() => {
     if (rankModal === true) {
       setTimeout(() => {
-        console.log('axions 요청중이니까 확인해줄래?');
         dispatch(setGameRankList(null));
         dispatch(leaveRoom());
         dispatch(leaveSession());
@@ -301,7 +287,7 @@ function GameRoomPage() {
   }, [gameRankList]);
 
   useEffect(() => {
-    if (gameFallCount > 1 && gameFallCount < 3) {
+    if (gameFallCount > 10) {
       fallAxios();
     }
   }, [gameFallCount]);

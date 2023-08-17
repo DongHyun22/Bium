@@ -52,7 +52,6 @@ export const joinSession = createAsyncThunk('joinSession', async (props) => {
       }
     }
   } catch (error) {
-    console.log(error);
     return;
   }
 });
@@ -101,7 +100,7 @@ function createSession(props) {
         }
       );
       setTimeout(() => {
-        // console.log('개발자 설정을 통한 강제 리턴');
+        // '개발자 설정을 통한 강제 리턴'
         return resolve(response.data);
       }, 1000);
 

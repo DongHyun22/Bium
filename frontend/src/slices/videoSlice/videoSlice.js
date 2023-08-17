@@ -70,9 +70,7 @@ export const videoSlice = createSlice({
         state.publisher = payload.publisher;
       }
     });
-    builder.addCase(joinSession.rejected, (state, { payload }) => {
-      console.log('slice 오류야', payload);
-    });
+    builder.addCase(joinSession.rejected, (state, { payload }) => {});
   }
 });
 

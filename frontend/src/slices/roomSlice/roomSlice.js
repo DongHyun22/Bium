@@ -24,7 +24,6 @@ export const roomSlice = createSlice({
   initialState,
   reducers: {
     leaveRoom: (state) => {
-      console.log('실행완료욤');
       state.start = false;
       state.mySessionId = '';
       state.gameId = null;
@@ -83,7 +82,6 @@ export const roomSlice = createSlice({
       state.maxPeople = action.payload;
     },
     setBackgroundImage: (state, action) => {
-      console.log('백이미지 당장당장 확인', action.payload);
       state.backgroundImage = action.payload;
     }
   }

@@ -18,7 +18,6 @@ export const CreateGameRoom = () => {
   const backgroundImage = useSelector((state) => state.room.backgroundImage);
 
   useEffect(() => {
-    console.log('실행하나?');
     redirect('');
   }, []);
   // 방 생성
@@ -52,7 +51,6 @@ export const CreateGameRoom = () => {
     dispatch(setMaxPeople(e.target.value));
   };
   const handleChangeBackground = (e) => {
-    console.log(e.target.value);
     dispatch(setBackgroundImage(e.target.value));
   };
 

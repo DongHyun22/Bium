@@ -21,7 +21,6 @@ export const GameRoomListPage = () => {
 
   const gemeRoomapi = async () => {
     try {
-      console.log('여기 키워드', keyword);
       const response = await axios
         .get(APPLICATION_SERVER_URL + '/api/game', {
           params: { keyword: keyword },
@@ -37,8 +36,6 @@ export const GameRoomListPage = () => {
       // axios response
       // 방제목, 인원
     } catch (err) {
-      console.log('오류 떴어 .....해결하렴....');
-      console.log(err);
       return;
     }
   };
@@ -89,12 +86,9 @@ export const GameRoomListPage = () => {
           <input
             onKeyUp={(e) => {
               if (e.key === 'Backspace' && keyword === '') {
-                console.log('백스', e.key);
                 gemeRoomapi();
               }
               if (e.key === 'Enter') {
-                console.log('엔터', e.key);
-
                 setsetroom();
               }
             }}
