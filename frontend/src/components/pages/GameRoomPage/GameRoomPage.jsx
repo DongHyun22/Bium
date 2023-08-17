@@ -337,7 +337,7 @@ function GameRoomPage() {
   // useInView 훅 사용
   const [ref, inView] = useInView({
     triggerOnce: true,  // 이미지가 한 번 로드되면 다시 로드하지 않음
-    threshold: 0.1      // 이미지의 10%가 화면에 보일 때 로딩을 시작
+    threshold: 0.2      // 이미지의 20%가 화면에 보일 때 로딩을 시작
   });
 
   return (
