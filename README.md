@@ -51,7 +51,7 @@
 
 ```bash
 Node.js 18.16.1
-Spring
+SpringBoot 2.4.5
 npm 9.5.1
 ```
 
@@ -81,8 +81,6 @@ npm i  
 npm start
 ```
 
-
-
 # 📌기능 소개
 
 ## 주요 기능
@@ -105,8 +103,6 @@ npm start
   - 비움 기록 확인
   - 마이페이지
 
-
-
 # 📌기술 스택
 
 ##### Back-End
@@ -114,6 +110,7 @@ npm start
 <div>
 <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
 <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">
+<img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
 </div>
 
 ##### Front-End
@@ -129,10 +126,12 @@ npm start
 <div>
 <img src="https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira&logoColor=white"> 
 <img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white"> 
+<img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"> 
+<img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white"> 
+<img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> 
+<img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"> 
 <img src="https://img.shields.io/badge/ec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"> 
 </div>
-
-
 
 # 📌프로젝트 진행 및 산출물
 
@@ -157,8 +156,6 @@ npm start
 ##### 4. 요구사항 정의서
 
 [요구사항 정의서](https://docs.google.com/spreadsheets/d/1NY0yTh26FWAF4gvOKL72EtD5HL4vhLlK1UJVjDhHlrQ/edit#gid=283207649)
-
-
 
 # 📌개발 멤버
 
