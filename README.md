@@ -4,8 +4,6 @@
 
 > 📌 https://i9c205.p.ssafy.io
 
----
-
 # 📌서비스 소개
 
 ## 서비스 설명
@@ -51,13 +49,13 @@
 
 ###### 필수 사항
 
-- Node.js 18.16.1
+```bash
+Node.js 18.16.1
+Spring
+npm 9.5.1
+```
 
-- <mark>Spring ?????</mark>
-
-- npm 9.5.1
-
-권고 사항
+###### 권고 사항
 
 - Chorme Browser
 
@@ -83,7 +81,7 @@ npm i  
 npm start
 ```
 
----
+
 
 # 📌기능 소개
 
@@ -107,7 +105,7 @@ npm start
   - 비움 기록 확인
   - 마이페이지
 
----
+
 
 # 📌기술 스택
 
@@ -126,15 +124,15 @@ npm start
 <img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=Redux&logoColor=white"> 
 </div>
 
-##### In
+##### Environment
 
 <div>
 <img src="https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira&logoColor=white"> 
 <img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white"> 
-<img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"> 
+<img src="https://img.shields.io/badge/ec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"> 
 </div>
 
----
+
 
 # 📌프로젝트 진행 및 산출물
 
@@ -160,25 +158,20 @@ npm start
 
 [요구사항 정의서](https://docs.google.com/spreadsheets/d/1NY0yTh26FWAF4gvOKL72EtD5HL4vhLlK1UJVjDhHlrQ/edit#gid=283207649)
 
+
+
 # 📌개발 멤버
 
 ## 개발팀 소개
 
-|                                                               손효민                                                                |                                                               김동현                                                                |                                                               연주원                                                                |
-| :---------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
-|            <img title="" src="README-assets/262a5fef944cb52a7cabc0b0c8e3136c8fcee411.png" alt="" width="188" height="">             |                 <img title="" src="README-assets/32b1b11fb83880c8988699c751651308393c66fa.png" alt="" width="188">                  |                 <img title="" src="README-assets/043c240bee866d16f7a6118f0e6788ad9d9fbd6b.png" alt="" width="188">                  |
+| 손효민                                                                                                                                 | 김동현                                                                                                                                 | 연주원                                                                                                                                 |
+|:-----------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|
+| <img title="" src="README-assets/262a5fef944cb52a7cabc0b0c8e3136c8fcee411.png" alt="" width="188" height="">                        | <img title="" src="README-assets/32b1b11fb83880c8988699c751651308393c66fa.png" alt="" width="188">                                  | <img title="" src="README-assets/043c240bee866d16f7a6118f0e6788ad9d9fbd6b.png" alt="" width="188">                                  |
 | [<img title="" src="README-assets/c39c28c470f7abfb058794ccc718bdc7c7a020a1.png" alt="Git" width="75">](https://github.com/illu1996) | [<img title="" src="README-assets/c39c28c470f7abfb058794ccc718bdc7c7a020a1.png" alt="Git" width="75">](https://github.com/illu1996) | [<img title="" src="README-assets/c39c28c470f7abfb058794ccc718bdc7c7a020a1.png" alt="Git" width="75">](https://github.com/illu1996) |
-|                                                         **팀장**, BE-Leader                                                         |                                                                 BE                                                                  |                                                                 BE                                                                  |
+| **팀장**, BE-Leader                                                                                                                   | BE                                                                                                                                  | BE                                                                                                                                  |
 
-|                                                               이지혁                                                                |                                                               이정찬                                                                |                                                               최지수                                                                |
-| :---------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
-|                 <img title="" src="README-assets/e8ecae84287bfc11a4694cb682e65d9bf08a794c.png" alt="" width="188">                  |                 <img title="" src="README-assets/4f55a056ea837b3542287623738fd257f39a0a11.png" alt="" width="188">                  |                 <img title="" src="README-assets/75cdf7bc27f5797eccabcfe1a5b0ad6c79b639e5.png" alt="" width="188">                  |
+| 이지혁                                                                                                                                 | 이정찬                                                                                                                                 | 최지수                                                                                                                                 |
+|:-----------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|
+| <img title="" src="README-assets/e8ecae84287bfc11a4694cb682e65d9bf08a794c.png" alt="" width="188">                                  | <img title="" src="README-assets/4f55a056ea837b3542287623738fd257f39a0a11.png" alt="" width="188">                                  | <img title="" src="README-assets/75cdf7bc27f5797eccabcfe1a5b0ad6c79b639e5.png" alt="" width="188">                                  |
 | [<img title="" src="README-assets/c39c28c470f7abfb058794ccc718bdc7c7a020a1.png" alt="Git" width="75">](https://github.com/illu1996) | [<img title="" src="README-assets/c39c28c470f7abfb058794ccc718bdc7c7a020a1.png" alt="Git" width="75">](https://github.com/illu1996) | [<img title="" src="README-assets/c39c28c470f7abfb058794ccc718bdc7c7a020a1.png" alt="Git" width="75">](https://github.com/illu1996) |
-|                                                              FE-Leader                                                              |                                                                 FE                                                                  |                                                                 FE                                                                  |
-
-- **손효민**: 팀장, BE, Backend Leader
-- 김동현: BE
-- 연주원: BE
-- 이지혁: FE, Frontend Leader
-- 이정찬: FE
-- 최지수: FE
+| FE-Leader                                                                                                                           | FE                                                                                                                                  | FE                                                                                                                                  |
