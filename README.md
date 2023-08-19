@@ -89,11 +89,11 @@ npm start
 
 ## 주요 기능
 
-1. 실시간 라이브 스트리밍 비움
+⭐ 실시간 라이브 스트리밍 비움
 
-2. 회원 관리 (게임 기록 관리, 회원 정보 관리, 랭크 조회)
+⭐ 회원 관리 (게임 기록 관리, 회원 정보 관리, 랭크 조회)
 
-3. face-api.js 연동 - 카메라 이탈 인지, 표정 인지
+⭐ face-api.js 연동 - 카메라 이탈 인지, 표정 인지
 
 ## 세부 기능
 
@@ -161,6 +161,21 @@ npm start
 [요구사항 정의서](https://docs.google.com/spreadsheets/d/1NY0yTh26FWAF4gvOKL72EtD5HL4vhLlK1UJVjDhHlrQ/edit#gid=283207649)
 
 # 📌개발 멤버
+
+## 개발팀 소개
+
+|                                                    손효민                                                    |                                               김동현                                               |                                               연주원                                               |
+| :----------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------: |
+| <img title="" src="README-assets/262a5fef944cb52a7cabc0b0c8e3136c8fcee411.png" alt="" width="188" height=""> | <img title="" src="README-assets/32b1b11fb83880c8988699c751651308393c66fa.png" alt="" width="188"> | <img title="" src="README-assets/043c240bee866d16f7a6118f0e6788ad9d9fbd6b.png" alt="" width="188"> |
+
+| [@Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white) | [@ChaeyeonSeo](https://github.com/ChaeyeonSeo) | [@hyunjeong408](https://github.com/hyunjeong408) |
+| **Team-Leader**, BE-Leade | BE | BE |
+
+|                                               이지혁                                               |                                               이정찬                                               |                                               최지수                                               |
+| :------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------: |
+| <img title="" src="README-assets/e8ecae84287bfc11a4694cb682e65d9bf08a794c.png" alt="" width="188"> | <img title="" src="README-assets/4f55a056ea837b3542287623738fd257f39a0a11.png" alt="" width="188"> | <img title="" src="README-assets/75cdf7bc27f5797eccabcfe1a5b0ad6c79b639e5.png" alt="" width="188"> |
+|                                  Git(https://github.com/illu1996                                   |                           [@ChaeyeonSeo](https://github.com/ChaeyeonSeo)                           |                          [@hyunjeong408](https://github.com/hyunjeong408)                          |
+|                                             FE-Leader                                              |                                                 FE                                                 |                                                 FE                                                 |
 
 - **손효민**: 팀장, BE, Backend Leader
 - 김동현: BE
