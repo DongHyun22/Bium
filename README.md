@@ -14,7 +14,7 @@
 
 ###### 필수 사항
 
-[![NPM Version][npm-image]][npm-url]
+- Node.js 18.16.1
 
 - <mark>Spring ?????</mark>
 
@@ -101,25 +101,25 @@ npm start
 
 # 📌프로젝트 진행 및 산출물
 
-### 프로젝트 개발 기간
+#### 프로젝트 개발 기간
 
 2023.07.17 ~ 2023.08.18
 
-### 프로젝트 산출물
+#### 프로젝트 산출물
 
-#### 1. Figma
+##### 1. Figma
 
 [Figma](https://www.figma.com/file/0xwiJEVbPtZn1yo7yaQfn7/%EB%B9%84%CB%90%EC%9B%80?type=design&node-id=0-1&mode=design&t=q3l7gFRnTTfb5mJC-0)
 
-#### 2. ERD
+##### 2. ERD
 
 [ER Diagram](https://www.erdcloud.com/d/frF6qL8QF29gzuymg)
 
-#### 3. API 설계서
+##### 3. API 설계서
 
 [API 명세서](https://www.notion.so/API-URL-aecc36ea3f3d4a48a830f0fe8a689d4a?pvs=21)
 
-#### 4. 요구사항 정의서
+##### 4. 요구사항 정의서
 
 [요구사항 정의서](https://docs.google.com/spreadsheets/d/1NY0yTh26FWAF4gvOKL72EtD5HL4vhLlK1UJVjDhHlrQ/edit#gid=283207649)
 
