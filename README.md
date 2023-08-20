@@ -108,9 +108,9 @@ npm start
 ##### Back-End
 
 <div>
-<img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
-<img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">
-<img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
+<img src="https://img.shields.io/badge/Java [11.0.15]-007396?style=flat&logo=java&logoColor=white" />
+<img src="https://img.shields.io/badge/Spring Boot [2.7.14]-6DB33F?style=flat&logo=Spring Boot&logoColor=white" />
+<img src="https://img.shields.io/badge/Gradle [8.2.1]-02303A?style=flat&logo=gradle&logoColor=white" />
 </div>
 
 ##### Front-End
@@ -119,18 +119,41 @@ npm start
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white"> 
 <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> 
 <img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=Redux&logoColor=white"> 
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=JavaScript&logoColor=white" />
+<img src="https://img.shields.io/badge/node.js [18.16.1]-339933?style=flat&logo=Node.js&logoColor=white">
 </div>
+
+##### DataBase
+
+<img src="https://img.shields.io/badge/mariaDB [11.2.0 Alpha]-003545?style=flat&logo=mariaDB&logoColor=white">
+<img src="https://img.shields.io/badge/redis [7.0.12]-DC382D?style=flat&logo=redis&logoColor=white">
+
+##### VCS
+
+<img src="https://img.shields.io/badge/Git-F05032?style=flat&logo=Git&logoColor=white" />
+<img src="https://img.shields.io/badge/GitLab-FC6D26?style=flat&logo=gitlab&logoColor=white" />
+
+
+##### IDE
+
+<img src="https://img.shields.io/badge/Visual Studio Code [1.80.1]-007ACC?style=flat&logo=visualstudiocode&logoColor=white" />
+<img src="https://img.shields.io/badge/IntelliJ IDEA [2023.1.4]-000000?style=flat&logo=intellijidea&logoColor=white" />
+
+##### CI/CD
+
+<img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"> 
+<img src="https://img.shields.io/badge/ec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"> 
+<img src="https://img.shields.io/badge/Docker [24.0.4]-2496ED?style=flat&logo=docker&logoColor=white">
 
 ##### Environment
 
 <div>
 <img src="https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira&logoColor=white"> 
-<img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white"> 
 <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"> 
 <img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white"> 
 <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> 
-<img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"> 
-<img src="https://img.shields.io/badge/ec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"> 
+<img src="https://img.shields.io/badge/Mattermost [5.3.1]-0058CC?style=flat&logo=mattermost&logoColor=white" />
+<img src="https://img.shields.io/badge/Postman-FF6C37?style=flat&logo=postman&logoColor=white" />
 </div>
 
 # 📌프로젝트 진행 및 산출물
