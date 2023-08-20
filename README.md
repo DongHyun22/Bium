@@ -68,8 +68,9 @@ git clone https://lab.ssafy.com/s09-webmobile1-sub2/S09P12C205.git
 
 ###### Back-End
 
-```
-실행법 적어줘요용....
+```bash
+# backend 폴더로 이동
+cd backend
 ```
 
 ###### Front-End
