@@ -4,6 +4,12 @@
 
 > 📌 https://i9c205.p.ssafy.io
 
+###### 시연 영상
+
+> 📌 광고 https://youtu.be/9n_ocHmlpIk
+
+> 📌 UCC 경진대회 https://youtu.be/aLL42Mf6IVA
+
 # 📌서비스 소개
 
 ## 서비스 설명
@@ -133,7 +139,6 @@ npm start
 <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white" />
 <img src="https://img.shields.io/badge/GitLab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white" />
 
-
 ##### IDE
 
 <img src="https://img.shields.io/badge/Visual Studio Code [1.80.1]-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white" />
@@ -182,27 +187,29 @@ npm start
 
 ##### 5. Git Flow 브랜치 전략
 
-<img title="git graph" src="README-assets/Git Graph.gif" alt="" width="" height="" /> 
+<img title="git graph" src="README-assets/Git Graph.gif" alt="" width="" height="" />
 
 - Git Flow 사용 브랜치
+
   - develop: 개발
   - feature: 기능
   - master: 배포
   - hotfix: 에러 수정
 
 - Git Flow 진행 방식
+
   1. feature 브랜치가 완성되면 develop 브랜치로 pull request
   2. Front-End 팀장, Back-End 팀장이 변경 사항을 체크하여 merge
   3. 큰 기능이 완료될 때 마다 develop 브랜치를 master 브랜치로 병합하여 배포
 
 - feature 브랜치 이름 명명 규칙
   - [ FE / BE ] / [ 기능 이름 ]
-      <br> ex) FE/login 
-      <br> ex) BE/login
+    <br> ex) FE/login
+    <br> ex) BE/login
 
 ##### 6. Jira
 
-<img title="git graph" src="README-assets/jira_번다운 차트.PNG" alt="" width="" height="" /> 
+<img title="git graph" src="README-assets/jira_번다운 차트.PNG" alt="" width="" height="" />
 
 - 목적: 협업, 일정, 업무 관리
 - 방법
@@ -215,12 +222,12 @@ npm start
 
 ## 개발팀 소개
 
-| 손효민                                                                                                                                 | 김동현                                                                                                                                 | 연주원                                                                                                                                 |
-|:-----------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|
+|                                                   손효민                                                   |                                                  김동현                                                  |                                                연주원                                                |
+| :--------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: |
 | [<img title="" src="README-assets/SonHyoMin00.png" alt="Git" width="188">](https://github.com/sonhyomin00) | [<img title="" src="README-assets/DongHyun22.png" alt="Git" width="188">](https://github.com/DongHyun22) | [<img title="" src="README-assets/joo1yeon.jpg" alt="Git" width="188">](https://github.com/joo1yeon) |
-| **팀장**, BE-Leader                                                                                                                   | BE                                                                                                                                  | BE                                                                                                                                  |
+|                                            **팀장**, BE-Leader                                             |                                                    BE                                                    |                                                  BE                                                  |
 
-| 이지혁                                                                                                                                 | 이정찬                                                                                                                                 | 최지수                                                                                                                                 |
-|:-----------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|
+|                                                이지혁                                                |                                                   이정찬                                                   |                                               최지수                                               |
+| :--------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------: |
 | [<img title="" src="README-assets/illu1996.png" alt="Git" width="188">](https://github.com/illu1996) | [<img title="" src="README-assets/jeongchanim.png" alt="Git" width="188">](https://github.com/jeongchanim) | [<img title="" src="README-assets/cjjss11.png" alt="Git" width="188">](https://github.com/cjjss11) |
-| FE-Leader                                                                                                                           | FE                                                                                                                                  | FE                                                                                                                                  |
+|                                              FE-Leader                                               |                                                     FE                                                     |                                                 FE                                                 |
