@@ -11,9 +11,9 @@
 ### 개요
 
 - 서비스 명 : 비움
-  - “ ((주로 ‘마음, 가슴’ 따위와 함께 쓰여)) 욕심이나 집착 따위의 어지러운 생각을 없애다. “ 뜻의 비우다의 명사형과 “긴 소리를장음 부호를 합친 이름
+  - " ((주로 ‘마음, 가슴’ 따위와 함께 쓰여)) 욕심이나 집착 따위의 어지러운 생각을 없애다. " 뜻의 비우다의 명사형
   - 서비스를 통해 생각과 걱정을 비우고 힐링을 채우는 온라인 공간을 제공하고자 하는 의미
-- 프로젝트 명 : "심신 안정을 위한 화상 게임" 서비스
+- 프로젝트 명 : "심신 안정을 위한 화상 연결" 서비스
 
 ### 타겟
 
@@ -36,13 +36,12 @@
 
 ## 목적
 
-- 일상 생활 안에서 멍을 때리며 사람들의 정신 건강 관리를 돕기 위함
-- 장소의 제약을 벗어나 영상을 통해 멍 때릴 수 있는 환경을 제공
-- 게임과 대회에 참여하며 사람들과 함께 멍을 때릴 수 있는 기회를 제공
+- 일상 생활 안에서 생각을 비우며 사람들의 정신 건강 관리를 돕기 위함
+- 장소의 제약을 벗어나 영상을 통해 생각을 비울 수 있는 환경을 제공
 
 ## 의의
 
-- 누구든지 접속해서 참여할 수 있는 생각 비우기 게임
+- 누구든지 접속해서 참여할 수 있는 생각 비우기 서비스
 - 리프레시 하기 위한 수단
 
 # 📌 데모
@@ -51,7 +50,7 @@
 
 ```bash
 Node.js 18.16.1
-SpringBoot 2.4.5
+SpringBoot 2.7.14
 npm 9.5.1
 ```
 
@@ -90,7 +89,7 @@ npm start
 
 ⭐ 회원 관리 (게임 기록 관리, 회원 정보 관리, 랭크 조회)
 
-⭐ face-api.js 연동 - 카메라 이탈 인지, 표정 인지
+⭐ face-api.js - 카메라 이탈 인지, 표정 인지
 
 ## 세부 기능
 
@@ -187,12 +186,10 @@ npm start
 
 | 손효민                                                                                                                                 | 김동현                                                                                                                                 | 연주원                                                                                                                                 |
 |:-----------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|
-| <img title="" src="README-assets/SonHyoMin00.png" alt="" width="188" height="">                        | <img title="" src="README-assets/DongHyun22.png" alt="" width="188">                                  | <img title="" src="README-assets/joo1yeon.jpg" alt="" width="188">                                  |
-| [<img title="" src="README-assets/SonHyoMin00.png" alt="Git" width="75">](https://github.com/sonhyomin00) | [<img title="" src="README-assets/DongHyun22.png" alt="Git" width="75">](https://github.com/DongHyun22) | [<img title="" src="README-assets/joo1yeon.jpg" alt="Git" width="75">](https://github.com/joo1yeon) |
+| [<img title="" src="README-assets/SonHyoMin00.png" alt="Git" width="188">](https://github.com/sonhyomin00) | [<img title="" src="README-assets/DongHyun22.png" alt="Git" width="188">](https://github.com/DongHyun22) | [<img title="" src="README-assets/joo1yeon.jpg" alt="Git" width="188">](https://github.com/joo1yeon) |
 | **팀장**, BE-Leader                                                                                                                   | BE                                                                                                                                  | BE                                                                                                                                  |
 
 | 이지혁                                                                                                                                 | 이정찬                                                                                                                                 | 최지수                                                                                                                                 |
 |:-----------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|
-| <img title="" src="README-assets/illu1996.png" alt="" width="188">                                  | <img title="" src="README-assets/jeongchanim.png" alt="" width="188">                                  | <img title="" src="README-assets/cjjss11.png" alt="" width="188">                                  |
-| [<img title="" src="README-assets/illu1996.png" alt="Git" width="75">](https://github.com/illu1996) | [<img title="" src="README-assets/jeongchanim.png" alt="Git" width="75">](https://github.com/jeongchanim) | [<img title="" src="README-assets/cjjss11.png" alt="Git" width="75">](https://github.com/cjjss11) |
+| [<img title="" src="README-assets/illu1996.png" alt="Git" width="188">](https://github.com/illu1996) | [<img title="" src="README-assets/jeongchanim.png" alt="Git" width="188">](https://github.com/jeongchanim) | [<img title="" src="README-assets/cjjss11.png" alt="Git" width="188">](https://github.com/cjjss11) |
 | FE-Leader                                                                                                                           | FE                                                                                                                                  | FE                                                                                                                                  |
