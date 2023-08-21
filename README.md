@@ -200,6 +200,16 @@ npm start
       <br> ex) FE/login 
       <br> ex) BE/login
 
+##### 6. Jira
+
+<img title="git graph" src="README-assets/jira_번다운 차트.PNG" alt="" width="" height="" /> 
+
+- 목적: 협업, 일정, 업무 관리
+- 방법
+  1. 월요일 오전에 주 단위 계획
+  2. 백로그 생성
+  3. 스프린트 시작
+- 스프린트: 일주일 단위
 
 # 📌개발 멤버
 
