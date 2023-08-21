@@ -180,6 +180,27 @@ npm start
 
 [요구사항 정의서](https://docs.google.com/spreadsheets/d/1NY0yTh26FWAF4gvOKL72EtD5HL4vhLlK1UJVjDhHlrQ/edit#gid=283207649)
 
+##### 5. Git Flow 브랜치 전략
+
+<img title="git graph" src="README-assets/Git Graph.gif" alt="" width="" height="" /> 
+
+- Git Flow 사용 브랜치
+  - develop: 개발
+  - feature: 기능
+  - master: 배포
+  - hotfix: 에러 수정
+
+- Git Flow 진행 방식
+  1. feature 브랜치가 완성되면 develop 브랜치로 pull request
+  2. Front-End 팀장, Back-End 팀장이 변경 사항을 체크하여 merge
+  3. 큰 기능이 완료될 때 마다 develop 브랜치를 master 브랜치로 병합하여 배포
+
+- feature 브랜치 이름 명명 규칙
+  - [ FE / BE ] / [ 기능 이름 ]
+      <br> ex) FE/login 
+      <br> ex) BE/login
+
+
 # 📌개발 멤버
 
 ## 개발팀 소개
