@@ -63,8 +63,9 @@ function LoginPage() {
   const findPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(APPLICATION_SERVER_URL + `/api/findpw/${passwordEmail}`);
-      alert('임시 비밀번호가 이메일로 전송되었습니다.');
+      //const response = await axios.get(APPLICATION_SERVER_URL + `/api/findpw/${passwordEmail}`);
+      //alert('임시 비밀번호가 이메일로 전송되었습니다.');
+      alert('임시 비밀번호 발급 기능이 중단되었습니다.');
     } catch (error) {
       return;
     }
